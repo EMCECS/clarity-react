@@ -1,0 +1,42 @@
+{
+    "name": "client",
+    "version": "0.1.0",
+    "private": true,
+    "dependencies": {
+        "@clr/angular": "^1.0.5",
+        "@clr/icons": "^1.0.5",
+        "@clr/ui": "^1.0.5",
+        "@dell/clarity-ui": "^0.11.35",
+        "@types/jest": "^24.0.6",
+        "@types/node": "^11.9.5",
+        "@types/react": "^16.8.4",
+        "@types/react-dom": "^16.8.2",
+        "@webcomponents/custom-elements": "1.0.0",
+        "react": "^16.8.1",
+        "react-dom": "^16.8.1",
+        "react-relay": "^2.0.0",
+        "react-scripts": "2.1.5",
+        "typescript": "^3.3.3333"
+    },
+    "scripts": {
+        "start": "react-scripts start",
+        "build": "react-scripts build",
+        "test": "react-scripts test",
+        "eject": "react-scripts eject",
+        "relay": "relay-compiler --src ./src --schema ./schema.graphql",
+        "format": "prettier --write \"src/**/*.+(js|md|ts|css|sass|less|graphql|yml|yaml|json|scss|vue)\""
+    },
+    "browserslist": [
+        ">0.2%",
+        "not dead",
+        "not ie <= 11",
+        "not op_mini all"
+    ],
+    "devDependencies": {
+        "babel-plugin-root-import": "^6.1.0",
+        "eslint": "5.12.0",
+        "eslint-config-prettier": "^4.0.0",
+        "prettier": "^1.16.4",
+        "relay-compiler": "^2.0.0"
+    }
+}

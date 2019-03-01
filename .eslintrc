@@ -1,0 +1,15 @@
+{
+    "extends": ["react-app", "prettier"],
+    "parserOptions": {
+        "ecmaVersion": 2018,
+        "sourceType": "module"
+    },
+    "env": {
+        "es6": true
+    },
+    "rules": {
+        "semi": "error",
+        "prefer-const": "error",
+        "no-console": "warn"
+    }
+}
