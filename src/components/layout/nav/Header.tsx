@@ -2,19 +2,22 @@ import * as React from "react";
 import {ResponsiveNavCodes} from "./ResponsiveNavCodes";
 
 export type HeaderProps = {
-    // onToggle handles any calls made in this component that will trigger
-    // navigation toggling. The logic for handling the toggle is within the
-    // parent object, and will have an effect on the navList property.
-    onToggle: (controlCode: string, navLevel: number) => void;
+    // navList is a list of numbers representing the navigation components enabled
+    // in the pane
+    navList: number[]
+
+    // onHamburgerToggle handles toggle actions for the left side navigation
+    // "hamburger" icon"
+    onHamburgerToggle: () => void;
+
+    // onRightSideToggle handles toggle actions for the left side navigation
+    // vertical ellipsis icon
+    onRightSideToggle: () => void;
 
     // onCloseAll handles a call made to close all in this component. The logic
     // for handling the closeAll action is within the parent object, and will
     // have an effect on navList property.
     onCloseAll: () => void;
-
-    // navList contains a list of numbers representing the active navigation
-    // levels.
-    navList: number[];
 };
 
 type navStates = {
@@ -53,26 +56,20 @@ export default class Header extends React.PureComponent<HeaderProps> {
         return {isNavLevel1OnPage, isNavLevel2OnPage};
     }
 
-    handleToggle(navLevel: number) {
-        const {NAV_TOGGLE} = ResponsiveNavCodes;
-        this.props.onToggle(NAV_TOGGLE, navLevel);
-    }
-
     render() {
-        const {onCloseAll, onToggle} = this.props;
-        const {NAV_LEVEL_1, NAV_LEVEL_2} = ResponsiveNavCodes;
+        const {onCloseAll, onHamburgerToggle, onRightSideToggle} = this.props;
         const {isNavLevel1OnPage, isNavLevel2OnPage} = this.state;
 
         return (
             <header className="header">
                 {isNavLevel1OnPage && (
-                    <button className="header-hamburger-trigger" type="button" onClick={this.handleToggle.bind(this, NAV_LEVEL_1)}>
+                    <button className="header-hamburger-trigger" type="button" onClick={onHamburgerToggle}>
                         <span />
                     </button>
                 )}
                 {this.props.children}
                 {isNavLevel2OnPage && (
-                    <button className="header-overflow-trigger" type="button" onClick={this.handleToggle.bind(this, NAV_LEVEL_2)}>
+                    <button className="header-overflow-trigger" type="button" onClick={onRightSideToggle}>
                         <span />
                     </button>
                 )}

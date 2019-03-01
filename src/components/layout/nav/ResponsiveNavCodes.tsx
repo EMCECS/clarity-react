@@ -10,4 +10,5 @@ export class ResponsiveNavCodes {
     public static NAV_CLOSE_ALL: string = "NAV_CLOSE_ALL";
     public static NAV_CLASS_HAMBURGER_MENU: string = "open-hamburger-menu";
     public static NAV_CLASS_OVERFLOW_MENU: string = "open-overflow-menu";
+    public static MAIN_CONTAINER_CLASS: string = "main-container";
 }

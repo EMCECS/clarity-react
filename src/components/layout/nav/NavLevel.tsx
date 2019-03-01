@@ -9,12 +9,7 @@ export type NavLevelProps = {
     navType: string;
 };
 
-export default class NavLevel extends React.PureComponent<NavLevelProps> {
-    constructor(props: NavLevelProps) {
-        super(props);
-        this.state = {};
-    }
-
+export default class NavLevel extends React.Component<NavLevelProps> {
     render() {
         let navClass: string[] = [];
         if (this.props.navType === ResponsiveNavCodes.NAV_TYPE_HEADER) {
@@ -26,6 +21,10 @@ export default class NavLevel extends React.PureComponent<NavLevelProps> {
         }
         navClass.push("clr-nav-level-" + this.props.navLevel);
 
-        return <nav className={navClass.join(" ")}>{this.props.children}</nav>;
+        return (
+          <nav className={navClass.join(" ")}>
+            {this.props.children}
+          </nav>
+        );
     }
 }
