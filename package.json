@@ -1,9 +1,12 @@
 {
-    "name": "client",
+    "name": "@dell/clarity-react",
     "version": "0.1.0",
+    "description": "React components for Clarity UI",
     "private": true,
+    "outDir": "dist",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
     "dependencies": {
-        "@clr/angular": "^1.0.5",
         "@clr/icons": "^1.0.5",
         "@clr/ui": "^1.0.5",
         "@dell/clarity-ui": "^0.11.35",
@@ -14,17 +17,14 @@
         "@webcomponents/custom-elements": "1.0.0",
         "react": "^16.8.1",
         "react-dom": "^16.8.1",
-        "react-relay": "^2.0.0",
-        "react-scripts": "2.1.5",
         "typescript": "^3.3.3333"
     },
+    "repository": {
+        "type": "http",
+        "url": "https://github.com:ben-schumacher/clr-react.git"
+    },
     "scripts": {
-        "start": "react-scripts start",
-        "build": "react-scripts build",
-        "test": "react-scripts test",
-        "eject": "react-scripts eject",
-        "relay": "relay-compiler --src ./src --schema ./schema.graphql",
-        "format": "prettier --write \"src/**/*.+(js|md|ts|css|sass|less|graphql|yml|yaml|json|scss|vue)\""
+        "build": "tsc"
     },
     "browserslist": [
         ">0.2%",
@@ -36,7 +36,6 @@
         "babel-plugin-root-import": "^6.1.0",
         "eslint": "5.12.0",
         "eslint-config-prettier": "^4.0.0",
-        "prettier": "^1.16.4",
-        "relay-compiler": "^2.0.0"
+        "prettier": "^1.16.4"
     }
 }
