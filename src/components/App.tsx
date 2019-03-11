@@ -1,18 +1,12 @@
 import * as React from "react";
 import MainContainer from "./layout/main-container/MainContainer";
 
-import "@clr/icons/clr-icons.min.css";
-import "@webcomponents/custom-elements/custom-elements.min.js";
-import "@clr/icons/clr-icons-lite.min.js";
-import "@clr/icons/shapes/technology-shapes.js";
-import "@dell/clarity-ui//shapes/dell-shapes.js";
 import "@dell/clarity-ui/dell-clarity-ui.min.css";
 import {ResponsiveNavCodes} from "./layout/nav/ResponsiveNavCodes";
 import NavLevel from "./layout/nav/NavLevel";
 import VerticalNav from "./layout/vertical-nav/VerticalNav";
+import NavLink from "./layout/nav/NavLink";
 import VerticalNavGroup from "./layout/vertical-nav/VerticalNavGroup";
-import VerticalNavGroupChildren from "./layout/vertical-nav/VerticalNavGroupChildren";
-import Icon from "./icon/Icon";
 
 const {
     NAV_TYPE_HEADER,
@@ -25,7 +19,6 @@ function renderPrimaryNav() {
     return (
         <NavLevel navType={NAV_TYPE_HEADER} navLevel={NAV_LEVEL_1}>
             <a href="javascript://" className="nav-link">
-                <Icon className="nav-icon" shape="home" />
                 <span className="nav-text">home</span>
             </a>
             <a href="javascript://" className="nav-link">
@@ -74,8 +67,21 @@ class App extends React.Component {
                 <main className="content-area">test main</main>
                 <VerticalNav isCollapsible={true} collapseButtonOnBottom={true}>
                     <VerticalNavGroup groupName="Normal" iconShape="user">
-                        <VerticalNavGroupChildren />
+                        <NavLink>Pidgey</NavLink>
+                        <NavLink>Snorlax</NavLink>
                     </VerticalNavGroup>
+                    <VerticalNavGroup groupName="Fire" iconShape="flame">
+                        <NavLink>Charmander</NavLink>
+                        <NavLink>Charizard</NavLink>
+                    </VerticalNavGroup>
+                    <VerticalNavGroup groupName="Electric" iconShape="bolt">
+                        <NavLink>Pikachu</NavLink>
+                        <NavLink>Raichu</NavLink>
+                    </VerticalNavGroup>
+                    <VerticalNavGroup
+                        groupName="Credit"
+                        iconShape="certificate"
+                    />
                 </VerticalNav>
             </MainContainer>
         );

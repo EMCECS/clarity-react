@@ -1,13 +1,13 @@
 import * as React from "react";
 import Icon, {Direction} from "../../icon/Icon";
 
-interface VerticalNavGroupProps {
+export interface VerticalNavGroupProps {
     groupName?: string;
     iconShape?: string;
+    closeGroup?: () => void;
 }
 
 interface VerticalNavGroupState {
-    isCollapsed: boolean;
     isExpanded: boolean;
 }
 
@@ -18,15 +18,17 @@ export default class VerticalNavGroup extends React.PureComponent<
     constructor(props: VerticalNavGroupProps) {
         super(props);
         this.state = {
-            isCollapsed: false,
             isExpanded: false,
         };
     }
 
-    toggleExpand() {}
+    toggleExpand() {
+        const {isExpanded} = this.state;
+        this.setState({isExpanded: !isExpanded});
+    }
 
     render() {
-        const {isCollapsed} = this.state;
+        const {isExpanded} = this.state;
         const {iconShape} = this.props;
         return (
             <div className="nav-group is-expanded">
@@ -46,11 +48,15 @@ export default class VerticalNavGroup extends React.PureComponent<
                         <Icon
                             shape="caret"
                             className="nav-group-trigger-icon"
-                            dir={isCollapsed ? Direction.RIGHT : Direction.DOWN}
+                            dir={isExpanded ? Direction.RIGHT : Direction.DOWN}
                         />
                     </button>
                 </div>
-                {this.props.children}
+                {isExpanded && (
+                    <div className="nav-group-children">
+                        {this.props.children}
+                    </div>
+                )}
             </div>
         );
     }

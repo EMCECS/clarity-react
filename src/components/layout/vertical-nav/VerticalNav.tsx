@@ -1,6 +1,6 @@
 import * as React from "react";
 import Icon, {Direction} from "../../icon/Icon";
-import VerticalNavGroup from "./VerticalNavGroup";
+import VerticalNavGroup, {VerticalNavGroupProps} from "./VerticalNavGroup";
 
 type VerticalNavProps = {
     isCollapsible?: boolean;
@@ -30,11 +30,13 @@ export default class VerticalNav extends React.PureComponent<
 
     checkChildren(children: React.ReactNode): boolean[] {
         let result: boolean[] = [false, false];
-        React.Children.forEach(children, (child: React.ReactNode) => {
+        React.Children.map(children, (child: React.ReactNode) => {
             if (React.isValidElement(child)) {
                 switch ((child as React.ReactElement<any>).type) {
                     case VerticalNavGroup:
                         result[0] = true;
+                        if ((child.props as VerticalNavGroupProps).iconShape)
+                            result[1] = true;
                         break;
                     case Icon:
                         result[1] = true;
@@ -61,13 +63,12 @@ export default class VerticalNav extends React.PureComponent<
     }
 
     getClassList() {
-        let classList: string[] = [];
+        let classList: string[] = [VerticalNavCodes.CLR_VERTICAL_NAV];
         const {collapseButtonOnBottom} = this.props;
         const {isCollapsed, hasNavGroups, hasIcons} = this.state;
         if (collapseButtonOnBottom) {
             classList.push(VerticalNavCodes.NAV_TRIGGER_BOTTOM);
         }
-        classList.push(VerticalNavCodes.CLR_VERTICAL_NAV);
         if (hasNavGroups) {
             classList.push(VerticalNavCodes.HAS_NAV_GROUPS);
         }
