@@ -29,7 +29,7 @@ export class RadioButtonGroup extends React.PureComponent<RadioButtonGroupProps>
             this.state = {value: defaultValue};
     }
 
-    private handleChange(evt: React.ChangeEvent<HTMLInputElement>) {
+    private handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({value: evt.target.value});
         const {onChange} = this.props;
         if (onChange) onChange(evt);

@@ -47,11 +47,11 @@ export class RadioButton extends React.PureComponent<RadioButtonProps> {
             <div className={utils.classNames(classNames)}>
                 <input className="radio" name={name}
                        id={id}
-                       checked={checked}
+                       defaultChecked={checked}
                        value={value}
                        disabled={disabled}
                        type="radio"
-                       onSelect={onChange}
+                       onChange={onChange}
                 /><label className={labelClassNames} htmlFor={id}>{label}</label>
                 {children}
             </div>
