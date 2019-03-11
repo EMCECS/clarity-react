@@ -3,17 +3,19 @@ import {ResponsiveNavCodes} from "../nav/ResponsiveNavCodes";
 import Header from "../nav/Header";
 
 export type MainContainerProps = {
-    primaryNav?: any
-    secondaryNav?: any
+    primaryNav?: React.ReactNode;
+    secondaryNav?: React.ReactNode;
 };
 
 type mainContainerState = {
-    navList: number[]
-    leftNavOpen: boolean
-    rightNavOpen: boolean
+    navList: number[];
+    leftNavOpen: boolean;
+    rightNavOpen: boolean;
 };
 
-export default class MainContainer extends React.PureComponent<MainContainerProps> {
+export default class MainContainer extends React.PureComponent<
+    MainContainerProps
+> {
     state: mainContainerState;
 
     constructor(props: any) {
@@ -25,7 +27,11 @@ export default class MainContainer extends React.PureComponent<MainContainerProp
         if (props.secondaryNav) {
             navList.push(ResponsiveNavCodes.NAV_LEVEL_2);
         }
-        this.state = {navList: navList, leftNavOpen: false, rightNavOpen: false};
+        this.state = {
+            navList: navList,
+            leftNavOpen: false,
+            rightNavOpen: false,
+        };
     }
 
     handleHamburgerToggle() {
@@ -59,24 +65,23 @@ export default class MainContainer extends React.PureComponent<MainContainerProp
         const {primaryNav, secondaryNav} = this.props;
         return (
             <div className={this.getClassList().join(" ")}>
-                <Header navList={navList}
-                        onHamburgerToggle={this.handleHamburgerToggle.bind(this)}
-                        onRightSideToggle={this.handleRightSideToggle.bind(this)}
-                        onCloseAll={this.closeAll.bind(this)}
+                <Header
+                    navList={navList}
+                    onHamburgerToggle={this.handleHamburgerToggle.bind(this)}
+                    onRightSideToggle={this.handleRightSideToggle.bind(this)}
+                    onCloseAll={this.closeAll.bind(this)}
                 >
                     <div className="branding">
                         <a href="#" className="nav-link">
-                            <span className="logo dell-emc-logo"/>
+                            <span className="logo dell-emc-logo" />
                             <span className="title">ECS Flex</span>
                         </a>
                     </div>
                     {primaryNav}
-                    <div className="header-actions"/>
+                    <div className="header-actions" />
                 </Header>
                 {secondaryNav}
-                <div className="content-container">
-                    {this.props.children}
-                </div>
+                <div className="content-container">{this.props.children}</div>
             </div>
         );
     }

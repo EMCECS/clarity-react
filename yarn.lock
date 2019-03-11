@@ -784,13 +784,6 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@clr/angular@^1.0.5":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@clr/angular/-/angular-1.0.5.tgz#43be6752e7f82c9479caf2e8af4025347a4a7f9e"
-  integrity sha512-r7yru3ZDm+w5THwIUVGcsU4rTnvD9GbqYCO7Hr0Mj0zDmpJRe/GzaawQD+HszzTaol/jqLL3pN2Rkpjb+dNvqg==
-  dependencies:
-    tslib "^1.9.0"
-
 "@clr/icons@^1.0.5":
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/@clr/icons/-/icons-1.0.5.tgz#c0352cfae4988e8dd8cc1c95e13eb19a4d15d2e5"

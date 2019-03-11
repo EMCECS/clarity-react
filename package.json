@@ -3,7 +3,6 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
-        "@clr/angular": "^1.0.5",
         "@clr/icons": "^1.0.5",
         "@clr/ui": "^1.0.5",
         "@dell/clarity-ui": "^0.11.35",
