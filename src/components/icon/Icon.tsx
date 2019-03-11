@@ -1,4 +1,7 @@
 import * as React from "react";
+import "@clr/icons/clr-icons.min.css";
+import "@webcomponents/custom-elements/custom-elements.min.js";
+import "@clr/icons/clr-icons.min.js";
 
 export interface IconProps {
     shape: string;
