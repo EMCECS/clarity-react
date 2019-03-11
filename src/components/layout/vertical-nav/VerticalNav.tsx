@@ -1,6 +1,6 @@
 import * as React from "react";
 import Icon, {Direction} from "../../icon/Icon";
-import VerticalNavGroup, {VerticalNavGroupProps} from "./VerticalNavGroup";
+import VerticalNavGroup from "./VerticalNavGroup";
 
 type VerticalNavProps = {
     isCollapsible?: boolean;
@@ -19,36 +19,55 @@ export default class VerticalNav extends React.PureComponent<
 > {
     constructor(props: VerticalNavProps) {
         super(props);
-        this.state = this.initializeState();
-    }
-
-    private initializeState(): VerticalNavState {
-        let result: VerticalNavState = {
-            hasNavGroups: false,
-            hasIcons: false,
+        const children = this.props.children;
+        const result: boolean[] = this.checkChildren(children);
+        this.state = {
+            hasNavGroups: result[0],
+            hasIcons: result[1],
             isCollapsed: false,
         };
-        const {children} = this.props;
-        React.Children.map(children, (child: React.ReactNode) => {
-            const childEl = child as React.ReactElement;
-            if (childEl.type === VerticalNavGroup) {
-                result.hasNavGroups = true;
-                if ((childEl.props as VerticalNavGroupProps).iconShape)
-                    result.hasIcons = true;
-            } else if (childEl.type === Icon) {
-                result.hasIcons = true;
+    }
+
+    checkChildren(children: React.ReactNode): boolean[] {
+        let result: boolean[] = [false, false];
+        React.Children.forEach(children, (child: React.ReactNode) => {
+            if (React.isValidElement(child)) {
+                switch ((child as React.ReactElement<any>).type) {
+                    case VerticalNavGroup:
+                        result[0] = true;
+                        break;
+                    case Icon:
+                        result[1] = true;
+                        break;
+                }
+            }
+            const kid = child as React.ReactElement<any>;
+            if (!kid.props) {
+                return;
+            }
+            if (kid.props.children) {
+                let recursive_result: boolean[] = this.checkChildren(
+                    kid.props.children,
+                );
+                if (recursive_result[0]) {
+                    result[0] = true;
+                }
+                if (recursive_result[1]) {
+                    result[1] = true;
+                }
             }
         });
         return result;
     }
 
     getClassList() {
-        let classList: string[] = [VerticalNavCodes.CLR_VERTICAL_NAV];
+        let classList: string[] = [];
         const {collapseButtonOnBottom} = this.props;
         const {isCollapsed, hasNavGroups, hasIcons} = this.state;
         if (collapseButtonOnBottom) {
             classList.push(VerticalNavCodes.NAV_TRIGGER_BOTTOM);
         }
+        classList.push(VerticalNavCodes.CLR_VERTICAL_NAV);
         if (hasNavGroups) {
             classList.push(VerticalNavCodes.HAS_NAV_GROUPS);
         }
@@ -61,38 +80,13 @@ export default class VerticalNav extends React.PureComponent<
         return classList;
     }
 
-    toggleVertical() {
+    toggleByButton() {
         const {isCollapsed} = this.state;
         this.setState({isCollapsed: !isCollapsed});
     }
 
-    openVertical() {
+    unCollapse() {
         this.setState({isCollapsed: false});
-    }
-
-    private renderChildren(): React.ReactNode[] {
-        const {isCollapsed} = this.state;
-        const {children} = this.props;
-        if (typeof children === "undefined" || children === null) {
-            return [];
-        }
-        return React.Children.map(
-            children,
-            (child: React.ReactNode, index: number) => {
-                const childEl = child as React.ReactElement;
-                if (childEl.type === VerticalNavGroup) {
-                    return React.cloneElement(
-                        childEl as React.ReactElement<any>,
-                        {
-                            verticalIsCollapsed: isCollapsed,
-                            openVerticalNav: this.openVertical.bind(this),
-                        },
-                    );
-                }
-                console.log(child);
-                return child;
-            },
-        );
     }
 
     render() {
@@ -103,7 +97,7 @@ export default class VerticalNav extends React.PureComponent<
                     <button
                         type="button"
                         className="nav-trigger"
-                        onClick={this.toggleVertical.bind(this)}
+                        onClick={this.toggleByButton.bind(this)}
                     >
                         <Icon
                             shape="angle-double"
@@ -112,11 +106,12 @@ export default class VerticalNav extends React.PureComponent<
                         />
                     </button>
                 )}
+
                 <div className="nav-content">
-                    {this.renderChildren()}
+                    {this.props.children}
                     {this.state.isCollapsed && (
                         <button
-                            onClick={this.openVertical.bind(this)}
+                            onClick={this.unCollapse.bind(this)}
                             className="nav-btn"
                         />
                     )}
