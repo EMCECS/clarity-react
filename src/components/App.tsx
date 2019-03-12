@@ -1,6 +1,5 @@
 import * as React from "react";
 import MainContainer from "./layout/main-container/MainContainer";
-
 import "@dell/clarity-ui/dell-clarity-ui.min.css";
 import {ResponsiveNavCodes} from "./layout/nav/ResponsiveNavCodes";
 import NavLevel from "./layout/nav/NavLevel";
