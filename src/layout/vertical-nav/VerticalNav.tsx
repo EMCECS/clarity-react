@@ -1,0 +1,135 @@
+import * as React from "react";
+import Icon, {Direction} from "../../icon/Icon";
+import VerticalNavGroup, {VerticalNavGroupProps} from "./VerticalNavGroup";
+
+type VerticalNavProps = {
+    isCollapsible?: boolean;
+    collapseButtonOnBottom?: boolean;
+};
+
+type VerticalNavState = {
+    isCollapsed: boolean;
+    hasNavGroups: boolean;
+    hasIcons: boolean;
+};
+
+export default class VerticalNav extends React.PureComponent<
+    VerticalNavProps,
+    VerticalNavState
+> {
+    constructor(props: VerticalNavProps) {
+        super(props);
+        this.state = this.initializeState();
+    }
+
+    private initializeState(): VerticalNavState {
+        let result: VerticalNavState = {
+            hasNavGroups: false,
+            hasIcons: false,
+            isCollapsed: false,
+        };
+        const {children} = this.props;
+        React.Children.map(children, (child: React.ReactNode) => {
+            const childEl = child as React.ReactElement;
+            if (childEl.type === VerticalNavGroup) {
+                result.hasNavGroups = true;
+                if ((childEl.props as VerticalNavGroupProps).iconShape)
+                    result.hasIcons = true;
+            } else if (childEl.type === Icon) {
+                result.hasIcons = true;
+            }
+        });
+        return result;
+    }
+
+    getClassList() {
+        let classList: string[] = [VerticalNavCodes.CLR_VERTICAL_NAV];
+        const {collapseButtonOnBottom} = this.props;
+        const {isCollapsed, hasNavGroups, hasIcons} = this.state;
+        if (collapseButtonOnBottom) {
+            classList.push(VerticalNavCodes.NAV_TRIGGER_BOTTOM);
+        }
+        if (hasNavGroups) {
+            classList.push(VerticalNavCodes.HAS_NAV_GROUPS);
+        }
+        if (hasIcons) {
+            classList.push(VerticalNavCodes.HAS_ICONS);
+        }
+        if (isCollapsed) {
+            classList.push(VerticalNavCodes.IS_COLLAPSED);
+        }
+        return classList;
+    }
+
+    toggleVertical() {
+        const {isCollapsed} = this.state;
+        this.setState({isCollapsed: !isCollapsed});
+    }
+
+    openVertical() {
+        this.setState({isCollapsed: false});
+    }
+
+    private renderChildren(): React.ReactNode[] {
+        const {isCollapsed} = this.state;
+        const {children} = this.props;
+        if (typeof children === "undefined" || children === null) {
+            return [];
+        }
+        return React.Children.map(
+            children,
+            (child: React.ReactNode, index: number) => {
+                const childEl = child as React.ReactElement;
+                if (childEl.type === VerticalNavGroup) {
+                    return React.cloneElement(
+                        childEl as React.ReactElement<any>,
+                        {
+                            verticalIsCollapsed: isCollapsed,
+                            openVerticalNav: this.openVertical.bind(this),
+                        },
+                    );
+                }
+                console.log(child);
+                return child;
+            },
+        );
+    }
+
+    render() {
+        const {isCollapsed} = this.state;
+        return (
+            <div className={this.getClassList().join(" ")}>
+                {this.props.isCollapsible && (
+                    <button
+                        type="button"
+                        className="nav-trigger"
+                        onClick={this.toggleVertical.bind(this)}
+                    >
+                        <Icon
+                            shape="angle-double"
+                            className="nav-trigger-icon"
+                            dir={isCollapsed ? Direction.RIGHT : Direction.LEFT}
+                        />
+                    </button>
+                )}
+                <div className="nav-content">
+                    {this.renderChildren()}
+                    {this.state.isCollapsed && (
+                        <button
+                            onClick={this.openVertical.bind(this)}
+                            className="nav-btn"
+                        />
+                    )}
+                </div>
+            </div>
+        );
+    }
+}
+
+export class VerticalNavCodes {
+    public static CLR_VERTICAL_NAV: string = "clr-vertical-nav";
+    public static HAS_ICONS: string = "has-icons";
+    public static HAS_NAV_GROUPS: string = "has-nav-groups";
+    public static IS_COLLAPSED: string = "is-collapsed";
+    public static NAV_TRIGGER_BOTTOM: string = "nav-trigger--bottom";
+}

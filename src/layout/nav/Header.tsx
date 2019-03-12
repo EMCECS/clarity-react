@@ -4,7 +4,7 @@ import {ResponsiveNavCodes} from "./ResponsiveNavCodes";
 export type HeaderProps = {
     // navList is a list of numbers representing the navigation components enabled
     // in the pane
-    navList: number[]
+    navList: number[];
 
     // onHamburgerToggle handles toggle actions for the left side navigation
     // "hamburger" icon"
@@ -63,13 +63,21 @@ export default class Header extends React.PureComponent<HeaderProps> {
         return (
             <header className="header">
                 {isNavLevel1OnPage && (
-                    <button className="header-hamburger-trigger" type="button" onClick={onHamburgerToggle}>
+                    <button
+                        className="header-hamburger-trigger"
+                        type="button"
+                        onClick={onHamburgerToggle}
+                    >
                         <span />
                     </button>
                 )}
                 {this.props.children}
                 {isNavLevel2OnPage && (
-                    <button className="header-overflow-trigger" type="button" onClick={onRightSideToggle}>
+                    <button
+                        className="header-overflow-trigger"
+                        type="button"
+                        onClick={onRightSideToggle}
+                    >
                         <span />
                     </button>
                 )}

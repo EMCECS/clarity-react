@@ -21,10 +21,6 @@ export default class NavLevel extends React.Component<NavLevelProps> {
         }
         navClass.push("clr-nav-level-" + this.props.navLevel);
 
-        return (
-          <nav className={navClass.join(" ")}>
-            {this.props.children}
-          </nav>
-        );
+        return <nav className={navClass.join(" ")}>{this.props.children}</nav>;
     }
 }
