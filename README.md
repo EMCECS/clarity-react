@@ -1,6 +1,6 @@
 # Clarity React Binding
 
-This project an unofficial implementation of [VMware Clarity Design](https://clarity.design) in React. I leverages CSS, icons and images from the Clarity project.
+This project an unofficial implementation of [VMware Clarity Design](https://clarity.design) in React. It leverages CSS, icons and images from the Clarity project.
 
 ## Usage in React projects
 
@@ -11,7 +11,7 @@ $ yarn add @dell/clarity-react
 
 Import styles and globals from peer dependencies:
 
-####`index.tsx`
+#### `index.tsx`
 ```typescript
 import "@webcomponents/custom-elements/custom-elements.min.js";
 import "@clr/icons/clr-icons.min.css";
