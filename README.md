@@ -1,0 +1,86 @@
+# Clarity React Binding
+
+This project an unofficial implementation of [VMware Clarity Design](https://clarity.design) in React. I leverages CSS, icons and images from the Clarity project.
+
+## Usage in React projects
+
+To use the project simply add the dependencies with `yarn`, `npm`, etc:
+```shell
+$ yarn add @dell/clarity-react
+```
+
+Import styles and globals from peer dependencies:
+
+####`index.tsx`
+```typescript
+import "@webcomponents/custom-elements/custom-elements.min.js";
+import "@clr/icons/clr-icons.min.css";
+import "@clr/icons/clr-icons-lite.min.js";
+import "@clr/ui/clr-ui.min.css"
+import "@clr/icons/shapes/technology-shapes.js";
+
+...
+```
+
+And make use of the components in your app:
+#### `App.tsx`
+```typescript jsx
+import React, {Component} from 'react';
+import MainContainer from "@dell/clarity-react/layout/main-container/MainContainer";
+import {Redirect} from "react-router";
+
+const initialState = {
+};
+
+type MainPageProps = {
+    token?: string
+    level?: string
+    message?: string
+}
+
+export type MainPageState = Readonly<typeof initialState>;
+
+export default class MainPage extends Component<MainPageProps> {
+    readonly state: MainPageState = initialState;
+
+    render() {
+        const {token} = this.props;
+        if (token) {
+            return(
+                <MainContainer>
+                    Hello
+                </MainContainer>
+                    );
+        }  else {
+            return(<Redirect to="/login"/>);
+        }
+    }
+}
+```
+
+## Storybook
+
+This project includes [Storybook](https://storybook.js.org/) as a component browser. To fire up storybook, download the project in Git:
+```shell
+$ git clone https://github.com/EMCECS/clarity-react.git
+```
+
+Install the dependencies with `yarn`, `npm`, etc.
+```sbtshell
+$ cd clarity-react
+
+# Using yarn
+$ yarn
+
+# Using NPM
+$ npm install
+```
+
+Any run the "storybook" script:
+```shell
+# Using yarn
+$ yarn run storyook
+
+# Using NPM
+$ npm run storybook
+```
