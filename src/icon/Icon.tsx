@@ -5,7 +5,7 @@ import "@clr/icons/clr-icons.min.js";
 
 export interface IconProps {
     shape: string;
-    className: string;
+    className?: string;
     dir?: Direction;
 }
 

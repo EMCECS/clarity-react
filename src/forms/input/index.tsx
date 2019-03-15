@@ -55,6 +55,7 @@ export class Input extends React.PureComponent<InputProps> {
                     <div className="clr-input-wrapper">
                         <input type={type || "text"}
                                id={name}
+                               disabled={disabled}
                                className="clr-input"
                                placeholder={placeholder}
                                onChange={this.handleChange}

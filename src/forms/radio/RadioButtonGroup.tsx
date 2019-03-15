@@ -33,11 +33,11 @@ export class RadioButtonGroup extends React.PureComponent<RadioButtonGroupProps>
         this.setState({value: evt.target.value});
         const {onChange} = this.props;
         if (onChange) onChange(evt);
-    }
+    };
 
     private renderChildren(): React.ReactNode[] {
         const {value} = this.state;
-        const {children, className, name} = this.props;
+        const {children, className, disabled, name} = this.props;
         if (typeof children === "undefined" || children === null) {
             return [];
         }
@@ -47,6 +47,7 @@ export class RadioButtonGroup extends React.PureComponent<RadioButtonGroupProps>
                 return React.cloneElement(childEl as React.ReactElement<any>, {
                     checked: value === childEl.props.value,
                     className: className,
+                    disabled: disabled,
                     id: name + "-" + index,
                     name: name,
                     onChange: this.handleChange
