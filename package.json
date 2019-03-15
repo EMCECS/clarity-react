@@ -1,60 +1,58 @@
 {
-    "name": "@dell/clarity-react",
-    "version": "0.1.0",
-    "description": "React components for Clarity UI",
-    "private": true,
-    "outDir": "dist",
-    "main": "dist/index.js",
-    "types": "dist/index.d.ts",
-    "dependencies": {
-        "@clr/icons": "^1.0.5",
-        "@clr/ui": "^1.0.5",
-        "@dell/clarity-ui": "^0.11.35",
-        "@types/enzyme-adapter-react-16": "^1.0.5",
-        "@types/jest": "^24.0.6",
-        "@types/node": "^11.9.5",
-        "@types/react": "^16.8.4",
-        "@types/react-dom": "^16.8.2",
-        "@webcomponents/custom-elements": "1.0.0",
-        "react": "^16.8.1",
-        "react-dom": "^16.8.1",
-        "typescript": "^3.3.3333"
-    },
-    "repository": {
-        "type": "http",
-        "url": "https://github.com:ben-schumacher/clr-react.git"
-    },
-    "scripts": {
-        "build": "tsc",
-        "test": "jest --coverage"
-    },
-    "browserslist": [
-        ">0.2%",
-        "not dead",
-        "not ie <= 11",
-        "not op_mini all"
-    ],
-    "devDependencies": {
-        "@types/enzyme": "^3.9.0",
-        "babel-plugin-root-import": "^6.1.0",
-        "enzyme": "^3.9.0",
-        "enzyme-adapter-react-16": "^1.11.2",
-        "enzyme-to-json": "^3.3.5",
-        "eslint": "5.12.0",
-        "eslint-config-prettier": "^4.0.0",
-        "jest": "^24.5.0",
-        "prettier": "^1.16.4",
-        "ts-jest": "^24.0.0"
-    },
-    "jest": {
-        "transform": {
-            "\\.(ts|tsx)$": "ts-jest"
-        },
-        "setupFiles": [
-            "<rootDir>/test/setupTests.tsx"
-        ],
-        "snapshotSerializers": [
-            "enzyme-to-json/serializer"
-        ]
-    }
+  "name": "@dell/clarity-react",
+  "version": "0.1.0",
+  "description": "React components for Clarity UI",
+  "private": true,
+  "outDir": "dist",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "dependencies": {
+    "@clr/icons": "^1.0.5",
+    "@clr/ui": "^1.0.5",
+    "@dell/clarity-ui": "^0.11.35",
+    "@types/enzyme-adapter-react-16": "^1.0.5",
+    "@types/jest": "^24.0.11",
+    "@types/node": "^11.9.5",
+    "@types/react": "^16.8.4",
+    "@types/react-dom": "^16.8.2",
+    "@webcomponents/custom-elements": "1.0.0",
+    "react": "^16.8.1",
+    "react-dom": "^16.8.1",
+    "typescript": "^3.3.3333"
+  },
+  "repository": {
+    "type": "http",
+    "url": "https://github.com:ben-schumacher/clr-react.git"
+  },
+  "scripts": {
+    "build": "tsc",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook",
+    "test": "jest --coverage"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "@storybook/addon-actions": "^5.0.1",
+    "@storybook/addon-info": "^5.0.1",
+    "@storybook/addon-links": "^5.0.1",
+    "@storybook/addons": "^5.0.1",
+    "@storybook/react": "^5.0.1",
+    "@types/storybook__react": "^4.0.1",
+    "awesome-typescript-loader": "^5.2.1",
+    "babel-loader": "^8.0.5",
+    "babel-plugin-root-import": "^6.1.0",
+    "eslint": "5.12.0",
+    "eslint-config-prettier": "^4.0.0",
+    "prettier": "^1.16.4",
+    "react-docgen-typescript-loader": "^3.0.1",
+    "react-docgen-typescript-webpack-plugin": "^1.1.0",
+    "storybook-addon-specifications": "^2.1.2",
+    "expect": "latest"
+  }
 }
