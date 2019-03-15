@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<MainContainer /> rendering renders correctly 1`] = `
+<header
+  className="header"
+>
+  <div
+    className="header-backdrop"
+    onClick={[Function]}
+  />
+</header>
+`;

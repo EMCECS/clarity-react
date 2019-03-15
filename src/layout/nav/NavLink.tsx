@@ -2,7 +2,7 @@ import * as React from "react";
 
 interface NavLinkProps {}
 
-export default class NavLink extends React.PureComponent<NavLinkProps> {
+export class NavLink extends React.PureComponent<NavLinkProps> {
     constructor(props: NavLinkProps) {
         super(props);
     }

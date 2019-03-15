@@ -1,6 +1,5 @@
 import * as React from "react";
-import {ResponsiveNavCodes} from "../nav/ResponsiveNavCodes";
-import Header from "../nav/Header";
+import {ResponsiveNavCodes, Header} from "../nav";
 
 export type MainContainerProps = {
     primaryNav?: React.ReactNode;
@@ -13,9 +12,7 @@ type mainContainerState = {
     rightNavOpen: boolean;
 };
 
-export default class MainContainer extends React.PureComponent<
-    MainContainerProps
-> {
+export class MainContainer extends React.PureComponent<MainContainerProps> {
     state: mainContainerState;
 
     constructor(props: any) {

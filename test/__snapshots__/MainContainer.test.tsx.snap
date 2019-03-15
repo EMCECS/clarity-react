@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<MainContainer /> rendering renders correctly 1`] = `
+<div
+  className="main-container"
+>
+  <Header
+    navList={Array []}
+    onCloseAll={[Function]}
+    onHamburgerToggle={[Function]}
+    onRightSideToggle={[Function]}
+  >
+    <div
+      className="branding"
+    >
+      <a
+        className="nav-link"
+        href="#"
+      >
+        <span
+          className="logo dell-emc-logo"
+        />
+        <span
+          className="title"
+        >
+          ECS Flex
+        </span>
+      </a>
+    </div>
+    <div
+      className="header-actions"
+    />
+  </Header>
+  <div
+    className="content-container"
+  />
+</div>
+`;

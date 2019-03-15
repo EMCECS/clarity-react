@@ -23,7 +23,7 @@ interface VerticalNavGroupState {
     groupIsExpanded: boolean;
 }
 
-export default class VerticalNavGroup extends React.PureComponent<
+export class VerticalNavGroup extends React.PureComponent<
     VerticalNavGroupProps,
     VerticalNavGroupState
 > {

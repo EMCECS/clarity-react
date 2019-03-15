@@ -1,6 +1,6 @@
 import * as React from "react";
 import Icon, {Direction} from "../../icon/Icon";
-import VerticalNavGroup, {VerticalNavGroupProps} from "./VerticalNavGroup";
+import {VerticalNavGroup, VerticalNavGroupProps} from "./VerticalNavGroup";
 
 type VerticalNavProps = {
     isCollapsible?: boolean;
@@ -13,7 +13,7 @@ type VerticalNavState = {
     hasIcons: boolean;
 };
 
-export default class VerticalNav extends React.PureComponent<
+export class VerticalNav extends React.PureComponent<
     VerticalNavProps,
     VerticalNavState
 > {

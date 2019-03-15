@@ -25,7 +25,7 @@ type navStates = {
     isNavLevel2OnPage: boolean;
 };
 
-export default class Header extends React.PureComponent<HeaderProps> {
+export class Header extends React.PureComponent<HeaderProps> {
     state: navStates = {
         isNavLevel1OnPage: false,
         isNavLevel2OnPage: false,

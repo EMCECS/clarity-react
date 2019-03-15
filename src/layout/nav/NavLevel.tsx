@@ -9,7 +9,7 @@ export type NavLevelProps = {
     navType: string;
 };
 
-export default class NavLevel extends React.Component<NavLevelProps> {
+export class NavLevel extends React.Component<NavLevelProps> {
     render() {
         let navClass: string[] = [];
         if (this.props.navType === ResponsiveNavCodes.NAV_TYPE_HEADER) {
