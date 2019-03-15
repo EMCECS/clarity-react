@@ -26,7 +26,8 @@
   "scripts": {
     "build": "tsc",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "format": "prettier --write \"src/**/*.+(js|md|ts|css|sass|less|graphql|yml|yaml|json|scss|vue)\""
   },
   "browserslist": [
     ">0.2%",
