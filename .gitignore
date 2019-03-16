@@ -17,6 +17,7 @@
 # Generated jsx and js files
 /src/**/*.jsx
 /src/**/*.js
+/src/**/*.js.map
 
 # Private repo info
 .npmrc

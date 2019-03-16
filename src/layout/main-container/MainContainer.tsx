@@ -1,5 +1,5 @@
-import * as React from "react";
 import {ResponsiveNavCodes, Header} from "../nav";
+import * as React from 'react';
 
 export type MainContainerProps = {
     primaryNav?: React.ReactNode;
