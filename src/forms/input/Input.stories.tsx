@@ -27,9 +27,4 @@ storiesOf('Input', module)
                disabled={true}
                onChange={action('changed')}/>
     ))
-    .add('when disabled', () => (
-        <Input name="somevalue"
-               disabled={true}
-               onChange={action('changed')}/>
-    ))
 ;
