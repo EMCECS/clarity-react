@@ -4,20 +4,20 @@ import {ResponsiveNavCodes} from "./ResponsiveNavCodes";
 export type HeaderProps = {
     // navList is a list of numbers representing the navigation components enabled
     // in the pane
-    navList: number[];
+    navList?: number[];
 
     // onHamburgerToggle handles toggle actions for the left side navigation
     // "hamburger" icon"
-    onHamburgerToggle: () => void;
+    onHamburgerToggle?: () => void;
 
     // onRightSideToggle handles toggle actions for the left side navigation
     // vertical ellipsis icon
-    onRightSideToggle: () => void;
+    onRightSideToggle?: () => void;
 
     // onCloseAll handles a call made to close all in this component. The logic
     // for handling the closeAll action is within the parent object, and will
     // have an effect on navList property.
-    onCloseAll: () => void;
+    onCloseAll?: () => void;
 };
 
 type navStates = {
@@ -39,10 +39,12 @@ export class Header extends React.PureComponent<HeaderProps> {
     // initializeNavTriggers sets the navigation state for this component based
     // on whether each navLevel is contained within the navList
     private initializeNavTriggers(props: HeaderProps): navStates {
+        if (!props.navList)
+            return {isNavLevel1OnPage: false, isNavLevel2OnPage: false};
         const {NAV_LEVEL_1, NAV_LEVEL_2} = ResponsiveNavCodes;
         let isNavLevel1OnPage = false,
             isNavLevel2OnPage = false;
-        if (props.navList.length > 2) {
+        if (props.navList && props.navList.length > 2) {
             console.error("More than 2 Nav Levels detected.");
             return {isNavLevel1OnPage, isNavLevel2OnPage};
         }
