@@ -14,6 +14,13 @@
 # production
 /build
 
+# Generated jsx and js files
+/src/**/*.jsx
+/src/**/*.js
+
+# Private repo info
+.npmrc
+
 # misc
 .DS_Store
 .env.local
