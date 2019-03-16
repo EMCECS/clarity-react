@@ -7,7 +7,8 @@ let wrapper: any;
 beforeEach(() => {
     wrapper = shallow(
         <Header
-            navList={[]}
+            isNavLevel1OnPage={false}
+            isNavLevel2OnPage={false}
             onCloseAll={() => {}}
             onHamburgerToggle={() => {}}
             onRightSideToggle={() => {}}
@@ -33,7 +34,8 @@ describe("<MainContainer /> rendering", () => {
     it("should have two buttons for hamburger and overflow", () => {
         const test = shallow(
             <Header
-                navList={[1, 2]}
+                isNavLevel1OnPage={false}
+                isNavLevel2OnPage={false}
                 onCloseAll={() => {}}
                 onHamburgerToggle={() => {}}
                 onRightSideToggle={() => {}}

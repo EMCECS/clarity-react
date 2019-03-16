@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as utils from '../../utils';
 import {ResponsiveNavCodes} from "./ResponsiveNavCodes";
 
 export type NavLevelProps = {
@@ -11,16 +12,19 @@ export type NavLevelProps = {
 
 export class NavLevel extends React.Component<NavLevelProps> {
     render() {
-        let navClass: string[] = [];
-        if (this.props.navType === ResponsiveNavCodes.NAV_TYPE_HEADER) {
-            navClass = ["header-nav"];
-        } else if (this.props.navType === ResponsiveNavCodes.NAV_TYPE_SIDE) {
-            navClass = ["sidenav"];
-        } else if (this.props.navType === ResponsiveNavCodes.NAV_TYPE_SUB) {
-            navClass = ["subnav"];
-        }
-        navClass.push("clr-nav-level-" + this.props.navLevel);
-
-        return <nav className={navClass.join(" ")}>{this.props.children}</nav>;
+        const classList: (string | undefined)[] = [
+            (this.props.navType === ResponsiveNavCodes.NAV_TYPE_HEADER ?
+                "header-nav" : undefined),
+            (this.props.navType === ResponsiveNavCodes.NAV_TYPE_SIDE ?
+                "sidenav" : undefined),
+            (this.props.navType === ResponsiveNavCodes.NAV_TYPE_SUB ?
+                "subnav" : undefined),
+            "clr-nav-level-" + this.props.navLevel
+        ];
+        return (
+            <nav className={utils.classNames(classList)}>
+                {this.props.children}
+            </nav>
+        );
     }
 }
