@@ -1,5 +1,5 @@
 import * as React from "react";
-import Icon, {Direction} from "../../icon/Icon";
+import {Icon, Direction} from "../../icon";
 
 export interface VerticalNavGroupProps {
     // groupName is the clickable text that toggles display of grouped child
