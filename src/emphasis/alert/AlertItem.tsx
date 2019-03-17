@@ -5,16 +5,15 @@ import * as utils from "../../utils";
 
 export type AlertItemProps = {
     actions?: ReactElement
-    children: ReactNode | ReactNode[]
-    icon?: Icon
+    children?: ReactNode | ReactNode[]
+    icon?: ReactElement
     static?: boolean
 };
 
 export class AlertItem extends React.PureComponent<AlertItemProps> {
 
-    private static iconWithAlertClass(icon: Icon): Icon {
-        const iconEl = icon as ReactNode as ReactElement;
-        return React.cloneElement(iconEl, {
+    private static iconWithAlertClass(icon: ReactElement): Icon {
+        return React.cloneElement(icon, {
             className: "alert-icon " + icon.props.className
         }) as ReactNode as Icon;
     }

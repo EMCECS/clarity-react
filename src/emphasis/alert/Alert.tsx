@@ -4,13 +4,16 @@ import "@webcomponents/custom-elements/custom-elements.min.js";
 import "@clr/icons/clr-icons.min.js";
 import Icon from "../../icon/Icon";
 import * as utils from "../../utils";
+import {ReactNode} from "react";
 
 export interface AlertProps {
-    type: AlertType
-    size?: AlertSize
-    static?: boolean
-    closeIcon?: boolean
+    closeable?: boolean | undefined
+    children?: ReactNode | ReactNode[]
     level?: AlertLevel
+    size?: AlertSize
+    isStatic?: boolean
+    style?: any
+    type: AlertType
 }
 
 export enum AlertType {
@@ -36,24 +39,29 @@ export class Alert extends React.PureComponent<AlertProps> {
     }
 
     private static getClassNames(props: AlertProps): (string | undefined)[] {
+        const {type, isStatic, level, size} = props;
         return [
             "alert",
-            (props.type ? `alert-${props.type}` : undefined),
-            (props.size ? `alert-${props.size}` : undefined),
-            (props.static ? "static" : undefined)
+            (type ? `alert-${type}` : undefined),
+            (size ? `alert-${size}` : undefined),
+            (isStatic ? "static" : undefined),
+            (level == AlertLevel.APP ? "alert-app-level" : undefined),
+            (size == AlertSize.COMPACT ? "alert-sm" : undefined)
         ]
     }
 
     render() {
-        const {children, closeIcon} = this.props;
+        const {children, closeable, style} = this.props;
         return (
-            <div className={utils.classNames(Alert.getClassNames(this.props))}>
+            <div className={utils.classNames(Alert.getClassNames(this.props))}
+                 style={style}
+            >
                 <div className="alert-items">
                     {children}
                 </div>
-                {closeIcon &&
+                {closeable &&
                     <button type="button" className="close" aria-label="Close">
-                        <Icon shape="close"/>
+                        <Icon aria-hidden="true" shape="close"/>
                     </button>
                 }
             </div>
