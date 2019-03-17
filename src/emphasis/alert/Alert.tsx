@@ -7,7 +7,7 @@ import * as utils from "../../utils";
 
 export interface AlertProps {
     closeable?: boolean | undefined
-    children?: ReactNode | ReactNode[]
+    children?: React.ReactNode | React.ReactNode[]
     level?: AlertLevel
     size?: AlertSize
     isStatic?: boolean
@@ -16,7 +16,6 @@ export interface AlertProps {
 }
 
 export enum AlertType {
-    ERROR = "error",
     INFO = "info",
     DANGER = "danger",
     WARNING = "warning",
@@ -24,7 +23,6 @@ export enum AlertType {
 }
 
 export enum AlertSize {
-    DEFAULT = "default",
     COMPACT = "compact"
 }
 
