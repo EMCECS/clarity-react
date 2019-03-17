@@ -2,6 +2,7 @@ import * as React from "react";
 import {storiesOf} from '@storybook/react';
 import {Alert, AlertItem, AlertLevel, AlertSize, AlertType} from ".";
 import {Icon} from "../../icon";
+import {Button, ButtonState} from "../../forms/button";
 
 storiesOf('Alert', module)
     .add('Default Alerts', () =>
@@ -157,6 +158,38 @@ storiesOf('Alert', module)
             </Alert>
         </div>
     )
+    .add('Actionable Alerts', () =>
+        <div style={{"width": "80em", pading: "3em"}}>
+            <Alert type={AlertType.INFO} style={{marginBottom: "2em"}}>
+                <AlertItem
+                    actions={<Button>Action</Button>}
+                    icon={<Icon shape="info-standard"/>}>
+                    Informational Standard
+                </AlertItem>
+            </Alert>
+            <Alert type={AlertType.DANGER} style={{marginBottom: "2em"}}>
+                <AlertItem
+                    actions={<Button>Action</Button>}
+                    icon={<Icon shape="error-standard"/>}>
+                    Dangerous Alert
+                </AlertItem>
+            </Alert>
+            <Alert type={AlertType.SUCCESS} style={{marginBottom: "2em"}}>
+                <AlertItem
+                    actions={<Button>Action</Button>}
+                    icon={<Icon shape="success-standard"/>}>
+                    Successful Alert
+                </AlertItem>
+            </Alert>
+            <Alert type={AlertType.WARNING} size={AlertSize.COMPACT}>
+                <AlertItem
+                    actions={<Button>Action</Button>}
+                    icon={<Icon shape="warning-standard"/>}>
+                    Warning Alert
+                </AlertItem>
+            </Alert>
+        </div>
+    )
     .add('App Level Alerts', () =>
         <div style={{"width": "80em", padding: "3em"}}>
             <Alert type={AlertType.INFO}
@@ -173,16 +206,39 @@ storiesOf('Alert', module)
                     Dangerous Alert
                 </AlertItem>
             </Alert>
-            <Alert type={AlertType.SUCCESS}
+            <Alert type={AlertType.WARNING}
+                   level={AlertLevel.APP}>
+                <AlertItem icon={<Icon shape="warning-standard"/>}>
+                    Warning Alert
+                </AlertItem>
+            </Alert>
+        </div>
+    )
+    .add('App Level Actionable Alerts', () =>
+        <div style={{"width": "80em", padding: "3em"}}>
+            <Alert type={AlertType.INFO}
                    level={AlertLevel.APP}
                    style={{marginBottom: "2em"}}>
-                <AlertItem icon={<Icon shape="success-standard"/>}>
-                    Successful Alert
+                <AlertItem
+                    actions={<Button>Action</Button>}
+                    icon={<Icon shape="info-standard"/>}>
+                    Informational Standard
+                </AlertItem>
+            </Alert>
+            <Alert type={AlertType.DANGER}
+                   level={AlertLevel.APP}
+                   style={{marginBottom: "2em"}}>
+                <AlertItem
+                    actions={<Button>Action</Button>}
+                    icon={<Icon shape="error-standard"/>}>
+                    Dangerous Alert
                 </AlertItem>
             </Alert>
             <Alert type={AlertType.WARNING}
                    level={AlertLevel.APP}>
-                <AlertItem icon={<Icon shape="warning-standard"/>}>
+                <AlertItem
+                    actions={<Button>Action</Button>}
+                    icon={<Icon shape="warning-standard"/>}>
                     Warning Alert
                 </AlertItem>
             </Alert>

@@ -31,6 +31,8 @@ export enum AlertLevel {
     APP = "app"
 }
 
+//TODO: Add alert paging for app-level alerts
+//TODO: Improve alert action styling
 export class Alert extends React.PureComponent<AlertProps> {
     constructor(props: AlertProps) {
         super(props);
