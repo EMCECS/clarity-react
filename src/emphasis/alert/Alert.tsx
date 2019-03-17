@@ -9,6 +9,7 @@ export interface AlertProps {
     closeable?: boolean | undefined
     children?: React.ReactNode | React.ReactNode[]
     level?: AlertLevel
+    onClose?: React.MouseEventHandler<any>,
     size?: AlertSize
     isStatic?: boolean
     style?: any
@@ -48,18 +49,20 @@ export class Alert extends React.PureComponent<AlertProps> {
     }
 
     render() {
-        const {children, closeable, style} = this.props;
+        const {children, closeable, onClose, style} = this.props;
         return (
             <div className={utils.classNames(Alert.getClassNames(this.props))}
-                 style={style}
-            >
+                 style={style}>
                 <div className="alert-items">
                     {children}
                 </div>
                 {closeable &&
-                    <button type="button" className="close" aria-label="Close">
-                        <Icon aria-hidden="true" shape="close"/>
-                    </button>
+                <button type="button"
+                        onClick={onClose}
+                        className="close"
+                        aria-label="Close">
+                  <Icon aria-hidden="true" shape="close"/>
+                </button>
                 }
             </div>
         );
