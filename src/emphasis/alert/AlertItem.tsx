@@ -1,12 +1,12 @@
 import * as React from 'react';
 import {ReactElement, ReactNode} from 'react';
-import Icon from "../../icon/Icon";
+import {Icon} from "../../icon";
 import * as utils from "../../utils";
 
 export type AlertItemProps = {
-    actions?: ReactElement
-    children?: ReactNode | ReactNode[]
-    icon?: ReactElement
+    actions?: React.ReactElement
+    children?: React.ReactNode | React.ReactNode[]
+    icon?: React.ReactElement
     static?: boolean
 };
 

@@ -1,8 +1,8 @@
 import * as React from "react";
 import {storiesOf} from '@storybook/react';
 import {action} from '@storybook/addon-actions';
-import {Button, ButtonSize, ButtonState} from "./index";
-import Icon from "../../icon/Icon";
+import {Icon} from "../../icon";
+import {Button, ButtonSize, ButtonState} from ".";
 
 storiesOf('Button', module)
     .add('Simple buttons', () =>

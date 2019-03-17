@@ -1,6 +1,6 @@
 import * as React from "react";
-import Icon, {Direction} from "../../icon/Icon";
-import {VerticalNavGroup, VerticalNavGroupProps} from "./VerticalNavGroup";
+import {Icon, Direction} from "../../icon";
+import {VerticalNavGroup, VerticalNavGroupProps} from ".";
 
 type VerticalNavProps = {
     isCollapsible?: boolean;

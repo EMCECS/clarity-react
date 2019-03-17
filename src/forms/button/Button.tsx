@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {ReactElement, ReactNode} from 'react';
 import * as utils from '../../utils';
-import Icon from "../../icon/Icon";
+import {Icon} from "../../icon";
 
 type ButtonProps = {
     block?: boolean

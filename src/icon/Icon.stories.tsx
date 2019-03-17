@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {storiesOf} from '@storybook/react';
-import Icon, {Direction} from "./Icon";
+import {Icon, Direction} from ".";
 
 storiesOf('Icon', module)
     .add('a simple icon', () =>

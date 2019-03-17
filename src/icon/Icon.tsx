@@ -9,7 +9,7 @@ export interface IconProps {
     dir?: Direction;
 }
 
-export default class Icon extends React.PureComponent<IconProps> {
+export class Icon extends React.PureComponent<IconProps> {
     constructor(props: IconProps) {
         super(props);
     }

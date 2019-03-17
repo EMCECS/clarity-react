@@ -2,9 +2,8 @@ import * as React from "react";
 import "@clr/icons/clr-icons.min.css";
 import "@webcomponents/custom-elements/custom-elements.min.js";
 import "@clr/icons/clr-icons.min.js";
-import Icon from "../../icon/Icon";
+import {Icon} from "../../icon";
 import * as utils from "../../utils";
-import {ReactNode} from "react";
 
 export interface AlertProps {
     closeable?: boolean | undefined

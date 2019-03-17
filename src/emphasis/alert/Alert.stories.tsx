@@ -1,7 +1,7 @@
 import * as React from "react";
 import {storiesOf} from '@storybook/react';
 import {Alert, AlertItem, AlertLevel, AlertSize, AlertType} from ".";
-import Icon from "../../icon/Icon";
+import {Icon} from "../../icon";
 
 storiesOf('Alert', module)
     .add('Default Alerts', () =>
