@@ -2,7 +2,7 @@ import * as React from "react";
 import {storiesOf} from '@storybook/react';
 import {Alert, AlertItem, AlertLevel, AlertSize, AlertType} from ".";
 import {Icon} from "../../icon";
-import {Button, ButtonState} from "../../forms/button";
+import {Button} from "../../forms/button";
 
 storiesOf('Alert', module)
     .add('Default Alerts', () =>
@@ -162,30 +162,41 @@ storiesOf('Alert', module)
         <div style={{"width": "80em", pading: "3em"}}>
             <Alert type={AlertType.INFO} style={{marginBottom: "2em"}}>
                 <AlertItem
-                    actions={<Button>Action</Button>}
+                    actions={<Button link>Action</Button>}
                     icon={<Icon shape="info-standard"/>}>
                     Informational Standard
                 </AlertItem>
             </Alert>
             <Alert type={AlertType.DANGER} style={{marginBottom: "2em"}}>
                 <AlertItem
-                    actions={<Button>Action</Button>}
+                    actions={<Button link>Action</Button>}
                     icon={<Icon shape="error-standard"/>}>
                     Dangerous Alert
                 </AlertItem>
             </Alert>
             <Alert type={AlertType.SUCCESS} style={{marginBottom: "2em"}}>
                 <AlertItem
-                    actions={<Button>Action</Button>}
+                    actions={<Button link>Action</Button>}
                     icon={<Icon shape="success-standard"/>}>
                     Successful Alert
                 </AlertItem>
             </Alert>
             <Alert type={AlertType.WARNING} size={AlertSize.COMPACT}>
                 <AlertItem
-                    actions={<Button>Action</Button>}
+                    actions={<Button link>Action</Button>}
                     icon={<Icon shape="warning-standard"/>}>
                     Warning Alert
+                </AlertItem>
+            </Alert>
+        </div>
+    )
+    .add('Static Alerts', () =>
+        <div style={{"width": "80em", pading: "3em"}}>
+            <Alert type={AlertType.INFO} style={{marginBottom: "2em"}}>
+                <AlertItem
+                    static
+                    icon={<Icon shape="info-standard"/>}>
+                    Informational Standard
                 </AlertItem>
             </Alert>
         </div>
