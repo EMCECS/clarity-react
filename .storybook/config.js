@@ -1,9 +1,7 @@
 import {addDecorator, configure, setAddon} from '@storybook/react';
 import "@clr/ui/clr-ui.min.css"
 import {withInfo} from "@storybook/addon-info";
-import JSXAddon from "storybook-addon-jsx";
 
-setAddon(JSXAddon);
 addDecorator(withInfo);
 
 const req = require.context('../src', true, /\.stories\.tsx$/);
