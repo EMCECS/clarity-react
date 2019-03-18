@@ -1,6 +1,6 @@
 import * as React from "react";
 
-interface NavLinkProps {}
+export type NavLinkProps = {};
 
 export class NavLink extends React.PureComponent<NavLinkProps> {
     render() {

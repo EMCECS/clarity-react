@@ -1,6 +1,7 @@
 import * as React from "react";
+import {ClassNames} from "."
 
-type HeaderProps = {
+export type NavHeaderProps = {
     // onHamburgerToggle handles toggle actions for the left side navigation
     // "hamburger" icon"
     onHamburgerToggle?: () => void;
@@ -19,37 +20,7 @@ type HeaderProps = {
     isNavLevel2OnPage: boolean
 };
 
-export class Header extends React.PureComponent<HeaderProps> {
-    // state: navStates = {
-    //     isNavLevel1OnPage: false,
-    //     isNavLevel2OnPage: false
-    // };
-
-    // constructor(props: HeaderProps) {
-    //     super(props);
-    //     this.state = this.initializeNavTriggers(props);
-    // }
-
-    // initializeNavTriggers sets the navigation state for this component based
-    // on whether each navLevel is contained within the navList
-    // private initializeNavTriggers(props: HeaderProps): navStates {
-    //     const {NAV_LEVEL_1, NAV_LEVEL_2} = ResponsiveNavCodes;
-    //     let isNavLevel1OnPage = false,
-    //         isNavLevel2OnPage = false;
-    //     if (props.navList && props.navList.length > 2) {
-    //         console.error("More than 2 Nav Levels detected.");
-    //         return {isNavLevel1OnPage, isNavLevel2OnPage};
-    //     }
-    //     props.navList.forEach(navLevel => {
-    //         if (navLevel === NAV_LEVEL_1) {
-    //             isNavLevel1OnPage = true;
-    //         } else if (navLevel === NAV_LEVEL_2) {
-    //             isNavLevel2OnPage = true;
-    //         }
-    //     });
-    //     return {isNavLevel1OnPage, isNavLevel2OnPage};
-    // }
-
+export class Header extends React.PureComponent<NavHeaderProps> {
     render() {
         const {
             isNavLevel1OnPage,
@@ -61,18 +32,16 @@ export class Header extends React.PureComponent<HeaderProps> {
         return (
             <header className="header">
                 {isNavLevel1OnPage &&
-                <button
-                  className="header-hamburger-trigger"
-                  type="button"
-                  onClick={onHamburgerToggle}
-                >
+                <button className={ClassNames.HAMBURGER_TRIGGER}
+                        type="button"
+                        onClick={onHamburgerToggle}>
                   <span/>
                 </button>
                 }
                 {this.props.children}
                 {isNavLevel2OnPage &&
                 <button
-                  className="header-overflow-trigger"
+                  className={ClassNames.OVERFLOW_TRIGGER}
                   type="button"
                   onClick={onRightSideToggle}
                 >

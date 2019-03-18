@@ -1,38 +1,26 @@
 import * as React from 'react';
 import * as utils from "../../utils";
-import {Header} from "../nav";
+import {Header, ClassNames as NavClassNames} from "../nav";
+import {ClassNames} from ".";
 
-type MainContainerProps = {
+export type MainContainerProps = {
+    title: string;
     primaryNav?: React.ReactNode;
     secondaryNav?: React.ReactNode;
 };
 
-type MainContainerState = {
-    leftNavOpen: boolean;
-    rightNavOpen: boolean;
-    isNavLevel1OnPage: boolean
-    isNavLevel2OnPage: boolean
+const initialState = {
+    leftNavOpen: false,
+    rightNavOpen: false,
 };
 
-export class MainContainer extends React.PureComponent<MainContainerProps> {
-    readonly state: MainContainerState;
+type MainContainerState = Readonly<typeof initialState>;
 
-    constructor(props: MainContainerProps) {
-        super(props);
-        let isNavLevel1OnPage = false;
-        let isNavLevel2OnPage = false;
-        if (typeof props.primaryNav !== "undefined" && props.primaryNav !== null) {
-            isNavLevel1OnPage = true;
-        }
-        if (typeof props.secondaryNav !== "undefined" && props.secondaryNav !== null) {
-            isNavLevel2OnPage = true;
-        }
-        this.state = {
-            leftNavOpen: false,
-            rightNavOpen: false,
-            isNavLevel1OnPage,
-            isNavLevel2OnPage
-        };
+export class MainContainer extends React.PureComponent<MainContainerProps> {
+    readonly state: MainContainerState = initialState;
+
+    private static propIsSet(prop: any): boolean {
+        return (typeof prop !== "undefined" && prop !== null);
     }
 
     handleHamburgerToggle = () => {
@@ -52,27 +40,29 @@ export class MainContainer extends React.PureComponent<MainContainerProps> {
     getClassList(): (string | undefined)[] {
         const {leftNavOpen, rightNavOpen} = this.state;
         return [
-            "main-container",
-            (leftNavOpen  ? "open-hamburger-menu" : undefined),
-            (rightNavOpen ? "open-overflow-menu" : undefined)
+            ClassNames.CONTAINER_CLASS,
+            (leftNavOpen ? NavClassNames.HAMBURGER_MENU : undefined),
+            (rightNavOpen ? NavClassNames.OVERFLOW_MENU : undefined)
         ];
     }
 
     render() {
-        const {isNavLevel1OnPage, isNavLevel2OnPage} = this.state;
-        const {primaryNav, secondaryNav} = this.props;
+        const {children, primaryNav, secondaryNav, title} = this.props;
         return (
             <div className={utils.classNames(this.getClassList())}>
                 <Header
-                    isNavLevel1OnPage={isNavLevel1OnPage}
-                    isNavLevel2OnPage={isNavLevel2OnPage}
+                    isNavLevel1OnPage={MainContainer.propIsSet(primaryNav)}
+                    isNavLevel2OnPage={MainContainer.propIsSet(secondaryNav)}
                     onHamburgerToggle={this.handleHamburgerToggle}
                     onRightSideToggle={this.handleRightSideToggle}
-                    onCloseAll={this.closeAll}>
+                    onCloseAll={this.closeAll}
+                >
                     <div className="branding">
                         <a href="#" className="nav-link">
                             <span className="logo dell-emc-logo"/>
-                            <span className="title">ECS Flex</span>
+                            <span className="title">
+                                {title}
+                            </span>
                         </a>
                     </div>
                     {primaryNav}
@@ -80,7 +70,7 @@ export class MainContainer extends React.PureComponent<MainContainerProps> {
                 </Header>
                 {secondaryNav}
                 <div className="content-container">
-                    {this.props.children}
+                    {children}
                 </div>
             </div>
         );

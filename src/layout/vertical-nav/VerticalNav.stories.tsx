@@ -1,36 +1,25 @@
 import * as React from 'react';
 import {storiesOf} from '@storybook/react';
 import {VerticalNav, VerticalNavGroup} from ".";
+import {NavLink} from "../nav";
 
 // TODO: figure out link formatting
 storiesOf('Vertical Navigation', module)
     .add('a simple vertical nav', () =>
         <VerticalNav>
-            <a href={"./#"} className={"nav-btn"}>
-                Link 1
-            </a>
-            <a href={"./#"} className={"nav-btn"}>
-                Link 2
-            </a>
+            <NavLink>Link 1</NavLink>
+            <NavLink>Link 2</NavLink>
         </VerticalNav>
     )
     .add('a vertical nav with groups', () =>
         <VerticalNav>
             <VerticalNavGroup groupName="Group 1">
-                <a href={"./#"} className={"nav-btn"}>
-                    Link 1
-                </a>
-                <a href={"./#"} className={"nav-btn"}>
-                    Link 2
-                </a>
+                <NavLink>Link 1</NavLink>
+                <NavLink>Link 2</NavLink>
             </VerticalNavGroup>
             <VerticalNavGroup groupName="Group 2">
-                <a href={"./#"} className={"nav-btn"}>
-                    Link 3
-                </a>
-                <a href={"./#"} className={"nav-btn"}>
-                    Link 4
-                </a>
+                <NavLink>Link 3</NavLink>
+                <NavLink>Link 4</NavLink>
             </VerticalNavGroup>
         </VerticalNav>
     )
