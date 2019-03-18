@@ -1,5 +1,7 @@
 import * as React from "react";
 import * as utils from '../../utils';
+import {ReactElement} from "react";
+import {NavLink} from "./NavLink";
 
 export type NavProps = {
     // The level of navigation invoked.
@@ -38,6 +40,19 @@ export class Nav extends React.PureComponent<NavProps> {
         return "clr-nav-level=" + navLevel;
     }
 
+    private static maybeWrapInList(navType: NavType, children: React.ReactNode): React.ReactNode {
+        if (navType === NavType.SUB) {
+            const wrappedChildren = React.Children.map(children, (child) => {
+                const childEl = child as ReactElement;
+                if (childEl.type === NavLink)
+                    return (<li className="nav-item">{child}</li>);
+                return child;
+            });
+            return (<ul className={"nav"}>{wrappedChildren}</ul>);
+        }
+        return children;
+    }
+
     render() {
         const {children, navLevel, navType} = this.props;
         const classList: string[] = [
@@ -46,7 +61,7 @@ export class Nav extends React.PureComponent<NavProps> {
         ];
         return (
             <nav className={utils.classNames(classList)}>
-                {children}
+                {Nav.maybeWrapInList(navType, children)}
             </nav>
         );
     }

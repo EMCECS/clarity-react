@@ -4,6 +4,6 @@ import {Header} from ".";
 
 storiesOf('Header', module)
     .add('Header', () =>
-        <Header isNavLevel1OnPage={true} isNavLevel2OnPage={true}/>
+        <Header primaryShown={true} secondaryShown={true}/>
     )
 ;

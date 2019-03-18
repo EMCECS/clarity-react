@@ -8,8 +8,8 @@ describe("<MainContainer /> rendering", () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    it("should render one <Header />", () => {
+    it("should render one <Header6 />", () => {
         const wrapper = shallow(<MainContainer />);
-        expect(wrapper.find("Header")).toHaveLength(1);
+        expect(wrapper.find("Header6")).toHaveLength(1);
     });
 });

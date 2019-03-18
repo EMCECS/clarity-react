@@ -15,33 +15,33 @@ export type NavHeaderProps = {
     // have an effect on navList property.
     onCloseAll?: () => void;
 
-    isNavLevel1OnPage: boolean
+    primaryShown: boolean
 
-    isNavLevel2OnPage: boolean
+    secondaryShown: boolean
 };
 
 export class Header extends React.PureComponent<NavHeaderProps> {
     render() {
         const {
-            isNavLevel1OnPage,
-            isNavLevel2OnPage,
+            primaryShown,
+            secondaryShown,
             onCloseAll,
             onHamburgerToggle,
             onRightSideToggle
         } = this.props;
         return (
-            <header className="header">
-                {isNavLevel1OnPage &&
-                <button className={ClassNames.HAMBURGER_TRIGGER}
+            <header className={ClassNames.Header6}>
+                {primaryShown &&
+                <button className={ClassNames.HamburgerTrigger}
                         type="button"
                         onClick={onHamburgerToggle}>
                   <span/>
                 </button>
                 }
                 {this.props.children}
-                {isNavLevel2OnPage &&
+                {secondaryShown &&
                 <button
-                  className={ClassNames.OVERFLOW_TRIGGER}
+                  className={ClassNames.OverflowTrigger}
                   type="button"
                   onClick={onRightSideToggle}
                 >

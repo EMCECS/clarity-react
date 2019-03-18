@@ -1,12 +1,13 @@
 import * as React from 'react';
 import * as utils from "../../utils";
-import {Header, ClassNames as NavClassNames} from "../nav";
+import {ClassNames as NavClassNames, Header, Nav, NavLevel} from "../nav";
 import {ClassNames} from ".";
 
 export type MainContainerProps = {
     title: string;
-    primaryNav?: React.ReactNode;
-    secondaryNav?: React.ReactNode;
+    headerNav?: any;
+    sideNav?: any;
+    subNav?: any;
 };
 
 const initialState = {
@@ -14,12 +15,14 @@ const initialState = {
     rightNavOpen: false,
 };
 
+export type navsShown = {primary: boolean, secondary: boolean};
+
 type MainContainerState = Readonly<typeof initialState>;
 
 export class MainContainer extends React.PureComponent<MainContainerProps> {
     readonly state: MainContainerState = initialState;
 
-    private static propIsSet(prop: any): boolean {
+    private static varToBool(prop: any): boolean {
         return (typeof prop !== "undefined" && prop !== null);
     }
 
@@ -41,18 +44,19 @@ export class MainContainer extends React.PureComponent<MainContainerProps> {
         const {leftNavOpen, rightNavOpen} = this.state;
         return [
             ClassNames.CONTAINER_CLASS,
-            (leftNavOpen ? NavClassNames.HAMBURGER_MENU : undefined),
-            (rightNavOpen ? NavClassNames.OVERFLOW_MENU : undefined)
+            (leftNavOpen ? NavClassNames.HamburgerMenu : undefined),
+            (rightNavOpen ? NavClassNames.OverflowMenu : undefined)
         ];
     }
 
     render() {
-        const {children, primaryNav, secondaryNav, title} = this.props;
+        const {children, headerNav, sideNav, subNav, title} = this.props;
+        const {primary, secondary} = MainContainer.detectNavs(headerNav, sideNav, subNav);
         return (
             <div className={utils.classNames(this.getClassList())}>
                 <Header
-                    isNavLevel1OnPage={MainContainer.propIsSet(primaryNav)}
-                    isNavLevel2OnPage={MainContainer.propIsSet(secondaryNav)}
+                    primaryShown={MainContainer.varToBool(primary)}
+                    secondaryShown={MainContainer.varToBool(secondary)}
                     onHamburgerToggle={this.handleHamburgerToggle}
                     onRightSideToggle={this.handleRightSideToggle}
                     onCloseAll={this.closeAll}
@@ -65,14 +69,27 @@ export class MainContainer extends React.PureComponent<MainContainerProps> {
                             </span>
                         </a>
                     </div>
-                    {primaryNav}
+                    {headerNav && headerNav}
                     <div className="header-actions"/>
                 </Header>
-                {secondaryNav}
+                {subNav && subNav}
                 <div className="content-container">
+                    {sideNav && sideNav}
                     {children}
                 </div>
             </div>
         );
+    }
+
+    private static detectNavs(...navs: (Nav| undefined)[]): navsShown {
+        return navs.reduce((acc, nav) => {
+            if (typeof nav === "undefined")
+                return acc;
+            if (nav.props.navLevel === NavLevel.PRIMARY)
+                return Object.assign({}, acc, {primary: true});
+            if (nav.props.navLevel === NavLevel.SECONDARY)
+                return Object.assign({}, acc, {secondary: true});
+            return acc;
+        }, {primary: false, secondary: false});
     }
 }
