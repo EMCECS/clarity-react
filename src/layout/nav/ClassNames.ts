@@ -2,6 +2,7 @@ export class ClassNames {
     public static Actions: string = "header-actions";
     public static HamburgerTrigger: string = "header-hamburger-trigger";
     public static HamburgerMenu: string = "open-hamburger-menu";
+    public static Header: string = "header";
     public static Header1: string = "header-1";
     public static Header2: string = "header-2";
     public static Header3: string = "header-3";

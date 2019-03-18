@@ -1,12 +1,26 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<MainContainer /> rendering renders correctly 1`] = `
+exports[`<MainContainer /> with primary and secondary rendering renders correctly 1`] = `
 <header
   className="header"
 >
+  <button
+    className="header-hamburger-trigger"
+    onClick={[MockFunction]}
+    type="button"
+  >
+    <span />
+  </button>
+  <button
+    className="header-overflow-trigger"
+    onClick={[MockFunction]}
+    type="button"
+  >
+    <span />
+  </button>
   <div
     className="header-backdrop"
-    onClick={[Function]}
+    onClick={[MockFunction]}
   />
 </header>
 `;

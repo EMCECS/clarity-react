@@ -4,12 +4,12 @@ import * as React from "react";
 
 describe("<MainContainer /> rendering", () => {
     it("renders correctly", () => {
-        const wrapper = shallow(<MainContainer />);
+        const wrapper = shallow(<MainContainer title="test" />);
         expect(wrapper).toMatchSnapshot();
     });
 
-    it("should render one <Header6 />", () => {
-        const wrapper = shallow(<MainContainer />);
-        expect(wrapper.find("Header6")).toHaveLength(1);
+    it("should render one <Header />", () => {
+        const wrapper = shallow(<MainContainer title="test" />);
+        expect(wrapper.find("Header")).toHaveLength(1);
     });
 });

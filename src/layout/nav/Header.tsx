@@ -1,5 +1,5 @@
 import * as React from "react";
-import {ClassNames} from "."
+import {ClassNames} from ".";
 
 export type NavHeaderProps = {
     // onHamburgerToggle handles toggle actions for the left side navigation
@@ -15,40 +15,28 @@ export type NavHeaderProps = {
     // have an effect on navList property.
     onCloseAll?: () => void;
 
-    primaryShown: boolean
+    primaryShown: boolean;
 
-    secondaryShown: boolean
+    secondaryShown: boolean;
 };
 
 export class Header extends React.PureComponent<NavHeaderProps> {
     render() {
-        const {
-            primaryShown,
-            secondaryShown,
-            onCloseAll,
-            onHamburgerToggle,
-            onRightSideToggle
-        } = this.props;
+        const {primaryShown, secondaryShown, onCloseAll, onHamburgerToggle, onRightSideToggle} = this.props;
         return (
-            <header className={ClassNames.Header6}>
-                {primaryShown &&
-                <button className={ClassNames.HamburgerTrigger}
-                        type="button"
-                        onClick={onHamburgerToggle}>
-                  <span/>
-                </button>
-                }
+            <header className={ClassNames.Header}>
+                {primaryShown && (
+                    <button className={ClassNames.HamburgerTrigger} type="button" onClick={onHamburgerToggle}>
+                        <span />
+                    </button>
+                )}
                 {this.props.children}
-                {secondaryShown &&
-                <button
-                  className={ClassNames.OverflowTrigger}
-                  type="button"
-                  onClick={onRightSideToggle}
-                >
-                  <span/>
-                </button>
-                }
-                <div className="header-backdrop" onClick={onCloseAll}/>
+                {secondaryShown && (
+                    <button className={ClassNames.OverflowTrigger} type="button" onClick={onRightSideToggle}>
+                        <span />
+                    </button>
+                )}
+                <div className="header-backdrop" onClick={onCloseAll} />
             </header>
         );
     }

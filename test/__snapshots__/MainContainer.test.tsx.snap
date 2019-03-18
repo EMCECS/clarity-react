@@ -5,10 +5,11 @@ exports[`<MainContainer /> rendering renders correctly 1`] = `
   className="main-container"
 >
   <Header
-    navList={Array []}
     onCloseAll={[Function]}
     onHamburgerToggle={[Function]}
     onRightSideToggle={[Function]}
+    primaryShown={false}
+    secondaryShown={false}
   >
     <div
       className="branding"
@@ -23,7 +24,7 @@ exports[`<MainContainer /> rendering renders correctly 1`] = `
         <span
           className="title"
         >
-          ECS Flex
+          test
         </span>
       </a>
     </div>

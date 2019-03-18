@@ -1,47 +1,97 @@
-import {Header} from "../src/layout/nav";
-import {shallow} from "enzyme";
+import {Header, NavHeaderProps} from "../src/layout/nav";
+import {shallow, mount, ShallowWrapper} from "enzyme";
 import * as React from "react";
 
-let wrapper: any;
+let wrapper: ShallowWrapper<NavHeaderProps>;
+const clickFn = jest.fn();
 
-beforeEach(() => {
-    wrapper = shallow(
-        <Header
-            isNavLevel1OnPage={false}
-            isNavLevel2OnPage={false}
-            onCloseAll={() => {}}
-            onHamburgerToggle={() => {}}
-            onRightSideToggle={() => {}}
-        />,
-    );
-});
+describe("<MainContainer /> with primary and secondary rendering", () => {
+    beforeAll(() => {
+        wrapper = shallow<Header>(
+            <Header
+                primaryShown={true}
+                secondaryShown={true}
+                onCloseAll={clickFn}
+                onHamburgerToggle={clickFn}
+                onRightSideToggle={clickFn}
+            />,
+        );
+    });
 
-describe("<MainContainer /> rendering", () => {
     it("renders correctly", () => {
         expect(wrapper).toMatchSnapshot();
     });
-    it("should not have any buttons", () => {
-        expect(wrapper.find("button")).toHaveLength(0);
-    });
-    // it("should have one button for hamburger", () => {
-    //     wrapper.setProps({navList: [1, 0]});
-    //     expect(wrapper.find("button")).toHaveLength(1);
-    // });
-    // it("should have one button for overflow", () => {
-    //     wrapper.setProps({navList: [0, 2]});
-    //     expect(wrapper.find("button")).toHaveLength(1);
-    // });
+
     it("should have two buttons for hamburger and overflow", () => {
-        const test = shallow(
+        expect(wrapper.find(".header-hamburger-trigger")).toHaveLength(1);
+        expect(wrapper.find(".header-overflow-trigger")).toHaveLength(1);
+        expect(wrapper.find("button")).toHaveLength(2);
+    });
+});
+
+describe("<MainContainer /> without primary and secondary rendering", () => {
+    beforeAll(() => {
+        wrapper = shallow<Header>(
             <Header
-                isNavLevel1OnPage={false}
-                isNavLevel2OnPage={false}
-                onCloseAll={() => {}}
-                onHamburgerToggle={() => {}}
-                onRightSideToggle={() => {}}
+                primaryShown={false}
+                secondaryShown={false}
+                onCloseAll={clickFn}
+                onHamburgerToggle={clickFn}
+                onRightSideToggle={clickFn}
             />,
         );
-        //test.setProps({navList: [1, 2]});
-        expect(test.find("button")).toHaveLength(2);
+    });
+    it("should not have any buttons", () => {
+        expect(wrapper.find(".header-hamburger-trigger")).toHaveLength(0);
+        expect(wrapper.find(".header-overflow-trigger")).toHaveLength(0);
+        expect(wrapper.find("button")).toHaveLength(0);
+    });
+});
+
+describe("<MainContainer /> with only primary rendering", () => {
+    beforeAll(() => {
+        wrapper = shallow<Header>(
+            <Header
+                primaryShown={true}
+                secondaryShown={false}
+                onCloseAll={clickFn}
+                onHamburgerToggle={clickFn}
+                onRightSideToggle={clickFn}
+            />,
+        );
+    });
+    it("should have one button only for hamburger", () => {
+        expect(wrapper.find(".header-hamburger-trigger")).toHaveLength(1);
+        expect(wrapper.find(".header-overflow-trigger")).toHaveLength(0);
+        expect(wrapper.find("button")).toHaveLength(1);
+    });
+
+    it("should toggle hamburger menu", () => {
+        wrapper.find("button.header-hamburger-trigger").simulate("click");
+        expect(clickFn).toHaveBeenCalled();
+    });
+});
+
+describe("<MainContainer /> with only secondary rendering", () => {
+    beforeAll(() => {
+        wrapper = shallow<Header>(
+            <Header
+                primaryShown={false}
+                secondaryShown={true}
+                onCloseAll={clickFn}
+                onHamburgerToggle={clickFn}
+                onRightSideToggle={clickFn}
+            />,
+        );
+    });
+    it("should have one button only for overflow", () => {
+        expect(wrapper.find(".header-hamburger-trigger")).toHaveLength(0);
+        expect(wrapper.find(".header-overflow-trigger")).toHaveLength(1);
+        expect(wrapper.find("button")).toHaveLength(1);
+    });
+
+    it("should toggle overflow menu", () => {
+        wrapper.find("button.header-overflow-trigger").simulate("click");
+        expect(clickFn).toHaveBeenCalled();
     });
 });

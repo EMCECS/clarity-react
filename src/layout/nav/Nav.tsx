@@ -1,5 +1,5 @@
 import * as React from "react";
-import * as utils from '../../utils';
+import * as utils from "../../utils";
 import {ReactElement} from "react";
 import {NavLink} from "./NavLink";
 
@@ -13,13 +13,13 @@ export type NavProps = {
 
 export enum NavLevel {
     PRIMARY = "1",
-    SECONDARY = "2"
+    SECONDARY = "2",
 }
 
 export enum NavType {
     HEADER = "NAV_TYPE_HEADER",
     SIDE = "NAV_TYPE_SIDE",
-    SUB = "NAV_TYPE_SUB"
+    SUB = "NAV_TYPE_SUB",
 }
 
 export class Nav extends React.PureComponent<NavProps> {
@@ -37,32 +37,24 @@ export class Nav extends React.PureComponent<NavProps> {
     }
 
     private static classForNavLevel(navLevel: NavLevel): string {
-        return "clr-nav-level=" + navLevel;
+        return "clr-nav-level-" + navLevel;
     }
 
     private static maybeWrapInList(navType: NavType, children: React.ReactNode): React.ReactNode {
         if (navType === NavType.SUB) {
-            const wrappedChildren = React.Children.map(children, (child) => {
+            const wrappedChildren = React.Children.map(children, child => {
                 const childEl = child as ReactElement;
-                if (childEl.type === NavLink)
-                    return (<li className="nav-item">{child}</li>);
+                if (childEl.type === NavLink) return <li className="nav-item">{child}</li>;
                 return child;
             });
-            return (<ul className={"nav"}>{wrappedChildren}</ul>);
+            return <ul className={"nav"}>{wrappedChildren}</ul>;
         }
         return children;
     }
 
     render() {
         const {children, navLevel, navType} = this.props;
-        const classList: string[] = [
-            Nav.classForNavType(navType),
-            Nav.classForNavLevel(navLevel)
-        ];
-        return (
-            <nav className={utils.classNames(classList)}>
-                {Nav.maybeWrapInList(navType, children)}
-            </nav>
-        );
+        const classList: string[] = [Nav.classForNavType(navType), Nav.classForNavLevel(navLevel)];
+        return <nav className={utils.classNames(classList)}>{Nav.maybeWrapInList(navType, children)}</nav>;
     }
 }

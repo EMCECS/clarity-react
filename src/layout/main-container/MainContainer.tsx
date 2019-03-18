@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 import * as utils from "../../utils";
 import {ClassNames as NavClassNames, Header, Nav, NavLevel} from "../nav";
 import {ClassNames} from ".";
@@ -15,16 +15,12 @@ const initialState = {
     rightNavOpen: false,
 };
 
-export type navsShown = {primary: boolean, secondary: boolean};
+export type navsShown = {primary: boolean; secondary: boolean};
 
 type MainContainerState = Readonly<typeof initialState>;
 
 export class MainContainer extends React.PureComponent<MainContainerProps> {
     readonly state: MainContainerState = initialState;
-
-    private static varToBool(prop: any): boolean {
-        return (typeof prop !== "undefined" && prop !== null);
-    }
 
     handleHamburgerToggle = () => {
         const {leftNavOpen} = this.state;
@@ -44,8 +40,8 @@ export class MainContainer extends React.PureComponent<MainContainerProps> {
         const {leftNavOpen, rightNavOpen} = this.state;
         return [
             ClassNames.CONTAINER_CLASS,
-            (leftNavOpen ? NavClassNames.HamburgerMenu : undefined),
-            (rightNavOpen ? NavClassNames.OverflowMenu : undefined)
+            leftNavOpen ? NavClassNames.HamburgerMenu : undefined,
+            rightNavOpen ? NavClassNames.OverflowMenu : undefined,
         ];
     }
 
@@ -55,22 +51,20 @@ export class MainContainer extends React.PureComponent<MainContainerProps> {
         return (
             <div className={utils.classNames(this.getClassList())}>
                 <Header
-                    primaryShown={MainContainer.varToBool(primary)}
-                    secondaryShown={MainContainer.varToBool(secondary)}
+                    primaryShown={primary}
+                    secondaryShown={secondary}
                     onHamburgerToggle={this.handleHamburgerToggle}
                     onRightSideToggle={this.handleRightSideToggle}
                     onCloseAll={this.closeAll}
                 >
                     <div className="branding">
                         <a href="#" className="nav-link">
-                            <span className="logo dell-emc-logo"/>
-                            <span className="title">
-                                {title}
-                            </span>
+                            <span className="logo dell-emc-logo" />
+                            <span className="title">{title}</span>
                         </a>
                     </div>
                     {headerNav && headerNav}
-                    <div className="header-actions"/>
+                    <div className="header-actions" />
                 </Header>
                 {subNav && subNav}
                 <div className="content-container">
@@ -81,15 +75,15 @@ export class MainContainer extends React.PureComponent<MainContainerProps> {
         );
     }
 
-    private static detectNavs(...navs: (Nav| undefined)[]): navsShown {
-        return navs.reduce((acc, nav) => {
-            if (typeof nav === "undefined")
+    private static detectNavs(...navs: (Nav | undefined)[]): navsShown {
+        return navs.reduce(
+            (acc, nav) => {
+                if (typeof nav === "undefined") return acc;
+                if (nav.props.navLevel === NavLevel.PRIMARY) return Object.assign({}, acc, {primary: true});
+                if (nav.props.navLevel === NavLevel.SECONDARY) return Object.assign({}, acc, {secondary: true});
                 return acc;
-            if (nav.props.navLevel === NavLevel.PRIMARY)
-                return Object.assign({}, acc, {primary: true});
-            if (nav.props.navLevel === NavLevel.SECONDARY)
-                return Object.assign({}, acc, {secondary: true});
-            return acc;
-        }, {primary: false, secondary: false});
+            },
+            {primary: false, secondary: false},
+        );
     }
 }
