@@ -17,7 +17,7 @@
     "outDir": "dist",
     "moduleResolution": "node",
     "isolatedModules": false,
-    "noEmit": true,
+    "noEmit": false,
     "resolveJsonModule": true
   },
   "include": [
