@@ -8,22 +8,22 @@ storiesOf('Alert', module)
     .add('Default Alerts', () =>
         <div style={{"width": "80em", padding: "3em"}}>
             <Alert type={AlertType.INFO} style={{marginBottom: "2em"}}>
-                <AlertItem icon={<Icon shape="info-standard"/>}>
+                <AlertItem>
                     Informational Alert
                 </AlertItem>
             </Alert>
             <Alert type={AlertType.DANGER} style={{marginBottom: "2em"}}>
-                <AlertItem icon={<Icon shape="error-standard"/>}>
+                <AlertItem>
                     Dangerous Alert
                 </AlertItem>
             </Alert>
             <Alert type={AlertType.SUCCESS} style={{marginBottom: "2em"}}>
-                <AlertItem icon={<Icon shape="success-standard"/>}>
+                <AlertItem>
                     Successful Alert
                 </AlertItem>
             </Alert>
             <Alert type={AlertType.WARNING} style={{marginBottom: "2em"}}>
-                <AlertItem icon={<Icon shape="warning-standard"/>}>
+                <AlertItem>
                     Warning Alert
                 </AlertItem>
             </Alert>
@@ -34,26 +34,26 @@ storiesOf('Alert', module)
             <Alert type={AlertType.INFO}
                    closeable
                    style={{marginBottom: "2em"}}>
-                <AlertItem icon={<Icon shape="info-standard"/>}>
+                <AlertItem>
                     Informational Alert
                 </AlertItem>
             </Alert>
             <Alert type={AlertType.DANGER}
                    closeable
                    style={{marginBottom: "2em"}}>
-                <AlertItem icon={<Icon shape="error-standard"/>}>
+                <AlertItem>
                     Dangerous Alert
                 </AlertItem>
             </Alert>
             <Alert type={AlertType.SUCCESS}
                    closeable
                    style={{marginBottom: "2em"}}>
-                <AlertItem icon={<Icon shape="success-standard"/>}>
+                <AlertItem>
                     Successful Alert
                 </AlertItem>
             </Alert>
             <Alert type={AlertType.WARNING} closeable>
-                <AlertItem icon={<Icon shape="warning-standard"/>}>
+                <AlertItem>
                     Warning Alert
                 </AlertItem>
             </Alert>
@@ -64,8 +64,7 @@ storiesOf('Alert', module)
             <Alert type={AlertType.INFO}
                    style={{marginBottom: "2em"}}
                    closeable={true}>
-                <AlertItem
-                    icon={<Icon shape="info-standard"/>}>
+                <AlertItem>
                     Alert Item one
                 </AlertItem>
                 <AlertItem icon={<Icon shape="piggy-bank"/>}>
@@ -81,7 +80,7 @@ storiesOf('Alert', module)
             <Alert type={AlertType.DANGER}
                    style={{marginBottom: "2em"}}
                    closeable={true}>
-                <AlertItem icon={<Icon shape="info-standard"/>}>
+                <AlertItem>
                     Alert Item one
                 </AlertItem>
                 <AlertItem icon={<Icon shape="piggy-bank"/>}>
@@ -97,7 +96,7 @@ storiesOf('Alert', module)
             <Alert type={AlertType.SUCCESS}
                    style={{marginBottom: "2em"}}
                    closeable={true}>
-                <AlertItem icon={<Icon shape="info-standard"/>}>
+                <AlertItem>
                     Alert Item one
                 </AlertItem>
                 <AlertItem icon={<Icon shape="piggy-bank"/>}>
@@ -113,7 +112,7 @@ storiesOf('Alert', module)
             <Alert type={AlertType.WARNING}
                    style={{marginBottom: "2em"}}
                    closeable={true}>
-                <AlertItem icon={<Icon shape="info-standard"/>}>
+                <AlertItem>
                     Alert Item one
                 </AlertItem>
                 <AlertItem icon={<Icon shape="piggy-bank"/>}>
@@ -133,26 +132,26 @@ storiesOf('Alert', module)
             <Alert type={AlertType.INFO}
                    size={AlertSize.COMPACT}
                    style={{marginBottom: "2em"}}>
-                <AlertItem icon={<Icon shape="info-standard"/>}>
+                <AlertItem>
                     Informational Standard
                 </AlertItem>
             </Alert>
             <Alert type={AlertType.DANGER}
                    size={AlertSize.COMPACT}
                    style={{marginBottom: "2em"}}>
-                <AlertItem icon={<Icon shape="error-standard"/>}>
+                <AlertItem>
                     Dangerous Alert
                 </AlertItem>
             </Alert>
             <Alert type={AlertType.SUCCESS}
                    size={AlertSize.COMPACT}
                    style={{marginBottom: "2em"}}>
-                <AlertItem icon={<Icon shape="success-standard"/>}>
+                <AlertItem>
                     Successful Alert
                 </AlertItem>
             </Alert>
             <Alert type={AlertType.WARNING} size={AlertSize.COMPACT}>
-                <AlertItem icon={<Icon shape="warning-standard"/>}>
+                <AlertItem>
                     Warning Alert
                 </AlertItem>
             </Alert>
@@ -161,30 +160,22 @@ storiesOf('Alert', module)
     .add('Actionable Alerts', () =>
         <div style={{"width": "80em", pading: "3em"}}>
             <Alert type={AlertType.INFO} style={{marginBottom: "2em"}}>
-                <AlertItem
-                    actions={<Button link>Action</Button>}
-                    icon={<Icon shape="info-standard"/>}>
+                <AlertItem actions={<Button link>Action</Button>}>
                     Informational Standard
                 </AlertItem>
             </Alert>
             <Alert type={AlertType.DANGER} style={{marginBottom: "2em"}}>
-                <AlertItem
-                    actions={<Button link>Action</Button>}
-                    icon={<Icon shape="error-standard"/>}>
+                <AlertItem actions={<Button link>Action</Button>}>
                     Dangerous Alert
                 </AlertItem>
             </Alert>
             <Alert type={AlertType.SUCCESS} style={{marginBottom: "2em"}}>
-                <AlertItem
-                    actions={<Button link>Action</Button>}
-                    icon={<Icon shape="success-standard"/>}>
+                <AlertItem actions={<Button link>Action</Button>}>
                     Successful Alert
                 </AlertItem>
             </Alert>
             <Alert type={AlertType.WARNING} size={AlertSize.COMPACT}>
-                <AlertItem
-                    actions={<Button link>Action</Button>}
-                    icon={<Icon shape="warning-standard"/>}>
+                <AlertItem actions={<Button link>Action</Button>}>
                     Warning Alert
                 </AlertItem>
             </Alert>
@@ -193,9 +184,7 @@ storiesOf('Alert', module)
     .add('Static Alerts', () =>
         <div style={{"width": "80em", pading: "3em"}}>
             <Alert type={AlertType.INFO} style={{marginBottom: "2em"}}>
-                <AlertItem
-                    static
-                    icon={<Icon shape="info-standard"/>}>
+                <AlertItem static>
                     Informational Standard
                 </AlertItem>
             </Alert>
@@ -206,20 +195,20 @@ storiesOf('Alert', module)
             <Alert type={AlertType.INFO}
                    level={AlertLevel.APP}
                    style={{marginBottom: "2em"}}>
-                <AlertItem icon={<Icon shape="info-standard"/>}>
+                <AlertItem>
                     Informational Standard
                 </AlertItem>
             </Alert>
             <Alert type={AlertType.DANGER}
                    level={AlertLevel.APP}
                    style={{marginBottom: "2em"}}>
-                <AlertItem icon={<Icon shape="error-standard"/>}>
+                <AlertItem>
                     Dangerous Alert
                 </AlertItem>
             </Alert>
             <Alert type={AlertType.WARNING}
                    level={AlertLevel.APP}>
-                <AlertItem icon={<Icon shape="warning-standard"/>}>
+                <AlertItem>
                     Warning Alert
                 </AlertItem>
             </Alert>
@@ -230,26 +219,20 @@ storiesOf('Alert', module)
             <Alert type={AlertType.INFO}
                    level={AlertLevel.APP}
                    style={{marginBottom: "2em"}}>
-                <AlertItem
-                    actions={<Button>Action</Button>}
-                    icon={<Icon shape="info-standard"/>}>
+                <AlertItem actions={<Button>Action</Button>}>
                     Informational Standard
                 </AlertItem>
             </Alert>
             <Alert type={AlertType.DANGER}
                    level={AlertLevel.APP}
                    style={{marginBottom: "2em"}}>
-                <AlertItem
-                    actions={<Button>Action</Button>}
-                    icon={<Icon shape="error-standard"/>}>
+                <AlertItem actions={<Button>Action</Button>}>
                     Dangerous Alert
                 </AlertItem>
             </Alert>
             <Alert type={AlertType.WARNING}
                    level={AlertLevel.APP}>
-                <AlertItem
-                    actions={<Button>Action</Button>}
-                    icon={<Icon shape="warning-standard"/>}>
+                <AlertItem actions={<Button>Action</Button>}>
                     Warning Alert
                 </AlertItem>
             </Alert>

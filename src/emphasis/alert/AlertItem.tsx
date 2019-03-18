@@ -2,9 +2,11 @@ import * as React from 'react';
 import {ReactElement, ReactNode} from 'react';
 import {Icon} from "../../icon";
 import * as utils from "../../utils";
+import {AlertType} from ".";
 
 export type AlertItemProps = {
     actions?: React.ReactElement
+    type?: AlertType
     children?: React.ReactNode | React.ReactNode[]
     icon?: React.ReactElement
     static?: boolean
@@ -12,10 +14,14 @@ export type AlertItemProps = {
 
 export class AlertItem extends React.PureComponent<AlertItemProps> {
 
-    private static iconWithAlertClass(icon: ReactElement): Icon {
-        return React.cloneElement(icon, {
-            className: "alert-icon " + icon.props.className
-        }) as ReactNode as Icon;
+    private static iconWithAlertClass(alertType: AlertType | undefined, icon: ReactElement | undefined): any {
+        if (icon) {
+            return React.cloneElement(icon, {
+                shape: icon.props.shape || AlertItem.defaultIconShape(alertType),
+                className: "alert-icon " + icon.props.className
+            }) as ReactNode as Icon;
+        }
+        return <Icon className="alert-icon" shape={AlertItem.defaultIconShape(alertType)}/>;
     }
 
     private static renderActions(actions: React.ReactElement): ReactElement[] {
@@ -27,26 +33,39 @@ export class AlertItem extends React.PureComponent<AlertItemProps> {
     }
 
     render() {
-        const {actions, children, icon} = this.props;
+        const {actions, type, children, icon} = this.props;
         let classNames = ["alert-item"];
         if (this.props.static)
             classNames.push("static");
         return (
             <div className={utils.classNames(classNames)}>
-                {icon &&
                 <div className="alert-icon-wrapper">
-                    {AlertItem.iconWithAlertClass(icon)}
+                    {AlertItem.iconWithAlertClass(type, icon)}
                 </div>
-                }
                 <div className="alert-text">
                     {children}
                 </div>
-                { actions &&
-                    <div className="alert-actions">
-                        {AlertItem.renderActions(actions)}
-                    </div>
+                {actions &&
+                <div className="alert-actions">
+                    {AlertItem.renderActions(actions)}
+                </div>
                 }
             </div>
         );
+    }
+
+    private static defaultIconShape(alertType: AlertType | undefined): string {
+        switch (alertType) {
+            case AlertType.DANGER:
+                return "error-standard";
+            case AlertType.WARNING:
+                return "warning-standard";
+            case AlertType.INFO:
+                return "info-standard";
+            case AlertType.SUCCESS:
+                return "success-standard";
+            default:
+                return "info-standard";
+        }
     }
 }

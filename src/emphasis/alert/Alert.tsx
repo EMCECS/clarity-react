@@ -4,6 +4,7 @@ import "@webcomponents/custom-elements/custom-elements.min.js";
 import "@clr/icons/clr-icons.min.js";
 import {Icon} from "../../icon";
 import * as utils from "../../utils";
+import {AlertItem} from "./AlertItem";
 
 export interface AlertProps {
     closeable?: boolean | undefined
@@ -51,12 +52,12 @@ export class Alert extends React.PureComponent<AlertProps> {
     }
 
     render() {
-        const {children, closeable, onClose, style} = this.props;
+        const {type, children, closeable, onClose, style} = this.props;
         return (
             <div className={utils.classNames(Alert.getClassNames(this.props))}
                  style={style}>
                 <div className="alert-items">
-                    {children}
+                    {Alert.withAlertType(type, children)}
                 </div>
                 {closeable &&
                 <button type="button"
@@ -68,6 +69,16 @@ export class Alert extends React.PureComponent<AlertProps> {
                 }
             </div>
         );
+    }
+
+    private static withAlertType(alertType: AlertType, children: utils.ReactChildren): utils.ReactChildren {
+        return React.Children.map(children, (child => {
+            const childEl = child as React.ReactElement;
+            if (childEl.type === AlertItem)
+                return React.cloneElement(childEl, {
+                    type: alertType
+                });
+        }));
     }
 
 }
