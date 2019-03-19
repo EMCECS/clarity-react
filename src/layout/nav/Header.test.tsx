@@ -1,4 +1,4 @@
-import {Header, NavHeaderProps} from "../src/layout/nav";
+import {Header, NavHeaderProps} from ".";
 import {shallow, mount, ShallowWrapper} from "enzyme";
 import * as React from "react";
 

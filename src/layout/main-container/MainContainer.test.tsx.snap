@@ -29,11 +29,27 @@ exports[`<MainContainer /> rendering renders correctly 1`] = `
       </a>
     </div>
     <div
+      className="head"
+    >
+      header nav
+    </div>
+    <div
       className="header-actions"
     />
   </Header>
   <div
+    className="sub"
+  >
+    sub nav
+  </div>
+  <div
     className="content-container"
-  />
+  >
+    <div
+      className="side"
+    >
+      side nav
+    </div>
+  </div>
 </div>
 `;
