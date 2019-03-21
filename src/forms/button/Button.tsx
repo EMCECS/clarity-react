@@ -11,9 +11,11 @@ type ButtonProps = {
     inverse?: boolean
     link?: boolean
     onClick?: () => void
+    onSubmit?: () => void
     primary?: boolean
     size?: ButtonSize
     state?: ButtonState
+    submit?: boolean
     children: ReactNode | ReactNode[]
 };
 
@@ -80,6 +82,8 @@ export class Button extends React.PureComponent<ButtonProps> {
             disabled,
             children,
             onClick,
+            onSubmit,
+            submit,
         } = this.props;
         const icon = Button.detectIcon(children);
         const classNames = utils.classNames(Button.getClassNames(this.props, icon));
@@ -87,6 +91,8 @@ export class Button extends React.PureComponent<ButtonProps> {
             disabled={disabled}
             className={classNames}
             onClick={onClick}
+            onSubmit={onSubmit}
+            type={submit ? "submit" : undefined}
         >
             {children}
         </button>

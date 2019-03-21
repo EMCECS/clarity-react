@@ -4,6 +4,7 @@ import {ClassNames as NavClassNames, Header, Nav, NavLevel} from "../nav";
 import {ClassNames} from ".";
 
 export type MainContainerProps = {
+    actions?: React.ReactNode
     title: string;
     headerNav?: any;
     sideNav?: any;
@@ -46,7 +47,14 @@ export class MainContainer extends React.PureComponent<MainContainerProps> {
     }
 
     render() {
-        const {children, headerNav, sideNav, subNav, title} = this.props;
+        const {
+            actions,
+            children,
+            headerNav,
+            sideNav,
+            subNav,
+            title
+        } = this.props;
         const {primary, secondary} = MainContainer.detectNavs(headerNav, sideNav, subNav);
         return (
             <div className={utils.classNames(this.getClassList())}>
@@ -64,12 +72,16 @@ export class MainContainer extends React.PureComponent<MainContainerProps> {
                         </a>
                     </div>
                     {headerNav && headerNav}
-                    <div className="header-actions" />
+                    <div className="header-actions">
+                        {actions}
+                    </div>
                 </Header>
                 {subNav && subNav}
                 <div className="content-container">
+                    <div className="content-area">
+                        {children}
+                    </div>
                     {sideNav && sideNav}
-                    {children}
                 </div>
             </div>
         );

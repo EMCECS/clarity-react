@@ -55,6 +55,7 @@ export class Alert extends React.PureComponent<AlertProps> {
         const {type, children, closeable, onClose, style} = this.props;
         return (
             <div className={utils.classNames(Alert.getClassNames(this.props))}
+                 role="alert"
                  style={style}>
                 <div className="alert-items">
                     {Alert.withAlertType(type, children)}

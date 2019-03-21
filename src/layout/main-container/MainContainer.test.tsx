@@ -1,6 +1,7 @@
 import {MainContainer, MainContainerProps} from "./MainContainer";
 import {shallow, mount, ShallowWrapper} from "enzyme";
 import * as React from "react";
+import {NavLink} from "../nav";
 
 let wrapper: ShallowWrapper<MainContainerProps>;
 
@@ -9,6 +10,7 @@ describe("<MainContainer /> rendering", () => {
         wrapper = shallow(
             <MainContainer
                 title="test"
+                actions={<NavLink/>}
                 headerNav={<div className="head">header nav</div>}
                 sideNav={<div className="side">side nav</div>}
                 subNav={<div className="sub">sub nav</div>}
@@ -23,6 +25,9 @@ describe("<MainContainer /> rendering", () => {
     });
     it("should render one <Header />", () => {
         expect(wrapper.find("Header")).toHaveLength(1);
+    });
+    it("should render one Header actions", () => {
+        expect(wrapper.find(".header.nav-link")).toHaveLength(1);
     });
     it("should render header nav correctly", () => {
         expect(wrapper.find(".head")).toHaveLength(1);

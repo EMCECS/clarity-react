@@ -1,5 +1,5 @@
 {
-    "name": "@dell/clarity-react",
+    "name": "clarity-react",
     "version": "0.1.0",
     "description": "React components for Clarity UI",
     "private": true,
