@@ -5,14 +5,12 @@ import "@clr/icons/clr-icons.min.js";
 
 export interface IconProps {
     shape: string;
+    size?: number;
     className?: string;
     dir?: Direction;
 }
 
 export class Icon extends React.PureComponent<IconProps> {
-    constructor(props: IconProps) {
-        super(props);
-    }
     render() {
         return React.createElement("clr-icon", {
             class: this.props.className,

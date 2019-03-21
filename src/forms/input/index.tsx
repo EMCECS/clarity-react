@@ -11,6 +11,7 @@ type InputProps = {
     onChange?: (evt: React.ChangeEvent<HTMLInputElement>) => void
     placeholder?: string
     name: string
+    size?: number
 };
 
 const initialState = {value: null};
@@ -43,6 +44,7 @@ export class Input extends React.PureComponent<InputProps> {
             helperText,
             label,
             placeholder,
+            size,
             type
         } = this.props;
         let classNames = ["clr-control-container", className];
@@ -55,6 +57,7 @@ export class Input extends React.PureComponent<InputProps> {
                     <div className="clr-input-wrapper">
                         <input type={type || "text"}
                                id={name}
+                               size={size}
                                disabled={disabled}
                                className="clr-input"
                                placeholder={placeholder}
