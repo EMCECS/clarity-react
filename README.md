@@ -1,6 +1,6 @@
 # Clarity React Binding
 
-This project an unofficial implementation of [VMware Clarity Design](https://clarity.design) in React. It leverages CSS, icons and images from the Clarity project.
+This project an unofficial implementation of [VMware Clarity Design](https://clarity.design) in React. It leverages CSS, icons and images from the Clarity project. 
 
 ## Usage in React projects
 
@@ -78,3 +78,7 @@ $ yarn run storyook
 # Using NPM
 $ npm run storybook
 ```
+
+## Licenses
+* Clarity React components is licensed under Apache 2.0 License.
+* The VMware Clarity Design System is licensed under the MIT license.

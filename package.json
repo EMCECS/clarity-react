@@ -2,6 +2,11 @@
     "name": "clarity-react",
     "version": "0.1.0",
     "description": "React components for Clarity UI",
+    "license": {
+        "type": "Apache-2.0",
+        "url": "https://opensource.org/licenses/apache2.0.php"
+
+    },
     "private": true,
     "outDir": "dist",
     "main": "dist/index.js",
