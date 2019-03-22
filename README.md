@@ -80,5 +80,5 @@ $ npm run storybook
 ```
 
 ## Licenses
-
-* The Clarity Design System is licensed under the MIT license.
+* Clarity React components is licensed under Apache 2.0 License.
+* The VMware Clarity Design System is licensed under the MIT license.
