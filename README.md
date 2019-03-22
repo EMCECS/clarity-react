@@ -27,7 +27,6 @@ And make use of the components in your app:
 ```typescript jsx
 import React, {Component} from 'react';
 import MainContainer from "@dell/clarity-react/layout/main-container/MainContainer";
-import {Redirect} from "react-router";
 
 const initialState = {
 };
@@ -44,16 +43,11 @@ export default class MainPage extends Component<MainPageProps> {
     readonly state: MainPageState = initialState;
 
     render() {
-        const {token} = this.props;
-        if (token) {
-            return(
-                <MainContainer>
-                    Hello
-                </MainContainer>
-                    );
-        }  else {
-            return(<Redirect to="/login"/>);
-        }
+        return(
+            <MainContainer>
+                Hello
+            </MainContainer>
+        );
     }
 }
 ```
