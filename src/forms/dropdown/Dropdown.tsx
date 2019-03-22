@@ -9,6 +9,7 @@ export type DropdownProps = {
     label: string;
     dropdownItem?: any;
     isNested?: boolean;
+    onMenuToggle?: () => void;
 };
 
 const initialState = {
@@ -45,7 +46,9 @@ export class Dropdown extends React.PureComponent<DropdownProps> {
         return (
             <div className={utils.classNames(this.getClassListMain())} style={{position: "static"}}>
                 {isNested ? (
-                    <DropdownItem isExpandable={true}>Lorem ipsum.</DropdownItem>
+                    <DropdownItem isExpandable={true} itemClicked={this.toggleClick.bind(this)}>
+                        {label}
+                    </DropdownItem>
                 ) : (
                     <button
                         className={utils.classNames(this.getClassListButton())}
