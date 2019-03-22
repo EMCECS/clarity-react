@@ -10,7 +10,14 @@
 
 export type ReactChildren = (React.ReactNode) | (React.ReactNode[] & React.ReactNode);
 
-export function classNames(classNameList: (false|undefined|null|string)[]) {
-    return classNameList.filter(x => typeof x === 'string').join(' ');
+export function classNames(classNameList: (false | undefined | null | string)[]) {
+    return classNameList.filter(x => typeof x === "string").join(" ");
 }
 
+export function isInTreeDOM(rootEl: Node, clicked: Node): boolean {
+    while (clicked !== rootEl && clicked !== document.body && clicked !== null) {
+        clicked = clicked.parentNode!;
+    }
+
+    return clicked === rootEl;
+}
