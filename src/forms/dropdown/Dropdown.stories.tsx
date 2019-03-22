@@ -1,6 +1,7 @@
 import * as React from "react";
 import {storiesOf} from "@storybook/react";
 import {Dropdown, DropdownMenu, DropdownItem, MenuItemType} from ".";
+import {action} from "@storybook/addon-actions";
 
 storiesOf("Dropdown", module).add("Dropdown", () => (
     <div>
@@ -17,7 +18,12 @@ storiesOf("Dropdown", module).add("Dropdown", () => (
                 <DropdownItem>Lorem</DropdownItem>
                 <Dropdown label="Lorem ipsum." isNested={true}>
                     <DropdownMenu>
-                        <DropdownItem value="Foo." />
+                        <DropdownItem>Foo.</DropdownItem>
+                        <Dropdown label="Bar" isNested={true}>
+                            <DropdownMenu>
+                                <DropdownItem>Baz</DropdownItem>
+                            </DropdownMenu>
+                        </Dropdown>
                     </DropdownMenu>
                 </Dropdown>
             </DropdownMenu>

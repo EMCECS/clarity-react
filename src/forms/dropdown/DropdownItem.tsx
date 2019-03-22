@@ -8,6 +8,7 @@ export type DropdownItemProps = {
     isDisabled?: boolean;
     isExpandable?: boolean;
     isHeaderChild?: boolean;
+    itemClicked?: () => void;
 };
 
 export enum MenuItemType {
@@ -47,6 +48,8 @@ export class DropdownItem extends React.PureComponent<DropdownItemProps> {
         return result;
     }
 
+    toggle() {}
+
     render() {
         const {menuItemType, isDisabled, children} = this.props;
         const classList = this.getClassList();
@@ -57,7 +60,11 @@ export class DropdownItem extends React.PureComponent<DropdownItemProps> {
                 return <div className={utils.classNames(classList)} />;
             case MenuItemType.ITEM:
                 return (
-                    <button className={utils.classNames(classList)} disabled={isDisabled}>
+                    <button
+                        className={utils.classNames(classList)}
+                        disabled={isDisabled}
+                        onClick={this.props.itemClicked}
+                    >
                         {children}
                     </button>
                 );
