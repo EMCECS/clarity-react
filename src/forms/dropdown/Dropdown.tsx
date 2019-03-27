@@ -1,16 +1,17 @@
 import * as React from "react";
-import * as utils from "../../utils";
+import * as ReactDOM from "react-dom";
+import {classNames, isInTreeDOM} from "../../utils";
 import {Icon} from "../../icon";
 import {ClassNames} from "./ClassNames";
-import {DropdownItem, MenuItemType} from "./DropdownItem";
-import "@dell/clarity-ui/dell-clarity-ui.min.css";
+import {DropdownItem, DropdownMenu, propogationChain, DropdownMenuProps} from ".";
+import {ReactElement, ReactNode} from "react";
+import {STOP_PROPAGATION} from ".";
 
 export type DropdownProps = {
     label: string;
-    dropdownItem?: any;
     isNested?: boolean;
-    onMenuToggle?: () => void;
-};
+    className?: string;
+} & DropdownMenuProps;
 
 const initialState = {
     isOpen: false,
@@ -19,16 +20,58 @@ const initialState = {
 type DropdownState = Readonly<typeof initialState>;
 
 export class Dropdown extends React.PureComponent<DropdownProps> {
+    static defaultProps = {
+        closeOnItemClick: true,
+        closeOnBackdrop: true,
+        itemsPath: "",
+        _level: 0,
+        isNested: false,
+    };
+
     readonly state: DropdownState = initialState;
 
-    toggleClick() {
-        const {isOpen} = this.state;
-        this.setState({isOpen: !isOpen});
+    handleButtonClick() {
+        this.toggle();
     }
 
+    toggle(isOpen = !this.state.isOpen) {
+        this.setState({isOpen}, this.afterToggle);
+    }
+
+    afterToggle = () => {
+        if (this.state.isOpen) this.subscribeDocumentClick();
+        else this.unsubscribeDocumentClick();
+    };
+
+    subscribeDocumentClick = () => {
+        window.addEventListener("click", this.handleDocumentClick as any, true);
+    };
+
+    unsubscribeDocumentClick = () => {
+        window.removeEventListener("click", this.handleDocumentClick as any, true);
+    };
+
+    handleDocumentClick = (evt: React.MouseEvent<HTMLElement>) => {
+        if (!this.state.isOpen || !this.props.closeOnBackdrop) return;
+        const target = (evt.target as any) as HTMLElement;
+        const el = ReactDOM.findDOMNode(this);
+        if (!el || typeof el === "string") {
+            console.warn("wrong element type");
+            return;
+        }
+        if (!isInTreeDOM(el, target)) {
+            this.toggle(false);
+        }
+    };
+
     getClassListMain(): (string | undefined)[] {
+        const {className} = this.props;
         const {isOpen} = this.state;
-        return [ClassNames.DROPDOWN, isOpen ? ClassNames.OPEN : undefined];
+        return [
+            ClassNames.DROPDOWN, // prettier hack
+            isOpen ? ClassNames.OPEN : undefined,
+            className ? className : undefined,
+        ];
     }
 
     getClassListButton(): (string | undefined)[] {
@@ -36,30 +79,54 @@ export class Dropdown extends React.PureComponent<DropdownProps> {
         return [ClassNames.BUTTON, ClassNames.BUTTON_OUTLINE_PRIMARY, isOpen ? ClassNames.ACTIVE : undefined];
     }
 
-    static defaultProps = {
-        isNested: false,
+    handleItemClick = async (item: DropdownItem, itemPath: string = "") => {
+        const r = await propogationChain(item, itemPath, [this.props.onItemClick]);
+        if (r === STOP_PROPAGATION) return;
+        if (this.props.closeOnItemClick) {
+            this.toggle(false);
+        }
+        return undefined;
     };
 
+    private renderChildren(): React.ReactNode[] {
+        const {children, itemsPath, isNested, _level} = this.props;
+        if (typeof children === "undefined" || children === null) {
+            return [];
+        }
+        return React.Children.map(children, (child: ReactNode, index: number) => {
+            const childEl = child as ReactElement;
+            if (childEl.type === DropdownMenu) {
+                return React.cloneElement(childEl as React.ReactElement<any>, {
+                    onItemClick: this.handleItemClick,
+                    itemsPath: isNested ? `${itemsPath}/${this.props.label}` : undefined,
+                    _level: _level + 1,
+                });
+            }
+            console.log(child);
+            return child;
+        });
+    }
+
     render() {
-        const {label, children, isNested} = this.props;
+        const {label, isNested} = this.props;
 
         return (
-            <div className={utils.classNames(this.getClassListMain())} style={{position: "static"}}>
+            <div className={classNames(this.getClassListMain())} style={{position: "static"}}>
                 {isNested ? (
-                    <DropdownItem isExpandable={true} itemClicked={this.toggleClick.bind(this)}>
+                    <DropdownItem isExpandable={true} onClick={this.handleButtonClick.bind(this)}>
                         {label}
                     </DropdownItem>
                 ) : (
                     <button
-                        className={utils.classNames(this.getClassListButton())}
+                        className={classNames(this.getClassListButton())}
                         type="button"
-                        onClick={this.toggleClick.bind(this)}
+                        onClick={this.handleButtonClick.bind(this)}
                     >
                         {label}
                         <Icon shape="caret" />
                     </button>
                 )}
-                {children}
+                {this.renderChildren()}
             </div>
         );
     }
