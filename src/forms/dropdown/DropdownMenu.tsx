@@ -1,32 +1,80 @@
 import * as React from "react";
+import {DropdownItem, DropdownItemProps, Dropdown, DropdownProps} from ".";
+import {ReactElement, ReactNode} from "react";
+import {MenuItemType} from "./DropdownItem";
 
-export enum MenuPosition {
-    BOTTOM_LEFT = "bottom-left",
-    BOTTOM_RIGHT = "bottom-right",
-    TOP_LEFT = "top-left",
-    TOP_RIGHT = "top-right",
-    LEFT_BOTTOM = "left-bottom",
-    LEFT_TOP = "left-top",
-    RIGHT_BOTTOM = "right-bottom",
-    RIGHT_TOP = "right-top",
-}
+export const STOP_PROPAGATION: "stopPropagation" = "stopPropagation";
+export type OnItemClickResult =
+    | void
+    | undefined
+    | typeof STOP_PROPAGATION
+    | Promise<undefined | typeof STOP_PROPAGATION>;
 
-export type DropDownMenuProps = {
-    position: MenuPosition;
+export type DropdownMenuProps = {
+    itemsPath?: string;
+    closeOnItemClick?: boolean;
+    closeOnBackdrop?: boolean;
+    _level: number;
+    onItemClick?: (item: DropdownItem, itemPath: string) => OnItemClickResult;
 };
 
-export class DropdownMenu extends React.PureComponent {
-    constructor(props: DropDownMenuProps) {
-        super(props);
-
-        switch (props.position) {
-            case MenuPosition.BOTTOM_LEFT:
-                break;
+export async function propogationChain(item: any, itemPath: any, funcs: any[]) {
+    for (const func of funcs) {
+        if (func) {
+            let r;
+            r = await func(item, itemPath);
+            if (r === STOP_PROPAGATION) return STOP_PROPAGATION;
         }
+    }
+    return undefined;
+}
+
+export class DropdownMenu extends React.PureComponent<DropdownMenuProps> {
+    static defaultProps = {
+        closeOnItemClick: true,
+        closeOnBackdrop: true,
+        itemsPath: "",
+        _level: 0,
+    };
+    private renderChildren(): React.ReactNode[] {
+        const {children, itemsPath, onItemClick, _level} = this.props;
+        if (typeof children === "undefined" || children === null) {
+            return [];
+        }
+        return React.Children.map(children, (child: ReactNode, index: number) => {
+            const childEl = child as ReactElement;
+            if (childEl.type === DropdownItem) {
+                if ((childEl.props as DropdownItemProps).menuItemType === MenuItemType.ITEM) {
+                    const onClick = (childEl.props as DropdownItemProps).onClick;
+                    const key =
+                        (childEl.props as DropdownItemProps).label || (childEl.props as DropdownItemProps).key || index;
+                    const itemPath = `${itemsPath}/${key}`;
+                    return React.cloneElement(childEl as React.ReactElement<DropdownItemProps>, {
+                        onClick: (evt: React.MouseEvent<HTMLElement>) => {
+                            return propogationChain(childEl, itemPath, [
+                                onClick && onClick(evt),
+                                this.props.onItemClick,
+                            ]);
+                        },
+                        key: key.toString(),
+                    });
+                }
+            } else if (childEl.type === Dropdown) {
+                return React.cloneElement(childEl as React.ReactElement<DropdownProps>, {
+                    onItemClick: (clickedItem: DropdownItem, itemPath: string) => {
+                        return propogationChain(clickedItem, itemPath, [clickedItem.props.onClick, onItemClick]);
+                    },
+                    itemsPath: itemsPath,
+                    className: _level! % 2 === 0 ? "left-top" : "right-bottom",
+                    _level: _level,
+                });
+            }
+            console.log(child);
+            return child;
+        });
     }
 
     render() {
-        const {children} = this.props;
-        return <div className="dropdown-menu">{children}</div>;
+        return <div className="dropdown-menu">{this.renderChildren()}</div>;
     }
 }
