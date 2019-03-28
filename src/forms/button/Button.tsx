@@ -20,7 +20,7 @@ export type ButtonProps = {
     flat?: boolean;
     inverse?: boolean;
     link?: boolean;
-    onClick?: () => void;
+    onClick?: (evt: React.MouseEvent<HTMLElement>) => void;
     onSubmit?: () => void;
     primary?: boolean;
     size?: ButtonSize;

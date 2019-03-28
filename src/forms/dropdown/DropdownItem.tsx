@@ -1,6 +1,7 @@
 import * as React from "react";
 import {ClassNames} from "./ClassNames";
 import {classNames} from "../../utils";
+import {Button} from "../button";
 
 export type DropdownItemProps = {
     menuItemType: MenuItemType;
@@ -82,10 +83,10 @@ export class DropdownItem extends React.PureComponent<DropdownItemProps, Dropdow
                 return <div className={classNames(classList)} />;
             case MenuItemType.ITEM:
                 return (
-                    <button className={classNames(classList)} disabled={isDisabled} onClick={onClick}>
+                    <Button className={classNames(classList)} disabled={isDisabled} onClick={onClick}>
                         {label}
                         {children}
-                    </button>
+                    </Button>
                 );
         }
     }

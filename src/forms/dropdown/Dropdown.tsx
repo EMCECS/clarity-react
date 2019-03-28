@@ -5,12 +5,15 @@ import {Icon} from "../../icon";
 import {ClassNames} from "./ClassNames";
 import {DropdownItem, DropdownMenu, propogationChain, DropdownMenuProps} from ".";
 import {ReactElement, ReactNode} from "react";
+import {ButtonProps, Button} from "../button";
 import {STOP_PROPAGATION} from ".";
+import {string} from "prop-types";
 
 export type DropdownProps = {
-    label: string;
+    label?: string;
     isNested?: boolean;
     className?: string;
+    button?: ButtonProps;
 } & DropdownMenuProps;
 
 const initialState = {
@@ -108,23 +111,37 @@ export class Dropdown extends React.PureComponent<DropdownProps> {
     }
 
     render() {
-        const {label, isNested} = this.props;
-
+        const {label, isNested, button} = this.props;
+        const buttonProps = {
+            ...button,
+        };
         return (
             <div className={classNames(this.getClassListMain())} style={{position: "static"}}>
                 {isNested ? (
                     <DropdownItem isExpandable={true} onClick={this.handleButtonClick.bind(this)}>
                         {label}
                     </DropdownItem>
+                ) : button ? (
+                    <Button {...buttonProps} onClick={this.handleButtonClick.bind(this)}>
+                        {label}
+                        <Icon shape="caret down" />
+                    </Button>
                 ) : (
-                    <button
+                    <Button
                         className={classNames(this.getClassListButton())}
-                        type="button"
                         onClick={this.handleButtonClick.bind(this)}
                     >
                         {label}
-                        <Icon shape="caret" />
-                    </button>
+                        <Icon shape="caret down" />
+                    </Button>
+                    // <button
+                    //     className={classNames(this.getClassListButton())}
+                    //     type="button"
+                    //     onClick={this.handleButtonClick.bind(this)}
+                    // >
+                    //     {label}
+                    //     <Icon shape="caret" />
+                    // </button>
                 )}
                 {this.renderChildren()}
             </div>
