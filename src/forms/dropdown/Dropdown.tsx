@@ -121,6 +121,7 @@ export class Dropdown extends React.PureComponent<DropdownProps> {
 
     render() {
         const {label, isNested, button} = this.props;
+        const caretShape = <Icon shape={this.state.isOpen ? "caret up" : "caret down"} />;
         const buttonProps = {
             ...button,
         };
@@ -133,7 +134,7 @@ export class Dropdown extends React.PureComponent<DropdownProps> {
                 ) : button ? (
                     <Button {...buttonProps} onClick={this.handleButtonClick.bind(this)}>
                         {label}
-                        <Icon shape="caret down" />
+                        {caretShape}
                     </Button>
                 ) : (
                     <Button
@@ -141,16 +142,8 @@ export class Dropdown extends React.PureComponent<DropdownProps> {
                         onClick={this.handleButtonClick.bind(this)}
                     >
                         {label}
-                        <Icon shape="caret down" />
+                        {caretShape}
                     </Button>
-                    // <button
-                    //     className={classNames(this.getClassListButton())}
-                    //     type="button"
-                    //     onClick={this.handleButtonClick.bind(this)}
-                    // >
-                    //     {label}
-                    //     <Icon shape="caret" />
-                    // </button>
                 )}
                 {this.renderChildren()}
             </div>
