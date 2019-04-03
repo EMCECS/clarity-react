@@ -126,7 +126,7 @@ export class Dropdown extends React.PureComponent<DropdownProps> {
             ...button,
         };
         return (
-            <div className={classNames(this.getClassListMain())} style={{position: "static"}}>
+            <div className={classNames(this.getClassListMain())}>
                 {isNested ? (
                     <DropdownItem isExpandable={true} onClick={this.handleButtonClick.bind(this)}>
                         {label}
