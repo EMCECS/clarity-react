@@ -10,7 +10,7 @@
 
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import {classNames, isInTreeDOM} from "../../utils";
+import {classNames} from "../../utils";
 import {Icon} from "../../icon";
 import {ClassNames} from "./ClassNames";
 import {DropdownItem, DropdownMenu, propogationChain, DropdownMenuProps} from ".";
@@ -40,6 +40,8 @@ export class Dropdown extends React.PureComponent<DropdownProps> {
         isNested: false,
     };
 
+    private ddRef = React.createRef<HTMLDivElement>();
+
     readonly state: DropdownState = initialState;
 
     handleButtonClick() {
@@ -66,12 +68,12 @@ export class Dropdown extends React.PureComponent<DropdownProps> {
     handleDocumentClick = (evt: React.MouseEvent<HTMLElement>) => {
         if (!this.state.isOpen || !this.props.closeOnBackdrop) return;
         const target = (evt.target as any) as HTMLElement;
-        const el = ReactDOM.findDOMNode(this);
+        const el = this.ddRef.current;
         if (!el || typeof el === "string") {
             console.warn("wrong element type");
             return;
         }
-        if (!isInTreeDOM(el, target)) {
+        if (!el.contains(target)) {
             this.toggle(false);
         }
     };
@@ -126,7 +128,7 @@ export class Dropdown extends React.PureComponent<DropdownProps> {
             ...button,
         };
         return (
-            <div className={classNames(this.getClassListMain())}>
+            <div ref={this.ddRef} className={classNames(this.getClassListMain())}>
                 {isNested ? (
                     <DropdownItem isExpandable={true} onClick={this.handleButtonClick.bind(this)}>
                         {label}
