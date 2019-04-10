@@ -12,7 +12,6 @@ import * as React from "react";
 import {UID} from "react-uid";
 import {Icon} from "../../icon";
 import {classNames} from "../../utils";
-import {ClassNames} from "../../layout/nav";
 
 type SelectOption = {
     value?: string;
@@ -35,38 +34,25 @@ type SelectProps = {
     error?: boolean; // force error state of component
     defaultHelperText?: string; // shown when state isError is false
     errorHelperText?: string; // shown when state isError is true
-    onChange?: (evt: React.ChangeEvent<HTMLElement>) => void;
+    onBlur?: (evt: React.FocusEvent<HTMLSelectElement>) => void;
+    onChange?: (evt: React.ChangeEvent<HTMLSelectElement>) => void;
 };
 
-type SelectState = {
-    isError?: boolean;
-};
-
-export class Select extends React.PureComponent<SelectProps, SelectState> {
+export class Select extends React.PureComponent<SelectProps> {
     constructor(props: SelectProps) {
         super(props);
-        this.state = {
-            isError: this.props.error,
-        };
-    }
-    handleBlur(evt: React.FocusEvent<HTMLSelectElement>) {
-        const {required} = this.props;
-        if (required && evt.target.value === "") {
-            this.setState({isError: true});
-        } else {
-            this.setState({isError: false});
-        }
-    }
-    handleChange(evt: React.ChangeEvent<HTMLSelectElement>) {
-        const {onChange} = this.props;
-        if (evt.target.value !== "") {
-            this.setState({isError: false});
-        }
-        if (onChange) onChange(evt);
     }
     render() {
-        const {label, value, defaultHelperText, errorHelperText, children} = this.props;
-        const {isError} = this.state;
+        const {
+            label, // prettier
+            value,
+            defaultHelperText,
+            errorHelperText,
+            onBlur,
+            onChange,
+            error,
+            children,
+        } = this.props;
         const setId = this.props.id;
         return (
             <UID>
@@ -80,15 +66,15 @@ export class Select extends React.PureComponent<SelectProps, SelectState> {
                         <div
                             className={classNames([
                                 "clr-control-container", //prettier
-                                isError && "clr-error",
+                                error && "clr-error",
                             ])}
                         >
                             <div className="clr-select-wrapper">
                                 <select
                                     value={value}
                                     id={setId ? setId : id}
-                                    onChange={this.handleChange.bind(this)}
-                                    onBlur={this.handleBlur.bind(this)}
+                                    onChange={onChange}
+                                    onBlur={onBlur}
                                     className="clr-select"
                                 >
                                     <option selected disabled hidden style={{display: "none"}} value="" />
@@ -96,7 +82,7 @@ export class Select extends React.PureComponent<SelectProps, SelectState> {
                                 </select>
                                 <Icon className="clr-validate-icon" shape="exclamation-circle" />
                             </div>
-                            {isError ? (
+                            {error ? (
                                 <span className="clr-subtext">{errorHelperText}</span>
                             ) : (
                                 defaultHelperText && <span className="clr-subtext">{defaultHelperText}</span>

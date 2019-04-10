@@ -25,18 +25,33 @@ storiesOf("Select", module)
     ))
     .add("Labels", () => (
         <div>
-            <Select onChange={action("basic change")} label="I've got some options">
+            <Select onChange={action("label select - change")} label="I've got some options">
                 <SelectOption value="1">One</SelectOption>
                 <SelectOption value="2">Two</SelectOption>
                 <SelectOption value="3">Three</SelectOption>
             </Select>
         </div>
     ))
-    .add("Helper and error messages", () => (
+    .add("Full select display", () => (
+        <div>
+            <Select
+                onChange={action("full select - change")}
+                defaultHelperText="You have these choices"
+                errorHelperText="This field is required!"
+                label="I've got some options"
+            >
+                <SelectOption value="1">One</SelectOption>
+                <SelectOption value="2">Two</SelectOption>
+                <SelectOption value="3">Three</SelectOption>
+            </Select>
+        </div>
+    ))
+    .add("Select with error", () => (
         <div>
             <Select
                 error={true}
-                onChange={action("basic change")}
+                onBlur={action("select with error - blur")}
+                onChange={action("select with error - change")}
                 defaultHelperText="You have these choices"
                 errorHelperText="This field is required!"
                 label="I've got some options"
