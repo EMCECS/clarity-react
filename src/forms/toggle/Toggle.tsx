@@ -12,76 +12,57 @@ import * as React from "react";
 import {UID} from "react-uid";
 import {ClassNames} from "./ClassNames";
 
-type CheckboxValue = boolean | "indeterminate";
-
-type CheckBoxProps = {
+type ToggleProps = {
+    id?: string;
     label?: string;
     name?: string;
-    id?: string;
-    checked?: CheckboxValue;
-    defaultChecked?: CheckboxValue;
     ariaLabelledby?: string;
     disabled?: boolean;
-    onChange?: (newValue: CheckboxValue) => void;
+    checked?: boolean;
+    defaultChecked?: boolean;
+    onChange?: (newValue: boolean) => void;
 };
 
-type CheckBoxState = {
-    value: CheckboxValue;
+type ToggleState = {
+    checked: boolean;
 };
 
-export class CheckBox extends React.PureComponent<CheckBoxProps, CheckBoxState> {
-    private myRef = React.createRef<HTMLInputElement>();
-
-    constructor(props: CheckBoxProps) {
+export class Toggle extends React.PureComponent<ToggleProps, ToggleState> {
+    constructor(props: ToggleProps) {
         super(props);
-        this.state = {value: this.getValue()};
+        this.state = {checked: this.getValue()};
     }
-
-    getValue(): CheckboxValue {
+    getValue(): boolean {
         const {checked, defaultChecked} = this.props;
-        const value = this.state ? this.state.value : undefined;
+        const value = this.state ? this.state.checked : undefined;
         if (value !== undefined) return value;
         return checked ? checked : defaultChecked ? defaultChecked : false;
     }
-
-    componentDidMount() {
-        (this.myRef.current as HTMLInputElement).indeterminate = this.getValue() === "indeterminate";
-    }
-
-    componentDidUpdate() {
-        (this.myRef.current as HTMLInputElement).indeterminate = this.getValue() === "indeterminate";
-    }
-
     handleChange(evt: React.ChangeEvent<HTMLInputElement>) {
         const hardValue = this.props.checked !== undefined;
-        const checked = evt.target.checked;
-        const indeterminate = evt.target.indeterminate;
-        const newValue = indeterminate ? "indeterminate" : checked;
-
+        const newValue = evt.target.checked;
         if (hardValue) {
             evt.preventDefault();
             if (this.props.onChange) this.props.onChange(newValue);
         } else {
-            this.setState({value: newValue});
+            this.setState({checked: newValue});
         }
     }
-
     render() {
         const {label, name, ariaLabelledby, disabled} = this.props;
+        const {checked} = this.state;
         const setId = this.props.id;
-        const {value} = this.state;
         return (
             <UID>
                 {id => (
-                    <div className={ClassNames.CLR_CHECKBOX_WRAPPER}>
+                    <div className={ClassNames.CLR_TOGGLE_WRAPPER}>
                         <input
-                            type="checkbox" // prettier
+                            type="checkbox" //prettier
                             id={setId ? setId : id}
                             name={name}
-                            ref={this.myRef}
-                            checked={value !== false}
+                            checked={checked !== false}
                             onChange={this.handleChange.bind(this)}
-                            className={ClassNames.CLR_CHECKBOX}
+                            className={ClassNames.CLR_TOGGLE}
                             aria-labelledby={ariaLabelledby}
                             disabled={disabled}
                         />

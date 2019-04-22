@@ -8,8 +8,4 @@
  *     http://www.apache.org/licenses/LICENSE-2.0
  */
 
-export class ClassNames {
-    public static CLR_CHECKBOX_WRAPPER: string = "clr-checkbox-wrapper";
-    public static CLR_CHECKBOX: string = "clr-checkbox";
-    public static CLR_CONTROL_LABEL: string = "clr-control-label";
-}
+export * from "./Toggle";

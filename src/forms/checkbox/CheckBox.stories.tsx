@@ -10,7 +10,8 @@
 
 import * as React from "react";
 import {storiesOf} from "@storybook/react";
-import {CheckBox, FormControl, SubTextWrapper} from ".";
+import {CheckBox} from ".";
+import {FormControl, SubTextWrapper} from "../common";
 
 storiesOf("Checkboxes", module)
     .add("Basic checkbox button", () => (

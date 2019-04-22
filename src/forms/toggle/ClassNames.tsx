@@ -9,7 +9,7 @@
  */
 
 export class ClassNames {
-    public static CLR_CHECKBOX_WRAPPER: string = "clr-checkbox-wrapper";
-    public static CLR_CHECKBOX: string = "clr-checkbox";
+    public static CLR_TOGGLE_WRAPPER: string = "clr-toggle-wrapper";
+    public static CLR_TOGGLE: string = "clr-toggle";
     public static CLR_CONTROL_LABEL: string = "clr-control-label";
 }
