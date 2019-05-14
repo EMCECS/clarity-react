@@ -2,19 +2,20 @@ import * as React from "react";
 import {Icon, Direction} from "../../icon";
 import Moment from "moment";
 import {classNames} from "../../utils";
-import {Input} from "../input";
 
 export type DatePickerProps = {
     value?: Date;
     locale?: string;
-    defaultValue?: Date;
+    defaultValue?: Date | string;
+    onChange?: (newValue: string | Date) => void;
 };
 
 export type DatePickerState = {
     isOpen: boolean;
-    value: Moment.Moment;
+    value: string;
     navValue: Moment.Moment;
     viewMode: ViewMode;
+    inputFocused: boolean;
 };
 
 enum ViewMode {
@@ -23,96 +24,102 @@ enum ViewMode {
     Year,
 }
 
-const NO_OF_DAYS_IN_A_WEEK: number = 7;
-const NO_OF_ROWS_IN_CALENDAR_VIEW: number = 6;
-const TOTAL_DAYS_IN_DAYS_VIEW: number = NO_OF_DAYS_IN_A_WEEK * NO_OF_ROWS_IN_CALENDAR_VIEW;
-
 export class DatePicker extends React.PureComponent<DatePickerProps, DatePickerState> {
     static defaultProps: DatePickerProps = {
         locale: "en",
-        defaultValue: new Date(),
     };
+
+    private calRef = React.createRef<HTMLDivElement>();
+    private inputRef = React.createRef<HTMLInputElement>();
+
+    static validDate(date: Date) {
+        if (isNaN(date.getTime())) return new Date();
+        return date;
+    }
 
     state: DatePickerState = {
         viewMode: ViewMode.Day,
         isOpen: false, // prettier
-        value: this.props.value !== undefined ? Moment(this.props.value) : Moment(this.props.defaultValue),
-        navValue: this.props.value !== undefined ? Moment(this.props.value) : Moment(this.props.defaultValue),
+        value: this.value,
+        navValue:
+            this.props.value !== undefined
+                ? Moment(DatePicker.validDate(this.props.value))
+                : Moment(this.props.defaultValue),
+        inputFocused: false,
     };
 
-    handleClick() {
-        const {isOpen} = this.state;
-        this.setState({
-            isOpen: !isOpen,
-            viewMode: ViewMode.Day,
-            navValue: this.props.value !== undefined ? Moment(this.props.value) : Moment(this.props.defaultValue),
-        });
+    get value() {
+        const {value, defaultValue} = this.props;
+        let result: string = ""; // in case we don't have a default or hard set value.
+        if (value !== undefined) result = DatePicker.dateToString(value);
+        if (defaultValue !== undefined) result = DatePicker.dateToString(defaultValue);
+        return result;
     }
 
-    private static numDaysFromPrevMonth(year: number, month: number): number {
-        let tempDate = Moment();
-        tempDate.year(year);
-        tempDate.month(month);
-        tempDate.date(1);
-        return tempDate.day();
+    handleToggle() {
+        this.toggle();
     }
 
-    private static numDaysFromNextMonth(year: number, month: number): number {
-        let tempDate = Moment();
-        tempDate.year(year);
-        tempDate.month(month);
-        return TOTAL_DAYS_IN_DAYS_VIEW - (DatePicker.numDaysFromPrevMonth(year, month) + tempDate.daysInMonth());
+    toggle(isOpen = !this.state.isOpen) {
+        this.setState(
+            {
+                isOpen: isOpen,
+                viewMode: ViewMode.Day,
+                navValue:
+                    isOpen && this.state.value.length > 0
+                        ? Moment(
+                              DatePicker.validDate(new Date(this.state.value)),
+                              Moment.localeData(this.props.locale).longDateFormat("L"),
+                          )
+                        : this.state.navValue,
+            },
+            this.afterToggle,
+        );
     }
 
-    private static daysInTheMonth(state: DatePickerState) {
-        const selectedDate = Moment(state.value);
-        const {navValue} = state;
-        const currentMonth = navValue.month();
-        const currentYear = navValue.year();
-        const daysFromPrevMonth = DatePicker.numDaysFromPrevMonth(selectedDate.year(), selectedDate.month());
-        const daysFromNextMonth = DatePicker.numDaysFromNextMonth(selectedDate.year(), selectedDate.month());
+    afterToggle = () => {
+        if (this.state.isOpen) this.subscribeDocumentClick();
+        else this.unsubscribeDocumentClick();
+    };
 
-        let calendar = Moment()
-            .year(currentYear)
-            .month(currentMonth)
-            .date(1);
-        calendar.subtract(daysFromPrevMonth, "days");
+    subscribeDocumentClick = () => {
+        console.log("subscribe");
+        window.addEventListener("click", this.handleDocumentClick as any, true);
+    };
 
-        const selectedSameMonth = selectedDate.isSame(navValue, "month");
+    unsubscribeDocumentClick = () => {
+        console.log("unsubscribe");
+        window.removeEventListener("click", this.handleDocumentClick as any, true);
+    };
 
-        const weeks: any = [];
-        [0, 1, 2, 3, 4, 5].map(() => {
-            const days: any = [];
-            [0, 1, 2, 3, 4, 5, 6].map(() => {
-                const isToday = calendar.isSame(Moment(), "day"); // are we on today?
-                const isSelected = calendar.isSame(selectedDate, "day"); // are we on selected?
-                const isDisabled = !navValue.isSame(calendar, "month");
-                const day = (
-                    <td className="calendar-cell">
-                        <div className="day">
-                            <button
-                                type="button"
-                                className={classNames([
-                                    "day-btn", // prettier
-                                    isSelected && !isToday && "is-selected",
-                                    isToday && "is-today",
-                                    isDisabled && "is-disabled",
-                                ])}
-                                tabIndex={selectedSameMonth ? (isSelected ? 0 : -1) : isToday ? 0 : -1}
-                                autoFocus={selectedSameMonth ? (isSelected ? true : false) : isToday ? true : false}
-                            >
-                                {calendar.date()}
-                            </button>
-                        </div>
-                    </td>
-                );
-                days.push(day);
-                calendar.add(1, "day");
-            });
-            weeks.push(<tr className="calendar-row">{days}</tr>);
-        });
-        return weeks;
+    handleDocumentClick = (evt: React.MouseEvent<HTMLElement>) => {
+        if (!this.state.isOpen) return;
+        const target = (evt.target as any) as HTMLElement;
+        const el = this.calRef.current;
+        if (!el || typeof el === "string") {
+            console.warn("wrong element type");
+            return;
+        }
+        if (!el.contains(target)) {
+            this.toggle(false);
+        }
+    };
+
+    handleSelectedDate(date: Date) {
+        this.setState(
+            {
+                isOpen: false, // prettier
+                value: DatePicker.dateToString(date),
+                navValue: Moment(date),
+            },
+            this.afterSelectedDate,
+        );
     }
+
+    afterSelectedDate = () => {
+        this.inputRef.current!.focus();
+        if (this.props.onChange) this.props.onChange(new Date(this.state.value));
+    };
 
     toggleViewMode(mode: ViewMode) {
         this.setState({viewMode: mode});
@@ -124,34 +131,108 @@ export class DatePicker extends React.PureComponent<DatePickerProps, DatePickerS
         this.setState({viewMode: ViewMode.Day, navValue: newValue});
     }
 
+    toggleNavValueYear(year: number) {
+        const newValue = Moment(this.state.navValue);
+        newValue.year(year);
+        this.setState({viewMode: ViewMode.Day, navValue: newValue});
+    }
+
+    toggleNavValueYear10(year: number) {
+        const newValue = Moment(this.state.navValue);
+        newValue.year(newValue.year() + year);
+        this.setState({navValue: newValue});
+    }
+
+    toggleNavValue() {
+        this.setState({viewMode: ViewMode.Day, navValue: Moment()});
+    }
+
+    private static numDaysFromPrevMonth(year: number, month: number): number {
+        let tempDate = Moment();
+        tempDate.year(year);
+        tempDate.month(month);
+        tempDate.date(1);
+        return tempDate.day();
+    }
+
+    private static dateToString(date: Date | string, locale: string = "en"): string {
+        if (typeof date === "string") return date;
+        return Moment(date)
+            .locale(locale)
+            .format("L");
+    }
+
+    private handleInputChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+        this.setState(
+            {
+                value: evt.target.value,
+                navValue: Moment(
+                    DatePicker.validDate(new Date(evt.target.value)),
+                    Moment.localeData(this.props.locale).longDateFormat("L"),
+                ),
+            },
+            this.afterInputChange,
+        );
+    };
+
+    afterInputChange = () => {
+        if (this.props.onChange) this.props.onChange(this.state.value);
+    };
+
     render() {
-        const {isOpen, viewMode} = this.state;
-        const navValue = Moment(this.state.navValue);
+        const {isOpen, viewMode, navValue, inputFocused, value} = this.state;
         const {locale} = this.props;
-
-        const weekDaysHtml = Moment.weekdaysShort(true).map(day => {
-            return <td className="calendar-cell weekday">{day.substring(0, 1)}</td>;
-        });
-
+        const navMonth = navValue.month();
+        const navYear = navValue.year();
+        const daysFromPrevMonth = DatePicker.numDaysFromPrevMonth(navYear, navMonth);
+        let calendar = Moment()
+            .year(navYear)
+            .month(navMonth)
+            .date(1)
+            .subtract(daysFromPrevMonth, "days");
+        const moment = Moment(value, Moment.localeData(locale).longDateFormat("L"));
+        const selectedSameMonth = moment.isSame(navValue, "month");
         return (
-            <div className="clr-control-container">
+            <div ref={this.calRef} className="clr-control-container">
                 <div className="clr-input-wrapper">
-                    <div className="clr-input-group">
+                    <div
+                        className={classNames([
+                            "clr-input-group", //prettier
+                            inputFocused && "clr-focus",
+                        ])}
+                    >
                         <input
+                            ref={this.inputRef}
                             type="text"
                             className="clr-input"
                             placeholder={Moment.localeData(locale).longDateFormat("L")}
+                            value={value}
+                            onFocus={() => {
+                                this.setState({inputFocused: true});
+                            }}
+                            onBlur={() => {
+                                this.setState({inputFocused: false});
+                            }}
+                            onChange={this.handleInputChange}
                         />
                         <button
                             className="clr-input-group-icon-action"
                             type="button"
                             title="Open"
-                            onClick={this.handleClick.bind(this)}
+                            onClick={this.handleToggle.bind(this)}
                         >
                             <Icon shape="calendar" />
                         </button>
                         {isOpen && (
-                            <div className="datepicker">
+                            <div
+                                className="datepicker"
+                                style={{
+                                    position: "absolute",
+                                    left: 0,
+                                    bottom: "auto",
+                                    right: "auto",
+                                }}
+                            >
                                 {viewMode === ViewMode.Day && (
                                     <div className="daypicker">
                                         <div className="calendar-header">
@@ -172,24 +253,99 @@ export class DatePicker extends React.PureComponent<DatePickerProps, DatePickerS
                                                 </button>
                                             </div>
                                             <div className="calendar-switchers">
-                                                <button className="calendar-btn switcher" type="button">
+                                                <button
+                                                    className="calendar-btn switcher"
+                                                    type="button"
+                                                    onClick={this.toggleNavValueMonth.bind(this, navValue.month() - 1)}
+                                                >
                                                     <Icon shape="angle" dir={Direction.LEFT} />
                                                 </button>
-                                                <button className="calendar-btn switcher" type="button">
+                                                <button
+                                                    className="calendar-btn switcher"
+                                                    type="button"
+                                                    onClick={this.toggleNavValue.bind(this)}
+                                                >
                                                     <Icon shape="event" />
                                                 </button>
-                                                <button className="calendar-btn switcher" type="button">
+                                                <button
+                                                    className="calendar-btn switcher"
+                                                    type="button"
+                                                    onClick={this.toggleNavValueMonth.bind(this, navValue.month() + 1)}
+                                                >
                                                     <Icon shape="angle" dir={Direction.RIGHT} />
                                                 </button>
                                             </div>
                                         </div>
                                         <table className="calendar-table weekdays">
                                             <tbody>
-                                                <tr className="calendar-row">{weekDaysHtml}</tr>
+                                                <tr className="calendar-row">
+                                                    {Moment.weekdaysShort(true).map((day: string) => {
+                                                        return (
+                                                            <td key={"day_" + day} className="calendar-cell weekday">
+                                                                {day.substring(0, 1)}
+                                                            </td>
+                                                        );
+                                                    })}
+                                                </tr>
                                             </tbody>
                                         </table>
                                         <table className="calendar-table calendar-dates">
-                                            {DatePicker.daysInTheMonth(this.state)}
+                                            <tbody>
+                                                {[0, 1, 2, 3, 4, 5].map((row: number) => {
+                                                    return (
+                                                        <tr key={"tr_" + row} className="calendar-row">
+                                                            {[0, 1, 2, 3, 4, 5, 6].map((cell: number) => {
+                                                                const isToday = calendar.isSame(Moment(), "day"); // are we on today?
+                                                                const isSelected = calendar.isSame(moment, "day"); // are we on selected?
+                                                                const isDisabled = !navValue.isSame(calendar, "month");
+                                                                const day = (
+                                                                    <td key={"td_" + cell} className="calendar-cell">
+                                                                        <div className="day">
+                                                                            <button
+                                                                                type="button"
+                                                                                className={classNames([
+                                                                                    "day-btn", // prettier
+                                                                                    isSelected &&
+                                                                                        !isToday &&
+                                                                                        "is-selected",
+                                                                                    isToday && "is-today",
+                                                                                    isDisabled && "is-disabled",
+                                                                                ])}
+                                                                                tabIndex={
+                                                                                    selectedSameMonth
+                                                                                        ? isSelected
+                                                                                            ? 0
+                                                                                            : -1
+                                                                                        : isToday
+                                                                                        ? 0
+                                                                                        : -1
+                                                                                }
+                                                                                autoFocus={
+                                                                                    selectedSameMonth
+                                                                                        ? isSelected
+                                                                                            ? true
+                                                                                            : false
+                                                                                        : isToday
+                                                                                        ? true
+                                                                                        : false
+                                                                                }
+                                                                                onClick={this.handleSelectedDate.bind(
+                                                                                    this,
+                                                                                    calendar.toDate(),
+                                                                                )}
+                                                                            >
+                                                                                {calendar.date()}
+                                                                            </button>
+                                                                        </div>
+                                                                    </td>
+                                                                );
+                                                                calendar.add(1, "day");
+                                                                return day;
+                                                            })}
+                                                        </tr>
+                                                    );
+                                                })}
+                                            </tbody>
                                         </table>
                                     </div>
                                 )}
@@ -219,23 +375,38 @@ export class DatePicker extends React.PureComponent<DatePickerProps, DatePickerS
                                 {viewMode === ViewMode.Year && (
                                     <div className="yearpicker">
                                         <div className="year-switchers">
-                                            <button type="button" className="calendar-btn switcher">
+                                            <button
+                                                type="button"
+                                                className="calendar-btn switcher"
+                                                onClick={this.toggleNavValueYear10.bind(this, -10)}
+                                            >
                                                 <Icon shape="angle" dir={Direction.LEFT} />
                                             </button>
-                                            <button type="button" className="calendar-btn switcher">
+                                            <button
+                                                type="button"
+                                                className="calendar-btn switcher"
+                                                onClick={this.toggleNavValue.bind(this)}
+                                            >
                                                 <Icon shape="event" />
                                             </button>
-                                            <button type="button" className="calendar-btn switcher">
+                                            <button
+                                                type="button"
+                                                className="calendar-btn switcher"
+                                                onClick={this.toggleNavValueYear10.bind(this, 10)}
+                                            >
                                                 <Icon shape="angle" dir={Direction.RIGHT} />
                                             </button>
                                         </div>
                                         <div className="years">
-                                            {[9, 8, 7, 6, 5, 4, 3, 2, 1, 0].map((year: number) => {
+                                            {[9, 8, 7, 6, 5, 4, 3, 2, 1, 0].map((year_index: number) => {
+                                                const moment = Moment(navValue).subtract(year_index, "year");
                                                 return (
-                                                    <button type="button" className="calendar-btn year">
-                                                        {Moment(navValue)
-                                                            .subtract(year, "year")
-                                                            .format("YYYY")}
+                                                    <button
+                                                        type="button"
+                                                        className="calendar-btn year"
+                                                        onClick={this.toggleNavValueYear.bind(this, moment.year())}
+                                                    >
+                                                        {moment.format("YYYY")}
                                                     </button>
                                                 );
                                             })}
