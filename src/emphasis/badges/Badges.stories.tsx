@@ -10,7 +10,7 @@
 
 import * as React from "react";
 import {storiesOf} from "@storybook/react";
-import {Badge, BadgeColor, BadgeStatus} from "./badges";
+import {Badge, BadgeColor, BadgeStatus} from "./Badges";
 
 storiesOf("Badges", module)
     .add("Color Badges", () => (
