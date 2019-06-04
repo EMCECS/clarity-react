@@ -17,6 +17,7 @@ type LabelProps = {
     status?: LabelStatus;
     onClick?: (evt: React.MouseEvent<HTMLElement>) => void;
     dismissable?: boolean;
+    style?: any;
 };
 
 export enum LabelColor {
@@ -35,14 +36,20 @@ export enum LabelStatus {
 
 export class Label extends React.PureComponent<LabelProps> {
     render() {
-        const {color, status, onClick, dismissable, children} = this.props;
-        let style: any;
+        const {color, status, onClick, dismissable, style, children} = this.props;
+        let styled: any;
         let Tag: any;
         if (onClick) {
             Tag = "a";
-            style = {cursor: "pointer"};
+            styled = {
+                ...style,
+                cursor: "pointer",
+            };
         } else {
             Tag = "span";
+            styled = {
+                ...style,
+            };
         }
         return (
             <Tag
@@ -53,7 +60,7 @@ export class Label extends React.PureComponent<LabelProps> {
                     onClick && !dismissable && "clickable",
                 ])}
                 onClick={onClick}
-                style={style}
+                style={styled}
             >
                 {children}
                 {dismissable && <Icon shape="close" />}
