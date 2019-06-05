@@ -18,6 +18,7 @@ type LabelProps = {
     onClick?: (evt: React.MouseEvent<HTMLElement>) => void;
     dismissable?: boolean;
     style?: any;
+    className?: string;
 };
 
 export enum LabelColor {
@@ -36,7 +37,7 @@ export enum LabelStatus {
 
 export class Label extends React.PureComponent<LabelProps> {
     render() {
-        const {color, status, onClick, dismissable, style, children} = this.props;
+        const {color, status, onClick, dismissable, style, className, children} = this.props;
         let styled: any;
         let Tag: any;
         if (onClick) {
@@ -54,7 +55,8 @@ export class Label extends React.PureComponent<LabelProps> {
         return (
             <Tag
                 className={classNames([
-                    "label", // prettier
+                    className, // prettier
+                    "label",
                     color && "label-" + color,
                     status && "label-" + status,
                     onClick && !dismissable && "clickable",
