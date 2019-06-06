@@ -113,4 +113,31 @@ storiesOf("Label", module)
                 <Badge>59</Badge>
             </Label>
         </div>
+    ))
+    .add("Custom styled labels", () => (
+        <div>
+            <Label status={LabelStatus.INFO} style={{color: "black", height: "40px"}}>
+                Info
+            </Label>
+            <Label style={{color: "#fff", background: "#6ea204", border: "1px solid #6ea204", fontWeight: "800"}}>
+                Healthy
+            </Label>
+            <Label style={{color: "#fff", background: "#ff0000", border: "1px solid #ff0000", fontWeight: "800"}}>
+                Critical
+            </Label>
+            <Label style={{color: "gray", background: "#ffff", border: "1px solid gray", width: "100px"}}>Main</Label>
+            <Label
+                status={LabelStatus.INFO}
+                style={{
+                    color: "#ffffff",
+                    background: "gray",
+                    border: "1px solid #dcdcdc",
+                    width: "100px",
+                    fontWeight: "800",
+                    height: "35px",
+                }}
+            >
+                sample
+            </Label>
+        </div>
     ));
