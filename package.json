@@ -34,11 +34,12 @@
         "storybook": "start-storybook -p 6006",
         "build-storybook": "build-storybook",
         "test": "jest --coverage",
-        "lint": ".\\node_modules\\.bin\\eslint **\\*.tsx"
+        "lint": "./node_modules/.bin/eslint **//*.tsx",
+        "precommit": "lint-staged"
     },
     "lint-staged": {
         "src/**/*.{js,jsx,json,css,ts,tsx}": [
-            ".\\node_modules\\.bin\\prettier --write",
+            "./node_modules/.bin/prettier --write",
             "git add"
         ]
     },
@@ -67,6 +68,7 @@
         "eslint": "5.12.0",
         "eslint-config-prettier": "^4.0.0",
         "expect": "latest",
+        "husky": "^2.4.1",
         "jest": "^24.5.0",
         "lint-staged": "^8.2.1",
         "prettier": "^1.16.4",

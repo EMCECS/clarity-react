@@ -14,14 +14,13 @@ import {classNames} from "../utils";
 // Props for ProgressBar component
 type ProgressBarProps = {
     value?: number;
-    max?:number;
-    labeled?:boolean;
+    max?: number;
+    labeled?: boolean;
     style?: any;
     className?: string;
     status?: ProgressBarStatus;
-    type?:ProgressBarType;
-    position?:ProgressBarPosition;
-
+    type?: ProgressBarType;
+    position?: ProgressBarPosition;
 };
 
 export enum ProgressBarType {
@@ -44,29 +43,19 @@ export const ProgressBarAnimation = {
     FADE_OUT: "progress-fade",
     FLASH: "flash",
     FLASH_DANGER: "flash-danger",
-}
+};
 
 export class ProgressBar extends React.PureComponent<ProgressBarProps> {
-
     // By default Progress Bar will be normal progress bar not static
     static defaultProps = {
-        type:ProgressBarType.NORMAL
-    }
+        type: ProgressBarType.NORMAL,
+    };
 
     render() {
-        const {
-               value,
-               max,
-               status,
-               type,
-               labeled,
-               position,
-               style,
-               className,
-            } = this.props;
+        const {value, max, status, type, labeled, position, style, className} = this.props;
 
         // Label style for labled progress bar
-        const labelStyle = { display: "block"}
+        const labelStyle = {display: "block"};
 
         return (
             <div
@@ -77,25 +66,20 @@ export class ProgressBar extends React.PureComponent<ProgressBarProps> {
                     position,
                     className, // prettier
                 ])}
-
                 style={style}
             >
-
                 {/* Render normal progress bar if type is normal */}
-                { type == ProgressBarType.NORMAL &&
-                    <progress max={max} value={value}> </progress>
-                }
+                {type == ProgressBarType.NORMAL && (
+                    <progress max={max} value={value}>
+                        {" "}
+                    </progress>
+                )}
 
                 {/* Render static progress bar if type is static */}
-                { type == ProgressBarType.STATIC &&
-                    <div className="progress-meter" data-value={value}></div>
-                }
+                {type == ProgressBarType.STATIC && <div className="progress-meter" data-value={value} />}
 
                 {/* If classname is labeled render label after progres bar */}
-                {labeled  &&
-                    <span style={labelStyle}> {value}% </span>
-                }
-
+                {labeled && <span style={labelStyle}> {value}% </span>}
             </div>
         );
     }
