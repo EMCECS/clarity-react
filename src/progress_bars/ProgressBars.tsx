@@ -20,19 +20,23 @@ type ProgressBarProps = {
     className?: string;
     status?: ProgressBarStatus;
     type?:ProgressBarType;
-    animation?:string[];
+    position?:ProgressBarPosition;
+
 };
 
 export enum ProgressBarType {
     STATIC = "progress-static",
     NORMAL = "progress",
-
 }
 
 export enum ProgressBarStatus {
     SUCCESS = "success",
     WARNING = "warning",
     DANGER = "danger",
+}
+
+export enum ProgressBarPosition {
+    TOP = "top",
 }
 
 export const ProgressBarAnimation = {
@@ -56,42 +60,26 @@ export class ProgressBar extends React.PureComponent<ProgressBarProps> {
                status,
                type,
                labeled,
+               position,
                style,
                className,
-               animation
             } = this.props;
 
         // Label style for labled progress bar
         const labelStyle = { display: "block"}
 
-        let Tag: any;
-        let labeledClassName;
-        let animationClasses;
-
-        if (labeled){
-            labeledClassName = 'labeled'
-        }
-
-        if (animation){
-            animationClasses = animation.join(' ')
-        }
-
-        Tag="div"
-
         return (
-            <Tag
+            <div
                 className={classNames([
                     type,
                     status,
-                    labeledClassName,
-                    animationClasses,
+                    labeled && "labeled",
+                    position,
                     className, // prettier
-
                 ])}
 
                 style={style}
             >
-
 
                 {/* Render normal progress bar if type is normal */}
                 { type == ProgressBarType.NORMAL &&
@@ -100,7 +88,7 @@ export class ProgressBar extends React.PureComponent<ProgressBarProps> {
 
                 {/* Render static progress bar if type is static */}
                 { type == ProgressBarType.STATIC &&
-                    <Tag class="progress-meter" data-value={value}></Tag>
+                    <div className="progress-meter" data-value={value}></div>
                 }
 
                 {/* If classname is labeled render label after progres bar */}
@@ -108,7 +96,7 @@ export class ProgressBar extends React.PureComponent<ProgressBarProps> {
                     <span style={labelStyle}> {value}% </span>
                 }
 
-            </Tag>
+            </div>
         );
     }
 }

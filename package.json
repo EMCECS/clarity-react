@@ -33,7 +33,14 @@
         "build": "tsc",
         "storybook": "start-storybook -p 6006",
         "build-storybook": "build-storybook",
-        "test": "jest --coverage"
+        "test": "jest --coverage",
+        "lint": ".\\node_modules\\.bin\\eslint **\\*.tsx"
+    },
+    "lint-staged": {
+        "src/**/*.{js,jsx,json,css,ts,tsx}": [
+            ".\\node_modules\\.bin\\prettier --write",
+            "git add"
+        ]
     },
     "browserslist": [
         ">0.2%",
@@ -61,6 +68,7 @@
         "eslint-config-prettier": "^4.0.0",
         "expect": "latest",
         "jest": "^24.5.0",
+        "lint-staged": "^8.2.1",
         "prettier": "^1.16.4",
         "react-docgen-typescript-loader": "^3.0.1",
         "react-docgen-typescript-webpack-plugin": "^1.1.0",

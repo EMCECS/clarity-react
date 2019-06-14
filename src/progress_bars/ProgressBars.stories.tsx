@@ -10,7 +10,9 @@
 
 import * as React from "react";
 import {storiesOf} from "@storybook/react";
-import {ProgressBar, ProgressBarStatus, ProgressBarType, ProgressBarAnimation} from "./ProgressBars";
+import {action} from "@storybook/addon-actions";
+import {ProgressBar, ProgressBarStatus, ProgressBarType, ProgressBarAnimation, ProgressBarPosition} from "./ProgressBars";
+import {Card, CardBlock, CardFooter, CardText, CardTitle} from "../cards";
 
 storiesOf("ProgressBar", module)
     .add("ProgressBar Simple", () => (
@@ -67,7 +69,7 @@ storiesOf("ProgressBar", module)
 
         <h4>Flash Then Fade</h4>
         <div style={{width: "80%"}}>
-            <ProgressBar value={100} max={100} animation={[ProgressBarAnimation.FLASH , ProgressBarAnimation.FADE_OUT]} style={{width: "50%"}} > </ProgressBar>
+            <ProgressBar value={100} max={100} className={`${ProgressBarAnimation.FADE_OUT}  ${ProgressBarAnimation.FLASH}`}  style={{width: "50%"}} > </ProgressBar>
         </div>
         <br></br>
 
@@ -78,7 +80,7 @@ storiesOf("ProgressBar", module)
 
         <h4>Labeled With Success Flash And Fade</h4>
         <div style={{width: "80%"}}>
-            <ProgressBar value={100} max={100} animation={[ProgressBarAnimation.FLASH , ProgressBarAnimation.FADE_OUT]} labeled={true} style={{width: "50%"}} > </ProgressBar>
+            <ProgressBar value={100} max={100} className={`${ProgressBarAnimation.FADE_OUT}  ${ProgressBarAnimation.FLASH}`} labeled={true} style={{width: "50%"}} > </ProgressBar>
         </div>
         </div>
     ))
@@ -99,6 +101,80 @@ storiesOf("ProgressBar", module)
         <h4>Red Static Progress Bar</h4>
         <div style={{width: "80%"}}>
             <ProgressBar value={80} max={100} type={ProgressBarType.STATIC} status={ProgressBarStatus.DANGER} style={{width: "50%"}} > </ProgressBar>
+        </div>
+        </div>
+    ))
+    .add("Progress Bar in Cards", () => (
+        <div>
+        <div className="clr-row">
+            <Card header="Header" className="clr-col-lg-4 clr-col-md-8 clr-col-12">
+                <CardBlock>
+                <ProgressBar value={50} max={100} position={ProgressBarPosition.TOP}> </ProgressBar>
+                    <CardTitle>Card title</CardTitle>
+                    <CardText>
+                        Card content can contain text, links, images, data visualizations, lists and more.
+                    </CardText>
+                </CardBlock>
+                <CardFooter>
+                    <button className="btn btn-sm btn-link" onClick={action("onclick - footer action 1")}>
+                        Footer Action 1
+                    </button>
+                </CardFooter>
+            </Card>
+        </div>
+
+        <div className="clr-row">
+        <Card header="Header" className="clr-col-lg-4 clr-col-md-8 clr-col-12">
+            <CardBlock>
+                <CardTitle>Card title</CardTitle>
+                <CardText>
+                    Card content can contain text, links, images, data visualizations, lists and more.
+                </CardText>
+            </CardBlock>
+            <CardFooter>
+               <ProgressBar value={40} max={100} > </ProgressBar>
+                <button className="btn btn-sm btn-link" onClick={action("onclick - footer action 1")}>
+                    Footer Action 1
+                </button>
+            </CardFooter>
+        </Card>
+        </div>
+        </div>
+    ))
+    .add("Static Progress Bar in Cards", () => (
+        <div>
+        <div className="clr-row">
+            <Card header="Header" className="clr-col-lg-4 clr-col-md-8 clr-col-12">
+                <CardBlock>
+                <ProgressBar value={50} max={100} type={ProgressBarType.STATIC} position={ProgressBarPosition.TOP}> </ProgressBar>
+                    <CardTitle>Card title</CardTitle>
+                    <CardText>
+                        Card content can contain text, links, images, data visualizations, lists and more.
+                    </CardText>
+                </CardBlock>
+                <CardFooter>
+                    <button className="btn btn-sm btn-link" onClick={action("onclick - footer action 1")}>
+                        Footer Action 1
+                    </button>
+                </CardFooter>
+            </Card>
+        </div>
+
+        <div className="clr-row">
+        <Card header="Header" className="clr-col-lg-4 clr-col-md-8 clr-col-12">
+            <CardBlock>
+                <CardTitle>Card title</CardTitle>
+                <CardText>
+                    Card content can contain text, links, images, data visualizations, lists and more.
+                </CardText>
+            </CardBlock>
+            <CardFooter>
+               <ProgressBar value={40} max={100} type={ProgressBarType.STATIC}> </ProgressBar>
+                <button className="btn btn-sm btn-link" onClick={action("onclick - footer action 1")}>
+                    Footer Action 1
+                </button>
+            </CardFooter>
+        </Card>
         </div>
         </div>
     ));
