@@ -18,10 +18,12 @@ type InputProps = {
     disabled?: boolean
     helperText?: ReactNode
     label?: string
+    type?: string
     onChange?: (evt: React.ChangeEvent<HTMLInputElement>) => void
     placeholder?: string
     name: string
     size?: number
+    style?: any
 };
 
 const initialState = {value: null};
@@ -55,11 +57,16 @@ export class Input extends React.PureComponent<InputProps> {
             label,
             placeholder,
             size,
-            type
+            type,
+            style
         } = this.props;
         let classNames = ["clr-control-container", className];
+        let styled: any;
         if (disabled)
             classNames.push("clr-form-control-disabled");
+        styled = {
+             ...style
+        }
         return (
             <div className="clr-form-control">
                 {label && Input.renderLabel(label)}
@@ -72,6 +79,7 @@ export class Input extends React.PureComponent<InputProps> {
                                className="clr-input"
                                placeholder={placeholder}
                                onChange={this.handleChange}
+                               style = {styled}
                         />
                     </div>
                     {helperText && Input.renderHelperText(helperText)}

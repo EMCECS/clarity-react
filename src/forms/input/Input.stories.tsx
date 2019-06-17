@@ -32,6 +32,13 @@ storiesOf('Input', module)
                helperText="this should help you figure it out"
                onChange={action('changed')}/>
     ))
+    .add('with boxed outline', () => (
+        <Input name="somevalue"
+               label="somevalue"
+               placeholder="stuff goes here"
+               style={{border: "1px solid gray"}}
+               onChange={action('changed')}/>
+    ))
     .add('when disabled', () => (
         <Input name="somevalue"
                disabled={true}
