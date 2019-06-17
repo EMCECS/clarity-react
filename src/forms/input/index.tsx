@@ -14,7 +14,6 @@ import {ReactNode} from "react";
 
 type InputProps = {
     className?: string
-    type?: string
     disabled?: boolean
     helperText?: ReactNode
     label?: string
