@@ -30,6 +30,7 @@ type SelectProps = {
     label?: string;
     id?: string;
     value?: any;
+    isBoxed?: boolean;
     required?: boolean; // auto-check on blur if there's a value
     error?: boolean; // force error state of component
     defaultHelperText?: string; // shown when state isError is false
@@ -48,6 +49,7 @@ export class Select extends React.PureComponent<SelectProps> {
             value,
             defaultHelperText,
             errorHelperText,
+            isBoxed,
             onBlur,
             onChange,
             error,
@@ -56,40 +58,57 @@ export class Select extends React.PureComponent<SelectProps> {
         const setId = this.props.id;
         return (
             <UID>
-                {id => (
-                    <div className="clr-form-control">
-                        {label && (
-                            <label htmlFor={setId ? setId : id} className="clr-control-label">
-                                {label}
-                            </label>
-                        )}
-                        <div
-                            className={classNames([
-                                "clr-control-container", //prettier
-                                error && "clr-error",
-                            ])}
-                        >
-                            <div className="clr-select-wrapper">
+                {id =>
+                    isBoxed ? (
+                        <div className="form-group">
+                            <label>{label}</label>
+                            <div className="select">
                                 <select
-                                    value={value}
+                                    value={value} // prettier
                                     id={setId ? setId : id}
                                     onChange={onChange}
                                     onBlur={onBlur}
-                                    className="clr-select"
                                 >
                                     <option selected disabled hidden style={{display: "none"}} value="" />
                                     {children}
                                 </select>
-                                <Icon className="clr-validate-icon" shape="exclamation-circle" />
                             </div>
-                            {error ? (
-                                <span className="clr-subtext">{errorHelperText}</span>
-                            ) : (
-                                defaultHelperText && <span className="clr-subtext">{defaultHelperText}</span>
-                            )}
                         </div>
-                    </div>
-                )}
+                    ) : (
+                        <div className="clr-form-control">
+                            {label && (
+                                <label htmlFor={setId ? setId : id} className="clr-control-label">
+                                    {label}
+                                </label>
+                            )}
+                            <div
+                                className={classNames([
+                                    "clr-control-container", //prettier
+                                    error && "clr-error",
+                                ])}
+                            >
+                                <div className="clr-select-wrapper">
+                                    <select
+                                        value={value}
+                                        id={setId ? setId : id}
+                                        onChange={onChange}
+                                        onBlur={onBlur}
+                                        className="clr-select"
+                                    >
+                                        <option selected disabled hidden style={{display: "none"}} value="" />
+                                        {children}
+                                    </select>
+                                    <Icon className="clr-validate-icon" shape="exclamation-circle" />
+                                </div>
+                                {error ? (
+                                    <span className="clr-subtext">{errorHelperText}</span>
+                                ) : (
+                                    defaultHelperText && <span className="clr-subtext">{defaultHelperText}</span>
+                                )}
+                            </div>
+                        </div>
+                    )
+                }
             </UID>
         );
     }
