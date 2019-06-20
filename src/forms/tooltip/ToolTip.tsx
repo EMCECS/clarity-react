@@ -15,6 +15,11 @@ import {Icon} from "../../icon";
 type ToolTipProps = {
     direction?: ToolTipDirection;
     size?: ToolTipSize;
+    status?: ToolTipStatus;
+    style?: any;
+    iconSize?: number;
+    shape?: string;
+    className?: string;
 };
 
 export enum ToolTipDirection {
@@ -22,6 +27,8 @@ export enum ToolTipDirection {
     TOP_LEFT = "top-left",
     BOTTOM_RIGHT = "bottom-right",
     BOTTOM_LEFT = "bottom-left",
+    TOP = "top",
+    BOTTOM = "bottom",
     RIGHT = "right",
     LEFT = "left",
 }
@@ -33,20 +40,46 @@ export enum ToolTipSize {
     LARGE = "lg",
 }
 
-export const ToolTip: React.FunctionComponent<ToolTipProps> = ({direction, size, children}) => {
+export enum ToolTipStatus {
+    INFO = "info",
+    OK = "ok",
+    WARNING = "warning",
+    ERROR = "error",
+}
+
+export const ToolTip: React.FunctionComponent<ToolTipProps> = ({
+    direction,
+    size,
+    style,
+    shape,
+    iconSize,
+    className,
+    status,
+    children,
+}) => {
+    let setShape: string = shape ? shape : "info-circle";
     return (
         <a
             href="javascript://"
             role="tooltip"
             aria-haspopup="true"
             className={classNames([
+                className && className,
                 "tooltip", //prettier
                 direction && "tooltip-" + direction,
                 size && "tooltip-" + size,
             ])}
+            style={style}
         >
-            <Icon shape="info-circle" size={24} />
-            <span className="tooltip-content">{children}</span>
+            <Icon shape={setShape} size={iconSize} />
+            <span
+                className={classNames([
+                    "tooltip-content", //prettier
+                    status && status,
+                ])}
+            >
+                {children}
+            </span>
         </a>
     );
 };
