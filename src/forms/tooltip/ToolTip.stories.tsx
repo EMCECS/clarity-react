@@ -72,4 +72,32 @@ storiesOf("ToolTip", module)
                 Left
             </div>
         </div>
+    ))
+    .add("Tooltip customization", () => (
+        <div style={{paddingTop: "75px"}}>
+            <div style={{float: "left"}}>
+                <ToolTip size={ToolTipSize.EXTRA_SMALL} iconSize={30}>
+                    Lorem
+                </ToolTip>
+                Extra Small
+            </div>
+            <div style={{float: "left", marginLeft: "20px"}}>
+                <ToolTip size={ToolTipSize.SMALL} style={{color: "gray"}}>
+                    Lorem ipsum sit
+                </ToolTip>
+                Small
+            </div>
+            <div style={{float: "left", marginLeft: "20px"}}>
+                <ToolTip size={ToolTipSize.MEDIUM} shape="check-circle">
+                    Loren ipsum dolor sit amet, ipsum
+                </ToolTip>
+                Medium
+            </div>
+            <div style={{float: "left", marginLeft: "20px"}}>
+                <ToolTip size={ToolTipSize.LARGE} iconSize={30} shape="exclamation-triangle" style={{color: "orange"}}>
+                    Loren ipsum dolor sit amet, consectetur adipisicing elit
+                </ToolTip>
+                Large
+            </div>
+        </div>
     ));
