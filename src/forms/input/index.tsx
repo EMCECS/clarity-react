@@ -47,7 +47,17 @@ export class Input extends React.PureComponent<InputProps> {
     }
 
     render() {
-        const {className, disabled, helperText, label, isBoxed, placeholder, size, type} = this.props;
+        const {
+            className, //prettier
+            disabled,
+            helperText,
+            label,
+            isBoxed,
+            placeholder,
+            size,
+            type,
+            children,
+        } = this.props;
         let classNames = ["clr-control-container", className];
         if (disabled) classNames.push("clr-form-control-disabled");
         return isBoxed ? (
@@ -61,6 +71,7 @@ export class Input extends React.PureComponent<InputProps> {
                     placeholder={placeholder}
                     onChange={this.handleChange}
                 />
+                {children}
             </div>
         ) : (
             <div className="clr-form-control">
@@ -76,6 +87,7 @@ export class Input extends React.PureComponent<InputProps> {
                             placeholder={placeholder}
                             onChange={this.handleChange}
                         />
+                        {children}
                     </div>
                     {helperText && Input.renderHelperText(helperText)}
                 </div>
