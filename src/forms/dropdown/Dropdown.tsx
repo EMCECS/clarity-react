@@ -23,6 +23,7 @@ export type DropdownProps = {
     isNested?: boolean;
     className?: string;
     button?: ButtonProps;
+    showCaret?: boolean;
 } & DropdownMenuProps;
 
 const initialState = {
@@ -38,6 +39,7 @@ export class Dropdown extends React.PureComponent<DropdownProps> {
         itemsPath: "",
         _level: 0,
         isNested: false,
+        showCaret: true,
     };
 
     private ddRef = React.createRef<HTMLDivElement>();
@@ -79,10 +81,10 @@ export class Dropdown extends React.PureComponent<DropdownProps> {
     };
 
     getClassListMain(): (string | undefined)[] {
-        const {className} = this.props;
+        const {className, _level} = this.props;
         const {isOpen} = this.state;
         return [
-            ClassNames.DROPDOWN, // prettier hack
+            _level === 0 && className ? undefined : ClassNames.DROPDOWN, // prettier hack
             isOpen ? ClassNames.OPEN : undefined,
             className ? className : undefined,
         ];
@@ -122,8 +124,8 @@ export class Dropdown extends React.PureComponent<DropdownProps> {
     }
 
     render() {
-        const {label, isNested, button} = this.props;
-        const caretShape = <Icon shape={this.state.isOpen ? "caret up" : "caret down"} />;
+        const {label, isNested, button, showCaret} = this.props;
+        const caretShape = showCaret && <Icon shape={this.state.isOpen ? "caret up" : "caret down"} />;
         const buttonProps = {
             ...button,
         };

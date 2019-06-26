@@ -8,4 +8,5 @@
  *     http://www.apache.org/licenses/LICENSE-2.0
  */
 
-export * from './Button';
+export * from "./Button";
+export * from "./ButtonGroup";

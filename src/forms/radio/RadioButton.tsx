@@ -8,25 +8,30 @@
  *     http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import * as React from 'react';
-import * as utils from '../../utils';
+import * as React from "react";
+import * as utils from "../../utils";
 import {ReactNode} from "react";
 
 type RadioButtonProps = {
-    checked?: boolean
-    className?: string
-    disabled?: boolean
-    label: string
-    labelClass?: string
-    onChange?: (evt: React.ChangeEvent<HTMLInputElement>) => void
-    name?: string
-    id?: string
-    value: any
-    children?: ReactNode
+    checked?: boolean;
+    className?: string;
+    disabled?: boolean;
+    label?: string;
+    labelClass?: string;
+    onChange?: (evt: React.ChangeEvent<HTMLInputElement>) => void;
+    name?: string;
+    id?: string;
+    value: any;
+    children?: ReactNode;
+    style?: any;
+    inButtonGroup?: boolean;
 };
 
 export class RadioButton extends React.PureComponent<RadioButtonProps> {
-    type: string = "RadioButton";
+    static defaultProps = {
+        inButtonGroup: false,
+    };
+
     key: string | undefined;
 
     constructor(props: RadioButtonProps) {
@@ -34,35 +39,50 @@ export class RadioButton extends React.PureComponent<RadioButtonProps> {
         this.key = props.id;
     }
 
+    private static getClassNames(props: RadioButtonProps): (string | undefined)[] {
+        return [
+            props.className,
+            props.inButtonGroup ? "radio btn" : "clr-radio-wrapper",
+            props.disabled ? "clr-form-control-disabled" : undefined,
+        ];
+    }
+
     render() {
         const {
-            checked,
+            checked, //prettier hack
             children,
-            className,
             disabled,
             label,
             labelClass,
             onChange,
             name,
             id,
-            value
+            value,
+            inButtonGroup,
+            style,
         } = this.props;
-        let classNames = ["clr-radio-wrapper", className];
-        if (disabled)
-            classNames.push("clr-form-control-disabled");
-
-        const labelClassNames =
-            utils.classNames(["clr-control-label", labelClass]);
+        const labelClassNames = utils.classNames([
+            !inButtonGroup && "clr-control-label", // prettier hack
+            labelClass,
+        ]);
         return (
-            <div className={utils.classNames(classNames)}>
-                <input className="radio" name={name}
-                       id={id}
-                       defaultChecked={checked}
-                       value={value}
-                       disabled={disabled}
-                       type="radio"
-                       onChange={onChange}
-                /><label className={labelClassNames} htmlFor={id}>{label}</label>
+            <div className={utils.classNames(RadioButton.getClassNames(this.props))}>
+                <input
+                    className="radio"
+                    name={name}
+                    id={id}
+                    defaultChecked={checked}
+                    value={value}
+                    disabled={disabled}
+                    type="radio"
+                    onChange={onChange}
+                    style={style}
+                />
+                {label && (
+                    <label className={labelClassNames} htmlFor={id}>
+                        {label}
+                    </label>
+                )}
                 {children}
             </div>
         );
