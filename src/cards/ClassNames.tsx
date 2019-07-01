@@ -22,4 +22,5 @@ export class ClassNames {
     public static CARD_MEDIA_DESC: string = "card-media-description";
     public static CARD_MEDIA_TITLE: string = "card-media-title";
     public static CARD_MEDIA_TEXT: string = "card-media-text";
+    public static CARD_PROGRESS: string = "progress top";
 }

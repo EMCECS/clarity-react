@@ -16,8 +16,9 @@ export const CardImage: React.FunctionComponent = ({children}) => {
     return <div className={ClassNames.CARD_IMAGE}>{children}</div>;
 };
 
-export const CardBlock: React.FunctionComponent = ({children}) => {
-    return <div className={ClassNames.CARD_BLOCK}>{children}</div>;
+export type CardBlockProps = {className?: string};
+export const CardBlock: React.FunctionComponent<CardBlockProps> = ({children, className}) => {
+    return <div className={classNames([ClassNames.CARD_BLOCK, className])}>{children}</div>;
 };
 
 export const CardTitle: React.FunctionComponent = ({children}) => {
@@ -30,6 +31,10 @@ export const CardText: React.FunctionComponent = ({children}) => {
 
 export const CardFooter: React.FunctionComponent = ({children}) => {
     return <div className={ClassNames.CARD_FOOTER}>{children}</div>;
+};
+
+export const CardProgress: React.FunctionComponent = ({children}) => {
+    return <div className={ClassNames.CARD_PROGRESS}>{children}</div>;
 };
 
 export type CardMediaBlockProps = {
@@ -86,6 +91,7 @@ export class Card extends React.PureComponent<CardProps> {
                     className={classNames([
                         ClassNames.CARD, // prettier
                         onClick && ClassNames.CLICKABLE,
+                        className,
                     ])}
                     onClick={this.handleClick.bind(this)}
                 >
