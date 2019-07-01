@@ -20,4 +20,6 @@ export class ClassNames {
     public static DROPDOWN_HEADER_CHILD: string = "dropdown-header-child";
     public static DROPDOWN_DIVIDER: string = "dropdown-divider";
     public static EXPANDABLE: string = "expandable";
+    public static DROPDOWN_RIGHT_BOTTOM: string = "right-bottom";
+    public static DROPDOWN_LEFT_TOP: string = "left-top";
 }

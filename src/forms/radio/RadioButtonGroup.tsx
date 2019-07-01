@@ -8,21 +8,21 @@
  *     http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import * as React from 'react';
+import * as React from "react";
 import {RadioButton} from "./RadioButton";
-import * as utils from '../../utils';
+import * as utils from "../../utils";
 import {ReactElement, ReactNode} from "react";
 
 type RadioButtonGroupProps = {
-    defaultValue?: any
-    children?: React.ReactNode[]
-    className?: string
-    disabled?: boolean
-    helperText?: ReactNode
-    inline?: boolean
-    label?: string
-    onChange?: (evt: React.ChangeEvent<HTMLInputElement>) => void
-    name: string
+    defaultValue?: any;
+    children?: React.ReactNode[];
+    className?: string;
+    disabled?: boolean;
+    helperText?: ReactNode;
+    inline?: boolean;
+    label?: string;
+    onChange?: (evt: React.ChangeEvent<HTMLInputElement>) => void;
+    name: string;
 };
 
 const initialState = {value: null};
@@ -35,8 +35,7 @@ export class RadioButtonGroup extends React.PureComponent<RadioButtonGroupProps>
     constructor(props: RadioButtonGroupProps) {
         super(props);
         const {defaultValue} = props;
-        if (defaultValue)
-            this.state = {value: defaultValue};
+        if (defaultValue) this.state = {value: defaultValue};
     }
 
     private handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,7 +59,7 @@ export class RadioButtonGroup extends React.PureComponent<RadioButtonGroupProps>
                     disabled: disabled,
                     id: name + "-" + index,
                     name: name,
-                    onChange: this.handleChange
+                    onChange: this.handleChange,
                 });
             }
             console.log(child);
@@ -77,22 +76,18 @@ export class RadioButtonGroup extends React.PureComponent<RadioButtonGroupProps>
     }
 
     private static renderLabel(label: string) {
-        return (<label className="clr-control-label">{label}</label>);
+        return <label className="clr-control-label">{label}</label>;
     }
 
     render() {
         const {className, disabled, helperText, inline, label} = this.props;
         let classNames = ["clr-control-container", className];
-        if (disabled)
-            classNames.push("clr-form-control-disabled");
-        if (inline)
-            classNames.push("clr-control-inline");
+        if (disabled) classNames.push("clr-form-control-disabled");
+        if (inline) classNames.push("clr-control-inline");
         return (
             <div className="clr-form-control">
                 {label && RadioButtonGroup.renderLabel(label)}
-                <div className={utils.classNames(classNames)}>
-                    {this.renderChildren()}
-                </div>
+                <div className={utils.classNames(classNames)}>{this.renderChildren()}</div>
                 {helperText && RadioButtonGroup.renderHelperText(helperText)}
             </div>
         );
