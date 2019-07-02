@@ -24,4 +24,8 @@ module.exports = {
     },
 
     testPathForConsistencyCheck: "some/__tests__/example.test.js",
+
+    process(src, filename, config, options) {
+        return "module.exports = " + JSON.stringify(path.basename(filename)) + ";";
+    },
 };
