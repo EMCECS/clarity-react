@@ -340,7 +340,7 @@ storiesOf("Table", module)
     .add("Table Container Widths", () => (
         <div className="clr-row">
             <div className="clr-col-12 clr-col-lg-6 clr-col-xl-4">
-                <Table className="table">
+                <Table>
                     <thead>
                         <tr>
                             <th className="left">Language</th>
@@ -372,7 +372,7 @@ storiesOf("Table", module)
                 </Table>
             </div>
             <div className="clr-col-12 clr-col-lg-6 clr-col-xl-4">
-                <Table className="table">
+                <Table>
                     <thead>
                         <tr>
                             <th className="left">Color</th>
@@ -404,7 +404,7 @@ storiesOf("Table", module)
                 </Table>
             </div>
             <div className="clr-col-12 clr-col-lg-6 clr-col-xl-4">
-                <Table className="table">
+                <Table>
                     <thead>
                         <tr>
                             <th className="left">Name</th>

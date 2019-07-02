@@ -32,10 +32,10 @@ export class Table extends React.PureComponent<TableProps> {
             <table
                 className={classNames([
                     ClassNames.TABLE, //prettier hack
-                    className,
                     isVertical && ClassNames.TABLE_VERTICAL,
                     isCompact && ClassNames.TABLE_COMPACT,
                     isNonBordered && ClassNames.TABLE_NO_BORDER,
+                    className,
                 ])}
             >
                 {children}
