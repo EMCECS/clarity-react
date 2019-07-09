@@ -16,7 +16,7 @@ export const CardImage: React.FunctionComponent = ({children}) => {
     return <div className={ClassNames.CARD_IMAGE}>{children}</div>;
 };
 
-export type CardBlockProps = {
+type CardBlockProps = {
     className?: string;
 };
 export const CardBlock: React.FunctionComponent<CardBlockProps> = ({children, className}) => {
