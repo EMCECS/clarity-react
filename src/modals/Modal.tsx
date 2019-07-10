@@ -49,15 +49,23 @@ export class Modal extends React.PureComponent<ModalProps> {
 
     componentWillUpdate(nextProps: ModalProps, nextState: ModalState) {
         if (this.isOpen(nextProps, nextState)) {
-            if (this.divRef === null) {
-                const el = document.createElement("div");
-                document.body.appendChild(el);
-                this.divRef = el;
-            }
-            document.body.classList.add(ClassNames.NO_SCROLLING);
+            this.createDivRef();
         } else {
             this.cleanup();
         }
+    }
+
+    componentWillMount() {
+        this.createDivRef();
+    }
+
+    createDivRef() {
+        if (this.divRef === null) {
+            const el = document.createElement("div");
+            document.body.appendChild(el);
+            this.divRef = el;
+        }
+        document.body.classList.add(ClassNames.NO_SCROLLING);
     }
 
     cleanup() {
