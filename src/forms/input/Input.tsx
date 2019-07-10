@@ -22,6 +22,7 @@ type InputProps = {
     onChange?: (evt: React.ChangeEvent<HTMLInputElement>) => void;
     placeholder?: string;
     name: string;
+    value?: string;
     size?: number;
 };
 
@@ -52,6 +53,7 @@ export class Input extends React.PureComponent<InputProps> {
             disabled,
             helperText,
             label,
+            value,
             isBoxed,
             placeholder,
             size,
@@ -66,6 +68,7 @@ export class Input extends React.PureComponent<InputProps> {
                 <input
                     type={type || "text"}
                     id={name}
+                    value={value}
                     size={size}
                     disabled={disabled}
                     placeholder={placeholder}
@@ -81,6 +84,7 @@ export class Input extends React.PureComponent<InputProps> {
                         <input
                             type={type || "text"}
                             id={name}
+                            value={value}
                             size={size}
                             disabled={disabled}
                             className="clr-input"
