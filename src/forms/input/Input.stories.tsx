@@ -16,6 +16,7 @@ import {Icon} from "../../icon";
 
 storiesOf("Input", module)
     .add("a simple input box", () => <Input name="somevalue" onChange={action("changed")} />)
+    .add("a simple input box with value", () => <Input name="somevalue" value="Apple" onChange={action("changed")} />)
     .add("with a label", () => <Input name="somevalue" label="somevalue" onChange={action("changed")} />)
     .add("with placeholder text", () => (
         <Input name="somevalue" placeholder="stuff goes here" onChange={action("changed")} />
