@@ -23,6 +23,7 @@ type InputProps = {
     placeholder?: string;
     name: string;
     value?: string;
+    defaultValue?: string;
     size?: number;
 };
 
@@ -54,6 +55,7 @@ export class Input extends React.PureComponent<InputProps> {
             helperText,
             label,
             value,
+            defaultValue,
             isBoxed,
             placeholder,
             size,
@@ -69,6 +71,7 @@ export class Input extends React.PureComponent<InputProps> {
                     type={type || "text"}
                     id={name}
                     value={value}
+                    defaultValue={defaultValue}
                     size={size}
                     disabled={disabled}
                     placeholder={placeholder}
@@ -85,6 +88,7 @@ export class Input extends React.PureComponent<InputProps> {
                             type={type || "text"}
                             id={name}
                             value={value}
+                            defaultValue={defaultValue}
                             size={size}
                             disabled={disabled}
                             className="clr-input"
