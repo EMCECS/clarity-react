@@ -84,7 +84,7 @@ export class Dropdown extends React.PureComponent<DropdownProps> {
         const {className, _level} = this.props;
         const {isOpen} = this.state;
         return [
-            _level === 0 && className ? undefined : ClassNames.DROPDOWN, // prettier hack
+            _level === 0 && className === "btn-group-overflow" ? undefined : ClassNames.DROPDOWN, // prettier hack
             isOpen ? ClassNames.OPEN : undefined,
             className ? className : undefined,
         ];
