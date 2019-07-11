@@ -16,20 +16,56 @@ export const CardImage: React.FunctionComponent = ({children}) => {
     return <div className={ClassNames.CARD_IMAGE}>{children}</div>;
 };
 
-export const CardBlock: React.FunctionComponent = ({children}) => {
-    return <div className={ClassNames.CARD_BLOCK}>{children}</div>;
+type CardBlockProps = {
+    className?: string;
+    style?: any;
 };
 
-export const CardTitle: React.FunctionComponent = ({children}) => {
-    return <div className={ClassNames.CARD_TITLE}>{children}</div>;
+export const CardBlock: React.FunctionComponent<CardBlockProps> = ({style, className, children}) => {
+    return (
+        <div className={classNames([ClassNames.CARD_BLOCK, className])} style={style}>
+            {children}
+        </div>
+    );
 };
 
-export const CardText: React.FunctionComponent = ({children}) => {
-    return <div className={ClassNames.CARD_TEXT}>{children}</div>;
+type CardTitleProps = {
+    className?: string;
+    style?: any;
 };
 
-export const CardFooter: React.FunctionComponent = ({children}) => {
-    return <div className={ClassNames.CARD_FOOTER}>{children}</div>;
+export const CardTitle: React.FunctionComponent<CardTitleProps> = ({style, className, children}) => {
+    return (
+        <div className={classNames([ClassNames.CARD_TITLE, className])} style={style}>
+            {children}
+        </div>
+    );
+};
+
+type CardTextProps = {
+    className?: string;
+    style?: any;
+};
+
+export const CardText: React.FunctionComponent<CardTextProps> = ({style, className, children}) => {
+    return (
+        <div className={classNames([ClassNames.CARD_TEXT, className])} style={style}>
+            {children}
+        </div>
+    );
+};
+
+type CardFooterProps = {
+    className?: string;
+    style?: any;
+};
+
+export const CardFooter: React.FunctionComponent<CardFooterProps> = ({style, className, children}) => {
+    return (
+        <div className={classNames([ClassNames.CARD_FOOTER, className])} style={style}>
+            {children}
+        </div>
+    );
 };
 
 export type CardMediaBlockProps = {
@@ -67,6 +103,7 @@ export const CardMediaBlock: React.FunctionComponent<CardMediaBlockProps> = ({
 };
 
 export type CardProps = {
+    style?: any;
     className?: string;
     header?: any;
     onClick?: (evt: React.MouseEvent<HTMLElement>) => void;
@@ -79,19 +116,19 @@ export class Card extends React.PureComponent<CardProps> {
     };
 
     render() {
-        const {className, header, onClick, children} = this.props;
+        const {className, header, onClick, style, children} = this.props;
         return (
-            <div className={className}>
-                <div
-                    className={classNames([
-                        ClassNames.CARD, // prettier
-                        onClick && ClassNames.CLICKABLE,
-                    ])}
-                    onClick={this.handleClick.bind(this)}
-                >
-                    {header && <div className={ClassNames.CARD_HEADER}>{header}</div>}
-                    {children}
-                </div>
+            <div
+                className={classNames([
+                    ClassNames.CARD, // prettier
+                    onClick && ClassNames.CLICKABLE,
+                    className,
+                ])}
+                style={style}
+                onClick={this.handleClick.bind(this)}
+            >
+                {header && <div className={ClassNames.CARD_HEADER}>{header}</div>}
+                {children}
             </div>
         );
     }
