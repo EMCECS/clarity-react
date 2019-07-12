@@ -28,6 +28,7 @@ export type ButtonProps = {
     submit?: boolean;
     children?: ReactNode | ReactNode[];
     icon?: string;
+    isPrimaryClassRequired?: boolean;
 };
 
 export enum ButtonState {
@@ -44,10 +45,14 @@ export enum ButtonSize {
 // TODO: add loading support
 
 export class Button extends React.PureComponent<ButtonProps> {
+    static defaultProps = {
+        isPrimaryClassRequired: true,
+    };
+
     private static getClassNames(props: ButtonProps): (string | undefined)[] {
         return [
-            "btn",
-            props.icon ? "btn-icon" : undefined,
+            props.isPrimaryClassRequired ? "btn" : undefined,
+            props.isPrimaryClassRequired ? (props.icon ? "btn-icon" : undefined) : undefined,
             props.className,
             ...["block", "flat", "inverse", "link", "primary"].map(field => {
                 const value = (props as any)[field];
