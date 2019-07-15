@@ -23,21 +23,21 @@ storiesOf("Header", module)
                 <h4> Header Types</h4>
                 <Header className={HeaderColor.header6} style={{marginTop: "24px"}}>
                     <div className="branding">
-                        <a href="..." className="nav-link">
+                        <a href="#" className="nav-link">
                             <Icon shape="vm-bug" />
                             <span className="title">Project Clarity</span>
                         </a>
                     </div>
                     <div className="header-nav">
-                        <a href="..." className="active nav-link">
+                        <a href="#" className="active nav-link">
                             <span className="nav-text">Dashboard</span>
                         </a>
-                        <a href="..." className="nav-link">
+                        <a href="#" className="nav-link">
                             <span className="nav-text">Interactive Analytics</span>
                         </a>
                     </div>
                     <div className="header-actions">
-                        <a href="..." className="nav-link nav-icon">
+                        <a href="#" className="nav-link nav-icon">
                             <Icon shape={"cog"} />
                         </a>
                     </div>
@@ -45,18 +45,18 @@ storiesOf("Header", module)
 
                 <Header className={HeaderColor.header6} style={{marginTop: "24px"}}>
                     <div className="branding">
-                        <a href="..." className="nav-link">
+                        <a href="#" className="nav-link">
                             <Icon shape="vm-bug" />
                             <span className="title">Project Clarity</span>
                         </a>
                     </div>
                     <form className="search">
                         <label>
-                            <input id="search_input" type="text" placeholder="Search for keywords..." />
+                            <input id="search_input" type="text" placeholder="Search for keywords#" />
                         </label>
                     </form>
                     <div className="header-actions">
-                        <a href="..." className="nav-link nav-icon">
+                        <a href="#" className="nav-link nav-icon">
                             <Icon shape="cog" />
                         </a>
                     </div>
@@ -64,7 +64,7 @@ storiesOf("Header", module)
 
                 <Header className={HeaderColor.header6} style={{marginTop: "24px"}}>
                     <div className="branding">
-                        <a href="..." className="nav-link">
+                        <a href="#" className="nav-link">
                             <Icon shape="vm-bug" />
                             <span className="title">Project Clarity</span>
                         </a>
@@ -85,16 +85,16 @@ storiesOf("Header", module)
 
                 <Header className={HeaderColor.header6} style={{marginTop: "24px"}}>
                     <div className="branding">
-                        <a href="..." className="nav-link">
+                        <a href="#" className="nav-link">
                             <Icon shape="vm-bug" />
                             <span className="title">Project Clarity</span>
                         </a>
                     </div>
                     <div className="header-nav">
-                        <a href="..." className="nav-link nav-icon">
+                        <a href="#" className="nav-link nav-icon">
                             <Icon shape="cloud" />
                         </a>
-                        <a href="..." className="active nav-link nav-icon">
+                        <a href="#" className="active nav-link nav-icon">
                             <Icon shape="folder" />
                         </a>
                     </div>
@@ -124,13 +124,13 @@ storiesOf("Header", module)
 
                 <Header className={HeaderColor.header6} style={{marginTop: "24px"}}>
                     <div className="branding">
-                        <a href="..." className="nav-link">
+                        <a href="#" className="nav-link">
                             <Icon shape="vm-bug" />
                             <span className="title">Project Clarity</span>
                         </a>
                     </div>
                     <div className="header-actions">
-                        <a href="..." className="nav-link nav-text">
+                        <a href="#" className="nav-link nav-text">
                             Log Out
                         </a>
                     </div>
@@ -138,7 +138,7 @@ storiesOf("Header", module)
 
                 <Header className={HeaderColor.header6} style={{marginTop: "24px"}}>
                     <div className="branding">
-                        <a href="..." className="nav-link">
+                        <a href="#" className="nav-link">
                             <Icon shape="vm-bug" />
                             <span className="title">Project Clarity</span>
                         </a>
@@ -178,13 +178,6 @@ storiesOf("Header", module)
                                     webkitTransform: "translate(-50%,-50%)",
                                 }}
                             />
-                            {/* position: relative; 
-                                position: relative; 
-                                top: initial; 
-                                left: initial;
-                                -webkit-transform: none; 
-                                transform: none; 
-                                margin-left: 1rem;  */}
                             <span className="nav-text">username</span>
                         </a>
                     </div>
@@ -198,7 +191,7 @@ storiesOf("Header", module)
             <h4> Header with Color Options</h4>
             <Header className={HeaderColor.header1} style={{marginTop: "24px"}}>
                 <div className="branding">
-                    <a href="..." className="nav-link">
+                    <a href="#" className="nav-link">
                         <Icon shape="vm-bug" />
                         <span className="title">Project Clarity</span>
                     </a>
@@ -207,7 +200,7 @@ storiesOf("Header", module)
 
             <Header className={HeaderColor.header2} style={{marginTop: "24px"}}>
                 <div className="branding">
-                    <a href="..." className="nav-link">
+                    <a href="#" className="nav-link">
                         <Icon shape="vm-bug" />
                         <span className="title">Project Clarity</span>
                     </a>
@@ -216,7 +209,7 @@ storiesOf("Header", module)
 
             <Header className={HeaderColor.header3} style={{marginTop: "24px"}}>
                 <div className="branding">
-                    <a href="..." className="nav-link">
+                    <a href="#" className="nav-link">
                         <Icon shape="vm-bug" />
                         <span className="title">Project Clarity</span>
                     </a>
@@ -225,7 +218,7 @@ storiesOf("Header", module)
 
             <Header className={HeaderColor.header4} style={{marginTop: "24px"}}>
                 <div className="branding">
-                    <a href="..." className="nav-link">
+                    <a href="#" className="nav-link">
                         <Icon shape="vm-bug" />
                         <span className="title">Project Clarity</span>
                     </a>
@@ -234,7 +227,7 @@ storiesOf("Header", module)
 
             <Header className={HeaderColor.header5} style={{marginTop: "24px"}}>
                 <div className="branding">
-                    <a href="..." className="nav-link">
+                    <a href="#" className="nav-link">
                         <Icon shape="vm-bug" />
                         <span className="title">Project Clarity</span>
                     </a>
@@ -243,7 +236,7 @@ storiesOf("Header", module)
 
             <Header className={HeaderColor.header6} style={{marginTop: "24px"}}>
                 <div className="branding">
-                    <a href="..." className="nav-link">
+                    <a href="#" className="nav-link">
                         <Icon shape="vm-bug" />
                         <span className="title">Project Clarity</span>
                     </a>
@@ -252,7 +245,7 @@ storiesOf("Header", module)
 
             <Header className={HeaderColor.header7} style={{marginTop: "24px"}}>
                 <div className="branding">
-                    <a href="..." className="nav-link">
+                    <a href="#" className="nav-link">
                         <Icon shape="vm-bug" />
                         <span className="title">Project Clarity</span>
                     </a>
@@ -266,7 +259,7 @@ storiesOf("Header", module)
             <h4> Header with Subnav</h4>
             <Header className={HeaderColor.header1}>
                 <div className="branding">
-                    <a href="..." className="nav-link">
+                    <a href="#" className="nav-link">
                         <Icon shape="vm-bug" />
                         <span className="title">Project Clarity</span>
                     </a>

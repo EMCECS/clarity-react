@@ -9,6 +9,7 @@
  */
 
 import * as React from "react";
+import {ReactNode} from "react";
 import {classNames} from "../utils";
 import {Icon} from "../icon";
 
@@ -16,6 +17,7 @@ import {Icon} from "../icon";
 type HeaderProps = {
     className?: string;
     style?: any;
+    children?: ReactNode | ReactNode[];
 };
 
 export const HeaderColor = {
