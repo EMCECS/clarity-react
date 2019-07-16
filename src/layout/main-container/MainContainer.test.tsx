@@ -20,7 +20,7 @@ describe("<MainContainer /> rendering", () => {
         wrapper = shallow(
             <MainContainer
                 title="test"
-                actions={<NavLink/>}
+                actions={<NavLink />}
                 headerNav={<div className="head">header nav</div>}
                 sideNav={<div className="side">side nav</div>}
                 subNav={<div className="sub">sub nav</div>}
@@ -37,7 +37,7 @@ describe("<MainContainer /> rendering", () => {
         expect(wrapper.find("Header")).toHaveLength(1);
     });
     it("should render one Header actions", () => {
-        expect(wrapper.find(".header.nav-link")).toHaveLength(1);
+        expect(wrapper.find(".nav-link")).toHaveLength(1);
     });
     it("should render header nav correctly", () => {
         expect(wrapper.find(".head")).toHaveLength(1);

@@ -12,7 +12,7 @@ import * as React from "react";
 import {classNames} from "../utils";
 
 // Props for ProgressBar component
-type ProgressBarProps = {
+export type ProgressBarProps = {
     value?: number;
     max?: number;
     labeled?: boolean;

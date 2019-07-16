@@ -1,0 +1,246 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ProgressBar /> rendering ProgressBar renders correctly 1`] = `
+<div
+  className="progress"
+  style={
+    Object {
+      "width": "50%",
+    }
+  }
+>
+  <progress
+    max={100}
+    value={10}
+  >
+     
+  </progress>
+</div>
+`;
+
+exports[`<ProgressBar /> rendering with Indeterminate (Looping) ProgressBar renders correctly with Indeterminate (Looping) 1`] = `
+<div
+  className="progress loop"
+  style={
+    Object {
+      "width": "50%",
+    }
+  }
+>
+  <progress
+    max={100}
+    value={100}
+  >
+     
+  </progress>
+</div>
+`;
+
+exports[`<ProgressBar /> rendering with Indeterminate (Looping) ProgressBar renders correctly with Indeterminate (Looping) 2`] = `
+<div
+  className="progress loop"
+  style={
+    Object {
+      "width": "50%",
+    }
+  }
+>
+  <progress
+    max={200}
+    value={100}
+  >
+     
+  </progress>
+</div>
+`;
+
+exports[`<ProgressBar /> rendering with Labeled With SUCCESS Flash And Fade ProgressBar renders correctly with Labeled With SUCCESS Flash And Fade 1`] = `
+<div
+  className="progress labeled progress-fade  flash"
+  style={
+    Object {
+      "width": "50%",
+    }
+  }
+>
+  <progress
+    max={100}
+    value={100}
+  >
+     
+  </progress>
+  <span
+    style={
+      Object {
+        "display": "block",
+      }
+    }
+  >
+     
+    100
+    % 
+  </span>
+</div>
+`;
+
+exports[`<ProgressBar /> rendering with Labeled, Static Progress Bar ProgressBar renders correctly with Labeled, Static Progress Bar 1`] = `
+<div
+  className="progress-static labeled"
+  style={
+    Object {
+      "width": "50%",
+    }
+  }
+>
+  <div
+    className="progress-meter"
+    data-value={40}
+  />
+  <span
+    style={
+      Object {
+        "display": "block",
+      }
+    }
+  >
+     
+    40
+    % 
+  </span>
+</div>
+`;
+
+exports[`<ProgressBar /> rendering with animation for flash then fade ProgressBar renders correctly with animation for flash then fade 1`] = `
+<div
+  className="progress progress-fade  flash"
+  style={
+    Object {
+      "width": "50%",
+    }
+  }
+>
+  <progress
+    max={100}
+    value={100}
+  >
+     
+  </progress>
+</div>
+`;
+
+exports[`<ProgressBar /> rendering with animation for red flash and no fade ProgressBar renders correctly with animation for red flash and no fade 1`] = `
+<div
+  className="progress flash-danger"
+  style={
+    Object {
+      "width": "50%",
+    }
+  }
+>
+  <progress
+    max={100}
+    value={100}
+  >
+     
+  </progress>
+</div>
+`;
+
+exports[`<ProgressBar /> rendering with color for danger ProgressBar renders correctly with color for danger 1`] = `
+<div
+  className="progress danger"
+  style={
+    Object {
+      "width": "50%",
+    }
+  }
+>
+  <progress
+    max={100}
+    value={40}
+  >
+     
+  </progress>
+</div>
+`;
+
+exports[`<ProgressBar /> rendering with color for success ProgressBar renders correctly with color for success 1`] = `
+<div
+  className="progress success"
+  style={
+    Object {
+      "width": "50%",
+    }
+  }
+>
+  <progress
+    max={100}
+    value={40}
+  >
+     
+  </progress>
+</div>
+`;
+
+exports[`<ProgressBar /> rendering with fade out animation ProgressBar renders correctly with fade out animation 1`] = `
+<div
+  className="progress progress-fade"
+  style={
+    Object {
+      "width": "50%",
+    }
+  }
+>
+  <progress
+    max={100}
+    value={100}
+  >
+     
+  </progress>
+</div>
+`;
+
+exports[`<ProgressBar /> rendering with label ProgressBar renders correctly with label 1`] = `
+<div
+  className="progress labeled"
+  style={
+    Object {
+      "width": "50%",
+    }
+  }
+>
+  <progress
+    max={100}
+    value={10}
+  >
+     
+  </progress>
+  <span
+    style={
+      Object {
+        "display": "block",
+      }
+    }
+  >
+     
+    10
+    % 
+  </span>
+</div>
+`;
+
+exports[`<ProgressBar /> rendering with static progress ProgressBar renders correctly with static progress 1`] = `
+<div
+  className="progress-static"
+  style={
+    Object {
+      "width": "50%",
+    }
+  }
+>
+  <div
+    className="progress-meter"
+    data-value={10}
+  />
+</div>
+`;
