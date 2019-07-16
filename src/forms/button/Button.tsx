@@ -28,7 +28,7 @@ export type ButtonProps = {
     submit?: boolean;
     children?: ReactNode | ReactNode[];
     icon?: string;
-    isPrimaryClassRequired?: boolean;
+    customBtn?: boolean;
 };
 
 export enum ButtonState {
@@ -51,8 +51,8 @@ export class Button extends React.PureComponent<ButtonProps> {
 
     private static getClassNames(props: ButtonProps): (string | undefined)[] {
         return [
-            props.isPrimaryClassRequired ? "btn" : undefined,
-            props.isPrimaryClassRequired ? (props.icon ? "btn-icon" : undefined) : undefined,
+            props.customBtn ? "btn" : undefined,
+            props.customBtn ? (props.icon ? "btn-icon" : undefined) : undefined,
             props.className,
             ...["block", "flat", "inverse", "link", "primary"].map(field => {
                 const value = (props as any)[field];
