@@ -9,36 +9,31 @@
  */
 
 import * as React from "react";
-import {ReactNode} from "react";
-import {classNames} from "../utils";
-import {Icon} from "../icon";
 
 // Props for Header component
 type HeaderProps = {
     className?: string;
     style?: any;
-    children?: ReactNode | ReactNode[];
+    children?: React.ReactNode | React.ReactNode[];
 };
 
-export const HeaderColor = {
-    header1: "header header-1",
-    header2: "header header-2",
-    header3: "header header-3",
-    header4: "header header-4",
-    header5: "header header-5",
-    header6: "header header-6",
-    header7: "header header-7",
-};
+export enum HeaderColor {
+    Header1 = "header header-1",
+    Header2 = "header header-2",
+    Header3 = "header header-3",
+    Header4 = "header header-4",
+    Header5 = "header header-5",
+    Header6 = "header header-6",
+    Header7 = "header header-7",
+}
 
 export class Header extends React.PureComponent<HeaderProps> {
     render() {
         const {className, style, children} = this.props;
         return (
-            <React.Fragment>
-                <header className={classNames([className])} style={style}>
-                    {children}
-                </header>
-            </React.Fragment>
+            <header className={className} style={style}>
+                {children}
+            </header>
         );
     }
 }
