@@ -46,7 +46,7 @@ export enum ButtonSize {
 
 export class Button extends React.PureComponent<ButtonProps> {
     static defaultProps = {
-        isPrimaryClassRequired: true,
+        customBtn: true,
     };
 
     private static getClassNames(props: ButtonProps): (string | undefined)[] {
