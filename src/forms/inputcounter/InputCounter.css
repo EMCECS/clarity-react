@@ -1,0 +1,27 @@
+/**
+ * Copyright (c) 2018 Dell Inc., or its subsidiaries. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ */
+.ic-flex {
+    display: flex;
+}
+.ic-div {
+    display: inline-block;
+    padding: 0%;
+}
+.ic-input {
+    height: 52px;
+    width: 100%;
+    border: 1px solid #d3d3d3;
+}
+.ic-icon {
+    height: 26px;
+    border: 1px solid #d3d3d3;
+    paddingright: 0%;
+    paddingleft: 0%;
+}
