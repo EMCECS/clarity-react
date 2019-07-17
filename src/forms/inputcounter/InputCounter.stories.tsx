@@ -13,9 +13,11 @@ import {action} from "@storybook/addon-actions";
 import {InputCounter} from "./InputCounter";
 
 storiesOf("InputCounter", module)
-    .add("a simple inputCounter box with minValue and maxValue ", () => (
-        <InputCounter minValue="10" maxValue="100" defaultValue="33" onChange={action("changed")} />
+    .add("a simple inputCounter box ", () => <InputCounter onChange={action("changed")} />)
+    .add("a simple inputCounter box with minValue and maxValue 1", () => (
+        <InputCounter minValue={10} maxValue={100} defaultValue={12} errMsg="Value should be" />
     ))
-    .add("a simple inputCounter box with width", () => (
-        <InputCounter minValue="0" maxValue="10" style={{width: "50rem"}} onChange={action("changed")} />
+    .add("a simple inputCounter box with width", () => <InputCounter minValue={5} maxValue={1000} width="4rem" />)
+    .add("a simple inputCounter box with defaultValue < than minValue", () => (
+        <InputCounter minValue={5} maxValue={1000} defaultValue={0} />
     ));

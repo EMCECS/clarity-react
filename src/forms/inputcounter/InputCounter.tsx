@@ -9,18 +9,18 @@
  */
 import * as React from "react";
 import * as utils from "../../utils";
-import {ReactNode} from "react";
-import {Button} from "../button";
+import {Icon} from "../../icon";
 import {Input} from "../input/Input";
 
 type InputCounterProps = {
     className?: string;
-    maxValue: string;
-    minValue: string;
-    defaultValue?: string | "0";
-    onChange?: (evt: React.ChangeEvent<HTMLInputElement>) => void;
+    maxValue?: number;
+    minValue?: number;
+    defaultValue?: number;
     name?: string;
-    style?: any;
+    errMsg?: string;
+    width?: string;
+    onChange?: (evt: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 type InputCounterState = {
@@ -29,23 +29,39 @@ type InputCounterState = {
 };
 
 export class InputCounter extends React.PureComponent<InputCounterProps, InputCounterState> {
+    public static defaultProps: Partial<InputCounterProps> = {
+        minValue: Number.MIN_SAFE_INTEGER,
+        maxValue: Number.MAX_SAFE_INTEGER,
+    };
     constructor(props: any) {
         super(props);
+
+        let defaultValue = isNaN(props.defaultValue) ? 0 : Math.max(props.defaultValue, props.minValue);
         this.state = {
-            value: parseInt(props.defaultValue),
+            value: defaultValue,
             errorMsg: "",
         };
     }
 
+    private getErrorMessage() {
+        if (this.props.errMsg === undefined) {
+            return "Value should be ";
+        } else {
+            return this.props.errMsg;
+        }
+    }
+
     private handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
         if (isNaN(parseInt(evt.target.value))) {
-            this.setState({value: parseInt(this.props.minValue)});
-        } else if (parseInt(evt.target.value) > parseInt(this.props.maxValue)) {
-            let maxValueError = "Value should be < " + this.props.maxValue;
+            this.setState({
+                value: isNaN(this.props.minValue!) ? 0 : this.props.minValue!,
+            });
+        } else if (parseInt(evt.target.value) > this.props.maxValue!) {
+            let maxValueError = this.getErrorMessage() + " <= " + this.props.maxValue;
             this.setState({errorMsg: maxValueError});
             this.setState({value: parseInt(evt.target.value)});
-        } else if (parseInt(evt.target.value) < parseInt(this.props.minValue)) {
-            let minValueError = "Value should be > " + this.props.minValue;
+        } else if (parseInt(evt.target.value) < this.props.minValue!) {
+            let minValueError = this.getErrorMessage() + " >= " + this.props.minValue;
             this.setState({errorMsg: minValueError});
             this.setState({value: parseInt(evt.target.value)});
         } else {
@@ -59,10 +75,10 @@ export class InputCounter extends React.PureComponent<InputCounterProps, InputCo
     private handleIncrement() {
         if (this.props.maxValue === undefined) {
             this.setState({value: this.state.value + 1});
-        } else if (this.state.value < parseInt(this.props.maxValue)) {
+        } else if (this.state.value < this.props.maxValue!) {
             this.setState({value: this.state.value + 1});
         } else {
-            let maxValueError = "Value should be < " + this.props.maxValue;
+            let maxValueError = this.getErrorMessage() + " <= " + this.props.maxValue;
             this.setState({errorMsg: maxValueError});
         }
     }
@@ -70,60 +86,47 @@ export class InputCounter extends React.PureComponent<InputCounterProps, InputCo
     private handleDecrement() {
         if (this.props.minValue === undefined) {
             this.setState({value: this.state.value - 1});
-        } else if (this.state.value > parseInt(this.props.minValue)) {
+        } else if (this.state.value > this.props.minValue!) {
             this.setState({value: this.state.value - 1});
         } else {
-            let minValueError = "Value should be > " + this.props.minValue;
+            let minValueError = this.getErrorMessage() + " >= " + this.props.minValue;
             this.setState({errorMsg: minValueError});
         }
     }
 
     render() {
-        const {
-            className, //prettier
-            maxValue,
-            minValue,
-            defaultValue,
-            onChange,
-            name,
-            style,
-        } = this.props;
+        const {maxValue, minValue, defaultValue, onChange, name, errMsg} = this.props;
+        let {width} = this.props;
+        if (width === undefined) {
+            width = "6rem"; //This is defaultWidth
+        }
         return (
-            <div className="clr-form">
-                <div className="clr-row" style={style}>
-                    <div className="clr-col-md-2" style={{paddingRight: "0%"}}>
+            <div className="clr-form" style={{width: width}}>
+                <div style={{display: "flex"}}>
+                    <div style={{display: "inline-block", paddingRight: "0%", paddingLeft: "0%"}}>
                         <input
                             name="counter"
                             value={this.state.value}
                             onChange={this.handleChange.bind(this)}
-                            style={{height: "100%", width: "100%"}}
+                            style={{height: "52px", width: "100%", border: "1px solid #d3d3d3"}}
                         />
                     </div>
-                    <div className="clr-col-md-3 " style={{paddingRight: "0%", paddingLeft: "0%"}}>
-                        <div className="clr-col" style={{paddingRight: "0%", paddingLeft: "0%"}}>
-                            <div className="clr-raw-md-6" style={{paddingRight: "0%", paddingLeft: "0%"}}>
-                                <input
-                                    type="button"
-                                    name="increment"
-                                    value="+"
-                                    onClick={this.handleIncrement.bind(this)}
-                                    style={{height: "100%", width: "10%", paddingRight: "0%", paddingLeft: "0%"}}
-                                />
-                            </div>
-                            <div className="clr-raw-md-6" style={{paddingRight: "0%", paddingLeft: "0%"}}>
-                                <input
-                                    type="button"
-                                    name="decrement"
-                                    value="-"
-                                    onClick={this.handleDecrement.bind(this)}
-                                    style={{height: "100%", width: "10%", paddingRight: "0%", paddingLeft: "0%"}}
-                                />
-                            </div>
-                        </div>
+                    <div style={{display: "inline-block"}}>
+                        <Icon
+                            shape="plus"
+                            style={{height: "26px", border: "1px solid #d3d3d3", paddingRight: "0%", paddingLeft: "0%"}}
+                            onClick={this.handleIncrement.bind(this)}
+                        />
+                        <br />
+                        <Icon
+                            shape="minus"
+                            style={{height: "26px", border: "1px solid #d3d3d3", paddingRight: "0%", paddingLeft: "0%"}}
+                            onClick={this.handleDecrement.bind(this)}
+                        />
                     </div>
                 </div>
-                <div className="clr-row" style={style}>
-                    <label>{this.state.errorMsg} </label>
+                <div>
+                    <label>{this.state.errorMsg}</label>
                 </div>
             </div>
         );
