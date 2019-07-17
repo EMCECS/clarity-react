@@ -16,6 +16,7 @@ import {VerticalNavGroup, VerticalNavGroupProps} from ".";
 type VerticalNavProps = {
     isCollapsible?: boolean;
     collapseButtonOnBottom?: boolean;
+    className?: string;
 };
 
 type VerticalNavState = {
@@ -39,11 +40,13 @@ export class VerticalNav extends React.PureComponent<VerticalNavProps, VerticalN
         const {children} = this.props;
         React.Children.map(children, (child: React.ReactNode) => {
             const childEl = child as React.ReactElement;
-            if (childEl.type === VerticalNavGroup) {
-                result.hasNavGroups = true;
-                if ((childEl.props as VerticalNavGroupProps).iconShape) result.hasIcons = true;
-            } else if (childEl.type === NavLink) {
-                if ((childEl.props as NavLinkProps).iconShape) result.hasIcons = true;
+            if (childEl) {
+                if (childEl.type === VerticalNavGroup) {
+                    result.hasNavGroups = true;
+                    if ((childEl.props as VerticalNavGroupProps).iconShape) result.hasIcons = true;
+                } else if (childEl.type === NavLink) {
+                    if ((childEl.props as NavLinkProps).iconShape) result.hasIcons = true;
+                }
             }
         });
         return result;
@@ -65,6 +68,9 @@ export class VerticalNav extends React.PureComponent<VerticalNavProps, VerticalN
         if (isCollapsed) {
             classList.push(VerticalNavCodes.IS_COLLAPSED);
         }
+        if (this.props.className) {
+            classList.push(this.props.className);
+        }
         return classList;
     }
 
@@ -85,11 +91,13 @@ export class VerticalNav extends React.PureComponent<VerticalNavProps, VerticalN
         }
         return React.Children.map(children, (child: React.ReactNode, index: number) => {
             const childEl = child as React.ReactElement;
-            if (childEl.type === VerticalNavGroup) {
-                return React.cloneElement(childEl as React.ReactElement<any>, {
-                    verticalIsCollapsed: isCollapsed,
-                    openVerticalNav: this.openVertical.bind(this),
-                });
+            if (childEl) {
+                if (childEl.type === VerticalNavGroup) {
+                    return React.cloneElement(childEl as React.ReactElement<any>, {
+                        verticalIsCollapsed: isCollapsed,
+                        openVerticalNav: this.openVertical.bind(this),
+                    });
+                }
             }
             console.log(child);
             return child;
