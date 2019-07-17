@@ -29,7 +29,7 @@ type InputCounterState = {
 };
 
 export class InputCounter extends React.PureComponent<InputCounterProps, InputCounterState> {
-    public static defaultProps: Partial<InputCounterProps> = {
+    static defaultProps = {
         minValue: Number.MIN_SAFE_INTEGER,
         maxValue: Number.MAX_SAFE_INTEGER,
         errMsg: "Value should be",
@@ -51,7 +51,7 @@ export class InputCounter extends React.PureComponent<InputCounterProps, InputCo
     private handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
         if (isNaN(parseInt(evt.target.value))) {
             this.setState({
-                value: isNaN(this.props.minValue!) ? 0 : Math.max(this.props.defaultValue, this.props.minValue!),
+                value: isNaN(this.props.minValue!) ? 0 : Math.max(this.props.defaultValue!, this.props.minValue!),
             });
         } else if (parseInt(evt.target.value) > this.props.maxValue!) {
             let maxValueError = this.props.errMsg + " <= " + this.props.maxValue;
