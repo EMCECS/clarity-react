@@ -126,12 +126,12 @@ storiesOf("Button", module)
             <Button key="link" primary state={ButtonState.SUCCESS} onClick={action("link click")} icon="link" />
         </div>
     ))
-    .add("Simple Button and Icon button without primary class", () => (
+    .add("Simple Button and Icon button without btn and btn-icon class", () => (
         <div>
-            <Button key="home" customBtn={false} onClick={action("home click")} icon="home">
+            <Button key="home" customBtn={true} onClick={action("home click")} icon="home">
                 HOME
             </Button>
-            <Button key="basic" customBtn={false} onClick={action("basic click")}>
+            <Button key="basic" customBtn={true} onClick={action("basic click")}>
                 BASIC
             </Button>
         </div>

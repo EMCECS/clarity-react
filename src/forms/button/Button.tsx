@@ -46,13 +46,13 @@ export enum ButtonSize {
 
 export class Button extends React.PureComponent<ButtonProps> {
     static defaultProps = {
-        customBtn: true,
+        customBtn: false,
     };
 
     private static getClassNames(props: ButtonProps): (string | undefined)[] {
         return [
-            props.customBtn ? "btn" : undefined,
-            props.customBtn ? (props.icon ? "btn-icon" : undefined) : undefined,
+            props.customBtn ? undefined : "btn",
+            props.customBtn ? undefined : props.icon ? "btn-icon" : undefined,
             props.className,
             ...["block", "flat", "inverse", "link", "primary"].map(field => {
                 const value = (props as any)[field];

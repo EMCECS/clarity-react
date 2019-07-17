@@ -15,17 +15,15 @@ import {Icon} from "../icon";
 import {Dropdown, DropdownMenu, DropdownItem} from "../forms/dropdown";
 import {Header, HeaderColor} from "./Header";
 import {NavLink} from "../layout/nav";
-// <NavLink>Link 1</NavLink>
 
 storiesOf("Header", module)
     .add("Header Types", () => (
         <React.Fragment>
             <div>
                 <h4> Header Types</h4>
-                <Header className={HeaderColor.Header6} style={{marginTop: "24px"}}>
+                <Header color={HeaderColor.HEADER6} style={{marginTop: "24px"}}>
                     <div className="branding">
-                        <NavLink>
-                            <Icon shape="vm-bug" />
+                        <NavLink iconShape="vm-bug">
                             <span className="title">Project Clarity</span>
                         </NavLink>
                     </div>
@@ -44,10 +42,9 @@ storiesOf("Header", module)
                     </div>
                 </Header>
 
-                <Header className={HeaderColor.Header6} style={{marginTop: "24px"}}>
+                <Header color={HeaderColor.HEADER6} style={{marginTop: "24px"}}>
                     <div className="branding">
-                        <NavLink>
-                            <Icon shape="vm-bug" />
+                        <NavLink iconShape="vm-bug">
                             <span className="title">Project Clarity</span>
                         </NavLink>
                     </div>
@@ -63,16 +60,15 @@ storiesOf("Header", module)
                     </div>
                 </Header>
 
-                <Header className={HeaderColor.Header6} style={{marginTop: "24px"}}>
+                <Header color={HeaderColor.HEADER6} style={{marginTop: "24px"}}>
                     <div className="branding">
-                        <NavLink>
-                            <Icon shape="vm-bug" />
+                        <NavLink iconShape="vm-bug">
                             <span className="title">Project Clarity</span>
                         </NavLink>
                     </div>
                     <div className="header-actions">
                         <Dropdown
-                            button={{icon: "cog", customBtn: false, className: "nav-icon dropdown-toggle"}}
+                            button={{icon: "cog", customBtn: true, className: "nav-icon dropdown-toggle"}}
                             onItemClick={action("onItemClick - Dropdown.")}
                         >
                             <DropdownMenu>
@@ -84,10 +80,9 @@ storiesOf("Header", module)
                     </div>
                 </Header>
 
-                <Header className={HeaderColor.Header6} style={{marginTop: "24px"}}>
+                <Header color={HeaderColor.HEADER6} style={{marginTop: "24px"}}>
                     <div className="branding">
-                        <NavLink>
-                            <Icon shape="vm-bug" />
+                        <NavLink iconShape="vm-bug">
                             <span className="title">Project Clarity</span>
                         </NavLink>
                     </div>
@@ -109,7 +104,7 @@ storiesOf("Header", module)
                         <Dropdown
                             button={{
                                 icon: "user",
-                                customBtn: false,
+                                customBtn: true,
                                 className: "nav-icon dropdown-toggle",
                             }}
                             onItemClick={action("onItemClick - Dropdown.")}
@@ -123,10 +118,9 @@ storiesOf("Header", module)
                     </div>
                 </Header>
 
-                <Header className={HeaderColor.Header6} style={{marginTop: "24px"}}>
+                <Header color={HeaderColor.HEADER6} style={{marginTop: "24px"}}>
                     <div className="branding">
-                        <NavLink>
-                            <Icon shape="vm-bug" />
+                        <NavLink iconShape="vm-bug">
                             <span className="title">Project Clarity</span>
                         </NavLink>
                     </div>
@@ -135,17 +129,16 @@ storiesOf("Header", module)
                     </div>
                 </Header>
 
-                <Header className={HeaderColor.Header6} style={{marginTop: "24px"}}>
+                <Header color={HeaderColor.HEADER6} style={{marginTop: "24px"}}>
                     <div className="branding">
-                        <NavLink>
-                            <Icon shape="vm-bug" />
+                        <NavLink iconShape="vm-bug">
                             <span className="title">Project Clarity</span>
                         </NavLink>
                     </div>
                     <div className="header-actions">
                         <Dropdown
                             label="john.doe@vmware.com"
-                            button={{customBtn: false, className: "nav-text dropdown-toggle"}}
+                            button={{customBtn: true, className: "nav-text dropdown-toggle"}}
                             onItemClick={action("onItemClick - Dropdown.")}
                         >
                             <DropdownMenu>
@@ -156,10 +149,9 @@ storiesOf("Header", module)
                     </div>
                 </Header>
 
-                <Header className={HeaderColor.Header6} style={{marginTop: "24px"}}>
+                <Header color={HeaderColor.HEADER6} style={{marginTop: "24px"}}>
                     <div className="branding">
-                        <NavLink>
-                            <Icon shape="vm-bug" />
+                        <NavLink iconShape="vm-bug">
                             <span className="title">Project Clarity</span>
                         </NavLink>
                     </div>
@@ -177,64 +169,57 @@ storiesOf("Header", module)
     .add("Header with Color Options", () => (
         <React.Fragment>
             <h4> Header with Color Options</h4>
-            <Header className={HeaderColor.Header1} style={{marginTop: "24px"}}>
+            <Header color={HeaderColor.HEADER1} style={{marginTop: "24px"}}>
                 <div className="branding">
-                    <NavLink>
-                        <Icon shape="vm-bug" />
+                    <NavLink iconShape="vm-bug">
                         <span className="title">Project Clarity</span>
                     </NavLink>
                 </div>
             </Header>
 
-            <Header className={HeaderColor.Header2} style={{marginTop: "24px"}}>
+            <Header color={HeaderColor.HEADER2} style={{marginTop: "24px"}}>
                 <div className="branding">
-                    <NavLink>
-                        <Icon shape="vm-bug" />
+                    <NavLink iconShape="vm-bug">
                         <span className="title">Project Clarity</span>
                     </NavLink>
                 </div>
             </Header>
 
-            <Header className={HeaderColor.Header3} style={{marginTop: "24px"}}>
+            <Header color={HeaderColor.HEADER3} style={{marginTop: "24px"}}>
                 <div className="branding">
-                    <NavLink>
-                        <Icon shape="vm-bug" />
+                    <NavLink iconShape="vm-bug">
                         <span className="title">Project Clarity</span>
                     </NavLink>
                 </div>
             </Header>
 
-            <Header className={HeaderColor.Header4} style={{marginTop: "24px"}}>
+            <Header color={HeaderColor.HEADER4} style={{marginTop: "24px"}}>
                 <div className="branding">
-                    <NavLink>
-                        <Icon shape="vm-bug" />
+                    <NavLink iconShape="vm-bug">
                         <span className="title">Project Clarity</span>
                     </NavLink>
                 </div>
             </Header>
 
-            <Header className={HeaderColor.Header5} style={{marginTop: "24px"}}>
+            <Header color={HeaderColor.HEADER5} style={{marginTop: "24px"}}>
                 <div className="branding">
-                    <NavLink>
-                        <Icon shape="vm-bug" />
+                    <NavLink iconShape="vm-bug">
                         <span className="title">Project Clarity</span>
                     </NavLink>
                 </div>
             </Header>
 
-            <Header className={HeaderColor.Header6} style={{marginTop: "24px"}}>
+            <Header color={HeaderColor.HEADER6} style={{marginTop: "24px"}}>
                 <div className="branding">
-                    <NavLink>
-                        <Icon shape="vm-bug" />
+                    <NavLink iconShape="vm-bug">
                         <span className="title">Project Clarity</span>
                     </NavLink>
                 </div>
             </Header>
 
-            <Header className={HeaderColor.Header7} style={{marginTop: "24px"}}>
+            <Header color={HeaderColor.HEADER7} style={{marginTop: "24px"}}>
                 <div className="branding">
-                    <NavLink>
-                        <Icon shape="vm-bug" />
+                    <NavLink iconShape="vm-bug">
                         <span className="title">Project Clarity</span>
                     </NavLink>
                 </div>
@@ -245,10 +230,9 @@ storiesOf("Header", module)
     .add("Header with Subnav", () => (
         <React.Fragment>
             <h4> Header with Subnav</h4>
-            <Header className={HeaderColor.Header1} style={{marginTop: "24px"}}>
+            <Header color={HeaderColor.HEADER1} style={{marginTop: "24px"}}>
                 <div className="branding">
-                    <NavLink>
-                        <Icon shape="vm-bug" />
+                    <NavLink iconShape="vm-bug">
                         <span className="title">Project Clarity</span>
                     </NavLink>
                 </div>
