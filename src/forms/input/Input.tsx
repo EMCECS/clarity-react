@@ -76,6 +76,7 @@ export class Input extends React.PureComponent<InputProps> {
                     disabled={disabled}
                     placeholder={placeholder}
                     onChange={this.handleChange}
+                    className={className}
                 />
                 {children}
             </div>
