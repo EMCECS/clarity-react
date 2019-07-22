@@ -22,7 +22,13 @@ export type WizardStep = {
     stepComponent: React.ReactNode;
     stepId: number;
     stepCompleted: boolean;
+    customStepNav?: WizardStepNavDetails;
     isStepValid?: Function /* This function should return boolen value. And use to determine if step is valid or not */;
+};
+
+export type WizardStepNavDetails = {
+    stepNavIcon?: string;
+    stepNavbadges?: React.ReactNode;
 };
 
 type WizardProps = {
@@ -42,13 +48,14 @@ type WizardProps = {
     cancelButtonText?: string;
     onClose?: Function;
     navLinkClasses?: string;
+    wizardValidation?: WizardValidation;
 };
 
 type WizardState = {
     show: boolean;
     currentStep: number;
     showFinishButton: boolean;
-    showPriviousButton: boolean;
+    showPreviousButton: boolean;
     showNextButton: boolean;
     allSteps: WizardStep[];
 };
@@ -57,6 +64,12 @@ export enum WizardSize {
     MEDIUM = "md",
     LARGE = "lg",
     XLARGE = "xl",
+}
+
+export enum WizardValidation {
+    ASYNC = "Asynchronous",
+    SYNC = "asynchronous",
+    NONE = "none",
 }
 
 export class Wizard extends React.PureComponent<WizardProps> {
@@ -71,17 +84,21 @@ export class Wizard extends React.PureComponent<WizardProps> {
         size: WizardSize.MEDIUM,
         showNav: true,
         defaultStep: 1,
+        wizardValidation: WizardValidation.NONE,
     };
 
-    // Initial state of wizard
-    state: WizardState = {
+    // Default state of wizard - Need this to reset Wizard state
+    initialState: WizardState = {
         show: this.props.show !== undefined ? this.props.show : false,
         currentStep: this.props.defaultStep! - 1 || 0,
         showFinishButton: false,
-        showPriviousButton: false,
+        showPreviousButton: false,
         showNextButton: true,
         allSteps: this.props.steps,
     };
+
+    // Initial state of wizard
+    state: WizardState = this.initialState;
 
     /* ##########  Wizard lifestyle hooks start  ############ */
     componentWillMount() {
@@ -125,45 +142,53 @@ export class Wizard extends React.PureComponent<WizardProps> {
         this.setState({show: true});
     }
 
+    // Reset Wizard state
+    resetWizard() {
+        const {steps} = this.props;
+        steps.map((step, key) => {
+            this.setState({
+                allSteps: [...this.state.allSteps, (this.state.allSteps[step.stepId].stepCompleted = false)],
+            });
+        });
+        this.setState(this.initialState);
+    }
+
     nextButtonClick() {
         const {onNext, steps} = this.props;
         const nextStepId = this.state.currentStep + 1;
-        console.log("in Next");
-        console.log(nextStepId);
 
         // Check validity of current step before going next
         const validState = this.checkStepValidity(this.state.allSteps[this.state.currentStep]);
-
         if (validState && nextStepId <= steps.length - 1) this.modifyButtonStates(this.state.allSteps[nextStepId]);
-
         onNext && onNext();
     }
 
-    priviousButtonClick() {
+    previousButtonClick() {
         const {onPrevious} = this.props;
-        const priviousStepId = this.state.currentStep - 1;
+        const previousStepId = this.state.currentStep - 1;
 
-        if (priviousStepId >= 0) this.modifyButtonStates(this.state.allSteps[priviousStepId]);
-
+        if (previousStepId >= 0) this.modifyButtonStates(this.state.allSteps[previousStepId]);
         onPrevious && onPrevious();
     }
 
     // Close the wizard on finish
     finishButtonClick() {
         const {onFinish} = this.props;
-        onFinish && onFinish();
-        this.close();
+        const validState = this.checkStepValidity(this.state.allSteps[this.state.currentStep]);
+        if (validState) {
+            onFinish && onFinish();
+            this.close();
+        }
     }
 
     modifyButtonStates(step: WizardStep) {
         const {steps} = this.props;
-        console.log("in modify button");
-        console.log(step.stepId);
+
         if (step.stepId == 0) {
             /* for first step : If currenst step is first step of workflow
           then hide privious button and show next button */
             this.setState({
-                showPriviousButton: false,
+                showPreviousButton: false,
                 showNextButton: true,
                 showFinishButton: false,
                 currentStep: step.stepId,
@@ -172,7 +197,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
             /* for last step : If currenst step is last step of workflow
           then hide next button and show privious and finish buttons */
             this.setState({
-                showPriviousButton: true,
+                showPreviousButton: true,
                 showFinishButton: true,
                 showNextButton: false,
                 currentStep: step.stepId,
@@ -181,7 +206,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
             /* for in between step : If currenst step is not last or first step of workflow
         then show next , privious buttons and hide finish button */
             this.setState({
-                showPriviousButton: true,
+                showPreviousButton: true,
                 showNextButton: true,
                 showFinishButton: false,
                 currentStep: step.stepId,
@@ -228,8 +253,8 @@ export class Wizard extends React.PureComponent<WizardProps> {
                         {cancelButtonText}{" "}
                     </Button>
 
-                    {this.state.showPriviousButton && (
-                        <Button key={previousButtonText} onClick={this.priviousButtonClick.bind(this)}>
+                    {this.state.showPreviousButton && (
+                        <Button key={previousButtonText} onClick={this.previousButtonClick.bind(this)}>
                             {previousButtonText}{" "}
                         </Button>
                     )}
@@ -268,11 +293,21 @@ export class Wizard extends React.PureComponent<WizardProps> {
                         {steps.map((step, key) => {
                             return (
                                 <NavLink
-                                    type={NavLinkType.stepNavLink}
+                                    iconShape={
+                                        step.customStepNav !== undefined && step.customStepNav.stepNavIcon
+                                            ? step.customStepNav.stepNavIcon
+                                            : undefined
+                                    }
+                                    type={
+                                        step.customStepNav !== undefined && step.customStepNav.stepNavIcon
+                                            ? undefined
+                                            : NavLinkType.stepNavLink
+                                    }
                                     className={classNames(this.getStepNavClasses(step))}
                                     onClick={this.navigationClick.bind(this, step)}
                                 >
-                                    {step.stepName}
+                                    {step.stepName} &nbsp;
+                                    {step.customStepNav !== undefined && step.customStepNav!.stepNavbadges}
                                 </NavLink>
                             );
                         })}
@@ -350,12 +385,12 @@ export class Wizard extends React.PureComponent<WizardProps> {
                                 <div className={ClassNames.MODAL_GHOST_WRAPPER}>
                                     <div
                                         _ngcontent-c7=""
-                                        className="modal-ghost modal-ghost-1 ng-trigger ng-trigger-ghostPageOneState"
+                                        className={ClassNames.MODAL_GHOST_1}
                                         style={{left: "-24px"}}
                                     />
                                     <div
                                         _ngcontent-c7=""
-                                        className="modal-ghost modal-ghost-2 ng-trigger ng-trigger-ghostPageTwoState"
+                                        className={ClassNames.MODAL_GHOST_2}
                                         style={{left: "-24px", top: "24px", bottom: "24px"}}
                                     />
                                 </div>

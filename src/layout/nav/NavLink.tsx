@@ -27,7 +27,7 @@ export class NavLink extends React.PureComponent<NavLinkProps> {
     render() {
         const {iconShape, className, type, onClick, children} = this.props;
 
-        let cssClass = classNames(["nav-text", type]);
+        let navLinkClassNames = classNames(["nav-text", type]);
         return iconShape ? (
             <a
                 href="javascript:void(0)"
@@ -35,7 +35,7 @@ export class NavLink extends React.PureComponent<NavLinkProps> {
                 onClick={onClick}
             >
                 <Icon shape={iconShape} className="nav-icon" />
-                <span className={cssClass}>{children}</span>
+                <span className={navLinkClassNames}>{children}</span>
             </a>
         ) : (
             <a
@@ -43,7 +43,7 @@ export class NavLink extends React.PureComponent<NavLinkProps> {
                 className={classNames([className, type == NavLinkType.stepNavLink ? "" : "nav-link"])}
                 onClick={onClick}
             >
-                <div className={cssClass}>{children}</div>
+                <div className={navLinkClassNames}>{children}</div>
             </a>
         );
     }

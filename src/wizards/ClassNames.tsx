@@ -29,6 +29,8 @@ export class ClassNames {
     public static MODAL_TITLE_TEXT: string = "modal-title-text";
     public static MODAL_BACKDROP: string = "modal-backdrop ng-trigger ng-trigger-fade";
     public static MODAL_GHOST_WRAPPER: string = "modal-ghost-wrapper";
+    public static MODAL_GHOST_1: string = "modal-ghost modal-ghost-1 ng-trigger ng-trigger-ghostPageOneState";
+    public static MODAL_GHOST_2: string = "modal-ghost modal-ghost-2 ng-trigger ng-trigger-ghostPageTwoState";
     public static WIZARD_PAGE: string = "clr-wizard-page";
     public static WIZARD_FOOTER: string = "modal-footer clr-wizard-footer";
     public static WIZARD_FOOTER_BUTTON: string =

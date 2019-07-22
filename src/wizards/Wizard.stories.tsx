@@ -11,11 +11,9 @@
 import * as React from "react";
 import {storiesOf} from "@storybook/react";
 import {State, Store} from "@sambego/storybook-state";
-//import {Modal, ModalSize, ModalBody, ModalFooter} from "./Modal";
 import {Button} from "../forms/button";
-//import {Wizard, WizardStep, WizardSize} from "./Wizard"
-
 import {Wizard, WizardSize} from "./Wizard";
+import {Badge, BadgeStatus, BadgeColor} from "../emphasis/badges";
 
 const stepsMedium = [
     {stepName: "page 1", stepId: 0, stepComponent: <p> Page 1</p>, stepCompleted: false},
@@ -35,16 +33,42 @@ const stepsXLarge = [
     {stepName: "page 3", stepId: 2, stepComponent: <p> Page 3</p>, stepCompleted: false},
 ];
 
+const stepsNavIcon = [
+    {
+        stepName: "Play",
+        stepId: 0,
+        stepComponent: <p> Play </p>,
+        stepCompleted: false,
+        customStepNav: {stepNavIcon: "play", stepNavbadges: <Badge status={BadgeStatus.BADGE_INFO}>2</Badge>},
+    },
+    {
+        stepName: "Stop",
+        stepId: 1,
+        stepComponent: <p> Stop </p>,
+        stepCompleted: false,
+        customStepNav: {stepNavIcon: "stop", stepNavbadges: <Badge color={BadgeColor.ORANGE}>3</Badge>},
+    },
+    {
+        stepName: "Power",
+        stepId: 2,
+        stepComponent: <p> Power </p>,
+        stepCompleted: false,
+        customStepNav: {stepNavIcon: "power", stepNavbadges: <Badge status={BadgeStatus.BADGE_DANGER}>15</Badge>},
+    },
+];
+
 const storeMedium = new Store({show: false});
-
 const storeLarge = new Store({show: false});
-
 const storeXlarge = new Store({show: false});
-
 const storeDefaultState = new Store({show: false});
-
 const storeCustomButtons = new Store({show: false});
 const storeWithoutNav = new Store({show: false});
+const storeNavWithIcon = new Store({show: false});
+const storeSyncValidation = new Store({show: false});
+const storeResetWizard = new Store({show: false});
+
+// Refrence to call resetWizard() of Wizard component
+const wizardRef = React.createRef<Wizard>();
 
 storiesOf("Wizard", module)
     .add("Wizard Sizes", () => (
@@ -126,6 +150,38 @@ storiesOf("Wizard", module)
                         steps={stepsMedium}
                         onClose={() => storeWithoutNav.set({show: false})}
                         showNav={false}
+                    />
+                </State>
+            </div>
+        </div>
+    ))
+    .add("Wizard with custom NAV", () => (
+        <div className="clr-row">
+            <div className="clr-col-12">
+                <State store={storeNavWithIcon}>
+                    <Button onClick={() => storeNavWithIcon.set({show: true})}> Wizard with Icon NAV </Button>
+                    <Wizard
+                        size={WizardSize.MEDIUM}
+                        title="Wizard with Icon Navigation Links"
+                        steps={stepsNavIcon}
+                        onClose={() => storeNavWithIcon.set({show: false})}
+                    />
+                </State>
+            </div>
+        </div>
+    ))
+    .add("Wizard with Reset", () => (
+        <div className="clr-row">
+            <div className="clr-col-12">
+                <State store={storeResetWizard}>
+                    <Button onClick={() => storeResetWizard.set({show: true})}> Reset on Finish </Button>
+                    <Wizard
+                        ref={wizardRef}
+                        size={WizardSize.MEDIUM}
+                        title="Reset Wizard on Finish"
+                        steps={stepsMedium}
+                        onClose={() => storeResetWizard.set({show: false})}
+                        onFinish={() => wizardRef.current!.resetWizard()}
                     />
                 </State>
             </div>
