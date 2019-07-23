@@ -12,7 +12,8 @@ import * as React from "react";
 import {storiesOf} from "@storybook/react";
 import {action} from "@storybook/addon-actions";
 import {Icon} from "../../icon";
-import {Header, Nav, NavLevel, NavLink, NavType, HeaderColor} from ".";
+import {ClassNames} from ".";
+import {Header, Nav, NavLevel, NavLink, NavType} from ".";
 import {Dropdown, DropdownMenu, DropdownItem} from "../../forms/dropdown";
 
 storiesOf("Header", module)
@@ -21,9 +22,9 @@ storiesOf("Header", module)
             <h4> Header Types</h4>
             <div className="main-container">
                 <Header
-                    primaryShown={true}
-                    secondaryShown={true}
-                    color={HeaderColor.HEADER6}
+                    primaryShown={false}
+                    secondaryShown={false}
+                    color={ClassNames.Header6}
                     style={{marginTop: "24px"}}
                 >
                     <div className="branding">
@@ -45,7 +46,7 @@ storiesOf("Header", module)
                 <Header
                     primaryShown={true}
                     secondaryShown={true}
-                    color={HeaderColor.HEADER6}
+                    color={ClassNames.Header6}
                     style={{marginTop: "24px"}}
                 >
                     <div className="branding">
@@ -68,7 +69,7 @@ storiesOf("Header", module)
                 <Header
                     primaryShown={true}
                     secondaryShown={true}
-                    color={HeaderColor.HEADER6}
+                    color={ClassNames.Header6}
                     style={{marginTop: "24px"}}
                 >
                     <div className="branding">
@@ -78,7 +79,7 @@ storiesOf("Header", module)
                     </div>
                     <div className="header-actions">
                         <Dropdown
-                            button={{icon: "cog", className: "nav-icon dropdown-toggle"}}
+                            button={{icon: "cog", customBtn: true, className: "nav-icon dropdown-toggle"}}
                             onItemClick={action("onItemClick - Dropdown.")}
                         >
                             <DropdownMenu>
@@ -93,7 +94,7 @@ storiesOf("Header", module)
                 <Header
                     primaryShown={true}
                     secondaryShown={true}
-                    color={HeaderColor.HEADER6}
+                    color={ClassNames.Header6}
                     style={{marginTop: "24px"}}
                 >
                     <div className="branding">
@@ -117,7 +118,7 @@ storiesOf("Header", module)
 
                     <div className="header-actions">
                         <Dropdown
-                            button={{icon: "user", className: "nav-icon dropdown-toggle"}}
+                            button={{icon: "user", customBtn: true, className: "nav-icon dropdown-toggle"}}
                             onItemClick={action("onItemClick - Dropdown.")}
                         >
                             <DropdownMenu>
@@ -132,7 +133,7 @@ storiesOf("Header", module)
                 <Header
                     primaryShown={true}
                     secondaryShown={true}
-                    color={HeaderColor.HEADER6}
+                    color={ClassNames.Header6}
                     style={{marginTop: "24px"}}
                 >
                     <div className="branding">
@@ -148,7 +149,7 @@ storiesOf("Header", module)
                 <Header
                     primaryShown={true}
                     secondaryShown={true}
-                    color={HeaderColor.HEADER6}
+                    color={ClassNames.Header6}
                     style={{marginTop: "24px"}}
                 >
                     <div className="branding">
@@ -159,7 +160,7 @@ storiesOf("Header", module)
                     <div className="header-actions">
                         <Dropdown
                             label="john.doe@vmware.com"
-                            button={{className: "nav-text dropdown-toggle"}}
+                            button={{customBtn: true, className: "nav-text dropdown-toggle"}}
                             onItemClick={action("onItemClick - Dropdown.")}
                         >
                             <DropdownMenu>
@@ -173,7 +174,7 @@ storiesOf("Header", module)
                 <Header
                     primaryShown={true}
                     secondaryShown={true}
-                    color={HeaderColor.HEADER6}
+                    color={ClassNames.Header6}
                     style={{marginTop: "24px"}}
                 >
                     <div className="branding">
@@ -209,7 +210,7 @@ storiesOf("Header", module)
                 <Header
                     primaryShown={true}
                     secondaryShown={false}
-                    color={HeaderColor.HEADER1}
+                    color={ClassNames.Header1}
                     style={{marginTop: "24px"}}
                 >
                     <div className="branding">
@@ -222,7 +223,7 @@ storiesOf("Header", module)
                 <Header
                     primaryShown={true}
                     secondaryShown={false}
-                    color={HeaderColor.HEADER2}
+                    color={ClassNames.Header2}
                     style={{marginTop: "24px"}}
                 >
                     <div className="branding">
@@ -235,7 +236,7 @@ storiesOf("Header", module)
                 <Header
                     primaryShown={true}
                     secondaryShown={false}
-                    color={HeaderColor.HEADER3}
+                    color={ClassNames.Header3}
                     style={{marginTop: "24px"}}
                 >
                     <div className="branding">
@@ -248,7 +249,7 @@ storiesOf("Header", module)
                 <Header
                     primaryShown={true}
                     secondaryShown={false}
-                    color={HeaderColor.HEADER4}
+                    color={ClassNames.Header4}
                     style={{marginTop: "24px"}}
                 >
                     <div className="branding">
@@ -261,7 +262,7 @@ storiesOf("Header", module)
                 <Header
                     primaryShown={true}
                     secondaryShown={false}
-                    color={HeaderColor.HEADER5}
+                    color={ClassNames.Header5}
                     style={{marginTop: "24px"}}
                 >
                     <div className="branding">
@@ -274,7 +275,7 @@ storiesOf("Header", module)
                 <Header
                     primaryShown={true}
                     secondaryShown={false}
-                    color={HeaderColor.HEADER6}
+                    color={ClassNames.Header6}
                     style={{marginTop: "24px"}}
                 >
                     <div className="branding">
@@ -287,7 +288,7 @@ storiesOf("Header", module)
                 <Header
                     primaryShown={true}
                     secondaryShown={false}
-                    color={HeaderColor.HEADER7}
+                    color={ClassNames.Header7}
                     style={{marginTop: "24px"}}
                 >
                     <div className="branding">
@@ -308,7 +309,7 @@ storiesOf("Header", module)
                 <Header
                     primaryShown={true}
                     secondaryShown={true}
-                    color={HeaderColor.HEADER1}
+                    color={ClassNames.Header1}
                     style={{marginTop: "24px"}}
                 >
                     <div className="branding">

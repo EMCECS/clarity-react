@@ -25,23 +25,12 @@ export type NavHeaderProps = {
     // for handling the closeAll action is within the parent object, and will
     // have an effect on navList property.
     onCloseAll?: () => void;
-
     primaryShown: boolean;
-
     secondaryShown: boolean;
     style?: any;
-    color?: HeaderColor;
+    color?: string;
     className?: string;
 };
-export enum HeaderColor {
-    HEADER1 = "header header-1",
-    HEADER2 = "header header-2",
-    HEADER3 = "header header-3",
-    HEADER4 = "header header-4",
-    HEADER5 = "header header-5",
-    HEADER6 = "header header-6",
-    HEADER7 = "header header-7",
-}
 
 export class Header extends React.PureComponent<NavHeaderProps> {
     render() {
@@ -56,7 +45,7 @@ export class Header extends React.PureComponent<NavHeaderProps> {
             style,
         } = this.props;
         return (
-            <header className={classNames([className, color])} style={style}>
+            <header className={classNames([color, className])} style={style}>
                 {primaryShown && (
                     <button className={ClassNames.HamburgerTrigger} type="button" onClick={onHamburgerToggle}>
                         <span />
