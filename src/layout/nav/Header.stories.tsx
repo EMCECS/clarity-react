@@ -1,5 +1,5 @@
 /**
- * Copyright, (c) 2018 Dell Inc., or its subsidiaries. All Rights Reserved.
+ * Copyright (c) 2018 Dell Inc., or its subsidiaries. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,6 @@ import {action} from "@storybook/addon-actions";
 import {Icon} from "../../icon";
 import {Header, Nav, NavLevel, NavLink, NavType, HeaderColor} from ".";
 import {Dropdown, DropdownMenu, DropdownItem} from "../../forms/dropdown";
-// import {Nav, NavLevel, NavLink, NavType} from "../nav";
 
 storiesOf("Header", module)
     .add("Header Types", () => (
