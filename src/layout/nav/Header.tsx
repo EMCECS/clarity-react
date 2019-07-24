@@ -53,7 +53,6 @@ export class Header extends React.PureComponent<NavHeaderProps> {
             color,
             style,
         } = this.props;
-        console.log(ClassNames.Header);
         return (
             <header className={classNames([ClassNames.Header, color, className])} style={style}>
                 {primaryShown && (
