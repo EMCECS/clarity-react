@@ -44,8 +44,8 @@ storiesOf("Header", module)
                 </Header>
 
                 <Header
-                    primaryShown={true}
-                    secondaryShown={true}
+                    primaryShown={false}
+                    secondaryShown={false}
                     color={ClassNames.Header6}
                     style={{marginTop: "24px"}}
                 >
@@ -67,8 +67,8 @@ storiesOf("Header", module)
                 </Header>
 
                 <Header
-                    primaryShown={true}
-                    secondaryShown={true}
+                    primaryShown={false}
+                    secondaryShown={false}
                     color={ClassNames.Header6}
                     style={{marginTop: "24px"}}
                 >
@@ -79,7 +79,7 @@ storiesOf("Header", module)
                     </div>
                     <div className="header-actions">
                         <Dropdown
-                            button={{icon: "cog", customBtn: true, className: "nav-icon dropdown-toggle"}}
+                            button={{icon: "cog", customBtn: false, className: "nav-icon dropdown-toggle"}}
                             onItemClick={action("onItemClick - Dropdown.")}
                         >
                             <DropdownMenu>
@@ -92,8 +92,8 @@ storiesOf("Header", module)
                 </Header>
 
                 <Header
-                    primaryShown={true}
-                    secondaryShown={true}
+                    primaryShown={false}
+                    secondaryShown={false}
                     color={ClassNames.Header6}
                     style={{marginTop: "24px"}}
                 >
@@ -118,7 +118,7 @@ storiesOf("Header", module)
 
                     <div className="header-actions">
                         <Dropdown
-                            button={{icon: "user", customBtn: true, className: "nav-icon dropdown-toggle"}}
+                            button={{icon: "user", customBtn: false, className: "nav-icon dropdown-toggle"}}
                             onItemClick={action("onItemClick - Dropdown.")}
                         >
                             <DropdownMenu>
@@ -131,8 +131,8 @@ storiesOf("Header", module)
                 </Header>
 
                 <Header
-                    primaryShown={true}
-                    secondaryShown={true}
+                    primaryShown={false}
+                    secondaryShown={false}
                     color={ClassNames.Header6}
                     style={{marginTop: "24px"}}
                 >
@@ -147,8 +147,8 @@ storiesOf("Header", module)
                 </Header>
 
                 <Header
-                    primaryShown={true}
-                    secondaryShown={true}
+                    primaryShown={false}
+                    secondaryShown={false}
                     color={ClassNames.Header6}
                     style={{marginTop: "24px"}}
                 >
@@ -160,7 +160,7 @@ storiesOf("Header", module)
                     <div className="header-actions">
                         <Dropdown
                             label="john.doe@vmware.com"
-                            button={{customBtn: true, className: "nav-text dropdown-toggle"}}
+                            button={{customBtn: false, className: "nav-text dropdown-toggle"}}
                             onItemClick={action("onItemClick - Dropdown.")}
                         >
                             <DropdownMenu>
@@ -172,8 +172,8 @@ storiesOf("Header", module)
                 </Header>
 
                 <Header
-                    primaryShown={true}
-                    secondaryShown={true}
+                    primaryShown={false}
+                    secondaryShown={false}
                     color={ClassNames.Header6}
                     style={{marginTop: "24px"}}
                 >
@@ -208,7 +208,7 @@ storiesOf("Header", module)
             <h4> Header with Color Options</h4>
             <div className="main-container">
                 <Header
-                    primaryShown={true}
+                    primaryShown={false}
                     secondaryShown={false}
                     color={ClassNames.Header1}
                     style={{marginTop: "24px"}}
@@ -221,7 +221,7 @@ storiesOf("Header", module)
                     </div>
                 </Header>
                 <Header
-                    primaryShown={true}
+                    primaryShown={false}
                     secondaryShown={false}
                     color={ClassNames.Header2}
                     style={{marginTop: "24px"}}
@@ -234,7 +234,7 @@ storiesOf("Header", module)
                     </div>
                 </Header>
                 <Header
-                    primaryShown={true}
+                    primaryShown={false}
                     secondaryShown={false}
                     color={ClassNames.Header3}
                     style={{marginTop: "24px"}}
@@ -247,7 +247,7 @@ storiesOf("Header", module)
                     </div>
                 </Header>
                 <Header
-                    primaryShown={true}
+                    primaryShown={false}
                     secondaryShown={false}
                     color={ClassNames.Header4}
                     style={{marginTop: "24px"}}
@@ -260,7 +260,7 @@ storiesOf("Header", module)
                     </div>
                 </Header>
                 <Header
-                    primaryShown={true}
+                    primaryShown={false}
                     secondaryShown={false}
                     color={ClassNames.Header5}
                     style={{marginTop: "24px"}}
@@ -273,7 +273,7 @@ storiesOf("Header", module)
                     </div>
                 </Header>
                 <Header
-                    primaryShown={true}
+                    primaryShown={false}
                     secondaryShown={false}
                     color={ClassNames.Header6}
                     style={{marginTop: "24px"}}
@@ -286,7 +286,7 @@ storiesOf("Header", module)
                     </div>
                 </Header>
                 <Header
-                    primaryShown={true}
+                    primaryShown={false}
                     secondaryShown={false}
                     color={ClassNames.Header7}
                     style={{marginTop: "24px"}}
@@ -307,8 +307,8 @@ storiesOf("Header", module)
             <h4> Header with Subnav</h4>
             <div className="main-container">
                 <Header
-                    primaryShown={true}
-                    secondaryShown={true}
+                    primaryShown={false}
+                    secondaryShown={false}
                     color={ClassNames.Header1}
                     style={{marginTop: "24px"}}
                 >
