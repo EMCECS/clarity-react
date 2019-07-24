@@ -11,26 +11,28 @@
 import * as React from "react";
 import {storiesOf} from "@storybook/react";
 import {State, Store} from "@sambego/storybook-state";
+import {Wizard, WizardSize, WizardValidationType} from "./Wizard";
 import {Button} from "../forms/button";
-import {Wizard, WizardSize} from "./Wizard";
 import {Badge, BadgeStatus, BadgeColor} from "../emphasis/badges";
 
+const SingleStep = [{stepName: "page 1", stepId: 0, stepComponent: <p> Page 1</p>}];
+
 const stepsMedium = [
-    {stepName: "page 1", stepId: 0, stepComponent: <p> Page 1</p>, stepCompleted: false},
-    {stepName: "page 2", stepId: 1, stepComponent: <p> Page 2</p>, stepCompleted: false},
-    {stepName: "page 3", stepId: 2, stepComponent: <p> Page 3</p>, stepCompleted: false},
+    {stepName: "page 1", stepId: 0, stepComponent: <p> Page 1</p>},
+    {stepName: "page 2", stepId: 1, stepComponent: <p> Page 2</p>},
+    {stepName: "page 3", stepId: 2, stepComponent: <p> Page 3</p>},
 ];
 
 const stepsLarge = [
-    {stepName: "page 1", stepId: 0, stepComponent: <p> Page 1</p>, stepCompleted: false},
-    {stepName: "page 2", stepId: 1, stepComponent: <p> Page 2</p>, stepCompleted: false},
-    {stepName: "page 3", stepId: 2, stepComponent: <p> Page 3</p>, stepCompleted: false},
+    {stepName: "page 1", stepId: 0, stepComponent: <p> Page 1</p>},
+    {stepName: "page 2", stepId: 1, stepComponent: <p> Page 2</p>},
+    {stepName: "page 3", stepId: 2, stepComponent: <p> Page 3</p>},
 ];
 
 const stepsXLarge = [
-    {stepName: "page 1", stepId: 0, stepComponent: <p> Page 1</p>, stepCompleted: false},
-    {stepName: "page 2", stepId: 1, stepComponent: <p> Page 2</p>, stepCompleted: false},
-    {stepName: "page 3", stepId: 2, stepComponent: <p> Page 3</p>, stepCompleted: false},
+    {stepName: "page 1", stepId: 0, stepComponent: <p> Page 1</p>},
+    {stepName: "page 2", stepId: 1, stepComponent: <p> Page 2</p>},
+    {stepName: "page 3", stepId: 2, stepComponent: <p> Page 3</p>},
 ];
 
 const stepsNavIcon = [
@@ -38,37 +40,110 @@ const stepsNavIcon = [
         stepName: "Play",
         stepId: 0,
         stepComponent: <p> Play </p>,
-        stepCompleted: false,
-        customStepNav: {stepNavIcon: "play", stepNavbadges: <Badge status={BadgeStatus.BADGE_INFO}>2</Badge>},
+        customStepNav: {
+            stepNavIcon: "play",
+            stepNavTitle: "Start",
+            stepNavChildren: <Badge status={BadgeStatus.BADGE_INFO}>2</Badge>,
+        },
     },
     {
         stepName: "Stop",
         stepId: 1,
         stepComponent: <p> Stop </p>,
-        stepCompleted: false,
-        customStepNav: {stepNavIcon: "stop", stepNavbadges: <Badge color={BadgeColor.ORANGE}>3</Badge>},
+        customStepNav: {stepNavIcon: "stop", stepNavChildren: <Badge color={BadgeColor.ORANGE}>3</Badge>},
     },
     {
         stepName: "Power",
         stepId: 2,
         stepComponent: <p> Power </p>,
-        stepCompleted: false,
-        customStepNav: {stepNavIcon: "power", stepNavbadges: <Badge status={BadgeStatus.BADGE_DANGER}>15</Badge>},
+        customStepNav: {stepNavIcon: "power", stepNavChildren: <Badge status={BadgeStatus.BADGE_DANGER}>15</Badge>},
+    },
+];
+
+const stepsSyncValidation = [
+    {
+        stepName: "Step 1",
+        stepId: 0,
+        stepComponent: (
+            <Button
+                onClick={() => {
+                    wizardRefSync.current!.checkStepValidity(0);
+                }}
+            >
+                {" "}
+                Finish Step 1{" "}
+            </Button>
+        ),
+        isStepValid: () => true,
+    },
+    {
+        stepName: "Step 2",
+        stepId: 1,
+        stepComponent: (
+            <div>
+                {" "}
+                <Button
+                    onClick={() => {
+                        wizardRefSync.current!.checkStepValidity(1);
+                    }}
+                >
+                    {" "}
+                    Finish Step 2{" "}
+                </Button>{" "}
+            </div>
+        ),
+        isStepValid: () => true,
+    },
+    {
+        stepName: "Step 3",
+        stepId: 2,
+        stepComponent: (
+            <Button
+                onClick={() => {
+                    wizardRefSync.current!.checkStepValidity(2);
+                }}
+            >
+                {" "}
+                Finish Step 3{" "}
+            </Button>
+        ),
+        isStepValid: () => true,
+    },
+];
+
+const stepsAsyncValidation = [
+    {stepName: "Step 1", stepId: 0, stepComponent: <p> Step 1 </p>, isStepValid: () => true},
+    {stepName: "Step 2", stepId: 1, stepComponent: <p> Step 2 </p>, isStepValid: () => false},
+    {
+        stepName: "Step 3",
+        stepId: 2,
+        stepComponent: (
+            <p>
+                {" "}
+                Step 3 <div> Error at Step 2</div>{" "}
+            </p>
+        ),
+        isStepValid: () => true,
     },
 ];
 
 const storeMedium = new Store({show: false});
 const storeLarge = new Store({show: false});
 const storeXlarge = new Store({show: false});
+const storeSingleStep = new Store({show: false});
 const storeDefaultState = new Store({show: false});
 const storeCustomButtons = new Store({show: false});
 const storeWithoutNav = new Store({show: false});
 const storeNavWithIcon = new Store({show: false});
 const storeSyncValidation = new Store({show: false});
+const storeAsyncValidation = new Store({show: false});
 const storeResetWizard = new Store({show: false});
 
 // Refrence to call resetWizard() of Wizard component
 const wizardRef = React.createRef<Wizard>();
+
+// Refrence to call step validation methods of wizard
+const wizardRefSync = React.createRef<Wizard>();
 
 storiesOf("Wizard", module)
     .add("Wizard Sizes", () => (
@@ -106,6 +181,21 @@ storiesOf("Wizard", module)
             </div>
         </div>
     ))
+    .add("Wizard with Single step ", () => (
+        <div className="clr-row">
+            <div className="clr-col-12">
+                <State store={storeSingleStep}>
+                    <Button onClick={() => storeSingleStep.set({show: true})}> Single Step </Button>
+                    <Wizard
+                        size={WizardSize.MEDIUM}
+                        title="Wizard with Single Step"
+                        steps={SingleStep}
+                        onClose={() => storeSingleStep.set({show: false})}
+                    />
+                </State>
+            </div>
+        </div>
+    ))
     .add("Wizard with deafult step ", () => (
         <div className="clr-row">
             <div className="clr-col-12">
@@ -116,7 +206,7 @@ storiesOf("Wizard", module)
                         title="Open Wizard at step 2"
                         steps={stepsMedium}
                         onClose={() => storeDefaultState.set({show: false})}
-                        defaultStep={2}
+                        defaultStepId={1}
                     />
                 </State>
             </div>
@@ -182,6 +272,34 @@ storiesOf("Wizard", module)
                         steps={stepsMedium}
                         onClose={() => storeResetWizard.set({show: false})}
                         onFinish={() => wizardRef.current!.resetWizard()}
+                    />
+                </State>
+            </div>
+        </div>
+    ))
+    .add("Wizard Validation", () => (
+        <div className="clr-row">
+            <div className="clr-col-12">
+                <State store={storeSyncValidation}>
+                    <Button onClick={() => storeSyncValidation.set({show: true})}> Synchronous validation </Button>
+                    <Wizard
+                        ref={wizardRefSync}
+                        size={WizardSize.MEDIUM}
+                        title="Wizard with synchronous validation"
+                        steps={stepsSyncValidation}
+                        validationType={WizardValidationType.SYNC}
+                        onClose={() => storeSyncValidation.set({show: false})}
+                    />
+                </State>
+
+                <State store={storeAsyncValidation}>
+                    <Button onClick={() => storeAsyncValidation.set({show: true})}> Asynchronous validation </Button>
+                    <Wizard
+                        size={WizardSize.MEDIUM}
+                        title="Wizard with Asynchronous Validation"
+                        steps={stepsAsyncValidation}
+                        validationType={WizardValidationType.ASYNC}
+                        onClose={() => storeAsyncValidation.set({show: false})}
                     />
                 </State>
             </div>

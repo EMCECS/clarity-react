@@ -11,24 +11,26 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import {Icon} from "../icon";
-import {classNames} from "../utils";
-import {ClassNames} from "./ClassNames";
+import {classNames, allTrue} from "../utils";
+import {ClassNames, Styles} from "./ClassNames";
 import {Button, ButtonState} from "../forms/button";
 import {VerticalNav} from "../layout/vertical-nav";
-import {NavLink, NavLinkType} from "../layout/nav";
 
-export type WizardStep = {
+type WizardStep = {
     stepName: string;
     stepComponent: React.ReactNode;
     stepId: number;
-    stepCompleted: boolean;
+    stepCompleted?: boolean;
     customStepNav?: WizardStepNavDetails;
+    disableNav?: boolean;
     isStepValid?: Function /* This function should return boolen value. And use to determine if step is valid or not */;
+    onStepSubmit?: Function /* Function to perform on submittion of step at click of Next or Finish */;
 };
 
-export type WizardStepNavDetails = {
+type WizardStepNavDetails = {
     stepNavIcon?: string;
-    stepNavbadges?: React.ReactNode;
+    stepNavTitle?: string;
+    stepNavChildren?: React.ReactNode;
 };
 
 type WizardProps = {
@@ -36,7 +38,7 @@ type WizardProps = {
     size?: WizardSize;
     title?: string;
     steps: WizardStep[];
-    defaultStep?: number;
+    defaultStepId?: number;
     showNav?: boolean;
     closable?: boolean;
     previousButtonText?: string;
@@ -48,15 +50,17 @@ type WizardProps = {
     cancelButtonText?: string;
     onClose?: Function;
     navLinkClasses?: string;
-    wizardValidation?: WizardValidation;
+    validationType?: WizardValidationType;
 };
 
 type WizardState = {
     show: boolean;
-    currentStep: number;
+    currentStepId: number;
     showFinishButton: boolean;
+    disableFinishButton: boolean;
     showPreviousButton: boolean;
     showNextButton: boolean;
+    disableNextButton: boolean;
     allSteps: WizardStep[];
 };
 
@@ -66,10 +70,10 @@ export enum WizardSize {
     XLARGE = "xl",
 }
 
-export enum WizardValidation {
+export enum WizardValidationType {
     ASYNC = "Asynchronous",
-    SYNC = "asynchronous",
-    NONE = "none",
+    SYNC = "Synchronous",
+    NONE = "None",
 }
 
 export class Wizard extends React.PureComponent<WizardProps> {
@@ -83,17 +87,19 @@ export class Wizard extends React.PureComponent<WizardProps> {
         finishButtonText: "FINISH",
         size: WizardSize.MEDIUM,
         showNav: true,
-        defaultStep: 1,
-        wizardValidation: WizardValidation.NONE,
+        defaultStepId: 0,
+        validationType: WizardValidationType.NONE,
     };
 
     // Default state of wizard - Need this to reset Wizard state
-    initialState: WizardState = {
+    private initialState: WizardState = {
         show: this.props.show !== undefined ? this.props.show : false,
-        currentStep: this.props.defaultStep! - 1 || 0,
-        showFinishButton: false,
+        currentStepId: this.props.defaultStepId!,
+        showFinishButton: this.props.defaultStepId === this.props.steps.length - 1 ? true : false,
+        disableFinishButton: false,
         showPreviousButton: false,
-        showNextButton: true,
+        showNextButton: this.props.defaultStepId === this.props.steps.length - 1 ? false : true,
+        disableNextButton: false,
         allSteps: this.props.steps,
     };
 
@@ -103,9 +109,10 @@ export class Wizard extends React.PureComponent<WizardProps> {
     /* ##########  Wizard lifestyle hooks start  ############ */
     componentWillMount() {
         this.createRefDiv();
+        this.initStepsState();
     }
 
-    createRefDiv() {
+    private createRefDiv() {
         if (this.divRef === null) {
             const el = document.createElement("div");
             document.body.appendChild(el);
@@ -114,7 +121,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
         document.body.classList.add(ClassNames.NO_SCROLLING);
     }
 
-    cleanup() {
+    private cleanup() {
         if (this.divRef !== null) {
             document.body.removeChild(this.divRef);
             this.divRef = null;
@@ -122,6 +129,29 @@ export class Wizard extends React.PureComponent<WizardProps> {
         document.body.classList.remove(ClassNames.NO_SCROLLING);
     }
 
+    // Initialize state of wizard steps
+    private initStepsState() {
+        const {validationType, steps} = this.props;
+        // For 1st step disable Next button for synchronous validation
+        const disableNext = validationType === WizardValidationType.SYNC ? true : false;
+        steps.map((step, key) => {
+            // Enable Nav for first step in case of Synchronous validation
+            const disableNav =
+                (step.stepId === 0 && validationType === WizardValidationType.SYNC) ||
+                [WizardValidationType.ASYNC, WizardValidationType.NONE].includes(validationType!)
+                    ? false
+                    : true;
+
+            this.setState({
+                disableNextButton: this.state.disableNextButton !== disableNext ? disableNext : undefined,
+                allSteps: [
+                    ...this.state.allSteps,
+                    ((this.state.allSteps[step.stepId].stepCompleted = false),
+                    (this.state.allSteps[step.stepId].disableNav = disableNav)),
+                ],
+            });
+        });
+    }
     componentWillUnmount() {
         this.cleanup();
     }
@@ -129,6 +159,9 @@ export class Wizard extends React.PureComponent<WizardProps> {
     /* ##########  Wizard lifestyle hooks end  ############ */
 
     /* ##########  Wizard private methods start  ############ */
+    private getStepObj(stepId: number) {
+        return this.state.allSteps[stepId];
+    }
 
     // Close the wizard
     close() {
@@ -155,52 +188,70 @@ export class Wizard extends React.PureComponent<WizardProps> {
 
     nextButtonClick() {
         const {onNext, steps} = this.props;
-        const nextStepId = this.state.currentStep + 1;
-
+        const nextStepId = this.state.currentStepId + 1;
+        const currenstStep = this.getStepObj(this.state.currentStepId);
         // Check validity of current step before going next
-        const validState = this.checkStepValidity(this.state.allSteps[this.state.currentStep]);
-        if (validState && nextStepId <= steps.length - 1) this.modifyButtonStates(this.state.allSteps[nextStepId]);
-        onNext && onNext();
+        const {validState, disableNextStep} = this.checkStepValidity(this.state.currentStepId);
+
+        if (!disableNextStep && nextStepId <= steps.length - 1) {
+            this.modifyButtonStates(nextStepId);
+            currenstStep.onStepSubmit && currenstStep.onStepSubmit();
+            onNext && onNext();
+        }
     }
 
     previousButtonClick() {
         const {onPrevious} = this.props;
-        const previousStepId = this.state.currentStep - 1;
+        const previousStepId = this.state.currentStepId - 1;
 
-        if (previousStepId >= 0) this.modifyButtonStates(this.state.allSteps[previousStepId]);
+        if (previousStepId >= 0) this.modifyButtonStates(previousStepId);
         onPrevious && onPrevious();
     }
 
     // Close the wizard on finish
     finishButtonClick() {
-        const {onFinish} = this.props;
-        const validState = this.checkStepValidity(this.state.allSteps[this.state.currentStep]);
-        if (validState) {
+        const {onFinish, validationType} = this.props;
+        let finishWizard: boolean;
+        const currenstStep = this.getStepObj(this.state.currentStepId);
+        const {validState, disableNextStep} = this.checkStepValidity(this.state.currentStepId);
+
+        if (validationType === WizardValidationType.ASYNC) {
+            var {validationData, allStepsValid} = this.checkValidityOfAllSteps();
+            finishWizard = allStepsValid;
+        } else {
+            finishWizard = !disableNextStep;
+        }
+
+        if (finishWizard) {
+            currenstStep.onStepSubmit && currenstStep.onStepSubmit();
             onFinish && onFinish();
             this.close();
         }
     }
 
-    modifyButtonStates(step: WizardStep) {
-        const {steps} = this.props;
+    private modifyButtonStates(stepId: number) {
+        const {steps, validationType} = this.props;
+        const step = this.getStepObj(stepId);
 
-        if (step.stepId == 0) {
+        if (stepId === 0) {
             /* for first step : If currenst step is first step of workflow
           then hide privious button and show next button */
             this.setState({
                 showPreviousButton: false,
                 showNextButton: true,
+                disableNextButton: !step.stepCompleted && validationType == WizardValidationType.SYNC ? true : false,
                 showFinishButton: false,
-                currentStep: step.stepId,
+                currentStepId: step.stepId,
             });
-        } else if (step.stepId == steps.length - 1) {
+        } else if (stepId === steps.length - 1) {
             /* for last step : If currenst step is last step of workflow
           then hide next button and show privious and finish buttons */
             this.setState({
                 showPreviousButton: true,
                 showFinishButton: true,
+                disableFinishButton: !step.stepCompleted && validationType == WizardValidationType.SYNC ? true : false,
                 showNextButton: false,
-                currentStep: step.stepId,
+                currentStepId: step.stepId,
             });
         } else {
             /* for in between step : If currenst step is not last or first step of workflow
@@ -208,42 +259,72 @@ export class Wizard extends React.PureComponent<WizardProps> {
             this.setState({
                 showPreviousButton: true,
                 showNextButton: true,
+                disableNextButton: !step.stepCompleted && validationType == WizardValidationType.SYNC ? true : false,
                 showFinishButton: false,
-                currentStep: step.stepId,
+                currentStepId: step.stepId,
             });
         }
     }
 
-    navigationClick(step: WizardStep) {
-        // TODO : Do we need to check validity here ?
-        this.modifyButtonStates(step);
+    private navigationClick(stepId: number) {
+        this.modifyButtonStates(stepId);
     }
 
-    getStepNavClasses(step: WizardStep) {
+    private getStepNavClasses(stepId: number) {
         let classNames = [ClassNames.WIZARD_STEPNAV_LINK];
 
-        if (this.state.currentStep == step.stepId) classNames.push(ClassNames.ACTIVE);
-        if (this.state.allSteps[step.stepId].stepCompleted) classNames.push(ClassNames.COMPLETE);
+        if (this.state.currentStepId === stepId) classNames.push(ClassNames.ACTIVE);
+        if (this.state.allSteps[stepId].stepCompleted) classNames.push(ClassNames.COMPLETE);
         if (this.props.navLinkClasses) classNames.push(this.props.navLinkClasses);
         // TODO: Add class error if step is not valid
         return classNames;
     }
 
     // Check validity of given step
-    checkStepValidity(step: WizardStep) {
+    checkStepValidity(stepId: number) {
+        const {validationType, steps} = this.props;
         let validationState = true;
-        if (this.state.allSteps[step.stepId].isStepValid !== undefined)
-            validationState = this.state.allSteps[step.stepId].isStepValid!();
+        let disableNext = false;
+        let currenstStep = this.getStepObj(stepId);
+        let nextStep = stepId == steps.length - 1 ? currenstStep : this.state.allSteps[stepId + 1];
 
-        this.setState({
-            allSteps: [...this.state.allSteps, (this.state.allSteps[step.stepId].stepCompleted = validationState)],
+        if (currenstStep.isStepValid !== undefined) validationState = currenstStep.isStepValid!();
+        if (!validationState && validationType === WizardValidationType.SYNC) disableNext = true;
+        if (currenstStep.stepCompleted !== validationState) {
+            this.setState({
+                disableNextButton: this.state.disableNextButton !== disableNext ? disableNext : undefined,
+                disableFinishButton: this.state.disableFinishButton !== disableNext ? disableNext : undefined,
+                allSteps: [
+                    ...this.state.allSteps,
+                    ((currenstStep.stepCompleted = validationState), (nextStep.disableNav = disableNext)),
+                ],
+            });
+        }
+
+        return {
+            validState: validationState,
+            disableNextStep: disableNext,
+        };
+    }
+
+    // Check validity of All steps
+    checkValidityOfAllSteps() {
+        const {steps} = this.props;
+        let validationData: {[key: number]: boolean} = {};
+
+        steps.map((step, key) => {
+            const {validState, disableNextStep} = this.checkStepValidity(step.stepId);
+            validationData[step.stepId] = validState;
         });
-
-        return validationState;
+        const allStepsValid = allTrue(validationData);
+        return {
+            validationData: validationData,
+            allStepsValid: allStepsValid,
+        };
     }
 
     // Build DOM for Wizard footer
-    buildWizardFooter(): React.ReactElement {
+    private buildWizardFooter(): React.ReactElement {
         const {cancelButtonText, nextButtonText, previousButtonText, finishButtonText} = this.props;
 
         return (
@@ -260,7 +341,12 @@ export class Wizard extends React.PureComponent<WizardProps> {
                     )}
 
                     {this.state.showNextButton && (
-                        <Button key={nextButtonText} primary onClick={this.nextButtonClick.bind(this)}>
+                        <Button
+                            key={nextButtonText}
+                            primary
+                            disabled={this.state.disableNextButton}
+                            onClick={this.nextButtonClick.bind(this)}
+                        >
                             {nextButtonText}{" "}
                         </Button>
                     )}
@@ -269,6 +355,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
                         <Button
                             key={finishButtonText}
                             state={ButtonState.SUCCESS}
+                            disabled={this.state.disableFinishButton}
                             onClick={this.finishButtonClick.bind(this)}
                         >
                             {finishButtonText}
@@ -282,7 +369,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
     }
 
     // Build DOM for Wizard NAV
-    buildWizardNav(): React.ReactElement {
+    private buildWizardNav(): React.ReactElement {
         const {steps, title, showNav} = this.props;
 
         return (
@@ -292,23 +379,26 @@ export class Wizard extends React.PureComponent<WizardProps> {
                     <div className={ClassNames.WIZARD_STEPNAV}>
                         {steps.map((step, key) => {
                             return (
-                                <NavLink
-                                    iconShape={
-                                        step.customStepNav !== undefined && step.customStepNav.stepNavIcon
-                                            ? step.customStepNav.stepNavIcon
-                                            : undefined
-                                    }
-                                    type={
-                                        step.customStepNav !== undefined && step.customStepNav.stepNavIcon
-                                            ? undefined
-                                            : NavLinkType.stepNavLink
-                                    }
-                                    className={classNames(this.getStepNavClasses(step))}
-                                    onClick={this.navigationClick.bind(this, step)}
-                                >
-                                    {step.stepName} &nbsp;
-                                    {step.customStepNav !== undefined && step.customStepNav!.stepNavbadges}
-                                </NavLink>
+                                <div className={classNames(this.getStepNavClasses(step.stepId))}>
+                                    <Button
+                                        disabled={this.state.allSteps[step.stepId].disableNav}
+                                        link={true}
+                                        className="clr-wizard-stepnav-link"
+                                        onClick={this.navigationClick.bind(this, step.stepId)}
+                                        icon={
+                                            step.customStepNav !== undefined && step.customStepNav.stepNavIcon
+                                                ? step.customStepNav.stepNavIcon
+                                                : undefined
+                                        }
+                                    >
+                                        &nbsp;
+                                        {step.customStepNav !== undefined && step.customStepNav.stepNavTitle
+                                            ? step.customStepNav.stepNavTitle
+                                            : step.stepName}{" "}
+                                        &nbsp;
+                                        {step.customStepNav !== undefined && step.customStepNav!.stepNavChildren}
+                                    </Button>
+                                </div>
                             );
                         })}
                     </div>
@@ -318,13 +408,13 @@ export class Wizard extends React.PureComponent<WizardProps> {
     }
 
     // Build DOM for wizard step
-    buildWizardSteps(): React.ReactElement {
+    private buildWizardSteps(): React.ReactElement {
         const {steps} = this.props;
 
         return (
             <div className={ClassNames.WIZARD_CONTENT}>
                 {steps.map((step, key) => {
-                    const hideStep = step.stepId == this.state.currentStep ? false : true;
+                    const hideStep = step.stepId === this.state.currentStepId ? false : true;
                     return (
                         <div
                             role="tabpanel"
@@ -341,10 +431,11 @@ export class Wizard extends React.PureComponent<WizardProps> {
         );
     }
 
-    buildWizard(): React.ReactElement {
+    private buildWizard(): React.ReactElement {
         const {size, closable, steps, children} = this.props;
         const wizardSize = "wizard-" + size;
         const modalSize = "modal-" + size;
+
         return (
             <React.Fragment>
                 <div className={`${ClassNames.WIZARD} ${wizardSize} ${ClassNames.WIZARD_OPEN}`}>
@@ -355,7 +446,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
                             aria-hidden="false"
                             aria-labelledby="clr-id-3"
                         >
-                            <div className={ClassNames.WIZARD_OUTER_WRAPPER} style={{height: "100%", width: "100%"}}>
+                            <div className={ClassNames.WIZARD_OUTER_WRAPPER} style={Styles.WIZARD_OUTER_WRAPPER}>
                                 <div className={ClassNames.MODAL_CONTENT_WRAPPER}>
                                     {this.buildWizardNav()}
                                     <div className={ClassNames.MODAL_CONTENT}>
@@ -368,9 +459,9 @@ export class Wizard extends React.PureComponent<WizardProps> {
                                             >
                                                 <Icon aria-hidden={true} shape="close" />
                                             </button>
-                                            <h3 className={ClassNames.MODAL_TITLE} style={{paddingTop: "0.5rem"}}>
+                                            <h3 className={ClassNames.MODAL_TITLE} style={Styles.MODAL_TITELE}>
                                                 <span className={ClassNames.MODAL_TITLE_TEXT}>
-                                                    {steps[this.state.currentStep].stepName}
+                                                    {steps[this.state.currentStepId].stepName}
                                                 </span>
                                             </h3>
                                         </div>{" "}
@@ -386,12 +477,12 @@ export class Wizard extends React.PureComponent<WizardProps> {
                                     <div
                                         _ngcontent-c7=""
                                         className={ClassNames.MODAL_GHOST_1}
-                                        style={{left: "-24px"}}
+                                        style={Styles.MODAL_GHOST_1}
                                     />
                                     <div
                                         _ngcontent-c7=""
                                         className={ClassNames.MODAL_GHOST_2}
-                                        style={{left: "-24px", top: "24px", bottom: "24px"}}
+                                        style={Styles.MODAL_GHOST_2}
                                     />
                                 </div>
                             </div>{" "}

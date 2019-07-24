@@ -13,3 +13,8 @@ export type ReactChildren = (React.ReactNode) | (React.ReactNode[] & React.React
 export function classNames(classNameList: (false | undefined | null | string)[]) {
     return classNameList.filter(x => typeof x === "string").join(" ");
 }
+
+export function allTrue(obj: any) {
+    for (var key in obj) if (!obj[key]) return false;
+    return true;
+}

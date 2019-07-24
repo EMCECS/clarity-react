@@ -15,35 +15,22 @@ import {classNames} from "../../utils";
 export type NavLinkProps = {
     iconShape?: string;
     className?: string;
-    type?: NavLinkType;
     onClick?: (evt: React.MouseEvent<HTMLElement>) => void;
 };
 
-export enum NavLinkType {
-    stepNavLink = "btn btn-link clr-wizard-stepnav-link",
-}
-
 export class NavLink extends React.PureComponent<NavLinkProps> {
     render() {
-        const {iconShape, className, type, onClick, children} = this.props;
+        const {iconShape, className, onClick, children} = this.props;
+        let navLinkClassNames = classNames(["nav-link", className]);
 
-        let navLinkClassNames = classNames(["nav-text", type]);
         return iconShape ? (
-            <a
-                href="javascript:void(0)"
-                className={classNames([className, type == NavLinkType.stepNavLink ? "" : "nav-link"])}
-                onClick={onClick}
-            >
+            <a href="javascript:void(0)" className={navLinkClassNames} onClick={onClick}>
                 <Icon shape={iconShape} className="nav-icon" />
-                <span className={navLinkClassNames}>{children}</span>
+                <span className="nav-text">{children}</span>
             </a>
         ) : (
-            <a
-                href="javascript:void(0)"
-                className={classNames([className, type == NavLinkType.stepNavLink ? "" : "nav-link"])}
-                onClick={onClick}
-            >
-                <div className={navLinkClassNames}>{children}</div>
+            <a href="javascript:void(0)" className={navLinkClassNames} onClick={onClick}>
+                <div className="nav-text">{children}</div>
             </a>
         );
     }

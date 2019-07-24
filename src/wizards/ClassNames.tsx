@@ -39,3 +39,10 @@ export class ClassNames {
     public static COMPLETE: string = "complete";
     public static ERROR: string = "error";
 }
+
+export class Styles {
+    public static MODAL_GHOST_2 = {left: "-24px", top: "24px", bottom: "24px"};
+    public static MODAL_GHOST_1 = {left: "-24px"};
+    public static MODAL_TITELE = {paddingTop: "0.5rem"};
+    public static WIZARD_OUTER_WRAPPER = {height: "100%", width: "100%"};
+}

@@ -19,7 +19,6 @@ export type NavProps = {
 
     // The navigation type (header, sub side).
     navType: NavType;
-    className?: string;
 };
 
 export enum NavLevel {
@@ -64,8 +63,8 @@ export class Nav extends React.PureComponent<NavProps> {
     }
 
     render() {
-        const {children, navLevel, navType, className} = this.props;
-        const classList: string[] = [Nav.classForNavType(navType), Nav.classForNavLevel(navLevel), className as any];
+        const {children, navLevel, navType} = this.props;
+        const classList: string[] = [Nav.classForNavType(navType), Nav.classForNavLevel(navLevel)];
         return <nav className={utils.classNames(classList)}>{Nav.maybeWrapInList(navType, children)}</nav>;
     }
 }
