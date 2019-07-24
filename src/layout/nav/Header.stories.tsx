@@ -12,8 +12,7 @@ import * as React from "react";
 import {storiesOf} from "@storybook/react";
 import {action} from "@storybook/addon-actions";
 import {Icon} from "../../icon";
-import {ClassNames} from ".";
-import {Header, Nav, NavLevel, NavLink, NavType} from ".";
+import {Header, HeaderColor, Nav, NavLevel, NavLink, NavType} from ".";
 import {Dropdown, DropdownMenu, DropdownItem} from "../../forms/dropdown";
 
 storiesOf("Header", module)
@@ -24,7 +23,7 @@ storiesOf("Header", module)
                 <Header
                     primaryShown={false}
                     secondaryShown={false}
-                    color={ClassNames.Header6}
+                    color={HeaderColor.HEADER6}
                     style={{marginTop: "24px"}}
                 >
                     <div className="branding">
@@ -46,7 +45,7 @@ storiesOf("Header", module)
                 <Header
                     primaryShown={false}
                     secondaryShown={false}
-                    color={ClassNames.Header6}
+                    color={HeaderColor.HEADER6}
                     style={{marginTop: "24px"}}
                 >
                     <div className="branding">
@@ -69,7 +68,7 @@ storiesOf("Header", module)
                 <Header
                     primaryShown={false}
                     secondaryShown={false}
-                    color={ClassNames.Header6}
+                    color={HeaderColor.HEADER6}
                     style={{marginTop: "24px"}}
                 >
                     <div className="branding">
@@ -94,7 +93,7 @@ storiesOf("Header", module)
                 <Header
                     primaryShown={false}
                     secondaryShown={false}
-                    color={ClassNames.Header6}
+                    color={HeaderColor.HEADER6}
                     style={{marginTop: "24px"}}
                 >
                     <div className="branding">
@@ -133,7 +132,7 @@ storiesOf("Header", module)
                 <Header
                     primaryShown={false}
                     secondaryShown={false}
-                    color={ClassNames.Header6}
+                    color={HeaderColor.HEADER6}
                     style={{marginTop: "24px"}}
                 >
                     <div className="branding">
@@ -149,7 +148,7 @@ storiesOf("Header", module)
                 <Header
                     primaryShown={false}
                     secondaryShown={false}
-                    color={ClassNames.Header6}
+                    color={HeaderColor.HEADER6}
                     style={{marginTop: "24px"}}
                 >
                     <div className="branding">
@@ -174,7 +173,7 @@ storiesOf("Header", module)
                 <Header
                     primaryShown={false}
                     secondaryShown={false}
-                    color={ClassNames.Header6}
+                    color={HeaderColor.HEADER6}
                     style={{marginTop: "24px"}}
                 >
                     <div className="branding">
@@ -210,7 +209,7 @@ storiesOf("Header", module)
                 <Header
                     primaryShown={false}
                     secondaryShown={false}
-                    color={ClassNames.Header1}
+                    color={HeaderColor.HEADER1}
                     style={{marginTop: "24px"}}
                 >
                     <div className="branding">
@@ -223,7 +222,7 @@ storiesOf("Header", module)
                 <Header
                     primaryShown={false}
                     secondaryShown={false}
-                    color={ClassNames.Header2}
+                    color={HeaderColor.HEADER2}
                     style={{marginTop: "24px"}}
                 >
                     <div className="branding">
@@ -236,7 +235,7 @@ storiesOf("Header", module)
                 <Header
                     primaryShown={false}
                     secondaryShown={false}
-                    color={ClassNames.Header3}
+                    color={HeaderColor.HEADER3}
                     style={{marginTop: "24px"}}
                 >
                     <div className="branding">
@@ -249,7 +248,7 @@ storiesOf("Header", module)
                 <Header
                     primaryShown={false}
                     secondaryShown={false}
-                    color={ClassNames.Header4}
+                    color={HeaderColor.HEADER4}
                     style={{marginTop: "24px"}}
                 >
                     <div className="branding">
@@ -262,7 +261,7 @@ storiesOf("Header", module)
                 <Header
                     primaryShown={false}
                     secondaryShown={false}
-                    color={ClassNames.Header5}
+                    color={HeaderColor.HEADER5}
                     style={{marginTop: "24px"}}
                 >
                     <div className="branding">
@@ -275,7 +274,7 @@ storiesOf("Header", module)
                 <Header
                     primaryShown={false}
                     secondaryShown={false}
-                    color={ClassNames.Header6}
+                    color={HeaderColor.HEADER6}
                     style={{marginTop: "24px"}}
                 >
                     <div className="branding">
@@ -288,7 +287,7 @@ storiesOf("Header", module)
                 <Header
                     primaryShown={false}
                     secondaryShown={false}
-                    color={ClassNames.Header7}
+                    color={HeaderColor.HEADER7}
                     style={{marginTop: "24px"}}
                 >
                     <div className="branding">
@@ -309,7 +308,7 @@ storiesOf("Header", module)
                 <Header
                     primaryShown={false}
                     secondaryShown={false}
-                    color={ClassNames.Header1}
+                    color={HeaderColor.HEADER1}
                     style={{marginTop: "24px"}}
                 >
                     <div className="branding">
