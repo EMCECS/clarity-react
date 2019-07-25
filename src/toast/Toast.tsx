@@ -28,10 +28,6 @@ export enum MessageType {
     INFO = "info",
 }
 
-enum IconType {
-    SUCCESS = "success-standard",
-}
-
 const DEFAULT_HIDE_TIME = 3000;
 
 type ToastProps = {
