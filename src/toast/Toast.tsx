@@ -48,7 +48,7 @@ type ToastProps = {
     type?: MessageType;
     icon?: string;
     text: string;
-    onClose: Function;
+    onClose?: Function;
     style?: any;
     className?: string;
 };
@@ -59,6 +59,7 @@ type ToastState = {
 
 export class Toast extends React.PureComponent<ToastProps> {
     private divRef: HTMLDivElement | null = null;
+    // Remove the warning for setState on componentUnmount using isMounted
     private _isMounted = false;
 
     state: ToastState = {
@@ -96,8 +97,8 @@ export class Toast extends React.PureComponent<ToastProps> {
             const el = document.createElement("div");
             document.body.appendChild(el);
             this.divRef = el;
+            document.body.classList.add(ClassNames.NO_SCROLLING);
         }
-        document.body.classList.add(ClassNames.NO_SCROLLING);
     }
 
     componentDidMount() {
@@ -114,8 +115,8 @@ export class Toast extends React.PureComponent<ToastProps> {
         if (this.divRef !== null) {
             document.body.removeChild(this.divRef);
             this.divRef = null;
+            document.body.classList.remove(ClassNames.NO_SCROLLING);
         }
-        document.body.classList.remove(ClassNames.NO_SCROLLING);
     }
 
     componentWillUnmount() {
