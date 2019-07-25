@@ -36,9 +36,7 @@ storiesOf("Header", module)
                         <NavLink>Interactive Analytics</NavLink>
                     </Nav>
                     <div className="header-actions">
-                        <NavLink className="nav-icon">
-                            <Icon shape={"cog"} />
-                        </NavLink>
+                        <NavLink className="nav-icon" iconShape="cog" />
                     </div>
                 </Header>
 
@@ -59,9 +57,7 @@ storiesOf("Header", module)
                         </label>
                     </form>
                     <div className="header-actions">
-                        <NavLink className="nav-icon">
-                            <Icon shape={"cog"} />
-                        </NavLink>
+                        <NavLink className="nav-icon" iconShape="cog" />
                     </div>
                 </Header>
 
@@ -102,12 +98,8 @@ storiesOf("Header", module)
                         </NavLink>
                     </div>
                     <Nav navLevel={NavLevel.PRIMARY} navType={NavType.HEADER}>
-                        <NavLink className="nav-icon">
-                            <Icon shape="cloud" />
-                        </NavLink>
-                        <NavLink className="active nav-icon">
-                            <Icon shape="folder" />
-                        </NavLink>
+                        <NavLink className="nav-icon" iconShape="cloud" />
+                        <NavLink className="active nav-icon" iconShape="folder" />
                     </Nav>
                     <form className="search">
                         <label>
@@ -213,10 +205,9 @@ storiesOf("Header", module)
                     style={{marginTop: "24px"}}
                 >
                     <div className="branding">
-                        <a href="#" className="nav-link">
-                            <Icon shape="vm-bug" />
+                        <NavLink iconShape="vm-bug">
                             <span className="title">Project Clarity</span>
-                        </a>
+                        </NavLink>
                     </div>
                 </Header>
                 <Header
@@ -226,10 +217,9 @@ storiesOf("Header", module)
                     style={{marginTop: "24px"}}
                 >
                     <div className="branding">
-                        <a href="#" className="nav-link">
-                            <Icon shape="vm-bug" />
+                        <NavLink iconShape="vm-bug">
                             <span className="title">Project Clarity</span>
-                        </a>
+                        </NavLink>
                     </div>
                 </Header>
                 <Header
@@ -239,10 +229,9 @@ storiesOf("Header", module)
                     style={{marginTop: "24px"}}
                 >
                     <div className="branding">
-                        <a href="#" className="nav-link">
-                            <Icon shape="vm-bug" />
+                        <NavLink iconShape="vm-bug">
                             <span className="title">Project Clarity</span>
-                        </a>
+                        </NavLink>
                     </div>
                 </Header>
                 <Header
@@ -252,10 +241,9 @@ storiesOf("Header", module)
                     style={{marginTop: "24px"}}
                 >
                     <div className="branding">
-                        <a href="#" className="nav-link">
-                            <Icon shape="vm-bug" />
+                        <NavLink iconShape="vm-bug">
                             <span className="title">Project Clarity</span>
-                        </a>
+                        </NavLink>
                     </div>
                 </Header>
                 <Header
@@ -265,10 +253,9 @@ storiesOf("Header", module)
                     style={{marginTop: "24px"}}
                 >
                     <div className="branding">
-                        <a href="#" className="nav-link">
-                            <Icon shape="vm-bug" />
+                        <NavLink iconShape="vm-bug">
                             <span className="title">Project Clarity</span>
-                        </a>
+                        </NavLink>
                     </div>
                 </Header>
                 <Header
@@ -278,10 +265,9 @@ storiesOf("Header", module)
                     style={{marginTop: "24px"}}
                 >
                     <div className="branding">
-                        <a href="#" className="nav-link">
-                            <Icon shape="vm-bug" />
+                        <NavLink iconShape="vm-bug">
                             <span className="title">Project Clarity</span>
-                        </a>
+                        </NavLink>
                     </div>
                 </Header>
                 <Header
@@ -291,10 +277,9 @@ storiesOf("Header", module)
                     style={{marginTop: "24px"}}
                 >
                     <div className="branding">
-                        <a href="#" className="nav-link">
-                            <Icon shape="vm-bug" />
+                        <NavLink iconShape="vm-bug">
                             <span className="title">Project Clarity</span>
-                        </a>
+                        </NavLink>
                     </div>
                 </Header>
             </div>
