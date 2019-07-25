@@ -71,7 +71,6 @@ export class Toast extends React.PureComponent<ToastProps> {
         type: MessageType.SUCCESS,
         position: Direction.TOP_RIGHT,
         duration: DEFAULT_HIDE_TIME,
-        icon: IconType.SUCCESS,
     };
 
     componentWillUpdate(nextProps: ToastProps, nextState: ToastState) {
@@ -143,7 +142,7 @@ export class Toast extends React.PureComponent<ToastProps> {
 
         return (
             <div className={classNames(["alert", `alert-${type}`, className])} style={styled}>
-                <span style={{paddingRight: "5px"}}>{icon && <Icon shape={icon} />}</span>
+                {icon && <span style={{paddingRight: "5px"}}>{<Icon shape={icon} />}</span>}
                 {text}
             </div>
         );

@@ -11,9 +11,8 @@
 import * as React from "react";
 import {storiesOf} from "@storybook/react";
 import {State, Store} from "@sambego/storybook-state";
-import {Toast} from "./Toast";
 import {Button} from "../forms/button";
-import {Direction, MessageType} from "./Toast";
+import {Toast, Direction, MessageType} from "./Toast";
 
 const storeBottomLeftToast = new Store({
     showToast: false,
@@ -33,20 +32,13 @@ const storeTopLeftToast = new Store({
 
 const DURATION = 4000;
 
-enum IconType {
-    WARNING = "warning-standard",
-    SUCCESS = "success-standard",
-    DANGER = "error-standard",
-    INFO = "info-standard",
-}
-
 storiesOf("Toasts", module).add("Show toasts", () => (
     <div className="clr-row">
         <div className="clr-col-12">
             <State store={storeBottomLeftToast}>
                 <Toast
                     text={"Toast created at bottom left corner"}
-                    icon={IconType.WARNING}
+                    icon={"warning-standard"}
                     position={Direction.BOTTOM_LEFT}
                     type={MessageType.WARNING}
                     style={{marginBottom: "15px", marginLeft: "15px", color: "white", backgroundColor: "#f2af00"}}
@@ -58,7 +50,7 @@ storiesOf("Toasts", module).add("Show toasts", () => (
             <State store={storeBottomRightToast}>
                 <Toast
                     text={"Toast created at bottom right corner"}
-                    icon={IconType.DANGER}
+                    icon={"error-standard"}
                     position={Direction.BOTTOM_RIGHT}
                     duration={DURATION}
                     type={MessageType.DANGER}
@@ -80,7 +72,7 @@ storiesOf("Toasts", module).add("Show toasts", () => (
             <State store={storeTopLeftToast}>
                 <Toast
                     text={"Toast created at top left corner"}
-                    icon={IconType.INFO}
+                    icon={"info-standard"}
                     position={Direction.TOP_LEFT}
                     type={MessageType.INFO}
                     style={{marginTop: "15px", marginLeft: "15px", color: "white", backgroundColor: "#007db8"}}
