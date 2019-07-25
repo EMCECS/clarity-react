@@ -21,13 +21,6 @@ export enum Direction {
     TOP_LEFT = "top-left",
 }
 
-enum Directions {
-    LEFT = "left",
-    RIGHT = "right",
-    BOTTOM = "bottom",
-    TOP = "top",
-}
-
 export enum MessageType {
     SUCCESS = "success",
     WARNING = "warning",
@@ -136,9 +129,9 @@ export class Toast extends React.PureComponent<ToastProps> {
         };
 
         //create styles based on the position given
-        let place = (position || Direction.TOP_RIGHT).includes(Directions.BOTTOM) ? Directions.BOTTOM : Directions.TOP;
+        let place = (position || Direction.TOP_RIGHT).includes("bottom") ? "bottom" : "top";
         styled[place] = 0;
-        place = (position || Direction.TOP_RIGHT).includes(Directions.RIGHT) ? Directions.RIGHT : Directions.LEFT;
+        place = (position || Direction.TOP_RIGHT).includes("right") ? "right" : "left";
         styled[place] = 0;
 
         return (
