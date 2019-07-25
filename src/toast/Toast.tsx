@@ -72,9 +72,8 @@ export class Toast extends React.PureComponent<ToastProps> {
             this.createElement();
 
             if (nextProps.showToast === true && nextProps.showToast !== nextState.showToast) {
-                let duration = nextProps.duration === undefined ? DEFAULT_HIDE_TIME : nextProps.duration;
                 //set the timer for the toast
-                this.setTimer(duration);
+                this.setTimer(nextProps.duration!);
             }
         } else {
             this.cleanup();
@@ -129,9 +128,9 @@ export class Toast extends React.PureComponent<ToastProps> {
         };
 
         //create styles based on the position given
-        let place = (position || Direction.TOP_RIGHT).includes("bottom") ? "bottom" : "top";
+        let place = position!.includes("bottom") ? "bottom" : "top";
         styled[place] = 0;
-        place = (position || Direction.TOP_RIGHT).includes("right") ? "right" : "left";
+        place = position!.includes("right") ? "right" : "left";
         styled[place] = 0;
 
         return (
