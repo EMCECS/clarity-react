@@ -108,7 +108,6 @@ export class Toast extends React.PureComponent<ToastProps> {
     }
 
     componentWillUnmount() {
-        this.close();
         this._isMounted = false;
         this.cleanup();
     }
