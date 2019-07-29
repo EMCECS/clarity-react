@@ -52,7 +52,7 @@ export class Button extends React.PureComponent<ButtonProps> {
     private static getClassNames(props: ButtonProps): (string | false | undefined)[] {
         return [
             props.customBtn && "btn",
-            props.customBtn && props.icon ? "btn-icon" : undefined,
+            props.customBtn && props.icon && "btn-icon",
             props.className,
             ...["block", "flat", "inverse", "link", "primary"].map(field => {
                 const value = (props as any)[field];
