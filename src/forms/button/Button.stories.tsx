@@ -128,10 +128,10 @@ storiesOf("Button", module)
     ))
     .add("Simple Button and Icon button without btn and btn-icon class", () => (
         <div>
-            <Button key="home" customBtn={false} onClick={action("home click")} icon="home">
+            <Button key="home" defaultBtn={false} onClick={action("home click")} icon="home">
                 HOME
             </Button>
-            <Button key="basic" customBtn={false} onClick={action("basic click")}>
+            <Button key="basic" defaultBtn={false} onClick={action("basic click")}>
                 BASIC
             </Button>
         </div>

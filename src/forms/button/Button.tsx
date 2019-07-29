@@ -28,7 +28,7 @@ export type ButtonProps = {
     submit?: boolean;
     children?: ReactNode | ReactNode[];
     icon?: string;
-    customBtn?: boolean;
+    defaultBtn?: boolean;
 };
 
 export enum ButtonState {
@@ -46,13 +46,13 @@ export enum ButtonSize {
 
 export class Button extends React.PureComponent<ButtonProps> {
     static defaultProps = {
-        customBtn: true,
+        defaultBtn: true,
     };
 
     private static getClassNames(props: ButtonProps): (string | false | undefined)[] {
         return [
-            props.customBtn && "btn",
-            props.customBtn && props.icon && "btn-icon",
+            props.defaultBtn && "btn",
+            props.defaultBtn && props.icon && "btn-icon",
             props.className,
             ...["block", "flat", "inverse", "link", "primary"].map(field => {
                 const value = (props as any)[field];

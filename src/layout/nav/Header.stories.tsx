@@ -74,7 +74,7 @@ storiesOf("Header", module)
                     </div>
                     <div className="header-actions">
                         <Dropdown
-                            button={{icon: "cog", customBtn: false, className: "nav-icon dropdown-toggle"}}
+                            button={{icon: "cog", defaultBtn: false, className: "nav-icon dropdown-toggle"}}
                             onItemClick={action("onItemClick - Dropdown.")}
                         >
                             <DropdownMenu>
@@ -109,7 +109,7 @@ storiesOf("Header", module)
 
                     <div className="header-actions">
                         <Dropdown
-                            button={{icon: "user", customBtn: false, className: "nav-icon dropdown-toggle"}}
+                            button={{icon: "user", defaultBtn: false, className: "nav-icon dropdown-toggle"}}
                             onItemClick={action("onItemClick - Dropdown.")}
                         >
                             <DropdownMenu>
@@ -151,7 +151,7 @@ storiesOf("Header", module)
                     <div className="header-actions">
                         <Dropdown
                             label="john.doe@vmware.com"
-                            button={{customBtn: false, className: "nav-text dropdown-toggle"}}
+                            button={{defaultBtn: false, className: "nav-text dropdown-toggle"}}
                             onItemClick={action("onItemClick - Dropdown.")}
                         >
                             <DropdownMenu>
