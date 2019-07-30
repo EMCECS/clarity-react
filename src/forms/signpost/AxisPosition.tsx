@@ -8,7 +8,7 @@
  *     http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import {SignPostDirection} from "./SignPost";
+import {SignPostDirection} from ".";
 
 export function calculateAxisPosition(
     pHeight: number,
