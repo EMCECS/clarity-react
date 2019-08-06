@@ -37,6 +37,8 @@ type SelectProps = {
     errorHelperText?: string; // shown when state isError is true
     onBlur?: (evt: React.FocusEvent<HTMLSelectElement>) => void;
     onChange?: (evt: React.ChangeEvent<HTMLSelectElement>) => void;
+    className?: string;
+    style?: any;
 };
 
 export class Select extends React.PureComponent<SelectProps> {
@@ -54,6 +56,8 @@ export class Select extends React.PureComponent<SelectProps> {
             onChange,
             error,
             children,
+            className,
+            style,
         } = this.props;
         const setId = this.props.id;
         return (
@@ -62,7 +66,7 @@ export class Select extends React.PureComponent<SelectProps> {
                     isBoxed ? (
                         <div className="form-group">
                             <label>{label}</label>
-                            <div className="select">
+                            <div className={classNames(["select", className])} style={style}>
                                 <select
                                     value={value} // prettier
                                     id={setId ? setId : id}
@@ -87,7 +91,7 @@ export class Select extends React.PureComponent<SelectProps> {
                                     error && "clr-error",
                                 ])}
                             >
-                                <div className="clr-select-wrapper">
+                                <div className={classNames(["clr-select-wrapper", className])} style={style}>
                                     <select
                                         value={value}
                                         id={setId ? setId : id}
