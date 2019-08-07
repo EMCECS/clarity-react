@@ -10,7 +10,7 @@
 
 import * as React from "react";
 import {storiesOf} from "@storybook/react";
-import {SignPost, SignPostDirection} from "./SignPost";
+import {SignPost, SignPostDirection} from ".";
 import {action} from "@storybook/addon-actions";
 import {Button} from "../button";
 
