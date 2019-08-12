@@ -10,6 +10,7 @@
 
 import * as React from "react";
 import {Icon, Direction} from "../../icon";
+import {classNames} from "../../utils";
 
 export interface VerticalNavGroupProps {
     // groupName is the clickable text that toggles display of grouped child
@@ -27,16 +28,15 @@ export interface VerticalNavGroupProps {
     // openVerticalNav will trigger the state of parent component VerticalNav
     // to be opened so that the expanded group can become visible.
     openVerticalNav?: () => void;
+
+    className?: string;
 }
 
 interface VerticalNavGroupState {
     groupIsExpanded: boolean;
 }
 
-export class VerticalNavGroup extends React.PureComponent<
-    VerticalNavGroupProps,
-    VerticalNavGroupState
-> {
+export class VerticalNavGroup extends React.PureComponent<VerticalNavGroupProps, VerticalNavGroupState> {
     constructor(props: VerticalNavGroupProps) {
         super(props);
         this.state = {
@@ -57,40 +57,25 @@ export class VerticalNavGroup extends React.PureComponent<
 
     render() {
         const {groupIsExpanded} = this.state;
-        const {iconShape, verticalIsCollapsed} = this.props;
-        const expandClass: string = groupIsExpanded
-            ? "nav-group is-expanded"
-            : "nav-group";
+        const {iconShape, verticalIsCollapsed, className} = this.props;
+        const expandClass: string = groupIsExpanded ? "nav-group is-expanded" : "nav-group";
+        const navGroupContentClassNames = classNames(["nav-group-content", className]);
         return (
             <div className={expandClass}>
-                <div className="nav-group-content">
-                    <button
-                        className="nav-group-trigger"
-                        type="button"
-                        onClick={this.handleClick.bind(this)}
-                    >
-                        {iconShape && (
-                            <Icon className="nav-icon" shape={iconShape} />
-                        )}
+                <div className={navGroupContentClassNames}>
+                    <button className="nav-group-trigger" type="button" onClick={this.handleClick.bind(this)}>
+                        {iconShape && <Icon className="nav-icon" shape={iconShape} />}
 
-                        <div className="nav-group-text">
-                            {this.props.groupName}
-                        </div>
+                        <div className="nav-group-text">{this.props.groupName}</div>
                         <Icon
                             shape="caret"
                             className="nav-group-trigger-icon"
-                            dir={
-                                groupIsExpanded
-                                    ? Direction.RIGHT
-                                    : Direction.DOWN
-                            }
+                            dir={groupIsExpanded ? Direction.RIGHT : Direction.DOWN}
                         />
                     </button>
                 </div>
                 {groupIsExpanded && verticalIsCollapsed === false && (
-                    <div className="nav-group-children">
-                        {this.props.children}
-                    </div>
+                    <div className="nav-group-children">{this.props.children}</div>
                 )}
             </div>
         );
