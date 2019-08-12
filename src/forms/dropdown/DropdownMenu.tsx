@@ -26,6 +26,7 @@ export type DropdownMenuProps = {
     closeOnBackdrop?: boolean;
     _level: number;
     onItemClick?: (item: DropdownItem, itemPath: string) => OnItemClickResult;
+    style?: any;
 };
 
 export async function propogationChain(item: any, itemPath: any, funcs: any[]) {
@@ -45,9 +46,10 @@ export class DropdownMenu extends React.PureComponent<DropdownMenuProps> {
         closeOnBackdrop: true,
         itemsPath: "",
         _level: 0,
+        style: {},
     };
     private renderChildren(): React.ReactNode[] {
-        const {children, itemsPath, onItemClick, _level} = this.props;
+        const {children, itemsPath, onItemClick, _level, style} = this.props;
         if (typeof children === "undefined" || children === null) {
             return [];
         }
@@ -85,6 +87,10 @@ export class DropdownMenu extends React.PureComponent<DropdownMenuProps> {
     }
 
     render() {
-        return <div className="dropdown-menu">{this.renderChildren()}</div>;
+        return (
+            <div className="dropdown-menu" style={this.props.style}>
+                {this.renderChildren()}
+            </div>
+        );
     }
 }
