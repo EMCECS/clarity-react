@@ -144,8 +144,8 @@ storiesOf("Signposts", module)
     .add("Left bottom position", () => (
         <div style={{paddingTop: "250px", paddingLeft: "300px"}}>
             <div style={{float: "left"}}>
-                <SignPost direction={SignPostDirection.LEFT_BOTTOM}>
-                    <h3 style={{marginTop: "0px"}}>Inline signpost</h3>
+                <SignPost direction={SignPostDirection.LEFT_BOTTOM} showCloseButton={false}>
+                    <h3 style={{marginTop: "0px"}}>No close button</h3>
                     <p>sample data here ...</p>
                 </SignPost>
             </div>
