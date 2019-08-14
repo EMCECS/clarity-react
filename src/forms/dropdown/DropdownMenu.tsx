@@ -12,6 +12,7 @@ import * as React from "react";
 import {DropdownItem, DropdownItemProps, Dropdown, DropdownProps} from ".";
 import {ReactElement, ReactNode} from "react";
 import {MenuItemType} from "./DropdownItem";
+import {classNames} from "../../utils";
 
 export const STOP_PROPAGATION: "stopPropagation" = "stopPropagation";
 export type OnItemClickResult =
@@ -27,6 +28,7 @@ export type DropdownMenuProps = {
     _level: number;
     onItemClick?: (item: DropdownItem, itemPath: string) => OnItemClickResult;
     style?: any;
+    className?: string;
 };
 
 export async function propogationChain(item: any, itemPath: any, funcs: any[]) {
@@ -47,9 +49,15 @@ export class DropdownMenu extends React.PureComponent<DropdownMenuProps> {
         itemsPath: "",
         _level: 0,
         style: {},
+        className: "",
     };
     private renderChildren(): React.ReactNode[] {
-        const {children, itemsPath, onItemClick, _level, style} = this.props;
+        const {
+            children, //prettier hack
+            itemsPath,
+            onItemClick,
+            _level,
+        } = this.props;
         if (typeof children === "undefined" || children === null) {
             return [];
         }
@@ -88,7 +96,13 @@ export class DropdownMenu extends React.PureComponent<DropdownMenuProps> {
 
     render() {
         return (
-            <div className="dropdown-menu" style={this.props.style}>
+            <div
+                className={classNames([
+                    "dropdown-menu", //prettier hack
+                    this.props.className,
+                ])}
+                style={this.props.style}
+            >
                 {this.renderChildren()}
             </div>
         );

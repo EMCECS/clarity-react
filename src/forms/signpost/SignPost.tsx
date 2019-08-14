@@ -110,7 +110,13 @@ export class SignPost extends React.PureComponent<SignPostProps> {
 
     render() {
         const {isOpen, transformVal} = this.state;
-        const {direction, style, children, icon, showCloseButton} = this.props;
+        const {
+            direction, //prettier
+            style,
+            children,
+            icon,
+            showCloseButton,
+        } = this.props;
         return (
             <div ref={this.refParent} className="signpost" style={{position: "relative"}}>
                 <Button
