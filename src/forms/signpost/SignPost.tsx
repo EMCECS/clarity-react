@@ -11,7 +11,7 @@
 import * as React from "react";
 import {classNames} from "../../utils";
 import {Button} from "../button";
-import {Icon} from "../../icon";
+import {Icon, IconProps} from "../../icon";
 import {calculateAxisPosition} from "./AxisPosition";
 
 type SignPostState = {
@@ -22,8 +22,8 @@ type SignPostState = {
 type SignPostProps = {
     direction?: SignPostDirection;
     style?: any;
-    shape?: string;
-    size?: number;
+    icon?: IconProps;
+    showCloseButton?: boolean;
 };
 
 export enum SignPostDirection {
@@ -42,6 +42,12 @@ export enum SignPostDirection {
 }
 
 export class SignPost extends React.PureComponent<SignPostProps> {
+    static defaultProps = {
+        direction: SignPostDirection.TOP_LEFT,
+        style: {},
+        icon: {shape: "dell-alert-info", size: 26},
+        showCloseButton: true,
+    };
     private refParent = React.createRef<HTMLDivElement>();
     private refChild = React.createRef<HTMLDivElement>();
 
@@ -104,8 +110,13 @@ export class SignPost extends React.PureComponent<SignPostProps> {
 
     render() {
         const {isOpen, transformVal} = this.state;
-        const {direction, style, children, shape, size} = this.props;
-        let setDirection = direction ? direction : "top-left";
+        const {
+            direction, //prettier
+            style,
+            children,
+            icon,
+            showCloseButton,
+        } = this.props;
         return (
             <div ref={this.refParent} className="signpost" style={{position: "relative"}}>
                 <Button
@@ -118,14 +129,14 @@ export class SignPost extends React.PureComponent<SignPostProps> {
                     ])}
                     onClick={this.handleButtonClick}
                 >
-                    <Icon shape={shape ? shape : "dell-alert-info"} size={size ? size : 26} />
+                    {icon && <Icon {...icon} />}
                 </Button>
                 {isOpen && (
                     <div
                         ref={this.refChild}
                         className={classNames([
                             "signpost-content",
-                            setDirection, //prettier
+                            direction, //prettier
                         ])}
                         style={{
                             ...style,
@@ -139,11 +150,17 @@ export class SignPost extends React.PureComponent<SignPostProps> {
                     >
                         <div className="signpost-flex-wrap">
                             <div className="popover-pointer" />
-                            <div className="signpost-content-header">
-                                <Button className="signpost-action close" onClick={this.handleButtonClick}>
-                                    <Icon shape="close" />
-                                </Button>
-                            </div>
+                            {showCloseButton && (
+                                <div className="signpost-content-header">
+                                    <Button
+                                        className="signpost-action close"
+                                        defaultBtn={false}
+                                        onClick={this.handleButtonClick}
+                                    >
+                                        <Icon shape="close" />
+                                    </Button>
+                                </div>
+                            )}
                             <div className="signpost-content-body">{children}</div>
                         </div>
                     </div>
