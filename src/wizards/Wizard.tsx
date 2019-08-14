@@ -387,7 +387,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
                                         onClick={this.navigationClick.bind(this, step.stepId)}
                                         icon={
                                             step.customStepNav !== undefined && step.customStepNav.stepNavIcon
-                                                ? step.customStepNav.stepNavIcon
+                                                ? {shape: step.customStepNav.stepNavIcon}
                                                 : undefined
                                         }
                                     >
