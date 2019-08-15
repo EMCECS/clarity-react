@@ -9,16 +9,28 @@
  */
 
 import * as React from "react";
+import {Icon} from "../../icon";
+import {classNames} from "../../utils";
 
-export type NavLinkProps = {};
+export type NavLinkProps = {
+    iconShape?: string;
+    className?: string;
+    onClick?: (evt: React.MouseEvent<HTMLElement>) => void;
+};
 
 export class NavLink extends React.PureComponent<NavLinkProps> {
     render() {
-        return (
-            <a href="#" className="nav-link">
-                <div className="nav-text">
-                    {this.props.children}
-                </div>
+        const {iconShape, className, onClick, children} = this.props;
+        let navLinkClassNames = classNames(["nav-link", className]);
+
+        return iconShape ? (
+            <a href="javascript:void(0)" className={navLinkClassNames} onClick={onClick}>
+                <Icon shape={iconShape} className="nav-icon" />
+                <span className="nav-text">{children}</span>
+            </a>
+        ) : (
+            <a href="javascript:void(0)" className={navLinkClassNames} onClick={onClick}>
+                <div className="nav-text">{children}</div>
             </a>
         );
     }

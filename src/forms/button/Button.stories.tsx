@@ -117,12 +117,28 @@ storiesOf("Button", module)
     ))
     .add("Icon buttons", () => (
         <div>
-            <Button key="home" onClick={action("home click")} icon="home">
+            <Button key="home" onClick={action("home click")} icon={{shape: "home"}}>
                 HOME
             </Button>
-            <Button key="cog" primary onClick={action("cog click")} icon="cog">
+            <Button key="cog" primary onClick={action("cog click")} icon={{shape: "cog"}}>
                 SETTINGS
             </Button>
-            <Button key="link" primary state={ButtonState.SUCCESS} onClick={action("link click")} icon="link" />
+            <Button
+                key="link"
+                primary
+                state={ButtonState.SUCCESS}
+                onClick={action("link click")}
+                icon={{shape: "link"}}
+            />
+        </div>
+    ))
+    .add("Simple Button and Icon button without btn and btn-icon class", () => (
+        <div>
+            <Button key="home" defaultBtn={false} onClick={action("home click")} icon={{shape: "home"}}>
+                HOME
+            </Button>
+            <Button key="basic" defaultBtn={false} onClick={action("basic click")}>
+                BASIC
+            </Button>
         </div>
     ));

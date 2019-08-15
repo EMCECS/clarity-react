@@ -17,6 +17,7 @@ export interface IconProps {
     shape: string;
     size?: number;
     className?: string;
+    style?: any;
     dir?: Direction;
 }
 

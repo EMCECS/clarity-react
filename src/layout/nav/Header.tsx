@@ -10,6 +10,7 @@
 
 import * as React from "react";
 import {ClassNames} from ".";
+import {classNames} from "../../utils";
 
 export type NavHeaderProps = {
     // onHamburgerToggle handles toggle actions for the left side navigation
@@ -24,17 +25,36 @@ export type NavHeaderProps = {
     // for handling the closeAll action is within the parent object, and will
     // have an effect on navList property.
     onCloseAll?: () => void;
-
     primaryShown: boolean;
-
     secondaryShown: boolean;
+    style?: any;
+    color?: HeaderColor;
+    className?: string;
 };
+export enum HeaderColor {
+    HEADER1 = "header-1",
+    HEADER2 = "header-2",
+    HEADER3 = "header-3",
+    HEADER4 = "header-4",
+    HEADER5 = "header-5",
+    HEADER6 = "header-6",
+    HEADER7 = "header-7",
+}
 
 export class Header extends React.PureComponent<NavHeaderProps> {
     render() {
-        const {primaryShown, secondaryShown, onCloseAll, onHamburgerToggle, onRightSideToggle} = this.props;
+        const {
+            primaryShown,
+            secondaryShown,
+            onCloseAll,
+            onHamburgerToggle,
+            onRightSideToggle,
+            className,
+            color,
+            style,
+        } = this.props;
         return (
-            <header className={ClassNames.Header}>
+            <header className={classNames([ClassNames.Header, color, className])} style={style}>
                 {primaryShown && (
                     <button className={ClassNames.HamburgerTrigger} type="button" onClick={onHamburgerToggle}>
                         <span />

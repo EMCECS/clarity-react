@@ -1,0 +1,60 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<MainContainer /> rendering renders correctly 1`] = `
+<div
+  className="main-container"
+>
+  <Header
+    onCloseAll={[Function]}
+    onHamburgerToggle={[Function]}
+    onRightSideToggle={[Function]}
+    primaryShown={false}
+    secondaryShown={false}
+  >
+    <div
+      className="branding"
+    >
+      <a
+        className="nav-link"
+        href="#"
+      >
+        <span
+          className="logo dell-emc-logo"
+        />
+        <span
+          className="title"
+        >
+          test
+        </span>
+      </a>
+    </div>
+    <div
+      className="head"
+    >
+      header nav
+    </div>
+    <div
+      className="header-actions"
+    >
+      <NavLink />
+    </div>
+  </Header>
+  <div
+    className="sub"
+  >
+    sub nav
+  </div>
+  <div
+    className="content-container"
+  >
+    <div
+      className="content-area"
+    />
+    <div
+      className="side"
+    >
+      side nav
+    </div>
+  </div>
+</div>
+`;
