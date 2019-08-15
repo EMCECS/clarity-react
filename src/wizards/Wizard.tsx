@@ -10,7 +10,7 @@
 
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import {Icon} from "../icon";
+import {Icon, IconProps} from "../icon";
 import {classNames, allTrue} from "../utils";
 import {ClassNames, Styles} from "./ClassNames";
 import {Button, ButtonState} from "../forms/button";
@@ -368,10 +368,16 @@ export class Wizard extends React.PureComponent<WizardProps> {
         );
     }
 
+    // Build icon props if specified in WizardStep
+    private buildStepIcon(step: WizardStep): IconProps | undefined {
+        if (step.customStepNav !== undefined && step.customStepNav.stepNavIcon)
+            return {shape: step.customStepNav.stepNavIcon};
+        return undefined;
+    }
+
     // Build DOM for Wizard NAV
     private buildWizardNav(): React.ReactElement {
         const {steps, title, showNav} = this.props;
-
         return (
             <VerticalNav className={ClassNames.WIZARD_STEPNAV_WRAPPER}>
                 <h3 className={ClassNames.WIZARD_TITLE}> {title} </h3>
@@ -385,11 +391,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
                                         link={true}
                                         className="clr-wizard-stepnav-link"
                                         onClick={this.navigationClick.bind(this, step.stepId)}
-                                        icon={
-                                            step.customStepNav !== undefined && step.customStepNav.stepNavIcon
-                                                ? step.customStepNav.stepNavIcon
-                                                : undefined
-                                        }
+                                        icon={this.buildStepIcon(step)}
                                     >
                                         &nbsp;
                                         {step.customStepNav !== undefined && step.customStepNav.stepNavTitle

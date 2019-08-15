@@ -47,7 +47,7 @@ storiesOf("ButtonGroup", module)
         <ButtonGroup className="btn-primary" name="Operation">
             <Button>Add</Button>
             <Button>Edit</Button>
-            <Dropdown button={{icon: "ellipsis-horizontal"}} onItemClick={action("onItemClick - Dropdown.")}>
+            <Dropdown button={{icon: {shape: "ellipsis-horizontal"}}} onItemClick={action("onItemClick - Dropdown.")}>
                 <DropdownMenu>
                     <DropdownItem onClick={action("Download")} label="Download" />
                     <DropdownItem onClick={action("Delete")} label="Delete" />
@@ -88,12 +88,12 @@ storiesOf("ButtonGroup", module)
     ))
     .add("Icon ButtonGroup", () => (
         <ButtonGroup className="btn-primary btn-icon" name="Operation">
-            <Button icon="home" />
-            <Button icon="cog" />
+            <Button icon={{shape: "home"}} />
+            <Button icon={{shape: "cog"}} />
             <Dropdown
                 showCaret={false}
                 className="btn-group-overflow"
-                button={{icon: "ellipsis-horizontal"}}
+                button={{icon: {shape: "ellipsis-horizontal"}}}
                 onItemClick={action("onItemClick - Dropdown.")}
             >
                 <DropdownMenu>
@@ -105,12 +105,12 @@ storiesOf("ButtonGroup", module)
     ))
     .add("With Text Icon ButtonGroup", () => (
         <ButtonGroup className="btn-primary btn-icon" name="Operation">
-            <Button icon="home">Home</Button>
-            <Button icon="cog">Setting</Button>
+            <Button icon={{shape: "home"}}>Home</Button>
+            <Button icon={{shape: "cog"}}>Setting</Button>
             <Dropdown
                 showCaret={false}
                 className="btn-group-overflow"
-                button={{icon: "ellipsis-horizontal"}}
+                button={{icon: {shape: "ellipsis-horizontal"}}}
                 onItemClick={action("onItemClick - Dropdown.")}
             >
                 <DropdownMenu>

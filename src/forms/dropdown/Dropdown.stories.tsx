@@ -52,7 +52,7 @@ storiesOf("Dropdown", module)
 
     .add("Icon Dropdown", () => (
         <div>
-            <Dropdown button={{icon: "house", link: true}} onItemClick={action("onItemClick - Dropdown.")}>
+            <Dropdown button={{icon: {shape: "house"}, link: true}} onItemClick={action("onItemClick - Dropdown.")}>
                 <DropdownMenu>
                     <DropdownItem menuItemType={MenuItemType.ITEM} isHeaderChild={true} label="Action" />
                     <DropdownItem menuItemType={MenuItemType.DIVIDER} />
