@@ -24,9 +24,30 @@ enum ViewMode {
     Year,
 }
 
+const CalendarTableWeekDays: React.FunctionComponent = () => {
+    return (
+        <table className="calendar-table weekdays">
+            <tbody>
+                <tr className="calendar-row">
+                    {Moment.weekdaysShort(true).map((day: string) => {
+                        return (
+                            <td key={"day_" + day} className="calendar-cell weekday">
+                                {day.substring(0, 1)}
+                            </td>
+                        );
+                    })}
+                </tr>
+            </tbody>
+        </table>
+    );
+};
+
 export class DatePicker extends React.PureComponent<DatePickerProps, DatePickerState> {
     static defaultProps: DatePickerProps = {
         locale: "en",
+        value: undefined,
+        defaultValue: undefined,
+        onChange: undefined,
     };
 
     private calRef = React.createRef<HTMLDivElement>();
@@ -78,17 +99,18 @@ export class DatePicker extends React.PureComponent<DatePickerProps, DatePickerS
     }
 
     afterToggle = () => {
-        if (this.state.isOpen) this.subscribeDocumentClick();
-        else this.unsubscribeDocumentClick();
+        if (this.state.isOpen) {
+            this.subscribeDocumentClick();
+        } else {
+            this.unsubscribeDocumentClick();
+        }
     };
 
     subscribeDocumentClick = () => {
-        console.log("subscribe");
         window.addEventListener("click", this.handleDocumentClick as any, true);
     };
 
     unsubscribeDocumentClick = () => {
-        console.log("unsubscribe");
         window.removeEventListener("click", this.handleDocumentClick as any, true);
     };
 
@@ -175,9 +197,36 @@ export class DatePicker extends React.PureComponent<DatePickerProps, DatePickerS
         );
     };
 
-    afterInputChange = () => {
-        if (this.props.onChange) this.props.onChange(this.state.value);
+    private handleInputBlur = (evt: React.FocusEvent<HTMLInputElement>) => {
+        this.setState({inputFocused: false});
     };
+
+    private handleInputFocus = (evt: React.FocusEvent<HTMLInputElement>) => {
+        this.setState({inputFocused: true});
+    };
+
+    private afterInputChange = () => {
+        if (this.props.onChange) {
+            this.props.onChange(this.state.value);
+        }
+    };
+
+    private buildDateClasses(isSelected: boolean, isToday: boolean, isDisabled: boolean) {
+        return classNames([
+            "day-btn", // prettier
+            isSelected && !isToday && "is-selected",
+            isToday && "is-today",
+            isDisabled && "is-disabled",
+        ]);
+    }
+
+    private calculateTabIndex(isSelected: boolean, isToday: boolean, selectedSameMonth: boolean): number {
+        return selectedSameMonth ? (isSelected ? 0 : -1) : isToday ? 0 : -1;
+    }
+
+    private calculateFocus(isSelected: boolean, isToday: boolean, selectedSameMonth: boolean) {
+        return selectedSameMonth ? (isSelected ? true : false) : isToday ? true : false;
+    }
 
     render() {
         const {isOpen, viewMode, navValue, inputFocused, value} = this.state;
@@ -207,12 +256,8 @@ export class DatePicker extends React.PureComponent<DatePickerProps, DatePickerS
                             className="clr-input"
                             placeholder={Moment.localeData(locale).longDateFormat("L")}
                             value={value}
-                            onFocus={() => {
-                                this.setState({inputFocused: true});
-                            }}
-                            onBlur={() => {
-                                this.setState({inputFocused: false});
-                            }}
+                            onFocus={this.handleInputFocus}
+                            onBlur={this.handleInputBlur}
                             onChange={this.handleInputChange}
                         />
                         <button
@@ -276,19 +321,7 @@ export class DatePicker extends React.PureComponent<DatePickerProps, DatePickerS
                                                 </button>
                                             </div>
                                         </div>
-                                        <table className="calendar-table weekdays">
-                                            <tbody>
-                                                <tr className="calendar-row">
-                                                    {Moment.weekdaysShort(true).map((day: string) => {
-                                                        return (
-                                                            <td key={"day_" + day} className="calendar-cell weekday">
-                                                                {day.substring(0, 1)}
-                                                            </td>
-                                                        );
-                                                    })}
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                        <CalendarTableWeekDays />
                                         <table className="calendar-table calendar-dates">
                                             <tbody>
                                                 {[0, 1, 2, 3, 4, 5].map((row: number) => {
@@ -303,32 +336,21 @@ export class DatePicker extends React.PureComponent<DatePickerProps, DatePickerS
                                                                         <div className="day">
                                                                             <button
                                                                                 type="button"
-                                                                                className={classNames([
-                                                                                    "day-btn", // prettier
-                                                                                    isSelected &&
-                                                                                        !isToday &&
-                                                                                        "is-selected",
-                                                                                    isToday && "is-today",
-                                                                                    isDisabled && "is-disabled",
-                                                                                ])}
-                                                                                tabIndex={
-                                                                                    selectedSameMonth
-                                                                                        ? isSelected
-                                                                                            ? 0
-                                                                                            : -1
-                                                                                        : isToday
-                                                                                        ? 0
-                                                                                        : -1
-                                                                                }
-                                                                                autoFocus={
-                                                                                    selectedSameMonth
-                                                                                        ? isSelected
-                                                                                            ? true
-                                                                                            : false
-                                                                                        : isToday
-                                                                                        ? true
-                                                                                        : false
-                                                                                }
+                                                                                className={this.buildDateClasses(
+                                                                                    isSelected,
+                                                                                    isToday,
+                                                                                    isDisabled,
+                                                                                )}
+                                                                                tabIndex={this.calculateTabIndex(
+                                                                                    isSelected,
+                                                                                    isToday,
+                                                                                    selectedSameMonth,
+                                                                                )}
+                                                                                autoFocus={this.calculateFocus(
+                                                                                    isSelected,
+                                                                                    isToday,
+                                                                                    selectedSameMonth,
+                                                                                )}
                                                                                 onClick={this.handleSelectedDate.bind(
                                                                                     this,
                                                                                     calendar.toDate(),
