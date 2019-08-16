@@ -8,4 +8,12 @@
  *     http://www.apache.org/licenses/LICENSE-2.0
  */
 
-export * from "./ProgressBars";
+import * as React from "react";
+import {storiesOf} from "@storybook/react";
+import {DatePicker} from "./DatePicker";
+
+storiesOf("Datepicker", module).add("Datepicker", () => (
+    <div>
+        <DatePicker />
+    </div>
+));
