@@ -883,13 +883,15 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
-"@clr/icons@^1.0.5":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@clr/icons/-/icons-1.1.1.tgz#09ee3154aff1ff1c3d6221cb4473756c02a95968"
+"@clr/icons@2.0.0-beta.1":
+  version "2.0.0-beta.1"
+  resolved "https://registry.yarnpkg.com/@clr/icons/-/icons-2.0.0-beta.1.tgz#758ba46ba2afe8b6c4a7f73b5a7b56073974235a"
+  integrity sha512-oFKf3DSCVB3uQYGlprcMyAHACDVtmXFuCPSgzF4r/xf6AGshVr7/a6V00k1ksHsxrhn9Glvv5fhJmdn8YnmA4w==
 
-"@clr/ui@^1.0.5":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@clr/ui/-/ui-1.1.1.tgz#29abef9f82daff13f6c50ab589017f2f95bfdc4f"
+"@clr/ui@2.1.1":
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@clr/ui/-/ui-2.1.1.tgz#f47191a7e4370bfe73f7fbf4abe429232608c07e"
+  integrity sha512-8R46KRxA6kPr6zEPJlsQIbo4m6gqg0GGxoxTNxCtkloOlMs5UetDYnx8/gGm3+e0vqNdUL7cbKlGDOZyy9uwmQ==
 
 "@cnakazawa/watch@^1.0.3":
   version "1.0.3"
