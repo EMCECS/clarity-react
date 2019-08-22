@@ -15,9 +15,11 @@
     "@types/node": "^11.9.5",
     "@types/react": "^16.8.4",
     "@types/react-dom": "^16.8.2",
-    "moment": "^2.24.0",
     "@webcomponents/custom-elements": "1.2.4",
+    "moment": "^2.24.0",
     "react": "^16.8.1",
+    "react-bootstrap-table-next": "^3.1.8",
+    "react-bootstrap-table2-filter": "^1.1.11",
     "react-dom": "^16.8.1",
     "react-uid": "^2.2.0",
     "typescript": "^3.3.3333"
