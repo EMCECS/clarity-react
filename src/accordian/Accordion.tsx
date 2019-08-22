@@ -9,79 +9,167 @@
  */
 
 import * as React from "react";
-import {classNames} from "../utils";
+import {classNames} from "..//utils";
 import {ClassNames} from "./ClassNames";
-import {Button} from "../forms/button";
 import {Icon, IconProps} from "../icon";
+import {Button} from "../forms/button";
 
-type AccordionPanelProps = {
-    className?: string;
-    style?: any;
-};
-
-export const AccordionPanel: React.FunctionComponent<AccordionPanelProps> = ({style, className, children}) => {
-    return (
-        <div className={classNames([ClassNames.ACCORDION_PANEL, className])} style={style}>
-            <div role="group" className={classNames([ClassNames.ACCORDION_PANEL_INNER, className])}>
-                {children}
-            </div>
-        </div>
-    );
-};
-
-type AccordionTitleProps = {
-    className?: string;
-    style?: any;
-};
-
-export const AccordionTitle: React.FunctionComponent<AccordionTitleProps> = ({style, className, children}) => {
-    return (
-        <div className={ClassNames.ACCORDION_HEADER}>
-            <button type="button" className={ClassNames.ACCORDION_HEADER_BUTTON}>
-                <span className="clr-sr-only"> </span>
-                <span className={ClassNames.ACCORDION_STATUS}>
-                    <Icon className={ClassNames.ACCORDION_ANGLE} shape="angle" />
-                    <div className={classNames([ClassNames.ACCORDION_TITLE, className])} style={style}>
-                        {children}
-                    </div>
-                </span>
-            </button>
-        </div>
-    );
-};
-
-type AccordionContentProps = {
-    className?: string;
-    style?: any;
-};
-
-export const AccordionContent: React.FunctionComponent<AccordionContentProps> = ({style, className, children}) => {
-    return (
-        <div className="ng-tns-c6-2 ng-trigger ng-trigger-skipInitialRender">
-            <div className="clr-accordion-inner-content">
-                <div className={classNames([ClassNames.ACCORDION_CONTENT, className])} style={style}>
-                    {children}
-                </div>
-            </div>
-        </div>
-    );
-};
-
-export type AccordionProps = {
+type AccordianProps = {
     style?: any;
     className?: string;
-    header?: any;
-    onClick?: (evt: React.MouseEvent<HTMLElement>) => void;
+    content: accordionContent[];
 };
 
-export class Accordion extends React.PureComponent<AccordionProps> {
-    handleClick = (evt: React.MouseEvent<HTMLElement>) => {
-        const {onClick} = this.props;
-        onClick && onClick(evt);
+type accordionContent = {
+    title: string;
+    itemComponent: React.ReactNode;
+};
+
+type SignPostState = {
+    panelItems: any;
+    prevItemIndex: any;
+};
+
+export class Accordion extends React.PureComponent<AccordianProps> {
+    state: SignPostState = {
+        prevItemIndex: -1,
+        panelItems: [],
     };
 
+    componentDidMount() {
+        this.getAccordionContent();
+    }
+
+    handleButtonClick = (index: any) => {
+        let items = this.state.panelItems;
+        if (this.state.prevItemIndex != -1 && this.state.prevItemIndex == index) {
+            items[index].isOpen = false;
+            this.setState({prevItemIndex: index});
+            this.setState({panelItems: items});
+        } else {
+            if (this.state.prevItemIndex != -1) {
+                items[this.state.prevItemIndex].isOpen = false;
+                items[this.state.prevItemIndex].content = this.getItemContent(
+                    this.state.prevItemIndex,
+                    items[this.state.prevItemIndex].title,
+                    true,
+                );
+            }
+            items[index].isOpen = true;
+            items[index].content = this.getItemContent(index, items[index].title, false);
+            this.setState({prevItemIndex: index});
+            this.setState({panelItems: items});
+        }
+        this.accordionPanel();
+    };
+
+    private accordionPanel(): React.ReactElement {
+        return (
+            <div>
+                {this.state.panelItems.map((content: any) => {
+                    return (
+                        <div className={classNames([ClassNames.ACCORDION_PANEL])}>
+                            {content.content}
+                            {content.isOpen ? (
+                                this.accordionContent(content)
+                            ) : (
+                                <div
+                                    className={classNames([ClassNames.ACCORDION_COLLAPSED_CONTENT])}
+                                    role="region"
+                                    aria-hidden="true"
+                                    aria-labelledby="clr-accordion-header"
+                                />
+                            )}
+                        </div>
+                    );
+                })}
+            </div>
+        );
+    }
+
+    private accordionContent(content: any): React.ReactElement {
+        return (
+            <div
+                className={classNames([ClassNames.ACCORDION_COLLAPSED_CONTENT])}
+                role="region"
+                aria-hidden="false"
+                aria-labelledby="clr-accordion-header"
+            >
+                <div className="clr-accordion-content ng-trigger ng-trigger-toggle ng-star-inserted">
+                    <div className={classNames([ClassNames.ACCORDION_INNER_CONTENT])}>
+                        <div className="ng-star-inserted">{content.component}</div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+    getItemContent = (index: any, title: any, isPrevious: boolean) => {
+        let panelClass = isPrevious
+            ? "ng-star-inserted clr-accordion-panel-inactive"
+            : "ng-star-inserted clr-accordion-panel-inactive clr-accordion-panel-open";
+        let expanded = isPrevious ? false : true;
+
+        return (
+            <div role="group" className={panelClass} key={index} onClick={() => this.handleButtonClick(index)}>
+                <div className={classNames([ClassNames.ACCORDION_HEADER])}>
+                    <button
+                        className={classNames([ClassNames.ACCORDION_HEADER_BUTTON])}
+                        type="button"
+                        aria-disabled="false"
+                        aria-controls="clr-accordion-content"
+                        aria-expanded={expanded}
+                    >
+                        <span className="clr-sr-only" />
+                        <span className={classNames([ClassNames.ACCORDION_STATUS])}>
+                            <Icon className={classNames([ClassNames.ACCORDION_ANGLE])} shape="angle" />
+                            <span className="clr-accordion-number"></span>
+                        </span>
+                        <div className={classNames([ClassNames.ACCORDION_TITLE])}>{title}</div>
+                    </button>
+                </div>
+            </div>
+        );
+    };
+
+    getAccordionContent = () => {
+        const {content} = this.props;
+        const panelContent = content.map((content, index) => {
+            return {
+                content: (
+                    <div
+                        role="group"
+                        className={classNames([ClassNames.ACCORDION_PANEL_INNER])}
+                        key={index}
+                        onClick={() => this.handleButtonClick(index)}
+                    >
+                        <div className={classNames([ClassNames.ACCORDION_HEADER])}>
+                            <button
+                                className={classNames([ClassNames.ACCORDION_HEADER_BUTTON])}
+                                type="button"
+                                aria-disabled="false"
+                                aria-controls="clr-accordion-content"
+                                aria-expanded="false"
+                            >
+                                <span className="clr-sr-only" />
+                                <span className={classNames([ClassNames.ACCORDION_STATUS])}>
+                                    <Icon className={classNames([ClassNames.ACCORDION_ANGLE])} shape="angle" />
+                                    <span className="clr-accordion-number"></span>
+                                </span>
+                                <div className={classNames([ClassNames.ACCORDION_TITLE])}>{content.title}</div>
+                            </button>
+                        </div>
+                    </div>
+                ),
+                isOpen: false,
+                title: content.title,
+                component: content.itemComponent,
+            };
+        });
+
+        this.setState({panelItems: panelContent});
+    };
     render() {
-        const {className, header, onClick, style, children} = this.props;
+        const {className, style} = this.props;
         return (
             <div
                 className={classNames([
@@ -90,7 +178,7 @@ export class Accordion extends React.PureComponent<AccordionProps> {
                 ])}
                 style={style}
             >
-                {children}
+                {this.accordionPanel()}
             </div>
         );
     }

@@ -10,23 +10,12 @@
 
 import * as React from "react";
 import {storiesOf} from "@storybook/react";
-import {action} from "@storybook/addon-actions";
-import {Accordion, AccordionPanel, AccordionTitle, AccordionContent} from ".";
+import {Accordion} from ".";
 
-storiesOf("Accordion", module).add("Basic Accordion", () => (
-    <Accordion header="Header">
-        <AccordionPanel>
-            <AccordionTitle>Item 1 </AccordionTitle>
-            <AccordionContent>Content 1</AccordionContent>
-            <AccordionContent>Content 2</AccordionContent>
-        </AccordionPanel>
-        <AccordionPanel>
-            <AccordionTitle>Item 2 </AccordionTitle>
-            <AccordionContent>Content 1</AccordionContent>
-        </AccordionPanel>
-        <AccordionPanel>
-            <AccordionTitle>Item 3 </AccordionTitle>
-            <AccordionContent>Content 1</AccordionContent>
-        </AccordionPanel>
-    </Accordion>
-));
+const accordionContent = [
+    {title: "Item 1", itemComponent: <p> Content 1</p>},
+    {title: "Item 2", itemComponent: <p> Content 2 </p>},
+    {title: "Item 3", itemComponent: <p> Content 3</p>},
+];
+
+storiesOf("Accordian", module).add("Accordian", () => <Accordion content={accordionContent} />);
