@@ -13,9 +13,9 @@ import {storiesOf} from "@storybook/react";
 import {Accordion} from ".";
 
 const accordionContent = [
-    {title: "Item 1", itemComponent: <p> Content 1</p>},
-    {title: "Item 2", itemComponent: <p> Content 2 </p>},
-    {title: "Item 3", itemComponent: <p> Content 3</p>},
+    {title: "Item 1", itemComponent: "Content 1"},
+    {title: "Item 2", itemComponent: "Content 2"},
+    {title: "Item 3", itemComponent: "Content 3"},
 ];
 
-storiesOf("Accordian", module).add("Accordian", () => <Accordion content={accordionContent} />);
+storiesOf("Accordion", module).add("Accordion", () => <Accordion content={accordionContent} />);

@@ -11,7 +11,7 @@
 import * as React from "react";
 import {classNames} from "..//utils";
 import {ClassNames} from "./ClassNames";
-import {Icon, IconProps} from "../icon";
+import {Icon, Direction} from "../icon";
 import {Button} from "../forms/button";
 
 type AccordianProps = {
@@ -30,7 +30,7 @@ type SignPostState = {
     prevItemIndex: any;
 };
 
-export class Accordion extends React.PureComponent<AccordianProps> {
+export class Accordion extends React.Component<AccordianProps> {
     state: SignPostState = {
         prevItemIndex: -1,
         panelItems: [],
@@ -39,12 +39,15 @@ export class Accordion extends React.PureComponent<AccordianProps> {
     componentDidMount() {
         this.getAccordionContent();
     }
-
     handleButtonClick = (index: any) => {
         let items = this.state.panelItems;
-        if (this.state.prevItemIndex != -1 && this.state.prevItemIndex == index) {
+        if (this.state.prevItemIndex != -1 && this.state.prevItemIndex === index) {
             items[index].isOpen = false;
-            this.setState({prevItemIndex: index});
+            items[this.state.prevItemIndex].content = this.getItemContent(
+                this.state.prevItemIndex,
+                items[this.state.prevItemIndex].title,
+                true,
+            );
             this.setState({panelItems: items});
         } else {
             if (this.state.prevItemIndex != -1) {
@@ -70,7 +73,7 @@ export class Accordion extends React.PureComponent<AccordianProps> {
                     return (
                         <div className={classNames([ClassNames.ACCORDION_PANEL])}>
                             {content.content}
-                            {content.isOpen ? (
+                            {content.isOpen && content.isOpen === true ? (
                                 this.accordionContent(content)
                             ) : (
                                 <div
@@ -95,7 +98,10 @@ export class Accordion extends React.PureComponent<AccordianProps> {
                 aria-hidden="false"
                 aria-labelledby="clr-accordion-header"
             >
-                <div className="clr-accordion-content ng-trigger ng-trigger-toggle ng-star-inserted">
+                <div
+                    className="clr-accordion-content ng-trigger ng-trigger-toggle ng-star-inserted"
+                    style={{display: "block"}}
+                >
                     <div className={classNames([ClassNames.ACCORDION_INNER_CONTENT])}>
                         <div className="ng-star-inserted">{content.component}</div>
                     </div>
@@ -121,7 +127,11 @@ export class Accordion extends React.PureComponent<AccordianProps> {
                     >
                         <span className="clr-sr-only" />
                         <span className={classNames([ClassNames.ACCORDION_STATUS])}>
-                            <Icon className={classNames([ClassNames.ACCORDION_ANGLE])} shape="angle" />
+                            <Icon
+                                className={classNames([ClassNames.ACCORDION_ANGLE])}
+                                dir={Direction.RIGHT}
+                                shape="angle"
+                            />
                             <span className="clr-accordion-number"></span>
                         </span>
                         <div className={classNames([ClassNames.ACCORDION_TITLE])}>{title}</div>
@@ -152,7 +162,11 @@ export class Accordion extends React.PureComponent<AccordianProps> {
                             >
                                 <span className="clr-sr-only" />
                                 <span className={classNames([ClassNames.ACCORDION_STATUS])}>
-                                    <Icon className={classNames([ClassNames.ACCORDION_ANGLE])} shape="angle" />
+                                    <Icon
+                                        className={classNames([ClassNames.ACCORDION_ANGLE])}
+                                        dir={Direction.RIGHT}
+                                        shape="angle"
+                                    />
                                     <span className="clr-accordion-number"></span>
                                 </span>
                                 <div className={classNames([ClassNames.ACCORDION_TITLE])}>{content.title}</div>
