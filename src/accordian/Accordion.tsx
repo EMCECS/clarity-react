@@ -12,12 +12,12 @@ import * as React from "react";
 import {classNames} from "..//utils";
 import {ClassNames} from "./ClassNames";
 import {Icon, Direction} from "../icon";
-import {Button} from "../forms/button";
 
 type AccordianProps = {
     style?: any;
     className?: string;
     content: accordionContent[];
+    accordionMultiPanel?: boolean;
 };
 
 type accordionContent = {
@@ -27,7 +27,7 @@ type accordionContent = {
 
 type SignPostState = {
     panelItems: any;
-    prevItemIndex: any;
+    prevItemIndex: number;
 };
 
 export class Accordion extends React.Component<AccordianProps> {
@@ -39,27 +39,30 @@ export class Accordion extends React.Component<AccordianProps> {
     componentDidMount() {
         this.getAccordionContent();
     }
-    handleButtonClick = (index: any) => {
+    handleButtonClick = (index: any, accordionMultiPanel: any) => {
         let items = this.state.panelItems;
         if (this.state.prevItemIndex != -1 && this.state.prevItemIndex === index) {
             items[index].isOpen = false;
+            this.setState({prevItemIndex: -1});
             items[this.state.prevItemIndex].content = this.getItemContent(
                 this.state.prevItemIndex,
                 items[this.state.prevItemIndex].title,
                 true,
+                accordionMultiPanel,
             );
             this.setState({panelItems: items});
         } else {
-            if (this.state.prevItemIndex != -1) {
+            if (!accordionMultiPanel && this.state.prevItemIndex != -1) {
                 items[this.state.prevItemIndex].isOpen = false;
                 items[this.state.prevItemIndex].content = this.getItemContent(
                     this.state.prevItemIndex,
                     items[this.state.prevItemIndex].title,
                     true,
+                    accordionMultiPanel,
                 );
             }
             items[index].isOpen = true;
-            items[index].content = this.getItemContent(index, items[index].title, false);
+            items[index].content = this.getItemContent(index, items[index].title, false, accordionMultiPanel);
             this.setState({prevItemIndex: index});
             this.setState({panelItems: items});
         }
@@ -78,9 +81,7 @@ export class Accordion extends React.Component<AccordianProps> {
                             ) : (
                                 <div
                                     className={classNames([ClassNames.ACCORDION_COLLAPSED_CONTENT])}
-                                    role="region"
                                     aria-hidden="true"
-                                    aria-labelledby="clr-accordion-header"
                                 />
                             )}
                         </div>
@@ -92,31 +93,28 @@ export class Accordion extends React.Component<AccordianProps> {
 
     private accordionContent(content: any): React.ReactElement {
         return (
-            <div
-                className={classNames([ClassNames.ACCORDION_COLLAPSED_CONTENT])}
-                role="region"
-                aria-hidden="false"
-                aria-labelledby="clr-accordion-header"
-            >
-                <div
-                    className="clr-accordion-content ng-trigger ng-trigger-toggle ng-star-inserted"
-                    style={{display: "block"}}
-                >
+            <div className={classNames([ClassNames.ACCORDION_COLLAPSED_CONTENT])} aria-hidden="false">
+                <div className={classNames([ClassNames.ACCORDION_TOGGLE_CONTENT])} style={{display: "block"}}>
                     <div className={classNames([ClassNames.ACCORDION_INNER_CONTENT])}>
-                        <div className="ng-star-inserted">{content.component}</div>
+                        <div className={classNames([ClassNames.ACCORDION_COMPONENT])}>{content.component}</div>
                     </div>
                 </div>
             </div>
         );
     }
-    getItemContent = (index: any, title: any, isPrevious: boolean) => {
+    getItemContent = (index: any, title: any, isPrevious: boolean, accordionMultiPanel: boolean) => {
         let panelClass = isPrevious
             ? "ng-star-inserted clr-accordion-panel-inactive"
             : "ng-star-inserted clr-accordion-panel-inactive clr-accordion-panel-open";
         let expanded = isPrevious ? false : true;
 
         return (
-            <div role="group" className={panelClass} key={index} onClick={() => this.handleButtonClick(index)}>
+            <div
+                role="group"
+                className={panelClass}
+                key={index}
+                onClick={() => this.handleButtonClick(index, accordionMultiPanel)}
+            >
                 <div className={classNames([ClassNames.ACCORDION_HEADER])}>
                     <button
                         className={classNames([ClassNames.ACCORDION_HEADER_BUTTON])}
@@ -142,7 +140,7 @@ export class Accordion extends React.Component<AccordianProps> {
     };
 
     getAccordionContent = () => {
-        const {content} = this.props;
+        const {content, accordionMultiPanel} = this.props;
         const panelContent = content.map((content, index) => {
             return {
                 content: (
@@ -150,7 +148,7 @@ export class Accordion extends React.Component<AccordianProps> {
                         role="group"
                         className={classNames([ClassNames.ACCORDION_PANEL_INNER])}
                         key={index}
-                        onClick={() => this.handleButtonClick(index)}
+                        onClick={() => this.handleButtonClick(index, accordionMultiPanel)}
                     >
                         <div className={classNames([ClassNames.ACCORDION_HEADER])}>
                             <button

@@ -18,4 +18,6 @@ const accordionContent = [
     {title: "Item 3", itemComponent: "Content 3"},
 ];
 
-storiesOf("Accordion", module).add("Accordion", () => <Accordion content={accordionContent} />);
+storiesOf("Accordion", module)
+    .add("Accordion", () => <Accordion content={accordionContent} />)
+    .add("Accordion accordian Multi Panel", () => <Accordion content={accordionContent} accordionMultiPanel={true} />);
