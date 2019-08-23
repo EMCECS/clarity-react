@@ -13,7 +13,7 @@ import {classNames} from "../utils";
 import {ClassNames} from "./ClassNames";
 import {Icon, Direction} from "../icon";
 
-type AccordianProps = {
+type AccordionProps = {
     style?: any;
     className?: string;
     content: accordionContent[];
@@ -30,7 +30,7 @@ type AccordionState = {
     prevItemIndex: number;
 };
 
-export class Accordion extends React.Component<AccordianProps, AccordionState> {
+export class Accordion extends React.Component<AccordionProps, AccordionState> {
     state: AccordionState = {
         prevItemIndex: -1,
         panelItems: [],
@@ -104,7 +104,7 @@ export class Accordion extends React.Component<AccordianProps, AccordionState> {
         let panelClass = isPrevious
             ? ClassNames.ACCORDION_PANEL_INNER
             : classNames([ClassNames.ACCORDION_PANEL_INNER, ClassNames.ACCORDION_PANEL_OPEN]);
-        let expanded = isPrevious ? false : true;
+        let expanded = !isPrevious;
         return (
             <div
                 role="group"
@@ -151,7 +151,7 @@ export class Accordion extends React.Component<AccordianProps, AccordionState> {
                                 aria-controls="clr-accordion-content"
                                 aria-expanded="false"
                             >
-                                <span className="clr-sr-only" />
+                                <span className={ClassNames.ACCORDION_SR} />
                                 <span className={ClassNames.ACCORDION_STATUS}>
                                     <Icon className={ClassNames.ACCORDION_ANGLE} dir={Direction.RIGHT} shape="angle" />
                                     <span className={ClassNames.ACCORDION_NUMBER}></span>
