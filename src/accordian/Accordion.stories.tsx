@@ -18,6 +18,12 @@ const accordionContent = [
     {title: "Item 3", itemComponent: "Content 3"},
 ];
 
+const nesteAccordionContent = [
+    {title: "Item 1", itemComponent: "Content 1"},
+    {title: "Item 2", itemComponent: <Accordion content={accordionContent} />},
+];
+
 storiesOf("Accordion", module)
     .add("Accordion", () => <Accordion content={accordionContent} />)
-    .add("Accordion accordian Multi Panel", () => <Accordion content={accordionContent} accordionMultiPanel={true} />);
+    .add("Accordion accordian Multi Panel", () => <Accordion content={accordionContent} accordionMultiPanel={true} />)
+    .add("Nested Accordion accordian", () => <Accordion content={nesteAccordionContent} />);

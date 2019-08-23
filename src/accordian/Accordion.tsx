@@ -9,7 +9,7 @@
  */
 
 import * as React from "react";
-import {classNames} from "..//utils";
+import {classNames} from "../utils";
 import {ClassNames} from "./ClassNames";
 import {Icon, Direction} from "../icon";
 
@@ -46,6 +46,10 @@ export class Accordion extends React.Component<AccordianProps> {
             items[index].isOpen = false;
             this.setState({prevItemIndex: -1});
             items[prevItemIndex].content = this.getItemContent(prevItemIndex, items[prevItemIndex].title, true);
+            this.setState({panelItems: items});
+        } else if (items[index].isOpen === true) {
+            items[index].isOpen = false;
+            items[index].content = this.getItemContent(index, items[index].title, true);
             this.setState({panelItems: items});
         } else {
             if (!accordionMultiPanel && prevItemIndex != -1) {
