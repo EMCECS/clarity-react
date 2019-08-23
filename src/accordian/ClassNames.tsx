@@ -12,7 +12,7 @@ export class ClassNames {
     public static ACCORDION: string = "clr-accordion";
     public static ACCORDION_HEADER: string = "clr-accordion-header";
     public static ACCORDION_PANEL: string = "clr-accordion-panel ng-star-inserted ng-tns-c6-2";
-    public static ACCORDION_PANEL_INNER: string = "clr-accordion-panel-inactive ng-tns-c6-2 ng-star-inserted";
+    public static ACCORDION_PANEL_INNER: string = "clr-accordion-panel-inactive ng-star-inserted";
     public static ACCORDION_TITLE: string = "clr-accordion-title";
     public static ACCORDION_CONTENT: string = "clr-accordion-content ng-star-inserted";
     public static ACCORDION_HEADER_BUTTON: string = "clr-accordion-header-button";
@@ -23,4 +23,7 @@ export class ClassNames {
     public static ACCORDION_TOGGLE_CONTENT: string =
         "clr-accordion-content ng-trigger ng-trigger-toggle ng-star-inserted";
     public static ACCORDION_COMPONENT: string = "ng-star-inserted";
+    public static ACCORDION_NUMBER: string = "clr-accordion-number";
+    public static ACCORDION_SR: string = "clr-sr-only";
+    public static ACCORDION_PANEL_OPEN: string = "clr-accordion-panel-open";
 }
