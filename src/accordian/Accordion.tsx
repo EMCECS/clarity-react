@@ -30,7 +30,7 @@ type AccordionState = {
     prevItemIndex: number;
 };
 
-export class Accordion extends React.Component<AccordianProps> {
+export class Accordion extends React.Component<AccordianProps, AccordionState> {
     state: AccordionState = {
         prevItemIndex: -1,
         panelItems: [],
@@ -39,6 +39,7 @@ export class Accordion extends React.Component<AccordianProps> {
     componentDidMount() {
         this.getAccordionContent();
     }
+
     handleButtonClick = (index: any, accordionMultiPanel: any) => {
         let items = this.state.panelItems;
         const {prevItemIndex} = this.state;
@@ -97,6 +98,7 @@ export class Accordion extends React.Component<AccordianProps> {
             </div>
         );
     }
+
     getItemContent = (index: any, title: any, isPrevious: boolean) => {
         const {accordionMultiPanel} = this.props;
         let panelClass = isPrevious
