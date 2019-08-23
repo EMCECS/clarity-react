@@ -25,5 +25,5 @@ const nesteAccordionContent = [
 
 storiesOf("Accordion", module)
     .add("Accordion", () => <Accordion content={accordionContent} />)
-    .add("Accordion accordian Multi Panel", () => <Accordion content={accordionContent} accordionMultiPanel={true} />)
+    .add("Accordion Multi Panel", () => <Accordion content={accordionContent} accordionMultiPanel={true} />)
     .add("Nested Accordion accordian", () => <Accordion content={nesteAccordionContent} />);
