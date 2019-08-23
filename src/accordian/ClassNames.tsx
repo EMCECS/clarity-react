@@ -20,4 +20,7 @@ export class ClassNames {
     public static ACCORDION_ANGLE: string = "clr-accordion-angle";
     public static ACCORDION_COLLAPSED_CONTENT: string = "ng-trigger ng-trigger-skipInitialRender";
     public static ACCORDION_INNER_CONTENT: string = "clr-accordion-inner-content";
+    public static ACCORDION_TOGGLE_CONTENT: string =
+        "clr-accordion-content ng-trigger ng-trigger-toggle ng-star-inserted";
+    public static ACCORDION_COMPONENT: string = "ng-star-inserted";
 }
