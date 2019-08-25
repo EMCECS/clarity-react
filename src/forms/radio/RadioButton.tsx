@@ -30,6 +30,7 @@ type RadioButtonProps = {
 export class RadioButton extends React.PureComponent<RadioButtonProps> {
     static defaultProps = {
         inButtonGroup: false,
+        disabled: false,
     };
 
     key: string | undefined;

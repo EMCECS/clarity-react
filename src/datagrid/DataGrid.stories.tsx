@@ -10,42 +10,38 @@
 
 import * as React from "react";
 import {storiesOf} from "@storybook/react";
-import {
-    DataGridColumn,
-    DataGridRow,
-    DataGridCell,
-    DataGridFooter,
-    DataGrid,
-    DataGridColumnHeader,
-    DataGridRowContainer,
-    DataGridBody,
-} from "./DataGrid";
-storiesOf("DataGrid", module).add("Basic", () => (
-    <div style={{width: "80%"}}>
-        <DataGrid>
-            <DataGridBody>
-                <DataGridColumnHeader>
-                    <DataGridColumn>{"User ID"}</DataGridColumn>
-                    <DataGridColumn>{"Name"}</DataGridColumn>
-                    <DataGridColumn> {"Creation date"}</DataGridColumn>
-                    <DataGridColumn>{"Favorite color"}</DataGridColumn>
-                </DataGridColumnHeader>
-                <DataGridRowContainer>
-                    <DataGridRow>
-                        <DataGridCell> {41512} </DataGridCell>
-                        <DataGridCell> {"Georgia"} </DataGridCell>
-                        <DataGridCell> {"Sep 11, 2018"} </DataGridCell>
-                        <DataGridCell> {"Blue"} </DataGridCell>
-                    </DataGridRow>
-                    <DataGridRow>
-                        <DataGridCell> {9524} </DataGridCell>
-                        <DataGridCell> {"Brynn"} </DataGridCell>
-                        <DataGridCell> {"Aug 2, 2014"} </DataGridCell>
-                        <DataGridCell> {"Purple"} </DataGridCell>
-                    </DataGridRow>
-                </DataGridRowContainer>
-            </DataGridBody>
-            <DataGridFooter> {"10 users"} </DataGridFooter>
-        </DataGrid>
-    </div>
-));
+import {Icon} from "../icon";
+import {DataGrid, GridSelectionType} from "./DataGrid";
+import {normalColumns, normalRows, customRows, footer} from "./DataGridValues";
+
+storiesOf("DataGrid", module)
+    .add("Basic grid", () => (
+        <div style={{width: "80%"}}>
+            <DataGrid columns={normalColumns} data={normalRows} footer={footer} />
+        </div>
+    ))
+    .add("Grid with custom cells", () => (
+        <div style={{width: "80%"}}>
+            <DataGrid columns={normalColumns} data={customRows} footer={footer} />
+        </div>
+    ))
+    .add("Grid with single select option", () => (
+        <div style={{width: "80%"}}>
+            <DataGrid
+                columns={normalColumns}
+                data={normalRows}
+                footer={footer}
+                selectionType={GridSelectionType.SINGLE}
+            />
+        </div>
+    ))
+    .add("Grid with multi select option", () => (
+        <div style={{width: "80%"}}>
+            <DataGrid
+                columns={normalColumns}
+                data={normalRows}
+                footer={footer}
+                selectionType={GridSelectionType.MULTI}
+            />
+        </div>
+    ));

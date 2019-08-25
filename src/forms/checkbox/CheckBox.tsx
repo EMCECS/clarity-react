@@ -23,6 +23,7 @@ type CheckBoxProps = {
     ariaLabelledby?: string;
     disabled?: boolean;
     onChange?: (newValue: CheckboxValue) => void;
+    onClick?: (evt: React.MouseEvent<HTMLInputElement>) => void;
 };
 
 type CheckBoxState = {
@@ -67,7 +68,7 @@ export class CheckBox extends React.PureComponent<CheckBoxProps, CheckBoxState> 
     }
 
     render() {
-        const {label, name, ariaLabelledby, disabled} = this.props;
+        const {label, name, ariaLabelledby, disabled, onClick, checked} = this.props;
         const setId = this.props.id;
         const {value} = this.state;
         return (
@@ -79,11 +80,12 @@ export class CheckBox extends React.PureComponent<CheckBoxProps, CheckBoxState> 
                             id={setId ? setId : id}
                             name={name}
                             ref={this.myRef}
-                            checked={value !== false}
+                            checked={checked}
                             onChange={this.handleChange.bind(this)}
                             className={ClassNames.CLR_CHECKBOX}
                             aria-labelledby={ariaLabelledby}
                             disabled={disabled}
+                            onClick={onClick}
                         />
                         <label className={ClassNames.CLR_CONTROL_LABEL} htmlFor={setId ? setId : id}>
                             {label}
