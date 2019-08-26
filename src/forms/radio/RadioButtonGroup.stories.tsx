@@ -15,6 +15,7 @@ import {RadioButton, RadioButtonGroup} from ".";
 
 storiesOf("RadioButton", module)
     .add("single radio button", () => <RadioButton label="O" value="one" />)
+    .add("radio button without label", () => <RadioButton value="one" />)
     .add("simple with two radio buttons", () => (
         <RadioButtonGroup name="number" onChange={action("changed")}>
             <RadioButton key="one" label="One" value="one" />

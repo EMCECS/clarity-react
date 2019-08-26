@@ -79,11 +79,9 @@ export class RadioButton extends React.PureComponent<RadioButtonProps> {
                     onChange={onChange}
                     style={style}
                 />
-                {label && (
-                    <label className={labelClassNames} htmlFor={id}>
-                        {label}
-                    </label>
-                )}
+                <label className={labelClassNames} htmlFor={id}>
+                    {label && label}
+                </label>
                 {children}
             </div>
         );
