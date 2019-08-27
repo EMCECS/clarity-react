@@ -34,4 +34,5 @@ export enum Direction {
     LEFT = "left",
     RIGHT = "right",
     DOWN = "down",
+    UP = "up",
 }
