@@ -31,23 +31,26 @@ export class Portlet extends React.PureComponent<PortletProps, PortletState> {
             color: "#007DB8",
         },
     };
+
     handleClick = () => {
         const {toggleContent} = this.state;
-        this.setState({toggleContent: !toggleContent});
-        toggleContent
-            ? this.setState({
-                  iconStyle: {
-                      transition: "all .3s ease-in 0s",
-                      transform: "rotate(180deg)",
-                      color: "#007DB8",
-                  },
-              })
-            : this.setState({
-                  iconStyle: {
-                      transition: "all .3s ease-in 0s",
-                      color: "#007DB8",
-                  },
-              });
+        this.setState(prevState => ({toggleContent: !prevState.toggleContent}));
+        if (toggleContent) {
+            this.setState({
+                iconStyle: {
+                    transition: "all .3s ease-in 0s",
+                    transform: "rotate(180deg)",
+                    color: "#007DB8",
+                },
+            });
+        } else {
+            this.setState({
+                iconStyle: {
+                    transition: "all .3s ease-in 0s",
+                    color: "#007DB8",
+                },
+            });
+        }
     };
 
     render() {
