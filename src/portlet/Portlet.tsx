@@ -10,6 +10,7 @@
 
 import * as React from "react";
 import {classNames} from "../utils";
+import {Styles} from "./ClassNames";
 import {Icon, Direction} from "../icon";
 
 type PortletProps = {
@@ -26,10 +27,7 @@ type PortletState = {
 export class Portlet extends React.PureComponent<PortletProps, PortletState> {
     state: PortletState = {
         toggleContent: true,
-        iconStyle: {
-            transition: "all .3s ease-in 0s",
-            color: "#007DB8",
-        },
+        iconStyle: Styles.ICON_STYLE,
     };
 
     handleClick = () => {
@@ -38,57 +36,29 @@ export class Portlet extends React.PureComponent<PortletProps, PortletState> {
         if (toggleContent) {
             this.setState({
                 iconStyle: {
-                    transition: "all .3s ease-in 0s",
+                    ...Styles.ICON_STYLE,
                     transform: "rotate(180deg)",
-                    color: "#007DB8",
                 },
             });
         } else {
             this.setState({
-                iconStyle: {
-                    transition: "all .3s ease-in 0s",
-                    color: "#007DB8",
-                },
+                iconStyle: Styles.ICON_STYLE,
             });
         }
     };
 
     render() {
-        const {className, style, header, children} = this.props;
+        const {className, header, children} = this.props;
         const {toggleContent, iconStyle} = this.state;
         return (
-            <div
-                style={{
-                    borderRadius: ".125rem",
-                    border: "1px solid #d7d7d7",
-                    position: "relative",
-                    display: "block",
-                    backgroundColor: "#fff",
-                    width: "100%",
-                    marginTop: "1rem",
-                }}
-            >
-                <div
-                    style={{
-                        cursor: "pointer",
-                        display: "flex",
-                        flexDirection: "row-reverse",
-                        alignItems: "center",
-                        margin: "0",
-                        padding: "12px 10px",
-                        position: "relative",
-                        overflow: "hidden",
-                        justifyContent: "space-between",
-                    }}
-                    aria-expanded={toggleContent}
-                    onClick={this.handleClick}
-                >
+            <div style={Styles.MAIN_DIV}>
+                <div style={Styles.HEADER_DIV} aria-expanded={toggleContent} onClick={this.handleClick}>
                     <span>
                         <Icon dir={Direction.UP} shape="angle" style={iconStyle} />
                     </span>
                     <span>{header}</span>
                 </div>
-                <div className={classNames([className])} style={{padding: "0 10px 5px"}}>
+                <div className={classNames([className])} style={Styles.CONTENT_DIV}>
                     {toggleContent && children}
                 </div>
             </div>
