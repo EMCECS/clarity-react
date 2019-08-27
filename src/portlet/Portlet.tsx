@@ -28,7 +28,6 @@ export class Portlet extends React.PureComponent<PortletProps, PortletState> {
         toggleContent: true,
         iconStyle: {
             transition: "all .3s ease-in 0s",
-            float: "right",
             color: "#007DB8",
         },
     };
@@ -40,14 +39,12 @@ export class Portlet extends React.PureComponent<PortletProps, PortletState> {
                   iconStyle: {
                       transition: "all .3s ease-in 0s",
                       transform: "rotate(180deg)",
-                      float: "right",
                       color: "#007DB8",
                   },
               })
             : this.setState({
                   iconStyle: {
                       transition: "all .3s ease-in 0s",
-                      float: "right",
                       color: "#007DB8",
                   },
               });
@@ -86,7 +83,7 @@ export class Portlet extends React.PureComponent<PortletProps, PortletState> {
                     <span>
                         <Icon dir={Direction.UP} shape="angle" style={iconStyle} />
                     </span>
-                    <span style={{float: "left"}}>{header}</span>
+                    <span>{header}</span>
                 </div>
                 <div className={classNames([className])} style={{padding: "0 10px 5px"}}>
                     {toggleContent && children}
