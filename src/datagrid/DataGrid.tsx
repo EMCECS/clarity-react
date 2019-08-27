@@ -9,10 +9,10 @@
  */
 
 import * as React from "react";
-import * as ReactDOM from "react-dom";
 import {ClassNames} from "./ClassNames";
-import {CheckBox} from "../forms/checkbox";
+import {CheckBox, CheckboxValue} from "../forms/checkbox";
 import {RadioButton} from "../forms/radio";
+import {classNames} from "../utils";
 
 type DataGridProps = {
     className?: string;
@@ -81,12 +81,27 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     };
 
     private buildDataGridBody(): React.ReactElement {
+        const {data} = this.props;
         return (
             <div className={ClassNames.DATAGRID}>
                 <div className={ClassNames.DATAGRID_TABLE_WRAPPER}>
                     <div className={ClassNames.DATAGRID_TABLE} role="grid">
                         {this.buildDataGridHeader()}
-                        {this.buildDataGridRowContainer()}
+                        {data ? (
+                            data.map((row: any, index: number) => {
+                                return this.buildDataGridRow(
+                                    row.keyElement,
+                                    row.content,
+                                    index,
+                                    row.className,
+                                    row.style,
+                                );
+                            })
+                        ) : (
+                            <div className={ClassNames.DATAGRID_PLACEHOLDER_CONTAINER}>
+                                <div className={ClassNames.DATAGRID_PLACEHOLDER} />
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
@@ -96,17 +111,41 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     private getSelectColumn(): React.ReactElement {
         const {selectionType} = this.props;
         if (selectionType === GridSelectionType.MULTI) {
-            return <CheckBox onClick={evt => this.handleAllSelectClick(evt)} />;
+            return (
+                <div
+                    role="columnheader"
+                    className={classNames([
+                        ClassNames.DATAGRID_COLUMN, //prettier
+                        ClassNames.DATAGRID_SELECT,
+                        ClassNames.DATAGRID_FIXED_COLUMN,
+                    ])}
+                >
+                    <span className={ClassNames.DATAGRID_COLUMN_TITLE}>
+                        <CheckBox onClick={evt => this.handleAllSelectClick(evt)} ariaLabel="Select All" />
+                    </span>
+                    <div className={ClassNames.DATAGRID_COLUMN_SEPARATOR} />
+                </div>
+            );
         }
         return <div>{""}</div>;
+    }
+
+    private handleChange(evt: React.ChangeEvent<HTMLInputElement>) {
+        evt.target.checked = true;
     }
 
     private getSelectCell(keyElement: string): React.ReactElement {
         const {selectionType} = this.props;
         const {selectAll} = this.state;
-        console.log(selectAll);
         if (selectionType === GridSelectionType.MULTI) {
-            return <CheckBox key={keyElement} checked={selectAll !== undefined ? selectAll : false} />;
+            return (
+                <CheckBox
+                    key={keyElement}
+                    ariaLabel="Select"
+                    onChange={this.handleChange.bind(this)}
+                    value={selectAll !== undefined ? selectAll : undefined}
+                />
+            );
         }
         return <RadioButton value={keyElement} id={keyElement} />;
     }
@@ -119,7 +158,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                     <div className={ClassNames.DATAGRID_ROW_MASTER}>
                         <div className={ClassNames.DATAGRID_ROW_STICKY} />
                         <div className={ClassNames.DATAGRID_ROW_SCROLLABLE}>
-                            {selectionType && this.buildDataGridColumn(this.getSelectColumn())}
+                            {selectionType && this.getSelectColumn()}
                             {columns &&
                                 columns.map((column: any) => {
                                     return this.buildDataGridColumn(column.content, column.className, column.style);
@@ -134,9 +173,8 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     private buildDataGridColumn(content: any, className?: string, style?: any): React.ReactElement {
         return (
             <div
-                _ngcontent-clarity-c4=""
                 role="columnheader"
-                className={`${ClassNames.DATAGRID_COLUMN} ${className}`}
+                className={classNames([ClassNames.DATAGRID_COLUMN, className])}
                 aria-sort="none"
                 style={style}
             >
@@ -151,41 +189,33 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         );
     }
 
-    private buildDataGridRowContainer(): React.ReactElement {
-        const {data} = this.props;
-        return (
-            <div>
-                {data &&
-                    data.map((row: any) => {
-                        return this.buildDataGridRow(row.keyElement, row.content, row.className, row.style);
-                    })}
-                <div className={ClassNames.DATAGRID_PLACEHOLDER_CONTAINER}>
-                    <div className={ClassNames.DATAGRID_PLACEHOLDER} />
-                </div>
-            </div>
-        );
-    }
-
     private buildDataGridRow(
         keyElement: string,
         content: DataGridCell[],
+        index: number,
         className?: string,
         style?: any,
     ): React.ReactElement {
         const {selectionType} = this.props;
         return (
             <div
-                _ngcontent-clarity-c4=""
                 role="rowgroup"
-                className={`${ClassNames.DATAGRID_ROW} ${className}`}
-                aria-owns="clr-dg-row1"
+                className={classNames([ClassNames.DATAGRID_ROW, className])}
+                aria-owns={"clr-dg-row" + index}
                 style={style}
             >
                 <div className={ClassNames.DATAGRID_ROW_MASTER} role="row" id="clr-dg-row1">
                     <div className={ClassNames.DATAGRID_ROW_STICKY} />
                     <div className={ClassNames.DATAGRID_ROW_SCROLLABLE}>
                         <div className={ClassNames.DATAGRID_SCROLLING_CELLS}>
-                            {selectionType && this.buildDataGridCell(this.getSelectCell(keyElement))}
+                            {selectionType &&
+                                this.buildDataGridCell(
+                                    this.getSelectCell(keyElement),
+                                    classNames([
+                                        ClassNames.DATAGRID_SELECT, //prettier
+                                        ClassNames.DATAGRID_FIXED_COLUMN,
+                                    ]),
+                                )}
                             {content &&
                                 content.map((cell: any) => {
                                     return this.buildDataGridCell(cell.content, cell.className, cell.style);
@@ -200,12 +230,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     private buildDataGridCell(content: any, className?: string, style?: any): React.ReactElement {
         console.log(content);
         return (
-            <div
-                _ngcontent-clarity-c4=""
-                role="gridcell"
-                className={`${ClassNames.DATAGRID_CELLS} ${className}`}
-                style={style}
-            >
+            <div role="gridcell" className={`${className} ${ClassNames.DATAGRID_CELLS}`} style={style}>
                 {content}
             </div>
         );
@@ -215,7 +240,6 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         const {footer} = this.props;
         return (
             <div
-                _ngcontent-clarity-c4=""
                 className={`${ClassNames.DATAGRID_FOOTER} ${footer && footer.className && footer.className}`}
                 style={footer && footer.style && footer.style}
             >
@@ -227,7 +251,13 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     render() {
         const {children, className, style} = this.props;
         return (
-            <div className={`${ClassNames.DATAGRID_HOST} ${className}`} style={style} _ngcontent-clarity-c4="">
+            <div
+                className={classNames([
+                    ClassNames.DATAGRID_HOST, // prettier
+                    className,
+                ])}
+                style={style}
+            >
                 {this.buildDataGridBody()}
                 {this.buildDataGridFooter()}
                 <div className={ClassNames.DATAGRID_CAL_TABLE}>
