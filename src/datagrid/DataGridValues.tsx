@@ -10,6 +10,7 @@
 
 import * as React from "react";
 import {Icon} from "../icon";
+import {Button} from "../forms/button";
 
 export const normalColumns = [
     {
@@ -42,7 +43,7 @@ export const normalRows = [
                 content: "Blue",
             },
         ],
-        keyElement: "Georgia",
+        rowID: "Georgia",
     },
     {
         content: [
@@ -59,7 +60,24 @@ export const normalRows = [
                 content: "Orange",
             },
         ],
-        keyElement: "Brynn",
+        rowID: "Brynn",
+    },
+    {
+        content: [
+            {
+                content: 30574,
+            },
+            {
+                content: "Brad",
+            },
+            {
+                content: "Jan 4, 2019",
+            },
+            {
+                content: "Yellow",
+            },
+        ],
+        rowID: "Brad",
     },
 ];
 
@@ -88,7 +106,7 @@ export const customRows = [
                 ),
             },
         ],
-        keyElement: "Georgia",
+        rowID: "Georgia",
     },
     {
         content: [
@@ -110,6 +128,15 @@ export const customRows = [
                 ),
             },
         ],
-        keyElement: "Brynn",
+        rowID: "Brynn",
     },
 ];
+
+export const actionBar = {
+    content: (
+        <div>
+            <Button key="basic">EDIT</Button>
+            <Button key="basic">DELELTE</Button>
+        </div>
+    ),
+};

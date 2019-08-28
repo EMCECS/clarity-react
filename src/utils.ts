@@ -14,7 +14,18 @@ export function classNames(classNameList: (false | undefined | null | string)[])
     return classNameList.filter(x => typeof x === "string").join(" ");
 }
 
+//Find if all the keys in an object are true
 export function allTrue(obj: any) {
     for (var key in obj) if (!obj[key]) return false;
+    return true;
+}
+
+// Find if a particular key in an object array is true for all elements in the array.
+export function allTrueOnKey(obj: any, key: any) {
+    for (var index in obj) {
+        if (!obj[index][key]) {
+            return false;
+        }
+    }
     return true;
 }

@@ -34,4 +34,5 @@ export class ClassNames {
     public static DATAGRID_HOST: string = "datagrid-host";
     public static DATAGRID_CAL_TABLE: string = "datagrid-calculation-table";
     public static DATAGRID_CAL_HEADER: string = "datagrid-calculation-header";
+    public static DATAGRID_ACTION_BAR: string = "datagrid-action-bar";
 }

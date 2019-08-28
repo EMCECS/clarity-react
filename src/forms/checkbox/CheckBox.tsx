@@ -12,16 +12,12 @@ import * as React from "react";
 import {UID} from "react-uid";
 import {ClassNames} from "./ClassNames";
 
-export type CheckboxValue = boolean | "indeterminate";
-
 type CheckBoxProps = {
     label?: string;
     name?: string;
     id?: string;
-    checked?: CheckboxValue;
-    defaultChecked?: CheckboxValue;
-    value?: CheckboxValue;
-    defaultValue?: CheckboxValue;
+    checked?: boolean;
+    defaultChecked?: boolean;
     ariaLabelledby?: string;
     ariaLabel?: string;
     disabled?: boolean;
@@ -30,54 +26,22 @@ type CheckBoxProps = {
 };
 
 type CheckBoxState = {
-    value: CheckboxValue;
+    value: boolean;
 };
 
 export class CheckBox extends React.PureComponent<CheckBoxProps, CheckBoxState> {
     private myRef = React.createRef<HTMLInputElement>();
 
+    private handleChange(evt: React.ChangeEvent<HTMLInputElement>) {
+        const newValue = !this.state.value;
+        this.setState({
+            value: newValue,
+        });
+    }
+
     constructor(props: CheckBoxProps) {
         super(props);
-        this.state = {value: this.getValue()};
-    }
-
-    getValue = (props = this.props, state = this.state): CheckboxValue => {
-        const valueProp = props.checked !== undefined ? props.checked : props.value;
-        const defaultValueProp = props.defaultChecked !== undefined ? props.defaultChecked : props.defaultValue;
-        return valueProp !== undefined ? valueProp : (state ? state.value : defaultValueProp) || false;
-    };
-
-    state: {
-        value: CheckboxValue;
-    } = {
-        value: this.getValue(this.props, undefined),
-    };
-
-    get value(): CheckboxValue {
-        return this.getValue();
-    }
-
-    componentDidMount() {
-        (this.myRef.current as HTMLInputElement).indeterminate = this.getValue() === "indeterminate";
-    }
-
-    componentDidUpdate() {
-        (this.myRef.current as HTMLInputElement).indeterminate = this.getValue() === "indeterminate";
-    }
-
-    handleChange(evt: React.ChangeEvent<HTMLInputElement>) {
-        const hardValue = this.props.value !== undefined || this.props.checked !== undefined;
-
-        const checked = evt.target.checked;
-        const indeterminate = evt.target.indeterminate;
-        const newValue = indeterminate ? "indeterminate" : checked;
-
-        if (hardValue) {
-            evt.preventDefault();
-            if (this.props.onChange) this.props.onChange(evt);
-        } else {
-            this.setState({value: newValue});
-        }
+        this.state = {value: false};
     }
 
     render() {
@@ -88,9 +52,11 @@ export class CheckBox extends React.PureComponent<CheckBoxProps, CheckBoxState> 
             ariaLabel,
             disabled,
             onClick,
+            checked,
+            onChange,
         } = this.props;
         const setId = this.props.id;
-        const value = this.value;
+        const {value} = this.state;
         return (
             <UID>
                 {id => (
@@ -100,8 +66,8 @@ export class CheckBox extends React.PureComponent<CheckBoxProps, CheckBoxState> 
                             id={setId ? setId : id}
                             name={name}
                             ref={this.myRef}
-                            checked={value !== false}
-                            onChange={this.handleChange.bind(this)}
+                            checked={checked !== undefined ? checked : value}
+                            onChange={onChange !== undefined ? onChange : this.handleChange.bind(this)}
                             className={ClassNames.CLR_CHECKBOX}
                             aria-labelledby={ariaLabelledby}
                             aria-label={ariaLabel}

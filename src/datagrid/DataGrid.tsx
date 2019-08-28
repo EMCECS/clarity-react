@@ -10,9 +10,9 @@
 
 import * as React from "react";
 import {ClassNames} from "./ClassNames";
-import {CheckBox, CheckboxValue} from "../forms/checkbox";
+import {CheckBox} from "../forms/checkbox";
 import {RadioButton} from "../forms/radio";
-import {classNames} from "../utils";
+import {classNames, allTrueOnKey} from "../utils";
 
 type DataGridProps = {
     className?: string;
@@ -22,10 +22,11 @@ type DataGridProps = {
     columns: DataGridColumn[];
     data: DataGridRow[];
     footer?: DataGridFooter;
+    actionBar?: DataGridActionBar;
 };
 
 type DataGridState = {
-    selectAll: boolean;
+    selectAll: boolean; // represents if all rows are selected
     allColumns: DataGridColumn[];
     allRows: DataGridRow[];
 };
@@ -43,10 +44,17 @@ type DataGridRow = {
     content: DataGridCell[];
     className?: string;
     style?: any;
-    keyElement?: string;
+    rowID?: string;
+    isSelected?: boolean;
 };
 
 type DataGridFooter = {
+    content: React.ReactNode;
+    className?: string;
+    style?: any;
+};
+
+type DataGridActionBar = {
     content: React.ReactNode;
     className?: string;
     style?: any;
@@ -62,6 +70,7 @@ export enum GridSelectionType {
     MULTI = "multi",
     SINGLE = "single",
 }
+
 export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> {
     static defaultProps = {
         pagination: false,
@@ -76,9 +85,70 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         };
     }
 
-    private handleAllSelectClick = (evt: React.MouseEvent<HTMLInputElement>) => {
-        this.setState({selectAll: !this.state.selectAll});
+    componentWillMount() {
+        this.initializeState();
+    }
+
+    private initializeState() {
+        const rows = this.state.allRows;
+        rows.forEach(r => (r["isSelected"] = false));
+        this.setState({
+            allRows: rows,
+        });
+    }
+
+    // Return the list of rows that are selected.
+    getSelectedRows(): DataGridRow[] {
+        const {allRows} = this.state;
+        let selectedRows = new Array();
+        if (this.state.selectAll) selectedRows = allRows;
+        else {
+            allRows.forEach(row => {
+                if (row["isSelected"]) selectedRows.push(row);
+            });
+        }
+        return selectedRows;
+    }
+
+    //Handle select all (column) click
+    private handleSelectAllClick = (evt: React.MouseEvent<HTMLInputElement>) => {
+        const rows = this.state.allRows;
+        const value = this.state.selectAll;
+        rows.forEach(r => (r["isSelected"] = !value));
+        this.setState({
+            selectAll: !value,
+            allRows: rows,
+        });
     };
+
+    //Handle click event for row checkbox
+    private handleSingleSelectClick(evt: React.MouseEvent<HTMLInputElement>, rowID: any) {
+        const rows = this.state.allRows;
+        rows.forEach(row => {
+            if (row["rowID"] === rowID) {
+                const value = !row["isSelected"];
+                row["isSelected"] = value;
+            }
+        });
+        this.setState({
+            allRows: [...rows],
+            selectAll: allTrueOnKey(rows, "isSelected"),
+        });
+    }
+
+    private buildDataGridActionBar(): React.ReactElement {
+        const {actionBar} = this.props;
+        return (
+            <div
+                className={`${ClassNames.DATAGRID_ACTION_BAR} ${actionBar &&
+                    actionBar.className &&
+                    actionBar.className}`}
+                style={actionBar && actionBar.style && actionBar.style}
+            >
+                {actionBar && actionBar.content && actionBar.content}
+            </div>
+        );
+    }
 
     private buildDataGridBody(): React.ReactElement {
         const {data} = this.props;
@@ -90,11 +160,12 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                         {data ? (
                             data.map((row: any, index: number) => {
                                 return this.buildDataGridRow(
-                                    row.keyElement,
+                                    row.rowID,
                                     row.content,
                                     index,
                                     row.className,
                                     row.style,
+                                    row.isSelected,
                                 );
                             })
                         ) : (
@@ -108,8 +179,10 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         );
     }
 
+    //Populate checkbox or blank cell for column level
     private getSelectColumn(): React.ReactElement {
         const {selectionType} = this.props;
+        const {selectAll} = this.state;
         if (selectionType === GridSelectionType.MULTI) {
             return (
                 <div
@@ -121,33 +194,37 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                     ])}
                 >
                     <span className={ClassNames.DATAGRID_COLUMN_TITLE}>
-                        <CheckBox onClick={evt => this.handleAllSelectClick(evt)} ariaLabel="Select All" />
+                        <CheckBox
+                            onClick={evt => this.handleSelectAllClick(evt)}
+                            ariaLabel="Select All"
+                            checked={selectAll !== undefined ? selectAll : undefined}
+                        />
                     </span>
                     <div className={ClassNames.DATAGRID_COLUMN_SEPARATOR} />
                 </div>
             );
         }
-        return <div>{""}</div>;
+        return (
+            <div>
+                <p> </p>
+            </div>
+        );
     }
 
-    private handleChange(evt: React.ChangeEvent<HTMLInputElement>) {
-        evt.target.checked = true;
-    }
-
-    private getSelectCell(keyElement: string): React.ReactElement {
+    // Populate checkbox or radio for individual rows.
+    private getSelectCell(rowID: string, isSelected: any): React.ReactElement {
         const {selectionType} = this.props;
-        const {selectAll} = this.state;
         if (selectionType === GridSelectionType.MULTI) {
             return (
                 <CheckBox
-                    key={keyElement}
+                    id={rowID}
                     ariaLabel="Select"
-                    onChange={this.handleChange.bind(this)}
-                    value={selectAll !== undefined ? selectAll : undefined}
+                    onClick={evt => this.handleSingleSelectClick(evt, rowID)}
+                    checked={isSelected !== undefined ? isSelected : undefined}
                 />
             );
         }
-        return <RadioButton value={keyElement} id={keyElement} />;
+        return <RadioButton value={rowID} id={rowID} />;
     }
 
     private buildDataGridHeader(): React.ReactElement {
@@ -190,11 +267,12 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     }
 
     private buildDataGridRow(
-        keyElement: string,
+        rowID: string,
         content: DataGridCell[],
         index: number,
         className?: string,
         style?: any,
+        isSelected?: boolean,
     ): React.ReactElement {
         const {selectionType} = this.props;
         return (
@@ -210,7 +288,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                         <div className={ClassNames.DATAGRID_SCROLLING_CELLS}>
                             {selectionType &&
                                 this.buildDataGridCell(
-                                    this.getSelectCell(keyElement),
+                                    this.getSelectCell(rowID, isSelected),
                                     classNames([
                                         ClassNames.DATAGRID_SELECT, //prettier
                                         ClassNames.DATAGRID_FIXED_COLUMN,
@@ -228,7 +306,6 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     }
 
     private buildDataGridCell(content: any, className?: string, style?: any): React.ReactElement {
-        console.log(content);
         return (
             <div role="gridcell" className={`${className} ${ClassNames.DATAGRID_CELLS}`} style={style}>
                 {content}
@@ -258,6 +335,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                 ])}
                 style={style}
             >
+                {this.buildDataGridActionBar()}
                 {this.buildDataGridBody()}
                 {this.buildDataGridFooter()}
                 <div className={ClassNames.DATAGRID_CAL_TABLE}>

@@ -12,7 +12,7 @@ import * as React from "react";
 import {storiesOf} from "@storybook/react";
 import {Icon} from "../icon";
 import {DataGrid, GridSelectionType} from "./DataGrid";
-import {normalColumns, normalRows, customRows, footer} from "./DataGridValues";
+import {normalColumns, normalRows, customRows, footer, actionBar} from "./DataGridValues";
 
 storiesOf("DataGrid", module)
     .add("Basic grid", () => (
@@ -23,16 +23,6 @@ storiesOf("DataGrid", module)
     .add("Grid with custom cells", () => (
         <div style={{width: "80%"}}>
             <DataGrid columns={normalColumns} data={customRows} footer={footer} />
-        </div>
-    ))
-    .add("Grid with single select option", () => (
-        <div style={{width: "80%"}}>
-            <DataGrid
-                columns={normalColumns}
-                data={normalRows}
-                footer={footer}
-                selectionType={GridSelectionType.SINGLE}
-            />
         </div>
     ))
     .add("Grid with multi select option", () => (

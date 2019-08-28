@@ -64,12 +64,12 @@ storiesOf("Checkboxes", module)
                 <SubTextWrapper shape="exclamation-circle" text="Error message" />
             </FormControl>
         </div>
-    ))
-    .add("Indeterminate checkboxes", () => (
-        <div>
-            <FormControl label="Indeterminate checkbox example">
-                <CheckBox label="option 1" defaultChecked="indeterminate" />
-                <SubTextWrapper shape="exclamation-circle" text="Helper text" />
-            </FormControl>
-        </div>
     ));
+// .add("Indeterminate checkboxes", () => (
+//     <div>
+//         <FormControl label="Indeterminate checkbox example">
+//             <CheckBox label="option 1" defaultChecked="indeterminate" />
+//             <SubTextWrapper shape="exclamation-circle" text="Helper text" />
+//         </FormControl>
+//     </div>
+// ));
