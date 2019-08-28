@@ -142,6 +142,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         allRows: this.props.data,
     };
 
+    /* ##########  DataGrid public methods start  ############ */
     // Function to return all selected rows
     getSelectedRows(): DataGridRow[] {
         const {allRows} = this.state;
@@ -351,7 +352,6 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                                 this.buildDataGridCell(
                                     this.buildSelectCell(rowID, isSelected),
                                     index,
-
                                     classNames([
                                         ClassNames.DATAGRID_SELECT, //prettier
                                         ClassNames.DATAGRID_FIXED_COLUMN,
@@ -406,7 +406,6 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                 ])}
                 style={style}
             >
-                {this.buildDataGridActionBar()}
                 {this.buildDataGridBody()}
                 {this.buildDataGridFooter()}
                 <div className={ClassNames.DATAGRID_CAL_TABLE}>
