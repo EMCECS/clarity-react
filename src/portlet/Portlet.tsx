@@ -16,7 +16,7 @@ import {Icon, Direction} from "../icon";
 type PortletProps = {
     style?: any;
     className?: string;
-    header: any;
+    header: string;
 };
 
 type PortletState = {

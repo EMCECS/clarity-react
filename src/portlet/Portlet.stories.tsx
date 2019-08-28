@@ -11,13 +11,14 @@
 import * as React from "react";
 import {storiesOf} from "@storybook/react";
 import {Portlet} from ".";
+import {Table} from "../tables/Table";
 
 storiesOf("Portlet", module).add("Basic Portlet", () => (
     <div className="clr-row">
         <div className="clr-col-lg-4 clr-col-md-8 clr-col-12">
             <Portlet header="Header- Porlet Component">
                 <div>Portlet Component </div>
-                <table className="table">
+                <Table className="table">
                     <thead>
                         <th>Decimal</th>
                         <th>Hexadecimal</th>
@@ -50,7 +51,7 @@ storiesOf("Portlet", module).add("Basic Portlet", () => (
                             <td>XV</td>
                         </tr>
                     </tbody>
-                </table>
+                </Table>
             </Portlet>
         </div>
     </div>
