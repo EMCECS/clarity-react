@@ -17,6 +17,7 @@ import {normalColumns, normalRows, customRows, footer, GridActions} from "./Data
 const datagridRef = React.createRef<DataGrid>();
 const datagridActionsRef = React.createRef<GridActions>();
 
+
 storiesOf("DataGrid", module)
     .add("Basic grid", () => (
         <div style={{width: "80%"}}>
@@ -65,6 +66,17 @@ storiesOf("DataGrid", module)
                     const rows = datagridRef.current!.getSelectedRows();
                     datagridActionsRef.current!.updateActions(rows);
                 }}
+            />
+        </div>
+    ))
+    .add("Grid with batch action", () => (
+        <div style={{width: "80%"}}>
+            <DataGrid
+                columns={normalColumns}
+                data={normalRows}
+                footer={footer}
+                selectionType={GridSelectionType.MULTI}
+                actionBar={actionBar}
             />
         </div>
     ));

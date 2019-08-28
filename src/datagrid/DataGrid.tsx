@@ -40,8 +40,12 @@ type DataGridProps = {
     columns: DataGridColumn[];
     data: DataGridRow[];
     footer?: DataGridFooter;
+<<<<<<< HEAD
     onRowSelect?: Function;
     onSelectAll?: Function;
+=======
+    actionBar?: DataGridActionBar;
+>>>>>>> more changes
 };
 
 /**
@@ -217,6 +221,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                     )}
                 </span>
                 <div className={ClassNames.DATAGRID_COLUMN_SEPARATOR} />
+
             </div>
         );
     }
@@ -348,6 +353,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                                 this.buildDataGridCell(
                                     this.buildSelectCell(rowID, isSelected),
                                     index,
+
                                     classNames([
                                         ClassNames.DATAGRID_SELECT, //prettier
                                         ClassNames.DATAGRID_FIXED_COLUMN,
@@ -402,6 +408,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                 ])}
                 style={style}
             >
+                {this.buildDataGridActionBar()}
                 {this.buildDataGridBody()}
                 {this.buildDataGridFooter()}
                 <div className={ClassNames.DATAGRID_CAL_TABLE}>

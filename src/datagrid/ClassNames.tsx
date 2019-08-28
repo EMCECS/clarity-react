@@ -36,4 +36,5 @@ export class ClassNames {
     public static DATAGRID_CAL_HEADER: string = "datagrid-calculation-header";
     public static DATAGRID_ACTION_BAR: string = "datagrid-action-bar";
     public static DATAGRID_SELECTED: string = "datagrid-selected";
+
 }

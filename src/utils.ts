@@ -29,3 +29,13 @@ export function allTrueOnKey(obj: any, key: any) {
     }
     return true;
 }
+
+// Find if a particular key in an object array is true for all elements in the array.
+export function allTrueOnKey(obj: any, key: any) {
+    obj.forEach(element => {
+        if (!element[key]) {
+            return false;
+        }
+    });
+    return true;
+}
