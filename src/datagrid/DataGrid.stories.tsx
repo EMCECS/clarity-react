@@ -11,8 +11,13 @@
 import * as React from "react";
 import {storiesOf} from "@storybook/react";
 import {Icon} from "../icon";
+import {Button} from "../forms/button";
 import {DataGrid, GridSelectionType} from "./DataGrid";
-import {normalColumns, normalRows, customRows, footer, actionBar} from "./DataGridValues";
+import {normalColumns, normalRows, customRows, footer, GridActions} from "./DataGridValues";
+
+// Refrence to call dataGrid methods
+const datagridRef = React.createRef<DataGrid>();
+const datagridActionsRef = React.createRef<GridActions>();
 
 storiesOf("DataGrid", module)
     .add("Basic grid", () => (
@@ -32,6 +37,22 @@ storiesOf("DataGrid", module)
                 data={normalRows}
                 footer={footer}
                 selectionType={GridSelectionType.MULTI}
+            />
+        </div>
+    ))
+    .add("Grid with batch action", () => (
+        <div style={{width: "80%"}}>
+            <GridActions ref={datagridActionsRef} />
+            <DataGrid
+                ref={datagridRef}
+                columns={normalColumns}
+                data={normalRows}
+                footer={footer}
+                selectionType={GridSelectionType.MULTI}
+                onRowSelect={() => {
+                    const rows = datagridRef.current!.getSelectedRows();
+                    datagridActionsRef.current!.updateActions(rows);
+                }}
             />
         </div>
     ));

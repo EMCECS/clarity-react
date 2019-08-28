@@ -12,6 +12,12 @@ import * as React from "react";
 import {Icon} from "../icon";
 import {Button} from "../forms/button";
 
+/**
+ * General file description :
+ * Data to render diffrent datagrids in storybook
+ */
+
+// Column Data
 export const normalColumns = [
     {
         content: "User ID",
@@ -27,6 +33,7 @@ export const normalColumns = [
     },
 ];
 
+// Row Data
 export const normalRows = [
     {
         content: [
@@ -81,6 +88,7 @@ export const normalRows = [
     },
 ];
 
+// Footer data
 export const footer = {
     content: "Total 2 users",
 };
@@ -132,11 +140,44 @@ export const customRows = [
     },
 ];
 
-export const actionBar = {
-    content: (
-        <div>
-            <Button key="basic">EDIT</Button>
-            <Button key="basic">DELELTE</Button>
-        </div>
-    ),
+// Grid Action component
+type GridActionsState = {
+    selectedRows: any[];
+    showEdit: boolean;
 };
+
+export class GridActions extends React.PureComponent<any, GridActionsState> {
+    state = {
+        selectedRows: [],
+        showEdit: false,
+    };
+
+    updateActions(rows: any) {
+        this.setState({
+            selectedRows: rows,
+            showEdit: rows.length === 1 ? true : false,
+        });
+    }
+
+    render() {
+        const {selectedRows, showEdit} = this.state;
+        return (
+            <div>
+                <Button key="new">NEW</Button>
+                {
+                    <Button key="edit" show={showEdit}>
+                        EDIT
+                    </Button>
+                }
+                <Button
+                    key="delete"
+                    onClick={() => {
+                        alert("Deleted" + selectedRows.length);
+                    }}
+                >
+                    DELELTE
+                </Button>
+            </div>
+        );
+    }
+}
