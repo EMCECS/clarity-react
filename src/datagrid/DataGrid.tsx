@@ -40,8 +40,8 @@ type DataGridProps = {
     columns: DataGridColumn[];
     data: DataGridRow[];
     footer?: DataGridFooter;
-    onRowSelect?: Function;
-    onSelectAll?: Function;
+    onRowSelect?: (rowId: any, selectionType: GridSelectionType) => void;
+    onSelectAll?: (value: boolean) => void;
 };
 
 /**
@@ -119,76 +119,28 @@ export enum GridSelectionType {
  * @param {allColumns} column data
  * @param {allRows} row data
  */
-type DataGridState = {
-    selectAll: boolean;
-    allColumns: DataGridColumn[];
-    allRows: DataGridRow[];
-};
 
 /**
  * DataGrid Componnet :
  * Displays data in grid format
  */
-export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> {
+export class DataGrid extends React.PureComponent<DataGridProps> {
     // Default props for datagrid
     static defaultProps = {
         pagination: false,
     };
 
-    // Initial state of datagrid
-    state: DataGridState = {
-        selectAll: false,
-        allColumns: this.props.columns,
-        allRows: this.props.data,
-    };
-
-    /* ##########  DataGrid public methods start  ############ */
-    // Function to return all selected rows
-    getSelectedRows(): DataGridRow[] {
-        const {allRows} = this.state;
-        let selectedRows = new Array();
-        if (this.state.selectAll) selectedRows = allRows;
-        else {
-            allRows.forEach(row => {
-                if (row["isSelected"]) selectedRows.push(row);
-            });
-        }
-        return selectedRows;
-    }
-
-    /* ##########  DataGrid public methods end  ############ */
-
     /* ##########  DataGrid private methods start  ############ */
     // Function to handle select/deselect of all rows
     private handleSelectAll = (evt: React.ChangeEvent<HTMLInputElement>) => {
-        const rows = this.state.allRows;
-        const value = this.state.selectAll;
         const {onSelectAll} = this.props;
-        rows.forEach(row => (row["isSelected"] = !value));
-        this.setState({
-            selectAll: !value,
-            allRows: rows,
-        });
-        onSelectAll && onSelectAll();
+        onSelectAll && onSelectAll(evt.target.checked);
     };
 
     // Function to handle select/deselect of single row
     private handleSelectSingle = (evt: React.ChangeEvent<HTMLInputElement>, rowID: any) => {
-        const rows = this.state.allRows;
         const {onRowSelect, selectionType} = this.props;
-        rows.forEach(row => {
-            if (row["rowID"] === rowID) {
-                const value = !row["isSelected"];
-                row["isSelected"] = value;
-            } else if (selectionType === GridSelectionType.SINGLE) {
-                row["isSelected"] = false;
-            }
-        });
-        this.setState({
-            allRows: [...rows],
-            selectAll: allTrueOnKey(rows, "isSelected"),
-        });
-        onRowSelect && onRowSelect();
+        onRowSelect && onRowSelect(rowID, selectionType!);
     };
     /* ##########  DataGrid private methods end  ############ */
 
@@ -197,7 +149,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     // function to render selectAll column
     private buildSelectColumn(): React.ReactElement {
         const {selectionType} = this.props;
-        const {selectAll} = this.state;
+        const selectAll = allTrueOnKey(this.props.data, "isSelected");
         return (
             <div
                 role="columnheader"

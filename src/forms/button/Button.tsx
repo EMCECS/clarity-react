@@ -46,6 +46,7 @@ export enum ButtonSize {
 // TODO: add loading support
 
 export class Button extends React.PureComponent<ButtonProps> {
+    private myRef = React.createRef<HTMLButtonElement>();
     static defaultProps = {
         defaultBtn: true,
         show: true,
@@ -69,10 +70,23 @@ export class Button extends React.PureComponent<ButtonProps> {
         ];
     }
 
+    disabled(value: boolean) {
+        this.myRef.current!.disabled = value;
+    }
+
+    show(value: boolean) {
+        if (value == true) {
+            this.myRef.current!.style.display = "";
+        } else {
+            this.myRef.current!.style.display = "none";
+        }
+    }
+
     render() {
         const {disabled, children, onClick, onSubmit, submit, icon, show} = this.props;
         return show ? (
             <button
+                ref={this.myRef}
                 disabled={disabled}
                 className={classNames(Button.getClassNames(this.props))}
                 onClick={onClick}
