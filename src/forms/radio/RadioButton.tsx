@@ -78,6 +78,7 @@ export class RadioButton extends React.PureComponent<RadioButtonProps> {
                     type="radio"
                     onChange={onChange}
                     style={style}
+                    checked={checked}
                 />
                 <label className={labelClassNames} htmlFor={id}>
                     {label && label}

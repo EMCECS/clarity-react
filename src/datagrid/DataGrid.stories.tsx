@@ -40,6 +40,16 @@ storiesOf("DataGrid", module)
             />
         </div>
     ))
+    .add("Grid with single select option", () => (
+        <div style={{width: "80%"}}>
+            <DataGrid
+                columns={normalColumns}
+                data={normalRows}
+                footer={footer}
+                selectionType={GridSelectionType.SINGLE}
+            />
+        </div>
+    ))
     .add("Grid with batch action", () => (
         <div style={{width: "80%"}}>
             <GridActions ref={datagridActionsRef} />
