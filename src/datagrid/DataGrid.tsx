@@ -158,7 +158,6 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     /* ##########  DataGrid private methods start  ############ */
     // Function to handle select/deselect of all rows
     private handleSelectAll = (evt: React.ChangeEvent<HTMLInputElement>) => {
-
         const rows = this.state.allRows;
         const value = this.state.selectAll;
         const {onSelectAll} = this.props;
@@ -174,7 +173,6 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // Function to handle select/deselect of single row
     private handleSelectSingle = (evt: React.ChangeEvent<HTMLInputElement>, rowID: any) => {
-
         const rows = this.state.allRows;
         const {onRowSelect, selectionType} = this.props;
         rows.forEach(row => {
@@ -221,7 +219,6 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                     )}
                 </span>
                 <div className={ClassNames.DATAGRID_COLUMN_SEPARATOR} />
-
             </div>
         );
     }

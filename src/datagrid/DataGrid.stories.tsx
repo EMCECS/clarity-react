@@ -45,10 +45,11 @@ storiesOf("DataGrid", module)
                 columns={normalColumns}
                 data={normalRows}
                 footer={footer}
-                selectionType={GridSelectionType.SINGLE}
+                selectionType={GridSelectionType.MULTI}
             />
         </div>
     ))
+
     .add("Grid with batch action", () => (
         <div style={{width: "80%"}}>
             <GridActions ref={datagridActionsRef} />
@@ -66,6 +67,7 @@ storiesOf("DataGrid", module)
                     const rows = datagridRef.current!.getSelectedRows();
                     datagridActionsRef.current!.updateActions(rows);
                 }}
+
             />
         </div>
     ))
