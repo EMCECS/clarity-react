@@ -10,9 +10,11 @@
 
 import * as React from "react";
 import {ClassNames} from "./ClassNames";
+import {classNames, allTrueOnKey} from "../utils";
 import {CheckBox} from "../forms/checkbox";
 import {RadioButton} from "../forms/radio";
-import {classNames, allTrueOnKey} from "../utils";
+import {Button} from "../forms/button";
+import {Icon} from "../icon";
 
 /**
  * General component description :
@@ -42,6 +44,7 @@ type DataGridProps = {
     footer?: DataGridFooter;
     onRowSelect?: Function;
     onSelectAll?: Function;
+    keyfield?: string;
 };
 
 /**
@@ -55,8 +58,9 @@ type DataGridProps = {
  * @param {onFilter} Function for custom filtering
  */
 type DataGridColumn = {
-    content: any;
-    sort?: boolean;
+    columnName: string;
+    columnID?: number; // For internal use
+    sort?: DataGridSort;
     filter?: boolean;
     className?: string;
     style?: any;
@@ -71,12 +75,12 @@ type DataGridColumn = {
  * @param {className} CSS class name
  * @param {style} CSS style
  */
-type DataGridRow = {
+export type DataGridRow = {
     content: DataGridCell[];
     className?: string;
     style?: any;
-    rowID?: string;
-    isSelected?: boolean;
+    rowID?: number; // not to take from user
+    isSelected?: boolean; // not to take from user
 };
 
 /**
@@ -87,6 +91,7 @@ type DataGridRow = {
  */
 type DataGridCell = {
     content: any;
+    columnName: string;
     className?: string;
     style?: any;
 };
@@ -104,6 +109,16 @@ type DataGridFooter = {
 };
 
 /**
+ * type for DataGridSort :
+ * @param {defaultSorOrder} if data in column by default sorted
+ * @param {sortFunction} function to perform sorting
+ */
+type DataGridSort = {
+    defaultSorOrder: SortOrder;
+    sortFunction: (data: DataGridRow[], order: SortOrder, columnName: string) => DataGridRow[];
+};
+
+/**
  * Enum for GridSelectionType :
  * @param {MULTI} for enabling multi row select
  * @param {SINGLE} for enabling single row select
@@ -111,6 +126,17 @@ type DataGridFooter = {
 export enum GridSelectionType {
     MULTI = "multi",
     SINGLE = "single",
+}
+
+/**
+ * Enum for sorting order :
+ * @param {MULTI} for enabling multi row select
+ * @param {SINGLE} for enabling single row select
+ */
+export enum SortOrder {
+    DESC = "descending",
+    ASC = "ascending ",
+    NONE = "none",
 }
 
 /**
@@ -142,6 +168,29 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         allRows: this.props.data,
     };
 
+    componentWillMount() {
+        this.setInitalState();
+    }
+
+    // Initialize state of grid
+    private setInitalState() {
+        const {allRows, allColumns} = this.state;
+
+        // set rowID = index in array
+        allRows.map((row, index) => {
+            row["rowID"] = index;
+        });
+
+        // set columnID = index in array
+        allColumns.map((col, index) => {
+            col["columnID"] = index;
+        });
+
+        this.setState({
+            allRows: [...allRows],
+            allColumns: [...allColumns],
+        });
+    }
     /* ##########  DataGrid public methods start  ############ */
     // Function to return all selected rows
     getSelectedRows(): DataGridRow[] {
@@ -177,8 +226,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         const {onRowSelect, selectionType} = this.props;
         rows.forEach(row => {
             if (row["rowID"] === rowID) {
-                const value = !row["isSelected"];
-                row["isSelected"] = value;
+                row["isSelected"] = !row["isSelected"];
             } else if (selectionType === GridSelectionType.SINGLE) {
                 row["isSelected"] = false;
             }
@@ -191,6 +239,31 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
             },
             () => onRowSelect && onRowSelect(),
         );
+    };
+
+    // Function to handle sorting
+    private handleSort = (
+        evt: React.MouseEvent<HTMLElement>,
+        columnName: string,
+        columnID: any,
+        sortFunction: Function,
+        defaultSorOrder: SortOrder,
+    ) => {
+        const {allRows, allColumns} = this.state;
+        alert("col ID" + columnID);
+        if (columnID) {
+            let nextSortOrder = SortOrder.DESC;
+            let currentSortOrder = allColumns[columnID].sort!.defaultSorOrder;
+            if (currentSortOrder === SortOrder.NONE || currentSortOrder === SortOrder.DESC)
+                nextSortOrder = SortOrder.ASC;
+            const rows = sortFunction(this.state.allRows, nextSortOrder, columnName);
+            allColumns[columnID].sort!.defaultSorOrder = nextSortOrder;
+
+            this.setState({
+                allRows: [...rows],
+                allColumns: [...allColumns],
+            });
+        }
     };
     /* ##########  DataGrid private methods end  ############ */
 
@@ -287,13 +360,8 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                         <div className={ClassNames.DATAGRID_ROW_SCROLLABLE}>
                             {selectionType && this.buildSelectColumn()}
                             {columns &&
-                                columns.map((column: any, index: number) => {
-                                    return this.buildDataGridColumn(
-                                        column.content,
-                                        index,
-                                        column.className,
-                                        column.style,
-                                    );
+                                columns.map((column: any) => {
+                                    return this.buildDataGridColumn(column);
                                 })}
                         </div>
                     </div>
@@ -303,7 +371,10 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     }
 
     // Function to build datagrid colums
-    private buildDataGridColumn(content: any, index: number, className?: string, style?: any): React.ReactElement {
+
+    private buildDataGridColumn(column: DataGridColumn): React.ReactElement {
+        const {columnName, columnID, className, style, sort} = column;
+        // const {defaultSorOrder, sortFunction} = sort!;
         return (
             <div
                 role="columnheader"
@@ -313,7 +384,33 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                 key={"col-" + index}
             >
                 <div className={ClassNames.DATAGRID_COLUMN_FLEX}>
-                    <span className={ClassNames.DATAGRID_COLUMN_TITLE}>{content}</span>
+                    {sort != undefined ? (
+                        <Button
+                            key="sort"
+                            defaultBtn={false}
+                            className={classNames([
+                                ClassNames.DATAGRID_COLUMN_TITLE,
+                                ClassNames.DATAGRID_NG_STAR_INSERTED,
+                            ])}
+                            onClick={evt =>
+                                this.handleSort(evt, columnName, columnID, sort.sortFunction, sort.defaultSorOrder)
+                            }
+                        >
+                            {columnName}
+                            {sort.defaultSorOrder !== SortOrder.NONE && (
+                                <Icon
+                                    shape={sort.defaultSorOrder == SortOrder.DESC ? "arrow down" : "arrow up"}
+                                    className={classNames([
+                                        ClassNames.DATAGRID_SORT_ICON,
+                                        ClassNames.DATAGRID_NG_STAR_INSERTED,
+                                    ])}
+                                />
+                            )}
+                        </Button>
+                    ) : (
+                        <span className={ClassNames.DATAGRID_COLUMN_TITLE}>{columnName}</span>
+                    )}
+
                     <div className={ClassNames.DATAGRID_COLUMN_SEPARATOR}>
                         <div aria-hidden="true" className={ClassNames.DATAGRID_COLUMN_HANDLE} />
                         <div className={ClassNames.DATAGRID_COLUMN_RESIZE} />

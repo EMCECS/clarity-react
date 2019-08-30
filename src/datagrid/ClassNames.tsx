@@ -36,5 +36,6 @@ export class ClassNames {
     public static DATAGRID_CAL_HEADER: string = "datagrid-calculation-header";
     public static DATAGRID_ACTION_BAR: string = "datagrid-action-bar";
     public static DATAGRID_SELECTED: string = "datagrid-selected";
-
+    public static DATAGRID_NG_STAR_INSERTED: string = "ng-star-inserted";
+    public static DATAGRID_SORT_ICON: string = "sort-icon";
 }

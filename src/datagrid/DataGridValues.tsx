@@ -11,6 +11,7 @@
 import * as React from "react";
 import {Icon} from "../icon";
 import {Button} from "../forms/button";
+import {SortOrder, DataGridRow} from "./DataGrid";
 
 /**
  * General file description :
@@ -19,72 +20,37 @@ import {Button} from "../forms/button";
 
 // Column Data
 export const normalColumns = [
-    {
-        content: "User ID",
-    },
-    {
-        content: "Name",
-    },
-    {
-        content: "Creation Date",
-    },
-    {
-        content: "Favorite color",
-    },
+    {columnName: "User ID"},
+    {columnName: "Name"},
+    {columnName: "Creation Date"},
+    {columnName: "Favorite color"},
 ];
 
 // Row Data
 export const normalRows = [
     {
         content: [
-            {
-                content: 41512,
-            },
-            {
-                content: "Georgia",
-            },
-            {
-                content: "Sep 11, 2008",
-            },
-            {
-                content: "Blue",
-            },
+            {columnName: "User ID", content: 41512},
+            {columnName: "Name", content: "Georgia"},
+            {columnName: "Creation Date", content: "Sep 11, 2008"},
+            {columnName: "Favorite color", content: "Blue"},
         ],
-        rowID: "Georgia",
     },
     {
         content: [
-            {
-                content: 16166,
-            },
-            {
-                content: "Brynn",
-            },
-            {
-                content: "Aug 2, 2014",
-            },
-            {
-                content: "Orange",
-            },
+            {columnName: "User ID", content: 16166},
+            {columnName: "Name", content: "Brynn"},
+            {columnName: "Creation Date", content: "Aug 2, 2014"},
+            {columnName: "Favorite color", content: "Orange"},
         ],
-        rowID: "Brynn",
     },
     {
         content: [
-            {
-                content: 30574,
-            },
-            {
-                content: "Brad",
-            },
-            {
-                content: "Jan 4, 2019",
-            },
-            {
-                content: "Yellow",
-            },
+            {columnName: "User ID", content: 30574},
+            {columnName: "Name", content: "Brad"},
+            {columnName: "Creation Date", content: "Jan 4, 2019"},
+            {columnName: "Favorite color", content: "Yellow"},
         ],
-        rowID: "Brad",
     },
 ];
 
@@ -96,16 +62,11 @@ export const footer = {
 export const customRows = [
     {
         content: [
+            {columnName: "User ID", content: 41512},
+            {columnName: "Name", content: "Georgia"},
+            {columnName: "Creation Date", content: "Sep 11, 2008"},
             {
-                content: 41512,
-            },
-            {
-                content: "Georgia",
-            },
-            {
-                content: "Sep 11, 2008",
-            },
-            {
+                columnName: "Favorite color",
                 content: (
                     <div>
                         <Icon shape="time" />
@@ -114,20 +75,14 @@ export const customRows = [
                 ),
             },
         ],
-        rowID: "Georgia",
     },
     {
         content: [
+            {columnName: "User ID", content: 16166},
+            {columnName: "Name", content: "Brynn"},
+            {columnName: "Creation Date", content: "Aug 2, 2014"},
             {
-                content: 16166,
-            },
-            {
-                content: "Brynn",
-            },
-            {
-                content: "Aug 2, 2014",
-            },
-            {
+                columnName: "Favorite color",
                 content: (
                     <div>
                         <Icon shape="time" />
@@ -136,10 +91,66 @@ export const customRows = [
                 ),
             },
         ],
-        rowID: "Brynn",
     },
 ];
 
+// Column Data
+export const sortColumns = [
+    {columnName: "User ID", sort: {defaultSorOrder: SortOrder.ASC, sortFunction: sortFunction}},
+    {columnName: "Name", sort: {defaultSorOrder: SortOrder.NONE, sortFunction: sortFunction}},
+    {columnName: "Creation Date"},
+    {columnName: "Favorite color"},
+];
+
+// Row Data
+export const sortRows = [
+    {
+        content: [
+            {columnName: "User ID", content: 41512},
+            {columnName: "Name", content: "Georgia"},
+            {columnName: "Creation Date", content: "Sep 11, 2008"},
+            {columnName: "Favorite color", content: "Blue"},
+        ],
+    },
+    {
+        content: [
+            {columnName: "User ID", content: 16166},
+            {columnName: "Name", content: "Brynn"},
+            {columnName: "Creation Date", content: "Aug 2, 2014"},
+            {columnName: "Favorite color", content: "Orange"},
+        ],
+    },
+    {
+        content: [
+            {columnName: "User ID", content: 30574},
+            {columnName: "Name", content: "Brad"},
+            {columnName: "Creation Date", content: "Jan 4, 2019"},
+            {columnName: "Favorite color", content: "Yellow"},
+        ],
+    },
+];
+
+function sortFunction(rows: DataGridRow[], sortOrder: SortOrder, columnName: string) {
+    alert("in sort");
+    rows.sort(function(first: DataGridRow, second: DataGridRow): number {
+        let result = 0;
+        let firstRecord = first.content.find(function(element: any) {
+            return element.columnID === columnName;
+        });
+
+        let secondRecord = first.content.find(function(element: any) {
+            return element.columnID === columnName;
+        });
+
+        if (firstRecord && secondRecord) {
+            if (sortOrder == SortOrder.ASC) result = firstRecord.content - secondRecord.content;
+            else if (sortOrder == SortOrder.DESC) result = secondRecord.content - firstRecord.content;
+        }
+        return result;
+    });
+
+    return rows;
+}
 // Grid Action component
 type GridActionsState = {
     selectedRows: any[];
