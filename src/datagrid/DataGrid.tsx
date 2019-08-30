@@ -191,7 +191,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
             allColumns: [...allColumns],
         });
     }
-    /* ##########  DataGrid public methods start  ############ */
+
     // Function to return all selected rows
     getSelectedRows(): DataGridRow[] {
         const {allRows} = this.state;
