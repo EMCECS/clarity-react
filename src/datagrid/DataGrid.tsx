@@ -142,21 +142,17 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         allRows: this.props.data,
     };
 
-    /* ##########  DataGrid public methods start  ############ */
     // Function to return all selected rows
     getSelectedRows(): DataGridRow[] {
         const {allRows} = this.state;
         let selectedRows = new Array();
-        if (this.state.selectAll) selectedRows = allRows;
-        else {
-            allRows.forEach(row => {
-                if (row["isSelected"]) selectedRows.push(row);
-            });
+        if (this.state.selectAll) {
+            selectedRows = allRows;
+        } else {
+            selectedRows = allRows.filter(row => row["isSelected"] === true);
         }
         return selectedRows;
     }
-
-    /* ##########  DataGrid public methods end  ############ */
 
     /* ##########  DataGrid private methods start  ############ */
     // Function to handle select/deselect of all rows
