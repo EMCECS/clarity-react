@@ -30,6 +30,7 @@ type RadioButtonProps = {
 export class RadioButton extends React.PureComponent<RadioButtonProps> {
     static defaultProps = {
         inButtonGroup: false,
+        disabled: false,
     };
 
     key: string | undefined;
@@ -71,18 +72,16 @@ export class RadioButton extends React.PureComponent<RadioButtonProps> {
                     className="radio"
                     name={name}
                     id={id}
-                    defaultChecked={checked}
                     value={value}
                     disabled={disabled}
                     type="radio"
                     onChange={onChange}
                     style={style}
+                    checked={checked}
                 />
-                {label && (
-                    <label className={labelClassNames} htmlFor={id}>
-                        {label}
-                    </label>
-                )}
+                <label className={labelClassNames} htmlFor={id}>
+                    {label && label}
+                </label>
                 {children}
             </div>
         );
