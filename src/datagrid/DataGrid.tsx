@@ -49,7 +49,7 @@ type DataGridProps = {
 
 /**
  * type for DataGridColumn :
- * @param {content} column data
+ * @param {columnName} column data
  * @param {sort} does colum support sorting
  * @param {filter} does colum support filtering
  * @param {className} CSS class name
@@ -231,7 +231,6 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                 row["isSelected"] = false;
             }
         });
-
         this.setState(
             {
                 allRows: [...rows],
@@ -250,7 +249,6 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         defaultSorOrder: SortOrder,
     ) => {
         const {allRows, allColumns} = this.state;
-        alert("col ID" + columnID);
         if (columnID) {
             let nextSortOrder = SortOrder.DESC;
             let currentSortOrder = allColumns[columnID].sort!.defaultSorOrder;
@@ -360,8 +358,8 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                         <div className={ClassNames.DATAGRID_ROW_SCROLLABLE}>
                             {selectionType && this.buildSelectColumn()}
                             {columns &&
-                                columns.map((column: any) => {
-                                    return this.buildDataGridColumn(column);
+                                columns.map((column: any, index: number) => {
+                                    return this.buildDataGridColumn(column, index);
                                 })}
                         </div>
                     </div>
@@ -372,9 +370,8 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // Function to build datagrid colums
 
-    private buildDataGridColumn(column: DataGridColumn): React.ReactElement {
+    private buildDataGridColumn(column: DataGridColumn, index: number): React.ReactElement {
         const {columnName, columnID, className, style, sort} = column;
-        // const {defaultSorOrder, sortFunction} = sort!;
         return (
             <div
                 role="columnheader"

@@ -178,7 +178,6 @@ export class GridActions extends React.PureComponent<any, GridActionsState> {
                 <Button key="edit" show={showEdit}>
                     EDIT
                 </Button>
-
                 <Button
                     key="delete"
                     onClick={() => {

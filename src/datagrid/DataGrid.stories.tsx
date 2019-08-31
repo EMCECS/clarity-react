@@ -83,6 +83,10 @@ storiesOf("DataGrid", module)
                     const rows = datagridRef.current!.getSelectedRows();
                     datagridActionsRef.current!.updateActions(rows);
                 }}
+                onSelectAll={() => {
+                    const rows = datagridRef.current!.getSelectedRows();
+                    datagridActionsRef.current!.updateActions(rows);
+                }}
             />
         </div>
     ))

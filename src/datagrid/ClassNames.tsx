@@ -38,4 +38,5 @@ export class ClassNames {
     public static DATAGRID_SELECTED: string = "datagrid-selected";
     public static DATAGRID_NG_STAR_INSERTED: string = "ng-star-inserted";
     public static DATAGRID_SORT_ICON: string = "sort-icon";
+    public static DATAGRID_SELECTED: string = "datagrid-selected";
 }
