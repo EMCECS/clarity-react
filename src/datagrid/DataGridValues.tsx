@@ -164,11 +164,9 @@ export class GridActions extends React.PureComponent<any, GridActionsState> {
         return (
             <div>
                 <Button key="new">NEW</Button>
-                {
-                    <Button key="edit" show={showEdit}>
-                        EDIT
-                    </Button>
-                }
+                <Button key="edit" show={showEdit}>
+                    EDIT
+                </Button>
                 <Button
                     key="delete"
                     onClick={() => {

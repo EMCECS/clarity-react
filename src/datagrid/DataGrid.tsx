@@ -161,11 +161,13 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         const value = this.state.selectAll;
         const {onSelectAll} = this.props;
         rows.forEach(row => (row["isSelected"] = !value));
-        this.setState({
-            selectAll: !value,
-            allRows: rows,
-        });
-        onSelectAll && onSelectAll();
+        this.setState(
+            {
+                selectAll: !value,
+                allRows: rows,
+            },
+            () => onSelectAll && onSelectAll(),
+        );
     };
 
     // Function to handle select/deselect of single row
@@ -180,11 +182,13 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                 row["isSelected"] = false;
             }
         });
-        this.setState({
-            allRows: [...rows],
-            selectAll: allTrueOnKey(rows, "isSelected"),
-        });
-        onRowSelect && onRowSelect();
+        this.setState(
+            {
+                allRows: [...rows],
+                selectAll: allTrueOnKey(rows, "isSelected"),
+            },
+            () => onRowSelect && onRowSelect(),
+        );
     };
     /* ##########  DataGrid private methods end  ############ */
 
@@ -281,8 +285,13 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                         <div className={ClassNames.DATAGRID_ROW_SCROLLABLE}>
                             {selectionType && this.buildSelectColumn()}
                             {columns &&
-                                columns.map((column: any) => {
-                                    return this.buildDataGridColumn(column.content, column.className, column.style);
+                                columns.map((column: any, index: number) => {
+                                    return this.buildDataGridColumn(
+                                        column.content,
+                                        index,
+                                        column.className,
+                                        column.style,
+                                    );
                                 })}
                         </div>
                     </div>
@@ -292,13 +301,14 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     }
 
     // Function to build datagrid colums
-    private buildDataGridColumn(content: any, className?: string, style?: any): React.ReactElement {
+    private buildDataGridColumn(content: any, index: number, className?: string, style?: any): React.ReactElement {
         return (
             <div
                 role="columnheader"
                 className={classNames([ClassNames.DATAGRID_COLUMN, className])}
                 aria-sort="none"
                 style={style}
+                key={"col-" + index}
             >
                 <div className={ClassNames.DATAGRID_COLUMN_FLEX}>
                     <span className={ClassNames.DATAGRID_COLUMN_TITLE}>{content}</span>
@@ -325,9 +335,10 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         return (
             <div
                 role="rowgroup"
-                className={classNames([ClassNames.DATAGRID_ROW, className])}
+                className={classNames([ClassNames.DATAGRID_ROW, isSelected && ClassNames.DATAGRID_SELECTED, className])}
                 aria-owns={"clr-dg-row" + index}
                 style={style}
+                key={"row-" + index}
             >
                 <div className={ClassNames.DATAGRID_ROW_MASTER} role="row" id="clr-dg-row1">
                     <div className={ClassNames.DATAGRID_ROW_STICKY} />
@@ -336,14 +347,15 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                             {selectionType &&
                                 this.buildDataGridCell(
                                     this.buildSelectCell(rowID, isSelected),
+                                    index,
                                     classNames([
                                         ClassNames.DATAGRID_SELECT, //prettier
                                         ClassNames.DATAGRID_FIXED_COLUMN,
                                     ]),
                                 )}
                             {content &&
-                                content.map((cell: any) => {
-                                    return this.buildDataGridCell(cell.content, cell.className, cell.style);
+                                content.map((cell: any, index: number) => {
+                                    return this.buildDataGridCell(cell.content, index, cell.className, cell.style);
                                 })}
                         </div>
                     </div>
@@ -353,9 +365,14 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     }
 
     // function to build datagrid cell
-    private buildDataGridCell(content: any, className?: string, style?: any): React.ReactElement {
+    private buildDataGridCell(content: any, index: number, className?: string, style?: any): React.ReactElement {
         return (
-            <div role="gridcell" className={`${className} ${ClassNames.DATAGRID_CELLS}`} style={style}>
+            <div
+                role="gridcell"
+                key={"cell-" + index}
+                className={`${className} ${ClassNames.DATAGRID_CELLS}`}
+                style={style}
+            >
                 {content}
             </div>
         );

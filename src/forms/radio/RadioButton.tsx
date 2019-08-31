@@ -72,7 +72,6 @@ export class RadioButton extends React.PureComponent<RadioButtonProps> {
                     className="radio"
                     name={name}
                     id={id}
-                    defaultChecked={checked}
                     value={value}
                     disabled={disabled}
                     type="radio"

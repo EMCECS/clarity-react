@@ -10,8 +10,6 @@
 
 import * as React from "react";
 import {storiesOf} from "@storybook/react";
-import {Icon} from "../icon";
-import {Button} from "../forms/button";
 import {DataGrid, GridSelectionType} from "./DataGrid";
 import {normalColumns, normalRows, customRows, footer, GridActions} from "./DataGridValues";
 
@@ -60,6 +58,10 @@ storiesOf("DataGrid", module)
                 footer={footer}
                 selectionType={GridSelectionType.MULTI}
                 onRowSelect={() => {
+                    const rows = datagridRef.current!.getSelectedRows();
+                    datagridActionsRef.current!.updateActions(rows);
+                }}
+                onSelectAll={() => {
                     const rows = datagridRef.current!.getSelectedRows();
                     datagridActionsRef.current!.updateActions(rows);
                 }}
