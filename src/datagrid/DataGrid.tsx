@@ -176,19 +176,9 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     private setInitalState() {
         const {allRows, allColumns} = this.state;
 
-        // set rowID = index in array
-        allRows.map((row, index) => {
-            row["rowID"] = index;
-        });
-
-        // set columnID = index in array
-        allColumns.map((col, index) => {
-            col["columnID"] = index;
-        });
-
         this.setState({
-            allRows: [...allRows],
-            allColumns: [...allColumns],
+            allRows: [...this.updateRowIDs(allRows)],
+            allColumns: [...this.updateColumnIDs(allColumns)],
         });
     }
 
@@ -249,12 +239,15 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         defaultSorOrder: SortOrder,
     ) => {
         const {allRows, allColumns} = this.state;
-        if (columnID) {
+        if (columnID != undefined) {
             let nextSortOrder = SortOrder.DESC;
-            let currentSortOrder = allColumns[columnID].sort!.defaultSorOrder;
+            const currentSortOrder = allColumns[columnID].sort!.defaultSorOrder;
+
             if (currentSortOrder === SortOrder.NONE || currentSortOrder === SortOrder.DESC)
                 nextSortOrder = SortOrder.ASC;
-            const rows = sortFunction(this.state.allRows, nextSortOrder, columnName);
+
+            const rows = this.updateRowIDs(sortFunction(this.state.allRows, nextSortOrder, columnName));
+            // update sort order
             allColumns[columnID].sort!.defaultSorOrder = nextSortOrder;
 
             this.setState({
@@ -263,6 +256,22 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
             });
         }
     };
+
+    updateRowIDs(rows: DataGridRow[]) {
+        // set rowID = index in array
+        rows.map((row: DataGridRow, index: number) => {
+            row["rowID"] = index;
+        });
+        return rows;
+    }
+
+    updateColumnIDs(cols: DataGridColumn[]) {
+        // set columnID = index in array
+        cols.map((cols: DataGridColumn, index: number) => {
+            cols["columnID"] = index;
+        });
+        return cols;
+    }
     /* ##########  DataGrid private methods end  ############ */
 
     /* ##########  DataGrid DOM methods start  ############ */
@@ -319,14 +328,14 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // function to build datagrid body
     private buildDataGridBody(): React.ReactElement {
-        const {data} = this.props;
+        const {allRows} = this.state;
         return (
             <div className={ClassNames.DATAGRID}>
                 <div className={ClassNames.DATAGRID_TABLE_WRAPPER}>
                     <div className={ClassNames.DATAGRID_TABLE} role="grid">
                         {this.buildDataGridHeader()}
-                        {data ? (
-                            data.map((row: any, index: number) => {
+                        {allRows ? (
+                            allRows.map((row: any, index: number) => {
                                 return this.buildDataGridRow(
                                     row.rowID,
                                     row.content,
@@ -349,7 +358,8 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // Function to build datagrid header
     private buildDataGridHeader(): React.ReactElement {
-        const {columns, selectionType} = this.props;
+        const {selectionType} = this.props;
+        const {allColumns} = this.state;
         return (
             <div className={ClassNames.DATAGRID_HEADER} role="rowgroup">
                 <div className={ClassNames.DATAGRID_ROW} role="row">
@@ -357,8 +367,8 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                         <div className={ClassNames.DATAGRID_ROW_STICKY} />
                         <div className={ClassNames.DATAGRID_ROW_SCROLLABLE}>
                             {selectionType && this.buildSelectColumn()}
-                            {columns &&
-                                columns.map((column: any, index: number) => {
+                            {allColumns &&
+                                allColumns.map((column: any, index: number) => {
                                     return this.buildDataGridColumn(column, index);
                                 })}
                         </div>
@@ -475,6 +485,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // function to build datagrid footer
     private buildDataGridFooter(): React.ReactElement {
+        // Need to take this from state in future
         const {footer} = this.props;
         return (
             <div

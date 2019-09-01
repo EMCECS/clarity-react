@@ -11,7 +11,7 @@
 import * as React from "react";
 import {storiesOf} from "@storybook/react";
 import {DataGrid, GridSelectionType} from "./DataGrid";
-import {normalColumns, normalRows, customRows, footer, GridActions, sortColumns, sortRows} from "./DataGridValues";
+import {normalColumns, normalRows, customRows, footer, GridActions, sortColumns} from "./DataGridValues";
 
 // Refrence to call dataGrid methods
 const datagridRef = React.createRef<DataGrid>();
@@ -92,6 +92,6 @@ storiesOf("DataGrid", module)
     ))
     .add("Grid with sorting", () => (
         <div style={{width: "80%"}}>
-            <DataGrid columns={sortColumns} data={sortRows} footer={footer} />
+            <DataGrid columns={sortColumns} data={normalRows} footer={footer} />
         </div>
     ));

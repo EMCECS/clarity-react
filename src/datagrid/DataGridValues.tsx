@@ -102,50 +102,38 @@ export const sortColumns = [
     {columnName: "Favorite color"},
 ];
 
-// Row Data
-export const sortRows = [
-    {
-        content: [
-            {columnName: "User ID", content: 41512},
-            {columnName: "Name", content: "Georgia"},
-            {columnName: "Creation Date", content: "Sep 11, 2008"},
-            {columnName: "Favorite color", content: "Blue"},
-        ],
-    },
-    {
-        content: [
-            {columnName: "User ID", content: 16166},
-            {columnName: "Name", content: "Brynn"},
-            {columnName: "Creation Date", content: "Aug 2, 2014"},
-            {columnName: "Favorite color", content: "Orange"},
-        ],
-    },
-    {
-        content: [
-            {columnName: "User ID", content: 30574},
-            {columnName: "Name", content: "Brad"},
-            {columnName: "Creation Date", content: "Jan 4, 2019"},
-            {columnName: "Favorite color", content: "Yellow"},
-        ],
-    },
-];
-
+// Custom sorting fucntion for number and string type
 function sortFunction(rows: DataGridRow[], sortOrder: SortOrder, columnName: string) {
-    alert("in sort");
     rows.sort(function(first: DataGridRow, second: DataGridRow): number {
         let result = 0;
         let firstRecord = first.content.find(function(element: any) {
-            return element.columnID === columnName;
+            if (element.columnName === columnName) return element;
         });
 
-        let secondRecord = first.content.find(function(element: any) {
-            return element.columnID === columnName;
+        let secondRecord = second.content.find(function(element: any) {
+            if (element.columnName === columnName) return element;
         });
 
         if (firstRecord && secondRecord) {
-            if (sortOrder == SortOrder.ASC) result = firstRecord.content - secondRecord.content;
-            else if (sortOrder == SortOrder.DESC) result = secondRecord.content - firstRecord.content;
+            const contentType = typeof firstRecord.content;
+
+            if (sortOrder === SortOrder.ASC) {
+                if (contentType === "number") {
+                    result = firstRecord.content - secondRecord.content;
+                } else if (contentType === "string") {
+                    if (firstRecord.content > secondRecord.content) result = -1;
+                    else if (firstRecord.content < secondRecord.content) result = 1;
+                }
+            } else if (sortOrder == SortOrder.DESC) {
+                if (contentType === "number") {
+                    result = secondRecord.content - firstRecord.content;
+                } else if (contentType === "string") {
+                    if (secondRecord.content > firstRecord.content) result = -1;
+                    else if (secondRecord.content < firstRecord.content) result = 1;
+                }
+            }
         }
+
         return result;
     });
 
