@@ -94,15 +94,39 @@ export const customRows = [
     },
 ];
 
-// Column Data
+// Column Data with sort option
 export const sortColumns = [
-    {columnName: "User ID", sort: {defaultSorOrder: SortOrder.ASC, sortFunction: sortFunction}},
-    {columnName: "Name", sort: {defaultSorOrder: SortOrder.NONE, sortFunction: sortFunction}},
+    {columnName: "User ID", sort: {defaultSortOrder: SortOrder.ASC, sortFunction: sortFunction}},
+    {columnName: "Name", sort: {defaultSortOrder: SortOrder.NONE, sortFunction: sortFunction}},
     {columnName: "Creation Date"},
     {columnName: "Favorite color"},
 ];
 
-// Custom sorting fucntion for number and string type
+//Columns with filter option
+export const filterColumns = [
+    {columnName: "User ID", onFilter: filterFunction},
+    {columnName: "Name", onFilter: filterFunction},
+    {columnName: "Creation Date"},
+    {columnName: "Favorite color"},
+];
+
+//Columns with filter and sort
+export const sortAndFilterColumns = [
+    {
+        columnName: "User ID",
+        sort: {defaultSortOrder: SortOrder.ASC, sortFunction: sortFunction},
+        onFilter: filterFunction,
+    },
+    {
+        columnName: "Name",
+        sort: {defaultSortOrder: SortOrder.NONE, sortFunction: sortFunction},
+        onFilter: filterFunction,
+    },
+    {columnName: "Creation Date"},
+    {columnName: "Favorite color"},
+];
+
+// Custom sorting function for number and string type
 function sortFunction(rows: DataGridRow[], sortOrder: SortOrder, columnName: string) {
     rows.sort(function(first: DataGridRow, second: DataGridRow): number {
         let result = 0;
@@ -139,6 +163,25 @@ function sortFunction(rows: DataGridRow[], sortOrder: SortOrder, columnName: str
 
     return rows;
 }
+
+//Custom function to filter data
+function filterFunction(rows: DataGridRow[], columnValue: string) {
+    if (columnValue === "" || columnValue === undefined) {
+        return normalRows;
+    }
+    let newRows = rows.filter(function(row) {
+        let matchFound = false;
+        for (let index in row.content) {
+            let content = String(row.content[index].content);
+            if (content.indexOf(columnValue) !== -1) {
+                matchFound = true;
+            }
+        }
+        if (matchFound) return row;
+    });
+    return newRows;
+}
+
 // Grid Action component
 type GridActionsState = {
     selectedRows: any[];
@@ -172,7 +215,7 @@ export class GridActions extends React.PureComponent<any, GridActionsState> {
                         alert("Deleted" + selectedRows.length);
                     }}
                 >
-                    DELELTE
+                    DELETE
                 </Button>
             </div>
         );

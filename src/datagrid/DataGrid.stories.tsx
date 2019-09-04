@@ -11,7 +11,16 @@
 import * as React from "react";
 import {storiesOf} from "@storybook/react";
 import {DataGrid, GridSelectionType} from "./DataGrid";
-import {normalColumns, normalRows, customRows, footer, GridActions, sortColumns} from "./DataGridValues";
+import {
+    normalColumns,
+    normalRows,
+    customRows,
+    footer,
+    GridActions,
+    sortColumns,
+    filterColumns,
+    sortAndFilterColumns,
+} from "./DataGridValues";
 
 // Refrence to call dataGrid methods
 const datagridRef = React.createRef<DataGrid>();
@@ -44,32 +53,11 @@ storiesOf("DataGrid", module)
                 columns={normalColumns}
                 data={normalRows}
                 footer={footer}
-                selectionType={GridSelectionType.MULTI}
+                selectionType={GridSelectionType.SINGLE}
             />
         </div>
     ))
 
-    .add("Grid with batch action", () => (
-        <div style={{width: "80%"}}>
-            <GridActions ref={datagridActionsRef} />
-            <DataGrid
-                ref={datagridRef}
-                columns={normalColumns}
-                data={normalRows}
-                footer={footer}
-                selectionType={GridSelectionType.MULTI}
-                onRowSelect={() => {
-                    const rows = datagridRef.current!.getSelectedRows();
-                    datagridActionsRef.current!.updateActions(rows);
-                }}
-                onSelectAll={() => {
-                    const rows = datagridRef.current!.getSelectedRows();
-                    datagridActionsRef.current!.updateActions(rows);
-                }}
-
-            />
-        </div>
-    ))
     .add("Grid with batch action", () => (
         <div style={{width: "80%"}}>
             <GridActions ref={datagridActionsRef} />
@@ -93,5 +81,15 @@ storiesOf("DataGrid", module)
     .add("Grid with sorting", () => (
         <div style={{width: "80%"}}>
             <DataGrid columns={sortColumns} data={normalRows} footer={footer} />
+        </div>
+    ))
+    .add("Grid with filter", () => (
+        <div style={{width: "80%"}}>
+            <DataGrid columns={filterColumns} data={normalRows} footer={footer} />
+        </div>
+    ))
+    .add("Grid with sorting and filter", () => (
+        <div style={{width: "80%"}}>
+            <DataGrid columns={sortAndFilterColumns} data={normalRows} footer={footer} />
         </div>
     ));

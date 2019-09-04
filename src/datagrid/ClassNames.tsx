@@ -38,5 +38,12 @@ export class ClassNames {
     public static DATAGRID_SELECTED: string = "datagrid-selected";
     public static DATAGRID_NG_STAR_INSERTED: string = "ng-star-inserted";
     public static DATAGRID_SORT_ICON: string = "sort-icon";
-    public static DATAGRID_SELECTED: string = "datagrid-selected";
+    public static CLR_FILTER: string = "clr-dg-filter";
+    public static CLR_POPOVER_CONTENT: string = "clr-popover-content";
+    public static DATARID_FILTER: string = "datagrid-filter";
+    public static DATAGRID_FILTER_BUTTON: string =
+        "datagrid-filter-toggle clr-anchor clr-smart-open-close datagrid-filter-open";
+    public static DATAGRID_FILTER_INPUT: string = "clr-input ng-pristine ng-valid ng-touched";
+    public static DATAGRID_FILTER_WRAPPER: string = "data-grid-filter-close-wrapper";
+    public static DATAGRID_FILTER_POPUP_CLOSE: string = "close clr-smart-close-button";
 }

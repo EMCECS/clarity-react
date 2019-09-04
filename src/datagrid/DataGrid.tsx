@@ -15,6 +15,7 @@ import {CheckBox} from "../forms/checkbox";
 import {RadioButton} from "../forms/radio";
 import {Button} from "../forms/button";
 import {Icon} from "../icon";
+import {DataGridFilter} from "./DataGridFilter";
 
 /**
  * General component description :
@@ -51,7 +52,6 @@ type DataGridProps = {
  * type for DataGridColumn :
  * @param {columnName} column data
  * @param {sort} does colum support sorting
- * @param {filter} does colum support filtering
  * @param {className} CSS class name
  * @param {columns} column details
  * @param {style} CSS style
@@ -61,10 +61,9 @@ type DataGridColumn = {
     columnName: string;
     columnID?: number; // For internal use
     sort?: DataGridSort;
-    filter?: boolean;
     className?: string;
     style?: any;
-    onFilter?: Function;
+    onFilter?: (data: DataGridRow[], columnValue: string) => DataGridRow[];
 };
 
 /**
@@ -110,11 +109,11 @@ type DataGridFooter = {
 
 /**
  * type for DataGridSort :
- * @param {defaultSorOrder} if data in column by default sorted
+ * @param {defaultSortOrder} if data in column by default sorted
  * @param {sortFunction} function to perform sorting
  */
 type DataGridSort = {
-    defaultSorOrder: SortOrder;
+    defaultSortOrder: SortOrder;
     sortFunction: (data: DataGridRow[], order: SortOrder, columnName: string) => DataGridRow[];
 };
 
@@ -130,8 +129,9 @@ export enum GridSelectionType {
 
 /**
  * Enum for sorting order :
- * @param {MULTI} for enabling multi row select
- * @param {SINGLE} for enabling single row select
+ * @param {DESC} to sort data in descending order
+ * @param {ASC} to sort data in ascending order
+ * @param {NONE} no sorting
  */
 export enum SortOrder {
     DESC = "descending",
@@ -236,25 +236,34 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         columnName: string,
         columnID: any,
         sortFunction: Function,
-        defaultSorOrder: SortOrder,
+        defaultSortOrder: SortOrder,
     ) => {
         const {allRows, allColumns} = this.state;
         if (columnID != undefined) {
             let nextSortOrder = SortOrder.DESC;
-            const currentSortOrder = allColumns[columnID].sort!.defaultSorOrder;
+            const currentSortOrder = allColumns[columnID].sort!.defaultSortOrder;
 
             if (currentSortOrder === SortOrder.NONE || currentSortOrder === SortOrder.DESC)
                 nextSortOrder = SortOrder.ASC;
 
             const rows = this.updateRowIDs(sortFunction(this.state.allRows, nextSortOrder, columnName));
             // update sort order
-            allColumns[columnID].sort!.defaultSorOrder = nextSortOrder;
+            allColumns[columnID].sort!.defaultSortOrder = nextSortOrder;
 
             this.setState({
                 allRows: [...rows],
                 allColumns: [...allColumns],
             });
         }
+    };
+
+    // Function to handle filter
+    private handleFilter = (evt: React.ChangeEvent<HTMLInputElement>, filterFuntion: Function) => {
+        const rows = this.updateRowIDs(filterFuntion(this.state.allRows, evt.target.value));
+        console.log(rows);
+        this.setState({
+            allRows: [...rows],
+        });
     };
 
     updateRowIDs(rows: DataGridRow[]) {
@@ -381,7 +390,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     // Function to build datagrid colums
 
     private buildDataGridColumn(column: DataGridColumn, index: number): React.ReactElement {
-        const {columnName, columnID, className, style, sort} = column;
+        const {columnName, columnID, className, style, sort, onFilter} = column;
         return (
             <div
                 role="columnheader"
@@ -400,13 +409,13 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                                 ClassNames.DATAGRID_NG_STAR_INSERTED,
                             ])}
                             onClick={evt =>
-                                this.handleSort(evt, columnName, columnID, sort.sortFunction, sort.defaultSorOrder)
+                                this.handleSort(evt, columnName, columnID, sort.sortFunction, sort.defaultSortOrder)
                             }
                         >
                             {columnName}
-                            {sort.defaultSorOrder !== SortOrder.NONE && (
+                            {sort.defaultSortOrder !== SortOrder.NONE && (
                                 <Icon
-                                    shape={sort.defaultSorOrder == SortOrder.DESC ? "arrow down" : "arrow up"}
+                                    shape={sort.defaultSortOrder == SortOrder.DESC ? "arrow down" : "arrow up"}
                                     className={classNames([
                                         ClassNames.DATAGRID_SORT_ICON,
                                         ClassNames.DATAGRID_NG_STAR_INSERTED,
@@ -417,6 +426,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                     ) : (
                         <span className={ClassNames.DATAGRID_COLUMN_TITLE}>{columnName}</span>
                     )}
+                    {onFilter && <DataGridFilter onChange={evt => this.handleFilter(evt, onFilter)} />}
 
                     <div className={ClassNames.DATAGRID_COLUMN_SEPARATOR}>
                         <div aria-hidden="true" className={ClassNames.DATAGRID_COLUMN_HANDLE} />
