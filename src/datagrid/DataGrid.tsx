@@ -14,7 +14,7 @@ import {classNames, allTrueOnKey} from "../utils";
 import {CheckBox} from "../forms/checkbox";
 import {RadioButton} from "../forms/radio";
 import {Button} from "../forms/button";
-import {Icon} from "../icon";
+import {Icon, Direction} from "../icon";
 import {DataGridFilter} from "./DataGridFilter";
 
 /**
@@ -34,6 +34,7 @@ import {DataGridFilter} from "./DataGridFilter";
  * @param {footer} footer component
  * @param {onRowSelect} Function which will gets called on select/deselect of rows
  * @param {onSelectAll} Function which will gets called on select/deselect of all rows
+ * @param {rowType} Expandable or compact row type
  */
 type DataGridProps = {
     className?: string;
@@ -46,6 +47,7 @@ type DataGridProps = {
     onRowSelect?: Function;
     onSelectAll?: Function;
     keyfield?: string;
+    rowType?: GridRowType;
 };
 
 /**
@@ -73,6 +75,7 @@ type DataGridColumn = {
  * @param {isSelected} set to true if row is selected
  * @param {className} CSS class name
  * @param {style} CSS style
+ * @param {expandableContent} Expandable data content
  */
 export type DataGridRow = {
     content: DataGridCell[];
@@ -80,6 +83,8 @@ export type DataGridRow = {
     style?: any;
     rowID?: number; // not to take from user
     isSelected?: boolean; // not to take from user
+    expandableContent?: any;
+    isExpanded?: boolean;
 };
 
 /**
@@ -140,6 +145,14 @@ export enum SortOrder {
 }
 
 /**
+ * Enum for RowTpye :
+ * @param {EXPANDABLE} for enabling expandable row
+ */
+export enum GridRowType {
+    EXPANDABLE = "expandable",
+}
+
+/**
  * State for DataGrid :
  * @param {selectAll} set to true if all rows got selected else false
  * @param {allColumns} column data
@@ -195,6 +208,23 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     }
 
     /* ##########  DataGrid private methods start  ############ */
+    //toggle collapse of expandable row
+    private toggleExpand(rowID: number) {
+        const {allRows} = this.state;
+        allRows.forEach(row => {
+            if (row["rowID"] === rowID) {
+                if (row["isExpanded"]) {
+                    row["isExpanded"] = false;
+                } else {
+                    row["isExpanded"] = true;
+                }
+            }
+        });
+        this.setState({
+            allRows: [...allRows],
+        });
+    }
+
     // Function to handle select/deselect of all rows
     private handleSelectAll = (evt: React.ChangeEvent<HTMLInputElement>) => {
         const rows = this.state.allRows;
@@ -260,7 +290,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     // Function to handle filter
     private handleFilter = (evt: React.ChangeEvent<HTMLInputElement>, filterFuntion: Function) => {
         const rows = this.updateRowIDs(filterFuntion(this.state.allRows, evt.target.value));
-        console.log(rows);
+
         this.setState({
             allRows: [...rows],
         });
@@ -284,6 +314,24 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     /* ##########  DataGrid private methods end  ############ */
 
     /* ##########  DataGrid DOM methods start  ############ */
+
+    //funtion to render expandable icon cell
+    private buildExpandableCell(rowID: number, isExpanded: boolean): React.ReactElement {
+        return (
+            <div className={ClassNames.DATAGRID_EXPANDABLE_CARET} role="gridcell" key={rowID}>
+                <Button
+                    key="expand"
+                    className={ClassNames.DATAGRID_EXPANDABLE_CARET_BUTTON}
+                    onClick={() => this.toggleExpand(rowID)}
+                    icon={{
+                        shape: "caret",
+                        className: ClassNames.DATAGRID_EXPANDABLE_CARET_ICON,
+                        dir: isExpanded ? Direction.DOWN : Direction.RIGHT,
+                    }}
+                />
+            </div>
+        );
+    }
 
     // function to render selectAll column
     private buildSelectColumn(): React.ReactElement {
@@ -313,12 +361,12 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     }
 
     // function to render select cell
-    private buildSelectCell(rowID: string, isSelected: any): React.ReactElement {
+    private buildSelectCell(rowID: number, isSelected: any): React.ReactElement {
         const {selectionType} = this.props;
         if (selectionType === GridSelectionType.MULTI) {
             return (
                 <CheckBox
-                    id={rowID}
+                    id={rowID.toString()}
                     ariaLabel="Select"
                     onChange={evt => this.handleSelectSingle(evt, rowID)}
                     checked={isSelected !== undefined ? isSelected : undefined}
@@ -328,7 +376,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         return (
             <RadioButton
                 value={rowID}
-                id={rowID}
+                id={rowID.toString()}
                 onChange={evt => this.handleSelectSingle(evt, rowID)}
                 checked={isSelected !== undefined ? isSelected : undefined}
             />
@@ -344,15 +392,8 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                     <div className={ClassNames.DATAGRID_TABLE} role="grid">
                         {this.buildDataGridHeader()}
                         {allRows ? (
-                            allRows.map((row: any, index: number) => {
-                                return this.buildDataGridRow(
-                                    row.rowID,
-                                    row.content,
-                                    index,
-                                    row.className,
-                                    row.style,
-                                    row.isSelected,
-                                );
+                            allRows.map((row: DataGridRow, index: number) => {
+                                return this.buildDataGridRow(row, index);
                             })
                         ) : (
                             <div className={ClassNames.DATAGRID_PLACEHOLDER_CONTAINER}>
@@ -438,15 +479,9 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     }
 
     // function to build datagrid rows
-    private buildDataGridRow(
-        rowID: string,
-        content: DataGridCell[],
-        index: number,
-        className?: string,
-        style?: any,
-        isSelected?: boolean,
-    ): React.ReactElement {
-        const {selectionType} = this.props;
+    private buildDataGridRow(row: DataGridRow, index: number): React.ReactElement {
+        const {selectionType, rowType} = this.props;
+        const {rowID, content, className, style, isSelected, isExpanded, expandableContent} = row;
         return (
             <div
                 role="rowgroup"
@@ -459,9 +494,12 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                     <div className={ClassNames.DATAGRID_ROW_STICKY} />
                     <div className={ClassNames.DATAGRID_ROW_SCROLLABLE}>
                         <div className={ClassNames.DATAGRID_SCROLLING_CELLS}>
+                            {rowType &&
+                                rowType === GridRowType.EXPANDABLE &&
+                                this.buildExpandableCell(rowID!, isExpanded!)}
                             {selectionType &&
                                 this.buildDataGridCell(
-                                    this.buildSelectCell(rowID, isSelected),
+                                    this.buildSelectCell(rowID!, isSelected),
                                     index,
                                     classNames([
                                         ClassNames.DATAGRID_SELECT, //prettier
@@ -473,6 +511,13 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                                     return this.buildDataGridCell(cell.content, index, cell.className, cell.style);
                                 })}
                         </div>
+                        {/* //Insert Expandable item view */}
+                        {rowType && rowType === GridRowType.EXPANDABLE && expandableContent && isExpanded && (
+                            <div className={ClassNames.DATAGRID_ROW_FLEX}>
+                                <div className={ClassNames.DATAGRID_EXPANDABLE_CARET} />
+                                {expandableContent}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

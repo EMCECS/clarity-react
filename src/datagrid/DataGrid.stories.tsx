@@ -10,7 +10,7 @@
 
 import * as React from "react";
 import {storiesOf} from "@storybook/react";
-import {DataGrid, GridSelectionType} from "./DataGrid";
+import {DataGrid, GridSelectionType, GridRowType} from "./DataGrid";
 import {
     normalColumns,
     normalRows,
@@ -20,6 +20,7 @@ import {
     sortColumns,
     filterColumns,
     sortAndFilterColumns,
+    expandableRows,
 } from "./DataGridValues";
 
 // Refrence to call dataGrid methods
@@ -91,5 +92,10 @@ storiesOf("DataGrid", module)
     .add("Grid with sorting and filter", () => (
         <div style={{width: "80%"}}>
             <DataGrid columns={sortAndFilterColumns} data={normalRows} footer={footer} />
+        </div>
+    ))
+    .add("Grid with expandable row", () => (
+        <div style={{width: "80%"}}>
+            <DataGrid columns={normalColumns} data={expandableRows} footer={footer} rowType={GridRowType.EXPANDABLE} />
         </div>
     ));

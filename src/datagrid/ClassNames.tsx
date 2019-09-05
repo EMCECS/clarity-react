@@ -46,4 +46,11 @@ export class ClassNames {
     public static DATAGRID_FILTER_INPUT: string = "clr-input ng-pristine ng-valid ng-touched";
     public static DATAGRID_FILTER_WRAPPER: string = "data-grid-filter-close-wrapper";
     public static DATAGRID_FILTER_POPUP_CLOSE: string = "close clr-smart-close-button";
+    public static DATAGRID_ROW_FLEX: string =
+        "datagrid-row-flex datagrid-row-detail datagrid-container ng-star-inserted";
+    public static DATAGRID_EXPANDABLE_CARET: string =
+        "datagrid-expandable-caret datagrid-fixed-column datagrid-cell ng-star-inserted";
+    public static DATAGRID_EXPANDABLE_CARET_BUTTON: string = "datagrid-expandable-caret-button ng-star-inserted";
+    public static DATAGRID_EXPANDABLE_CARET_ICON: string = "datagrid-expandable-caret-icon";
+    static DATAGRID_COMPACT: string = "datagrid-compact datagrid-host";
 }
