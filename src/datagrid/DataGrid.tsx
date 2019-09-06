@@ -35,6 +35,7 @@ import {DataGridFilter} from "./DataGridFilter";
  * @param {onRowSelect} Function which will gets called on select/deselect of rows
  * @param {onSelectAll} Function which will gets called on select/deselect of all rows
  * @param {rowType} Expandable or compact row type
+ * @param {itemText} label to display for all items
  */
 type DataGridProps = {
     className?: string;
@@ -42,12 +43,13 @@ type DataGridProps = {
     selectionType?: GridSelectionType;
     pagination?: boolean;
     columns: DataGridColumn[];
-    data: DataGridRow[];
+    data?: DataGridRow[];
     footer?: DataGridFooter;
     onRowSelect?: Function;
     onSelectAll?: Function;
     keyfield?: string;
     rowType?: GridRowType;
+    itemText?: string;
 };
 
 /**
@@ -157,11 +159,13 @@ export enum GridRowType {
  * @param {selectAll} set to true if all rows got selected else false
  * @param {allColumns} column data
  * @param {allRows} row data
+ * @param {itemText} label to display for all items
  */
 type DataGridState = {
     selectAll: boolean;
     allColumns: DataGridColumn[];
     allRows: DataGridRow[];
+    itemText: string;
 };
 
 /**
@@ -178,7 +182,8 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     state: DataGridState = {
         selectAll: false,
         allColumns: this.props.columns,
-        allRows: this.props.data,
+        allRows: this.props.data !== undefined ? this.props.data : [],
+        itemText: this.props.itemText !== undefined ? this.props.itemText : "items",
     };
 
     componentWillMount() {
@@ -385,19 +390,29 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // function to build datagrid body
     private buildDataGridBody(): React.ReactElement {
-        const {allRows} = this.state;
+        const {allRows, itemText} = this.state;
         return (
             <div className={ClassNames.DATAGRID}>
                 <div className={ClassNames.DATAGRID_TABLE_WRAPPER}>
                     <div className={ClassNames.DATAGRID_TABLE} role="grid">
                         {this.buildDataGridHeader()}
-                        {allRows ? (
+                        {allRows.length !== 0 ? (
                             allRows.map((row: DataGridRow, index: number) => {
                                 return this.buildDataGridRow(row, index);
                             })
                         ) : (
                             <div className={ClassNames.DATAGRID_PLACEHOLDER_CONTAINER}>
-                                <div className={ClassNames.DATAGRID_PLACEHOLDER} />
+                                <div
+                                    className={classNames([ClassNames.DATAGRID_PLACEHOLDER, ClassNames.DATAGRID_EMPTY])}
+                                >
+                                    <div
+                                        className={classNames([
+                                            ClassNames.DATAGRID_PLACEHOLDER_IMG,
+                                            ClassNames.DATAGRID_NG_STAR_INSERTED,
+                                        ])}
+                                    />
+                                    {`${"We couldn't find any"} ${itemText} ${"!"}`}
+                                </div>
                             </div>
                         )}
                     </div>

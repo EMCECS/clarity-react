@@ -98,4 +98,9 @@ storiesOf("DataGrid", module)
         <div style={{width: "80%"}}>
             <DataGrid columns={normalColumns} data={expandableRows} footer={footer} rowType={GridRowType.EXPANDABLE} />
         </div>
+    ))
+    .add("Empty data grid", () => (
+        <div style={{width: "80%"}}>
+            <DataGrid columns={normalColumns} footer={{content: "0 users"}} />
+        </div>
     ));
