@@ -59,6 +59,7 @@ type DataGridProps = {
  * @param {className} CSS class name
  * @param {columns} column details
  * @param {style} CSS style
+ * @param {width} width of column
  * @param {onFilter} Function for custom filtering
  */
 type DataGridColumn = {
@@ -67,6 +68,7 @@ type DataGridColumn = {
     sort?: DataGridSort;
     className?: string;
     style?: any;
+    width?: any;
     onFilter?: (data: DataGridRow[], columnValue: string) => DataGridRow[];
 };
 
@@ -301,7 +303,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         });
     };
 
-    updateRowIDs(rows: DataGridRow[]) {
+    private updateRowIDs(rows: DataGridRow[]) {
         // set rowID = index in array
         rows.map((row: DataGridRow, index: number) => {
             row["rowID"] = index;
@@ -309,12 +311,20 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         return rows;
     }
 
-    updateColumnIDs(cols: DataGridColumn[]) {
+    private updateColumnIDs(cols: DataGridColumn[]) {
         // set columnID = index in array
         cols.map((cols: DataGridColumn, index: number) => {
             cols["columnID"] = index;
         });
         return cols;
+    }
+
+    // Get width of column
+    private getColWidth(columnName: string) {
+        const {allColumns} = this.state;
+        const column = allColumns.find(col => col.columnName === columnName);
+
+        return column && column.width ? column.width : undefined;
     }
     /* ##########  DataGrid private methods end  ############ */
 
@@ -446,13 +456,13 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     // Function to build datagrid colums
 
     private buildDataGridColumn(column: DataGridColumn, index: number): React.ReactElement {
-        const {columnName, columnID, className, style, sort, onFilter} = column;
+        const {columnName, columnID, className, style, width, sort, onFilter} = column;
         return (
             <div
                 role="columnheader"
                 className={classNames([ClassNames.DATAGRID_COLUMN, className])}
                 aria-sort="none"
-                style={style}
+                style={{width: width, ...style}}
                 key={"col-" + index}
             >
                 <div className={ClassNames.DATAGRID_COLUMN_FLEX}>
@@ -509,21 +519,28 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                     <div className={ClassNames.DATAGRID_ROW_STICKY} />
                     <div className={ClassNames.DATAGRID_ROW_SCROLLABLE}>
                         <div className={ClassNames.DATAGRID_SCROLLING_CELLS}>
-                            {rowType &&
-                                rowType === GridRowType.EXPANDABLE &&
-                                this.buildExpandableCell(rowID!, isExpanded!)}
                             {selectionType &&
                                 this.buildDataGridCell(
                                     this.buildSelectCell(rowID!, isSelected),
                                     index,
+                                    "select",
                                     classNames([
                                         ClassNames.DATAGRID_SELECT, //prettier
                                         ClassNames.DATAGRID_FIXED_COLUMN,
                                     ]),
                                 )}
+                            {rowType &&
+                                rowType === GridRowType.EXPANDABLE &&
+                                this.buildExpandableCell(rowID!, isExpanded!)}
                             {content &&
                                 content.map((cell: any, index: number) => {
-                                    return this.buildDataGridCell(cell.content, index, cell.className, cell.style);
+                                    return this.buildDataGridCell(
+                                        cell.content,
+                                        index,
+                                        cell.columnName,
+                                        cell.className,
+                                        cell.style,
+                                    );
                                 })}
                         </div>
                         {/* //Insert Expandable item view */}
@@ -540,13 +557,21 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     }
 
     // function to build datagrid cell
-    private buildDataGridCell(content: any, index: number, className?: string, style?: any): React.ReactElement {
+    private buildDataGridCell(
+        content: any,
+        index: number,
+        columnName: string,
+        className?: string,
+        style?: any,
+    ): React.ReactElement {
+        let width: any = "";
+        if (columnName) width = this.getColWidth(columnName);
         return (
             <div
                 role="gridcell"
                 key={"cell-" + index}
                 className={`${className} ${ClassNames.DATAGRID_CELLS}`}
-                style={style}
+                style={{width: width, ...style}}
             >
                 {content}
             </div>

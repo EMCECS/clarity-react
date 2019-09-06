@@ -20,10 +20,10 @@ import {SortOrder, DataGridRow} from "./DataGrid";
 
 // Column Data
 export const normalColumns = [
-    {columnName: "User ID"},
-    {columnName: "Name"},
-    {columnName: "Creation Date"},
-    {columnName: "Favorite color"},
+    {columnName: "User ID", width: "96px"},
+    {columnName: "Name", width: "96px"},
+    {columnName: "Creation Date", width: "96px"},
+    {columnName: "Favorite color", width: "96px"},
 ];
 
 // Row Data
@@ -96,34 +96,36 @@ export const customRows = [
 
 // Column Data with sort option
 export const sortColumns = [
-    {columnName: "User ID", sort: {defaultSortOrder: SortOrder.ASC, sortFunction: sortFunction}},
-    {columnName: "Name", sort: {defaultSortOrder: SortOrder.NONE, sortFunction: sortFunction}},
-    {columnName: "Creation Date"},
-    {columnName: "Favorite color"},
+    {columnName: "User ID", width: "96px", sort: {defaultSortOrder: SortOrder.ASC, sortFunction: sortFunction}},
+    {columnName: "Name", width: "96px", sort: {defaultSortOrder: SortOrder.NONE, sortFunction: sortFunction}},
+    {columnName: "Creation Date", width: "96px"},
+    {columnName: "Favorite color", width: "96px"},
 ];
 
 //Columns with filter option
 export const filterColumns = [
-    {columnName: "User ID", onFilter: filterFunction},
-    {columnName: "Name", onFilter: filterFunction},
-    {columnName: "Creation Date"},
-    {columnName: "Favorite color"},
+    {columnName: "User ID", width: "96px", onFilter: filterFunction},
+    {columnName: "Name", width: "96px", onFilter: filterFunction},
+    {columnName: "Creation Date", width: "96px"},
+    {columnName: "Favorite color", width: "96px"},
 ];
 
 //Columns with filter and sort
 export const sortAndFilterColumns = [
     {
         columnName: "User ID",
+        width: "96px",
         sort: {defaultSortOrder: SortOrder.ASC, sortFunction: sortFunction},
         onFilter: filterFunction,
     },
     {
         columnName: "Name",
+        width: "96px",
         sort: {defaultSortOrder: SortOrder.NONE, sortFunction: sortFunction},
         onFilter: filterFunction,
     },
-    {columnName: "Creation Date"},
-    {columnName: "Favorite color"},
+    {columnName: "Creation Date", width: "96px"},
+    {columnName: "Favorite color", width: "96px"},
 ];
 
 // Custom sorting function for number and string type
