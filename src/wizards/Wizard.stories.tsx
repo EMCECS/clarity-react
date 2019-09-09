@@ -149,8 +149,10 @@ storiesOf("Wizard", module)
     .add("Wizard Sizes", () => (
         <div className="clr-row">
             <div className="clr-col-12">
+                <Button onClick={() => storeMedium.set({show: true})}>MEDIUM</Button>
+                <Button onClick={() => storeLarge.set({show: true})}>LARGE</Button>
+                <Button onClick={() => storeXlarge.set({show: true})}>XLARGE</Button>
                 <State store={storeMedium} key="store-1">
-                    <Button onClick={() => storeMedium.set({show: true})}>MEDIUM</Button>
                     <Wizard
                         size={WizardSize.MEDIUM}
                         title="Medium-Sized Wizard"
@@ -158,9 +160,7 @@ storiesOf("Wizard", module)
                         onClose={() => storeMedium.set({show: false})}
                     />
                 </State>
-
                 <State store={storeLarge} key="store-2">
-                    <Button onClick={() => storeLarge.set({show: true})}>LARGE</Button>
                     <Wizard
                         size={WizardSize.LARGE}
                         title="Large-Sized Wizard"
@@ -168,9 +168,7 @@ storiesOf("Wizard", module)
                         onClose={() => storeLarge.set({show: false})}
                     />
                 </State>
-
                 <State store={storeXlarge} key="store-3">
-                    <Button onClick={() => storeXlarge.set({show: true})}>XLARGE</Button>
                     <Wizard
                         size={WizardSize.XLARGE}
                         title="XLarge-Sized Wizard"
@@ -184,8 +182,8 @@ storiesOf("Wizard", module)
     .add("Wizard with Single step ", () => (
         <div className="clr-row">
             <div className="clr-col-12">
+                <Button onClick={() => storeSingleStep.set({show: true})}> Single Step </Button>
                 <State store={storeSingleStep}>
-                    <Button onClick={() => storeSingleStep.set({show: true})}> Single Step </Button>
                     <Wizard
                         size={WizardSize.MEDIUM}
                         title="Wizard with Single Step"
@@ -199,8 +197,8 @@ storiesOf("Wizard", module)
     .add("Wizard with deafult step ", () => (
         <div className="clr-row">
             <div className="clr-col-12">
+                <Button onClick={() => storeDefaultState.set({show: true})}> OPEN AT STEP 2 </Button>
                 <State store={storeDefaultState}>
-                    <Button onClick={() => storeDefaultState.set({show: true})}> OPEN AT STEP 2 </Button>
                     <Wizard
                         size={WizardSize.MEDIUM}
                         title="Open Wizard at step 2"
@@ -215,8 +213,8 @@ storiesOf("Wizard", module)
     .add("Overriding wizard buttons", () => (
         <div className="clr-row">
             <div className="clr-col-12">
+                <Button onClick={() => storeCustomButtons.set({show: true})}> Custom Wizard buttons </Button>
                 <State store={storeCustomButtons}>
-                    <Button onClick={() => storeCustomButtons.set({show: true})}> Custom Wizard buttons </Button>
                     <Wizard
                         size={WizardSize.MEDIUM}
                         title="Custom and default buttons"
@@ -232,8 +230,8 @@ storiesOf("Wizard", module)
     .add("Wizard without NAV", () => (
         <div className="clr-row">
             <div className="clr-col-12">
+                <Button onClick={() => storeWithoutNav.set({show: true})}> Wizard without NAV </Button>
                 <State store={storeWithoutNav}>
-                    <Button onClick={() => storeWithoutNav.set({show: true})}> Wizard without NAV </Button>
                     <Wizard
                         size={WizardSize.MEDIUM}
                         title="Wizard Without Navigation Links"
@@ -248,8 +246,8 @@ storiesOf("Wizard", module)
     .add("Wizard with custom NAV", () => (
         <div className="clr-row">
             <div className="clr-col-12">
+                <Button onClick={() => storeNavWithIcon.set({show: true})}> Wizard with Icon NAV </Button>
                 <State store={storeNavWithIcon}>
-                    <Button onClick={() => storeNavWithIcon.set({show: true})}> Wizard with Icon NAV </Button>
                     <Wizard
                         size={WizardSize.MEDIUM}
                         title="Wizard with Icon Navigation Links"
@@ -263,8 +261,8 @@ storiesOf("Wizard", module)
     .add("Wizard with Reset", () => (
         <div className="clr-row">
             <div className="clr-col-12">
+                <Button onClick={() => storeResetWizard.set({show: true})}> Reset on Finish </Button>
                 <State store={storeResetWizard}>
-                    <Button onClick={() => storeResetWizard.set({show: true})}> Reset on Finish </Button>
                     <Wizard
                         ref={wizardRef}
                         size={WizardSize.MEDIUM}
@@ -280,8 +278,9 @@ storiesOf("Wizard", module)
     .add("Wizard Validation", () => (
         <div className="clr-row">
             <div className="clr-col-12">
+                <Button onClick={() => storeSyncValidation.set({show: true})}> Synchronous validation </Button>
+                <Button onClick={() => storeAsyncValidation.set({show: true})}> Asynchronous validation </Button>
                 <State store={storeSyncValidation}>
-                    <Button onClick={() => storeSyncValidation.set({show: true})}> Synchronous validation </Button>
                     <Wizard
                         ref={wizardRefSync}
                         size={WizardSize.MEDIUM}
@@ -293,7 +292,6 @@ storiesOf("Wizard", module)
                 </State>
 
                 <State store={storeAsyncValidation}>
-                    <Button onClick={() => storeAsyncValidation.set({show: true})}> Asynchronous validation </Button>
                     <Wizard
                         size={WizardSize.MEDIUM}
                         title="Wizard with Asynchronous Validation"
