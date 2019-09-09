@@ -10,7 +10,7 @@
 
 import * as React from "react";
 import {storiesOf} from "@storybook/react";
-import {DataGrid, GridSelectionType, GridRowType} from "./DataGrid";
+import {DataGrid, GridSelectionType, GridRowType, SortOrder} from "./DataGrid";
 import {
     normalColumns,
     normalRows,
@@ -18,31 +18,34 @@ import {
     footer,
     GridActions,
     sortColumns,
-    filterColumns,
-    sortAndFilterColumns,
     expandableRows,
+    filterFunction,
+    sortFunction,
 } from "./DataGridValues";
+import {DataGridFilter} from "./DataGridFilter";
 
 // Refrence to call dataGrid methods
 const datagridRef = React.createRef<DataGrid>();
 const datagridActionsRef = React.createRef<GridActions>();
+const datagridFilterRef = React.createRef<DataGrid>();
+const datagridFilterSortRef = React.createRef<DataGrid>();
 
 storiesOf("DataGrid", module)
     .add("Basic grid", () => (
         <div style={{width: "80%"}}>
-            <DataGrid columns={normalColumns} data={normalRows} footer={footer} />
+            <DataGrid columns={normalColumns} rows={normalRows} footer={footer} />
         </div>
     ))
     .add("Grid with custom cells", () => (
         <div style={{width: "80%"}}>
-            <DataGrid columns={normalColumns} data={customRows} footer={footer} />
+            <DataGrid columns={normalColumns} rows={customRows} footer={footer} />
         </div>
     ))
     .add("Grid with multi select option", () => (
         <div style={{width: "80%"}}>
             <DataGrid
                 columns={normalColumns}
-                data={normalRows}
+                rows={normalRows}
                 footer={footer}
                 selectionType={GridSelectionType.MULTI}
             />
@@ -52,7 +55,7 @@ storiesOf("DataGrid", module)
         <div style={{width: "80%"}}>
             <DataGrid
                 columns={normalColumns}
-                data={normalRows}
+                rows={normalRows}
                 footer={footer}
                 selectionType={GridSelectionType.SINGLE}
             />
@@ -65,7 +68,7 @@ storiesOf("DataGrid", module)
             <DataGrid
                 ref={datagridRef}
                 columns={normalColumns}
-                data={normalRows}
+                rows={normalRows}
                 footer={footer}
                 selectionType={GridSelectionType.MULTI}
                 onRowSelect={() => {
@@ -81,22 +84,88 @@ storiesOf("DataGrid", module)
     ))
     .add("Grid with sorting", () => (
         <div style={{width: "80%"}}>
-            <DataGrid columns={sortColumns} data={normalRows} footer={footer} />
+            <DataGrid columns={sortColumns} rows={normalRows} footer={footer} />
         </div>
     ))
     .add("Grid with filter", () => (
         <div style={{width: "80%"}}>
-            <DataGrid columns={filterColumns} data={normalRows} footer={footer} />
+            <DataGrid
+                ref={datagridFilterRef}
+                columns={[
+                    {
+                        columnName: "User ID",
+                        width: "96px",
+                        filter: (
+                            <DataGridFilter
+                                onFilter={filterFunction}
+                                columnName={"User ID"}
+                                datagridRef={datagridFilterRef}
+                                style={{left: "-1%"}}
+                            />
+                        ),
+                    },
+                    {
+                        columnName: "Name",
+                        width: "96px",
+                        filter: (
+                            <DataGridFilter
+                                onFilter={filterFunction}
+                                columnName={"Name"}
+                                datagridRef={datagridFilterRef}
+                                style={{left: "19%"}}
+                            />
+                        ),
+                    },
+                    {columnName: "Creation Date", width: "96px"},
+                    {columnName: "Favorite color", width: "96px"},
+                ]}
+                rows={normalRows}
+                footer={footer}
+            />
         </div>
     ))
     .add("Grid with sorting and filter", () => (
         <div style={{width: "80%"}}>
-            <DataGrid columns={sortAndFilterColumns} data={normalRows} footer={footer} />
+            <DataGrid
+                ref={datagridFilterSortRef}
+                columns={[
+                    {
+                        columnName: "User ID",
+                        width: "96px",
+                        sort: {defaultSortOrder: SortOrder.ASC, sortFunction: sortFunction},
+                        filter: (
+                            <DataGridFilter
+                                onFilter={filterFunction}
+                                columnName={"User ID"}
+                                datagridRef={datagridFilterSortRef}
+                                style={{left: "-1%"}}
+                            />
+                        ),
+                    },
+                    {
+                        columnName: "Name",
+                        width: "96px",
+                        sort: {defaultSortOrder: SortOrder.NONE, sortFunction: sortFunction},
+                        filter: (
+                            <DataGridFilter
+                                onFilter={filterFunction}
+                                columnName={"Name"}
+                                datagridRef={datagridFilterSortRef}
+                                style={{left: "19%"}}
+                            />
+                        ),
+                    },
+                    {columnName: "Creation Date", width: "96px"},
+                    {columnName: "Favorite color", width: "96px"},
+                ]}
+                rows={normalRows}
+                footer={footer}
+            />
         </div>
     ))
     .add("Grid with expandable row", () => (
         <div style={{width: "80%"}}>
-            <DataGrid columns={normalColumns} data={expandableRows} footer={footer} rowType={GridRowType.EXPANDABLE} />
+            <DataGrid columns={normalColumns} rows={expandableRows} footer={footer} rowType={GridRowType.EXPANDABLE} />
         </div>
     ))
     .add("Empty data grid", () => (

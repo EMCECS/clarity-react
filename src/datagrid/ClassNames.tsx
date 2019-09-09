@@ -41,8 +41,7 @@ export class ClassNames {
     public static CLR_FILTER: string = "clr-dg-filter";
     public static CLR_POPOVER_CONTENT: string = "clr-popover-content";
     public static DATARID_FILTER: string = "datagrid-filter";
-    public static DATAGRID_FILTER_BUTTON: string =
-        "datagrid-filter-toggle clr-anchor clr-smart-open-close datagrid-filter-open";
+    public static DATAGRID_FILTER_BUTTON: string = "datagrid-filter-toggle clr-anchor clr-smart-open-close";
     public static DATAGRID_FILTER_INPUT: string = "clr-input ng-pristine ng-valid ng-touched";
     public static DATAGRID_FILTER_WRAPPER: string = "data-grid-filter-close-wrapper";
     public static DATAGRID_FILTER_POPUP_CLOSE: string = "close clr-smart-close-button";
@@ -55,4 +54,8 @@ export class ClassNames {
     static DATAGRID_COMPACT: string = "datagrid-compact datagrid-host";
     public static DATAGRID_EMPTY: string = "datagrid-empty";
     public static DATAGRID_PLACEHOLDER_IMG: string = "datagrid-placeholder-image";
+    public static ICON_SOLID: string = "is-solid";
+    public static OFFSCREEN_FOCUS_REBOUNDER: string = "offscreen-focus-rebounder";
+    public static CLR_INPUT: string = "clr-input ng-pristine ng-valid ng-touched";
+    public static DATAGRID_FILTERED: string = "datagrid-filtered datagrid-filter-open";
 }

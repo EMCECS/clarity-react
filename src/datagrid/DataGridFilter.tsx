@@ -12,16 +12,18 @@ import * as React from "react";
 import {classNames} from "../utils";
 import {ClassNames} from "./ClassNames";
 import {Button} from "../forms/button";
-import {Icon, IconProps} from "../icon";
-import {Input} from "../forms/input/Input";
+import {DataGridRow} from "./DataGrid";
+
+type DataGridFilterProps = {
+    style?: any;
+    datagridRef: any;
+    columnName: string;
+    onFilter: (rows: DataGridRow[], columnValue: any, columnName: string) => DataGridRow[];
+};
 
 type DataGridFilterState = {
     isOpen: boolean;
-};
-
-type DataGridFilterProps = {
-    onChange: (evt: React.ChangeEvent<HTMLInputElement>) => void;
-    style?: any;
+    filterValue: any;
 };
 
 export class DataGridFilter extends React.PureComponent<DataGridFilterProps, DataGridFilterState> {
@@ -30,6 +32,7 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
 
     state: DataGridFilterState = {
         isOpen: false,
+        filterValue: undefined,
     };
 
     handleButtonClick = () => {
@@ -69,48 +72,79 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
         }
     };
 
+    handleFilterChnage = (evt: React.ChangeEvent<any>) => {
+        const {columnName, datagridRef, onFilter} = this.props;
+        const value = evt.target!.value;
+
+        // get latest data from grid
+        const rows = datagridRef.current!.getAllRows();
+
+        if (onFilter && datagridRef) {
+            this.setState({filterValue: value}, () =>
+                datagridRef.current!.updateRows(onFilter(rows, value, columnName)),
+            );
+        }
+    };
+
     render() {
-        const {isOpen} = this.state;
-        const {onChange, style} = this.props;
+        const {isOpen, filterValue} = this.state;
+        const {onFilter, style} = this.props;
+        const FilterBtnClasses = classNames([
+            ClassNames.DATAGRID_FILTER_BUTTON,
+            filterValue && ClassNames.DATAGRID_FILTERED,
+        ]);
         return (
             <div ref={this.refParent} className={classNames([ClassNames.CLR_FILTER])} style={{position: "relative"}}>
                 <Button
-                    className={ClassNames.DATAGRID_FILTER_BUTTON}
-                    type="button"
-                    onClick={this.handleButtonClick}
                     defaultBtn={false}
-                >
-                    <Icon className="is-solid" shape="filter-grid" />
-                </Button>
+                    key="filterBtn"
+                    className={FilterBtnClasses}
+                    onClick={this.handleButtonClick}
+                    icon={{
+                        shape: filterValue ? "filter-grid-circle" : "filter-grid",
+                        className: ClassNames.ICON_SOLID,
+                    }}
+                />
                 {isOpen && (
-                    <div
-                        ref={this.refChild}
-                        className={classNames([
-                            ClassNames.DATARID_FILTER,
-                            ClassNames.CLR_POPOVER_CONTENT,
-                            ClassNames.DATAGRID_NG_STAR_INSERTED,
-                        ])}
-                        style={{
-                            ...style,
-                            zIndex: "1",
-                            position: "absolute",
-                        }}
-                    >
-                        <div className={ClassNames.DATAGRID_FILTER_WRAPPER}>
-                            <Button
-                                className={ClassNames.DATAGRID_FILTER_POPUP_CLOSE}
-                                defaultBtn={false}
-                                onClick={this.handleButtonClick}
-                            >
-                                <Icon shape="close" />
-                            </Button>
+                    <div>
+                        <span className={ClassNames.OFFSCREEN_FOCUS_REBOUNDER} />
+                        <span className={ClassNames.OFFSCREEN_FOCUS_REBOUNDER} />
+                        <span className={ClassNames.OFFSCREEN_FOCUS_REBOUNDER} />
+                        <span className={ClassNames.OFFSCREEN_FOCUS_REBOUNDER} />
+                        <div
+                            ref={this.refChild}
+                            className={classNames([ClassNames.DATARID_FILTER, ClassNames.CLR_POPOVER_CONTENT])}
+                            style={{
+                                zIndex: "5000",
+                                position: "fixed",
+                                top: "42px",
+                                bottom: "auto",
+                                right: "auto",
+                                height: "90px",
+                                ...style,
+                            }}
+                        >
+                            <div className={ClassNames.DATAGRID_FILTER_WRAPPER}>
+                                <Button
+                                    className={ClassNames.DATAGRID_FILTER_POPUP_CLOSE}
+                                    defaultBtn={false}
+                                    onClick={this.handleButtonClick}
+                                    icon={{
+                                        shape: "close",
+                                    }}
+                                />
+                            </div>
+                            <input
+                                className={ClassNames.CLR_INPUT}
+                                name="search"
+                                type="text"
+                                defaultValue={filterValue}
+                                onChange={evt => {
+                                    this.handleFilterChnage(evt);
+                                }}
+                            />
                         </div>
-                        <Input
-                            className={ClassNames.DATAGRID_FILTER_INPUT}
-                            name="search"
-                            type="text"
-                            onChange={onChange}
-                        />
+                        <span className={ClassNames.OFFSCREEN_FOCUS_REBOUNDER} />
                     </div>
                 )}
             </div>
