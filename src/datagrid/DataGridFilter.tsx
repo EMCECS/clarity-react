@@ -14,13 +14,51 @@ import {ClassNames} from "./ClassNames";
 import {Button} from "../forms/button";
 import {DataGridRow} from "./DataGrid";
 
-type DataGridFilterProps = {
+/**
+ * General component description :
+ * DataGridFilter :
+ * Render filter box for datagrid
+ */
+
+/**
+ * Props for DataGridFilter :
+ * @param {style} CSS style
+ * @param {className} CSS classnames
+ * @param {datagridRef} Refrence for DataGrid on which filter will gets apply. We need this to call method which will update datagird rows.
+ * @param {columnName} columnName on which filter will apply
+ * @param {onFilter} Custom filter logic
+ * @param {filterType} Type of filter string or custom
+ * @param {customFilter} custom Filter component
+ * In case of Custom filter component: the custom filter component owner needs to take care of following things.
+ * 1. Custom filter component should preseve filter value inside state of component and pass it to DataGridFilter
+ * 2. Custom filter component should implement its onChange event handler.
+ * 3. Custom filter's onChange event handler should call 'updateFilter' method of DataGridFilter.
+ */
+export type DataGridFilterProps = {
     style?: any;
+    className?: string;
     datagridRef: any;
     columnName: string;
     onFilter: (rows: DataGridRow[], columnValue: any, columnName: string) => DataGridRow[];
+    filterType?: FilterType;
+    customFilter?: React.ReactNode;
 };
 
+/**
+ * Enum for filter type :
+ * @param {STR} to render string filter
+ * @param {CUSTOM} to render custom filter
+ */
+export enum FilterType {
+    STR = "String",
+    CUSTOM = "Custom",
+}
+
+/**
+ * State for DataGridFilter:
+ * @param {isOpen} check if filter box is open
+ * @param {filterValue} filter string
+ */
 type DataGridFilterState = {
     isOpen: boolean;
     filterValue: any;
@@ -30,51 +68,22 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
     private refParent = React.createRef<HTMLDivElement>();
     private refChild = React.createRef<HTMLDivElement>();
 
+    static defaultProps = {
+        filterType: FilterType.STR,
+    };
+
+    // Initial state for filter
     state: DataGridFilterState = {
         isOpen: false,
         filterValue: undefined,
     };
 
-    handleButtonClick = () => {
-        this.toggle();
+    getFilterValue = () => {
+        return this.state.filterValue;
     };
 
-    toggle(isOpen = !this.state.isOpen) {
-        this.setState({isOpen}, this.afterToggle);
-    }
-
-    afterToggle = () => {
-        if (this.state.isOpen) {
-            this.subscribeDocumentClick();
-        } else {
-            this.unsubscribeDocumentClick();
-        }
-    };
-
-    subscribeDocumentClick = () => {
-        window.addEventListener("click", this.handleDocumentClick as any, true);
-    };
-
-    unsubscribeDocumentClick = () => {
-        window.removeEventListener("click", this.handleDocumentClick as any, true);
-    };
-
-    handleDocumentClick = (evt: React.MouseEvent<HTMLElement>) => {
-        if (!this.state.isOpen) return;
-        const target = (evt.target as any) as HTMLElement;
-
-        const el = this.refChild.current;
-        if (!el || typeof el === "string") {
-            return;
-        }
-        if (!el.contains(target)) {
-            this.toggle(false);
-        }
-    };
-
-    handleFilterChnage = (evt: React.ChangeEvent<any>) => {
+    updateFilter = (value: any) => {
         const {columnName, datagridRef, onFilter} = this.props;
-        const value = evt.target!.value;
 
         // get latest data from grid
         const rows = datagridRef.current!.getAllRows();
@@ -86,9 +95,49 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
         }
     };
 
+    private handleButtonClick = () => {
+        this.toggle();
+    };
+
+    private toggle() {
+        this.setState(
+            prevState => ({
+                isOpen: !prevState.isOpen,
+            }),
+            this.afterToggle,
+        );
+    }
+
+    private afterToggle = () => {
+        if (this.state.isOpen) {
+            this.subscribeDocumentClick();
+        } else {
+            this.unsubscribeDocumentClick();
+        }
+    };
+
+    private subscribeDocumentClick = () => {
+        window.addEventListener("click", this.handleDocumentClick as any, true);
+    };
+
+    private unsubscribeDocumentClick = () => {
+        window.removeEventListener("click", this.handleDocumentClick as any, true);
+    };
+
+    private handleDocumentClick = (evt: Event) => {
+        if (this.state.isOpen) {
+            const target = (evt.target as any) as HTMLElement;
+            const el = this.refChild.current;
+
+            if (el && typeof el !== "string" && !el.contains(target)) {
+                this.toggle();
+            }
+        }
+    };
+
     render() {
         const {isOpen, filterValue} = this.state;
-        const {onFilter, style} = this.props;
+        const {style, className, filterType, customFilter} = this.props;
         const FilterBtnClasses = classNames([
             ClassNames.DATAGRID_FILTER_BUTTON,
             filterValue && ClassNames.DATAGRID_FILTERED,
@@ -113,7 +162,11 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
                         <span className={ClassNames.OFFSCREEN_FOCUS_REBOUNDER} />
                         <div
                             ref={this.refChild}
-                            className={classNames([ClassNames.DATARID_FILTER, ClassNames.CLR_POPOVER_CONTENT])}
+                            className={classNames([
+                                ClassNames.DATARID_FILTER,
+                                ClassNames.CLR_POPOVER_CONTENT,
+                                className,
+                            ])}
                             style={{
                                 zIndex: "5000",
                                 position: "fixed",
@@ -134,15 +187,19 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
                                     }}
                                 />
                             </div>
-                            <input
-                                className={ClassNames.CLR_INPUT}
-                                name="search"
-                                type="text"
-                                defaultValue={filterValue}
-                                onChange={evt => {
-                                    this.handleFilterChnage(evt);
-                                }}
-                            />
+                            {filterType === FilterType.STR ? (
+                                <input
+                                    className={ClassNames.CLR_INPUT}
+                                    name="search"
+                                    type="text"
+                                    defaultValue={filterValue}
+                                    onChange={evt => {
+                                        this.updateFilter(evt.target.value);
+                                    }}
+                                />
+                            ) : (
+                                filterType === FilterType.CUSTOM && customFilter && customFilter
+                            )}
                         </div>
                         <span className={ClassNames.OFFSCREEN_FOCUS_REBOUNDER} />
                     </div>

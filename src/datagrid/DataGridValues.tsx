@@ -11,7 +11,7 @@
 import * as React from "react";
 import {Icon} from "../icon";
 import {Button} from "../forms/button";
-import {SortOrder, DataGridRow} from "./DataGrid";
+import {SortOrder, DataGridRow} from ".";
 
 /**
  * General file description :
@@ -20,10 +20,10 @@ import {SortOrder, DataGridRow} from "./DataGrid";
 
 // Column Data
 export const normalColumns = [
-    {columnName: "User ID", width: "96px"},
-    {columnName: "Name", width: "96px"},
-    {columnName: "Creation Date", width: "96px"},
-    {columnName: "Favorite color", width: "96px"},
+    {columnName: "User ID", style: {width: "96px"}},
+    {columnName: "Name", style: {width: "96px"}},
+    {columnName: "Creation Date", style: {width: "96px"}},
+    {columnName: "Favorite color", style: {width: "96px"}},
 ];
 
 // Row Data
@@ -96,10 +96,14 @@ export const customRows = [
 
 // Column Data with sort option
 export const sortColumns = [
-    {columnName: "User ID", width: "96px", sort: {defaultSortOrder: SortOrder.ASC, sortFunction: sortFunction}},
-    {columnName: "Name", width: "96px", sort: {defaultSortOrder: SortOrder.NONE, sortFunction: sortFunction}},
-    {columnName: "Creation Date", width: "96px"},
-    {columnName: "Favorite color", width: "96px"},
+    {
+        columnName: "User ID",
+        style: {width: "96px"},
+        sort: {defaultSortOrder: SortOrder.ASC, sortFunction: sortFunction},
+    },
+    {columnName: "Name", style: {width: "96px"}, sort: {defaultSortOrder: SortOrder.NONE, sortFunction: sortFunction}},
+    {columnName: "Creation Date", style: {width: "96px"}},
+    {columnName: "Favorite color", style: {width: "96px"}},
 ];
 
 // Custom sorting function for number and string type
@@ -198,6 +202,8 @@ export class GridActions extends React.PureComponent<any, GridActionsState> {
     }
 }
 
+const expandableContent =
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin in neque in ante placerat mattis id sed quam. Proin rhoncus lacus et tempor dignissim. Vivamus sem quam, pellentesque aliquet suscipit eget, pellentesque sed arcu. Vivamus in dui lectus. Suspendisse cursus est ac nisl imperdiet viverra. Aenean sagittis nibh lacus, in eleifend urna ultrices et. Mauris porttitor nisi nec velit pharetra porttitor. Vestibulum vulputate sollicitudin dolor ut tincidunt. Phasellus vitae blandit felis. Nullam posuere ipsum tincidunt velit pellentesque rhoncus. Morbi faucibus ut ipsum at malesuada. Nam vestibulum felis sit amet metus finibus hendrerit. Fusce faucibus odio eget ex vulputate rhoncus. Fusce nec aliquam leo, at suscipit diam.";
 // Expandable row data
 export const expandableRows = [
     {
@@ -207,8 +213,7 @@ export const expandableRows = [
             {columnName: "Creation Date", content: "Sep 11, 2008"},
             {columnName: "Favorite color", content: "Blue"},
         ],
-        expandableContent:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin in neque in ante placerat mattis id sed quam. Proin rhoncus lacus et tempor dignissim. Vivamus sem quam, pellentesque aliquet suscipit eget, pellentesque sed arcu. Vivamus in dui lectus. Suspendisse cursus est ac nisl imperdiet viverra. Aenean sagittis nibh lacus, in eleifend urna ultrices et. Mauris porttitor nisi nec velit pharetra porttitor. Vestibulum vulputate sollicitudin dolor ut tincidunt. Phasellus vitae blandit felis. Nullam posuere ipsum tincidunt velit pellentesque rhoncus. Morbi faucibus ut ipsum at malesuada. Nam vestibulum felis sit amet metus finibus hendrerit. Fusce faucibus odio eget ex vulputate rhoncus. Fusce nec aliquam leo, at suscipit diam.",
+        expandableContent: expandableContent,
     },
     {
         content: [
@@ -217,8 +222,7 @@ export const expandableRows = [
             {columnName: "Creation Date", content: "Aug 2, 2014"},
             {columnName: "Favorite color", content: "Orange"},
         ],
-        expandableContent:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin in neque in ante placerat mattis id sed quam. Proin rhoncus lacus et tempor dignissim. Vivamus sem quam, pellentesque aliquet suscipit eget, pellentesque sed arcu. Vivamus in dui lectus. Suspendisse cursus est ac nisl imperdiet viverra. Aenean sagittis nibh lacus, in eleifend urna ultrices et. Mauris porttitor nisi nec velit pharetra porttitor. Vestibulum vulputate sollicitudin dolor ut tincidunt. Phasellus vitae blandit felis. Nullam posuere ipsum tincidunt velit pellentesque rhoncus. Morbi faucibus ut ipsum at malesuada. Nam vestibulum felis sit amet metus finibus hendrerit. Fusce faucibus odio eget ex vulputate rhoncus. Fusce nec aliquam leo, at suscipit diam.",
+        expandableContent: expandableContent,
     },
     {
         content: [
@@ -227,7 +231,6 @@ export const expandableRows = [
             {columnName: "Creation Date", content: "Jan 4, 2019"},
             {columnName: "Favorite color", content: "Yellow"},
         ],
-        expandableContent:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin in neque in ante placerat mattis id sed quam. Proin rhoncus lacus et tempor dignissim. Vivamus sem quam, pellentesque aliquet suscipit eget, pellentesque sed arcu. Vivamus in dui lectus. Suspendisse cursus est ac nisl imperdiet viverra. Aenean sagittis nibh lacus, in eleifend urna ultrices et. Mauris porttitor nisi nec velit pharetra porttitor. Vestibulum vulputate sollicitudin dolor ut tincidunt. Phasellus vitae blandit felis. Nullam posuere ipsum tincidunt velit pellentesque rhoncus. Morbi faucibus ut ipsum at malesuada. Nam vestibulum felis sit amet metus finibus hendrerit. Fusce faucibus odio eget ex vulputate rhoncus. Fusce nec aliquam leo, at suscipit diam.",
+        expandableContent: expandableContent,
     },
 ];

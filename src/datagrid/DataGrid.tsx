@@ -58,7 +58,6 @@ type DataGridProps = {
  * @param {className} CSS class name
  * @param {columns} column details
  * @param {style} CSS style
- * @param {width} width of column
  * @param {filter} Filter component
  */
 export type DataGridColumn = {
@@ -67,7 +66,6 @@ export type DataGridColumn = {
     sort?: DataGridSort;
     className?: string;
     style?: any;
-    width?: any;
     filter?: React.ReactNode;
 };
 
@@ -231,6 +229,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
         this.setState({
             allRows: [...updatedRows],
+            selectAll: updatedRows.length == 0 ? false : this.state.selectAll,
         });
     };
 
@@ -344,7 +343,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         const {allColumns} = this.state;
         const column = allColumns.find(col => col.columnName === columnName);
 
-        return column && column.width ? column.width : undefined;
+        return column && column.style && column.style.width ? column.style.width : undefined;
     }
     /* ##########  DataGrid private methods end  ############ */
 
@@ -493,13 +492,13 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // Function to build datagrid colums
     private buildDataGridColumn(column: DataGridColumn, index: number): React.ReactElement {
-        const {columnName, columnID, className, style, width, sort, filter} = column;
+        const {columnName, columnID, className, style, sort, filter} = column;
         return (
             <div
                 role="columnheader"
                 className={classNames([ClassNames.DATAGRID_COLUMN, className])}
                 aria-sort="none"
-                style={{width: width, ...style}}
+                style={{...style}}
                 key={"col-" + index}
             >
                 <div className={ClassNames.DATAGRID_COLUMN_FLEX}>

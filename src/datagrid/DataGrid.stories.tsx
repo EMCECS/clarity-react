@@ -10,7 +10,7 @@
 
 import * as React from "react";
 import {storiesOf} from "@storybook/react";
-import {DataGrid, GridSelectionType, GridRowType, SortOrder} from "./DataGrid";
+import {DataGrid, GridSelectionType, GridRowType, SortOrder, DataGridFilter, FilterType} from ".";
 import {
     normalColumns,
     normalRows,
@@ -22,13 +22,16 @@ import {
     filterFunction,
     sortFunction,
 } from "./DataGridValues";
-import {DataGridFilter} from "./DataGridFilter";
+//import {DataGridFilter, FilterType} from "./DataGridFilter";
+import {CustomFilter} from "./CustomFilter";
 
 // Refrence to call dataGrid methods
 const datagridRef = React.createRef<DataGrid>();
 const datagridActionsRef = React.createRef<GridActions>();
 const datagridFilterRef = React.createRef<DataGrid>();
 const datagridFilterSortRef = React.createRef<DataGrid>();
+const datagridCustomFilterRef = React.createRef<DataGrid>();
+const filterRef = React.createRef<DataGridFilter>();
 
 storiesOf("DataGrid", module)
     .add("Basic grid", () => (
@@ -94,30 +97,30 @@ storiesOf("DataGrid", module)
                 columns={[
                     {
                         columnName: "User ID",
-                        width: "96px",
+                        style: {width: "96px"},
                         filter: (
                             <DataGridFilter
                                 onFilter={filterFunction}
                                 columnName={"User ID"}
                                 datagridRef={datagridFilterRef}
-                                style={{left: "-1%"}}
+                                style={{left: "-8px"}}
                             />
                         ),
                     },
                     {
                         columnName: "Name",
-                        width: "96px",
+                        style: {width: "96px"},
                         filter: (
                             <DataGridFilter
                                 onFilter={filterFunction}
                                 columnName={"Name"}
                                 datagridRef={datagridFilterRef}
-                                style={{left: "19%"}}
+                                style={{left: "203px"}}
                             />
                         ),
                     },
-                    {columnName: "Creation Date", width: "96px"},
-                    {columnName: "Favorite color", width: "96px"},
+                    {columnName: "Creation Date", style: {width: "96px"}},
+                    {columnName: "Favorite color", style: {width: "96px"}},
                 ]}
                 rows={normalRows}
                 footer={footer}
@@ -131,32 +134,64 @@ storiesOf("DataGrid", module)
                 columns={[
                     {
                         columnName: "User ID",
-                        width: "96px",
+                        style: {width: "96px"},
                         sort: {defaultSortOrder: SortOrder.ASC, sortFunction: sortFunction},
                         filter: (
                             <DataGridFilter
                                 onFilter={filterFunction}
                                 columnName={"User ID"}
                                 datagridRef={datagridFilterSortRef}
-                                style={{left: "-1%"}}
+                                style={{left: "-8px"}}
                             />
                         ),
                     },
                     {
                         columnName: "Name",
-                        width: "96px",
+                        style: {width: "96px"},
                         sort: {defaultSortOrder: SortOrder.NONE, sortFunction: sortFunction},
                         filter: (
                             <DataGridFilter
                                 onFilter={filterFunction}
                                 columnName={"Name"}
                                 datagridRef={datagridFilterSortRef}
-                                style={{left: "19%"}}
+                                style={{left: "203px"}}
                             />
                         ),
                     },
-                    {columnName: "Creation Date", width: "96px"},
-                    {columnName: "Favorite color", width: "96px"},
+                    {columnName: "Creation Date", style: {width: "96px"}},
+                    {columnName: "Favorite color", style: {width: "96px"}},
+                ]}
+                rows={normalRows}
+                footer={footer}
+            />
+        </div>
+    ))
+    .add("Grid with Custom filter", () => (
+        <div style={{width: "80%"}}>
+            <DataGrid
+                ref={datagridCustomFilterRef}
+                columns={[
+                    {
+                        columnName: "User ID",
+                        style: {width: "96px"},
+                    },
+                    {
+                        columnName: "Name",
+                        style: {width: "96px"},
+                        filter: (
+                            <DataGridFilter
+                                ref={filterRef}
+                                onFilter={filterFunction}
+                                columnName={"Name"}
+                                datagridRef={datagridCustomFilterRef}
+                                style={{left: "296px"}}
+                                filterType={FilterType.CUSTOM}
+                                customFilter={<CustomFilter datagridFilterRef={filterRef} />}
+                            />
+                        ),
+                    },
+                    {columnName: "Creation Date", style: {width: "96px"}},
+                    {columnName: "Favorite color", style: {width: "96px"}},
                 ]}
                 rows={normalRows}
                 footer={footer}
