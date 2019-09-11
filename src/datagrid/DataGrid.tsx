@@ -153,10 +153,12 @@ export enum SortOrder {
 
 /**
  * Enum for RowTpye :
- * @param {EXPANDABLE} for enabling expandable row
+ * @param {EXPANDABLE} for enabling expandable rows
+ * @param {COMPACT} for enabling compact rows
  */
 export enum GridRowType {
     EXPANDABLE = "expandable",
+    COMPACT = "compact",
 }
 
 /**
@@ -629,11 +631,12 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // render datagrid
     render() {
-        const {className, style} = this.props;
+        const {className, style, rowType} = this.props;
         return (
             <div
                 className={classNames([
                     ClassNames.DATAGRID_HOST, // prettier
+                    rowType === GridRowType.COMPACT && ClassNames.DATAGRID_COMPACT,
                     className,
                 ])}
                 style={style}

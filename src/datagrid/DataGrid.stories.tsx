@@ -22,7 +22,6 @@ import {
     filterFunction,
     sortFunction,
 } from "./DataGridValues";
-//import {DataGridFilter, FilterType} from "./DataGridFilter";
 import {CustomFilter} from "./CustomFilter";
 
 // Refrence to call dataGrid methods
@@ -206,5 +205,21 @@ storiesOf("DataGrid", module)
     .add("Empty data grid", () => (
         <div style={{width: "80%"}}>
             <DataGrid columns={normalColumns} footer={{content: "0 users"}} />
+        </div>
+    ))
+    .add("Grid with compact row", () => (
+        <div style={{width: "80%"}}>
+            <DataGrid columns={normalColumns} rows={normalRows} footer={footer} rowType={GridRowType.COMPACT} />
+        </div>
+    ))
+    .add("Grid with fixed height", () => (
+        <div style={{width: "80%"}}>
+            <DataGrid
+                columns={normalColumns}
+                rows={normalRows}
+                footer={footer}
+                //Give fixed height here
+                style={{height: "185px"}}
+            />
         </div>
     ));

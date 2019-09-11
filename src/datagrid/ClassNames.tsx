@@ -51,11 +51,11 @@ export class ClassNames {
         "datagrid-expandable-caret datagrid-fixed-column datagrid-cell ng-star-inserted";
     public static DATAGRID_EXPANDABLE_CARET_BUTTON: string = "datagrid-expandable-caret-button ng-star-inserted";
     public static DATAGRID_EXPANDABLE_CARET_ICON: string = "datagrid-expandable-caret-icon";
-    static DATAGRID_COMPACT: string = "datagrid-compact datagrid-host";
     public static DATAGRID_EMPTY: string = "datagrid-empty";
     public static DATAGRID_PLACEHOLDER_IMG: string = "datagrid-placeholder-image";
     public static ICON_SOLID: string = "is-solid";
     public static OFFSCREEN_FOCUS_REBOUNDER: string = "offscreen-focus-rebounder";
     public static CLR_INPUT: string = "clr-input ng-pristine ng-valid ng-touched";
     public static DATAGRID_FILTERED: string = "datagrid-filtered datagrid-filter-open";
+    public static DATAGRID_COMPACT: string = "datagrid-compact datagrid-host";
 }

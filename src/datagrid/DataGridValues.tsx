@@ -94,20 +94,28 @@ export const customRows = [
     },
 ];
 
-// Column Data with sort option
-export const sortColumns = [
-    {
-        columnName: "User ID",
-        style: {width: "96px"},
-        sort: {defaultSortOrder: SortOrder.ASC, sortFunction: sortFunction},
-    },
-    {columnName: "Name", style: {width: "96px"}, sort: {defaultSortOrder: SortOrder.NONE, sortFunction: sortFunction}},
-    {columnName: "Creation Date", style: {width: "96px"}},
-    {columnName: "Favorite color", style: {width: "96px"}},
-];
+//Custom function to filter data
+export const filterFunction = (rows: DataGridRow[], columnValue: string, columnName: string): DataGridRow[] => {
+    if (columnValue === "" || columnValue === undefined) {
+        return normalRows;
+    }
+    let newRows = rows.filter(function(row) {
+        let matchFound = false;
+        for (let index in row.content) {
+            let content = String(row.content[index].content);
+            if (content.indexOf(columnValue) !== -1) {
+                matchFound = true;
+            }
+        }
+        if (matchFound) {
+            return row;
+        }
+    });
+    return newRows;
+};
 
 // Custom sorting function for number and string type
-export function sortFunction(rows: DataGridRow[], sortOrder: SortOrder, columnName: string) {
+export const sortFunction = (rows: DataGridRow[], sortOrder: SortOrder, columnName: string): DataGridRow[] => {
     rows.sort(function(first: DataGridRow, second: DataGridRow): number {
         let result = 0;
         let firstRecord = first.content.find(function(element: any) {
@@ -137,30 +145,22 @@ export function sortFunction(rows: DataGridRow[], sortOrder: SortOrder, columnNa
                 }
             }
         }
-
         return result;
     });
-
     return rows;
-}
+};
 
-//Custom function to filter data
-export function filterFunction(rows: DataGridRow[], columnValue: string, columnName: string) {
-    if (columnValue === "" || columnValue === undefined) {
-        return normalRows;
-    }
-    let newRows = rows.filter(function(row) {
-        let matchFound = false;
-        for (let index in row.content) {
-            let content = String(row.content[index].content);
-            if (content.indexOf(columnValue) !== -1) {
-                matchFound = true;
-            }
-        }
-        if (matchFound) return row;
-    });
-    return newRows;
-}
+// Column Data with sort option
+export const sortColumns = [
+    {
+        columnName: "User ID",
+        style: {width: "96px"},
+        sort: {defaultSortOrder: SortOrder.ASC, sortFunction: sortFunction},
+    },
+    {columnName: "Name", style: {width: "96px"}, sort: {defaultSortOrder: SortOrder.NONE, sortFunction: sortFunction}},
+    {columnName: "Creation Date", style: {width: "96px"}},
+    {columnName: "Favorite color", style: {width: "96px"}},
+];
 
 // Grid Action component
 type GridActionsState = {

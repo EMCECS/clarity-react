@@ -77,7 +77,7 @@ export class Button extends React.PureComponent<ButtonProps> {
                 className={classNames(Button.getClassNames(this.props))}
                 onClick={onClick}
                 onSubmit={onSubmit}
-                type={type ? type : undefined}
+                type={type}
             >
                 {icon && <Icon {...icon} />}
                 {children}

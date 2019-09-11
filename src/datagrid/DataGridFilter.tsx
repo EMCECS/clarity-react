@@ -70,6 +70,9 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
 
     static defaultProps = {
         filterType: FilterType.STR,
+        className: "",
+        style: {},
+        customFilter: null,
     };
 
     // Initial state for filter
@@ -135,13 +138,65 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
         }
     };
 
+    // Function to render filter box
+    private openFilter(): React.ReactElement {
+        const {filterValue} = this.state;
+        const {style, className, filterType, customFilter} = this.props;
+        return (
+            <div>
+                <span className={ClassNames.OFFSCREEN_FOCUS_REBOUNDER} />
+                <span className={ClassNames.OFFSCREEN_FOCUS_REBOUNDER} />
+                <span className={ClassNames.OFFSCREEN_FOCUS_REBOUNDER} />
+                <span className={ClassNames.OFFSCREEN_FOCUS_REBOUNDER} />
+                <div
+                    ref={this.refChild}
+                    className={classNames([ClassNames.DATARID_FILTER, ClassNames.CLR_POPOVER_CONTENT, className])}
+                    style={{
+                        zIndex: "5000",
+                        position: "fixed",
+                        top: "42px",
+                        bottom: "auto",
+                        right: "auto",
+                        height: "90px",
+                        ...style,
+                    }}
+                >
+                    <div className={ClassNames.DATAGRID_FILTER_WRAPPER}>
+                        <Button
+                            className={ClassNames.DATAGRID_FILTER_POPUP_CLOSE}
+                            defaultBtn={false}
+                            onClick={this.handleButtonClick}
+                            icon={{
+                                shape: "close",
+                            }}
+                        />
+                    </div>
+                    {filterType === FilterType.STR ? (
+                        <input
+                            className={ClassNames.CLR_INPUT}
+                            name="search"
+                            type="text"
+                            defaultValue={filterValue}
+                            onChange={evt => {
+                                this.updateFilter(evt.target.value);
+                            }}
+                        />
+                    ) : (
+                        filterType === FilterType.CUSTOM && customFilter && customFilter
+                    )}
+                </div>
+                <span className={ClassNames.OFFSCREEN_FOCUS_REBOUNDER} />
+            </div>
+        );
+    }
+
     render() {
         const {isOpen, filterValue} = this.state;
-        const {style, className, filterType, customFilter} = this.props;
         const FilterBtnClasses = classNames([
             ClassNames.DATAGRID_FILTER_BUTTON,
             filterValue && ClassNames.DATAGRID_FILTERED,
         ]);
+
         return (
             <div ref={this.refParent} className={classNames([ClassNames.CLR_FILTER])} style={{position: "relative"}}>
                 <Button
@@ -154,56 +209,7 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
                         className: ClassNames.ICON_SOLID,
                     }}
                 />
-                {isOpen && (
-                    <div>
-                        <span className={ClassNames.OFFSCREEN_FOCUS_REBOUNDER} />
-                        <span className={ClassNames.OFFSCREEN_FOCUS_REBOUNDER} />
-                        <span className={ClassNames.OFFSCREEN_FOCUS_REBOUNDER} />
-                        <span className={ClassNames.OFFSCREEN_FOCUS_REBOUNDER} />
-                        <div
-                            ref={this.refChild}
-                            className={classNames([
-                                ClassNames.DATARID_FILTER,
-                                ClassNames.CLR_POPOVER_CONTENT,
-                                className,
-                            ])}
-                            style={{
-                                zIndex: "5000",
-                                position: "fixed",
-                                top: "42px",
-                                bottom: "auto",
-                                right: "auto",
-                                height: "90px",
-                                ...style,
-                            }}
-                        >
-                            <div className={ClassNames.DATAGRID_FILTER_WRAPPER}>
-                                <Button
-                                    className={ClassNames.DATAGRID_FILTER_POPUP_CLOSE}
-                                    defaultBtn={false}
-                                    onClick={this.handleButtonClick}
-                                    icon={{
-                                        shape: "close",
-                                    }}
-                                />
-                            </div>
-                            {filterType === FilterType.STR ? (
-                                <input
-                                    className={ClassNames.CLR_INPUT}
-                                    name="search"
-                                    type="text"
-                                    defaultValue={filterValue}
-                                    onChange={evt => {
-                                        this.updateFilter(evt.target.value);
-                                    }}
-                                />
-                            ) : (
-                                filterType === FilterType.CUSTOM && customFilter && customFilter
-                            )}
-                        </div>
-                        <span className={ClassNames.OFFSCREEN_FOCUS_REBOUNDER} />
-                    </div>
-                )}
+                {isOpen && this.openFilter()}
             </div>
         );
     }
