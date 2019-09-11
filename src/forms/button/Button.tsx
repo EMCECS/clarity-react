@@ -25,11 +25,11 @@ export type ButtonProps = {
     primary?: boolean;
     size?: ButtonSize;
     state?: ButtonState;
-    submit?: boolean;
     children?: ReactNode | ReactNode[];
     icon?: IconProps;
     defaultBtn?: boolean;
     show?: boolean;
+    type?: string;
 };
 
 export enum ButtonState {
@@ -70,14 +70,14 @@ export class Button extends React.PureComponent<ButtonProps> {
     }
 
     render() {
-        const {disabled, children, onClick, onSubmit, submit, icon, show} = this.props;
+        const {disabled, children, onClick, onSubmit, icon, show, type} = this.props;
         return show ? (
             <button
                 disabled={disabled}
                 className={classNames(Button.getClassNames(this.props))}
                 onClick={onClick}
                 onSubmit={onSubmit}
-                type={submit ? "submit" : undefined}
+                type={type}
             >
                 {icon && <Icon {...icon} />}
                 {children}

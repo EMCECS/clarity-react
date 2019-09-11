@@ -36,4 +36,26 @@ export class ClassNames {
     public static DATAGRID_CAL_HEADER: string = "datagrid-calculation-header";
     public static DATAGRID_ACTION_BAR: string = "datagrid-action-bar";
     public static DATAGRID_SELECTED: string = "datagrid-selected";
+    public static DATAGRID_NG_STAR_INSERTED: string = "ng-star-inserted";
+    public static DATAGRID_SORT_ICON: string = "sort-icon";
+    public static CLR_FILTER: string = "clr-dg-filter";
+    public static CLR_POPOVER_CONTENT: string = "clr-popover-content";
+    public static DATARID_FILTER: string = "datagrid-filter";
+    public static DATAGRID_FILTER_BUTTON: string = "datagrid-filter-toggle clr-anchor clr-smart-open-close";
+    public static DATAGRID_FILTER_INPUT: string = "clr-input ng-pristine ng-valid ng-touched";
+    public static DATAGRID_FILTER_WRAPPER: string = "data-grid-filter-close-wrapper";
+    public static DATAGRID_FILTER_POPUP_CLOSE: string = "close clr-smart-close-button";
+    public static DATAGRID_ROW_FLEX: string =
+        "datagrid-row-flex datagrid-row-detail datagrid-container ng-star-inserted";
+    public static DATAGRID_EXPANDABLE_CARET: string =
+        "datagrid-expandable-caret datagrid-fixed-column datagrid-cell ng-star-inserted";
+    public static DATAGRID_EXPANDABLE_CARET_BUTTON: string = "datagrid-expandable-caret-button ng-star-inserted";
+    public static DATAGRID_EXPANDABLE_CARET_ICON: string = "datagrid-expandable-caret-icon";
+    public static DATAGRID_EMPTY: string = "datagrid-empty";
+    public static DATAGRID_PLACEHOLDER_IMG: string = "datagrid-placeholder-image";
+    public static ICON_SOLID: string = "is-solid";
+    public static OFFSCREEN_FOCUS_REBOUNDER: string = "offscreen-focus-rebounder";
+    public static CLR_INPUT: string = "clr-input ng-pristine ng-valid ng-touched";
+    public static DATAGRID_FILTERED: string = "datagrid-filtered datagrid-filter-open";
+    public static DATAGRID_COMPACT: string = "datagrid-compact datagrid-host";
 }
