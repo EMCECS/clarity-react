@@ -39,7 +39,7 @@ export type DataGridFilterProps = {
     className?: string;
     datagridRef: any;
     columnName: string;
-    onFilter: (rows: DataGridRow[], columnValue: any, columnName: string) => DataGridRow[];
+    onFilter: (rows: DataGridRow[], columnValue: any, columnName: string) => Promise<DataGridRow[]>;
     filterType?: FilterType;
     customFilter?: React.ReactNode;
 };
@@ -93,7 +93,10 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
 
         if (onFilter && datagridRef) {
             this.setState({filterValue: value}, () =>
-                datagridRef.current!.updateRows(onFilter(rows, value, columnName)),
+                onFilter(rows, value, columnName).then(data => {
+                    // Update datagrid rows
+                    datagridRef.current!.updateRows(data);
+                }),
             );
         }
     };
