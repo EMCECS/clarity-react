@@ -120,7 +120,7 @@ export type DataGridFooter = {
  */
 export type DataGridSort = {
     defaultSortOrder: SortOrder;
-    sortFunction: (rows: DataGridRow[], order: SortOrder, columnName: string) => DataGridRow[];
+    sortFunction: (rows: DataGridRow[], order: SortOrder, columnName: string) => Promise<DataGridRow[]>;
 };
 
 export type DatagridData = {
@@ -313,13 +313,16 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
             if (currentSortOrder === SortOrder.NONE || currentSortOrder === SortOrder.DESC)
                 nextSortOrder = SortOrder.ASC;
 
-            const rows = this.updateRowIDs(sortFunction(allRows, nextSortOrder, columnName));
-            // update sort order
-            allColumns[columnID].sort!.defaultSortOrder = nextSortOrder;
+            sortFunction(allRows, nextSortOrder, columnName).then((data: DataGridRow[]) => {
+                const rows = this.updateRowIDs(data);
 
-            this.setState({
-                allRows: [...rows],
-                allColumns: [...allColumns],
+                // update sort order
+                allColumns[columnID].sort!.defaultSortOrder = nextSortOrder;
+
+                this.setState({
+                    allRows: [...rows],
+                    allColumns: [...allColumns],
+                });
             });
         }
     };
