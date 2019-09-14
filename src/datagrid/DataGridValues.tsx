@@ -108,23 +108,29 @@ export const customRows = [
  */
 
 //Custom function to filter data
-export const filterFunction = (rows: DataGridRow[], columnValue: string, columnName: string): DataGridRow[] => {
-    if (columnValue === "" || columnValue === undefined) {
-        return normalRows;
-    }
-    let newRows = rows.filter(function(row) {
-        let matchFound = false;
-        for (let index in row.rowData) {
-            let content = String(row.rowData[index].cellData);
-            if (content.indexOf(columnValue) !== -1) {
-                matchFound = true;
+export const filterFunction = (
+    rows: DataGridRow[],
+    columnValue: string,
+    columnName: string,
+): Promise<DataGridRow[]> => {
+    return new Promise((resolve, reject) => {
+        if (columnValue === "" || columnValue === undefined) {
+            resolve(normalRows);
+        }
+        let newRows = rows.filter(function(row) {
+            let matchFound = false;
+            for (let index in row.rowData) {
+                let content = String(row.rowData[index].cellData);
+                if (content.indexOf(columnValue) !== -1) {
+                    matchFound = true;
+                }
             }
-        }
-        if (matchFound) {
-            return row;
-        }
+            if (matchFound) {
+                return row;
+            }
+        });
+        resolve(newRows);
     });
-    return newRows;
 };
 
 /**
@@ -132,39 +138,41 @@ export const filterFunction = (rows: DataGridRow[], columnValue: string, columnN
  */
 
 // Custom sorting function for number and string type
-export const sortFunction = (rows: DataGridRow[], sortOrder: SortOrder, columnName: string): DataGridRow[] => {
-    rows.sort(function(first: DataGridRow, second: DataGridRow): number {
-        let result = 0;
-        let firstRecord = first.rowData.find(function(element: any) {
-            if (element.columnName === columnName) return element;
-        });
+export const sortFunction = (rows: DataGridRow[], sortOrder: SortOrder, columnName: string): Promise<DataGridRow[]> => {
+    return new Promise((resolve, reject) => {
+        rows.sort(function(first: DataGridRow, second: DataGridRow): number {
+            let result = 0;
+            let firstRecord = first.rowData.find(function(element: any) {
+                if (element.columnName === columnName) return element;
+            });
 
-        let secondRecord = second.rowData.find(function(element: any) {
-            if (element.columnName === columnName) return element;
-        });
+            let secondRecord = second.rowData.find(function(element: any) {
+                if (element.columnName === columnName) return element;
+            });
 
-        if (firstRecord && secondRecord) {
-            const contentType = typeof firstRecord.cellData;
+            if (firstRecord && secondRecord) {
+                const contentType = typeof firstRecord.cellData;
 
-            if (sortOrder === SortOrder.ASC) {
-                if (contentType === "number") {
-                    result = firstRecord.cellData - secondRecord.cellData;
-                } else if (contentType === "string") {
-                    if (firstRecord.cellData > secondRecord.cellData) result = -1;
-                    else if (firstRecord.cellData < secondRecord.cellData) result = 1;
-                }
-            } else if (sortOrder == SortOrder.DESC) {
-                if (contentType === "number") {
-                    result = secondRecord.cellData - firstRecord.cellData;
-                } else if (contentType === "string") {
-                    if (secondRecord.cellData > firstRecord.cellData) result = -1;
-                    else if (secondRecord.cellData < firstRecord.cellData) result = 1;
+                if (sortOrder === SortOrder.ASC) {
+                    if (contentType === "number") {
+                        result = firstRecord.cellData - secondRecord.cellData;
+                    } else if (contentType === "string") {
+                        if (firstRecord.cellData > secondRecord.cellData) result = -1;
+                        else if (firstRecord.cellData < secondRecord.cellData) result = 1;
+                    }
+                } else if (sortOrder == SortOrder.DESC) {
+                    if (contentType === "number") {
+                        result = secondRecord.cellData - firstRecord.cellData;
+                    } else if (contentType === "string") {
+                        if (secondRecord.cellData > firstRecord.cellData) result = -1;
+                        else if (secondRecord.cellData < firstRecord.cellData) result = 1;
+                    }
                 }
             }
-        }
-        return result;
+            return result;
+        });
+        resolve(rows);
     });
-    return rows;
 };
 
 // Column Data with sort option
