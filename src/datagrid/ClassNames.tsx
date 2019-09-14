@@ -58,4 +58,15 @@ export class ClassNames {
     public static CLR_INPUT: string = "clr-input ng-pristine ng-valid ng-touched";
     public static DATAGRID_FILTERED: string = "datagrid-filtered datagrid-filter-open";
     public static DATAGRID_COMPACT: string = "datagrid-compact datagrid-host";
+    public static DATAGRID_PAGINATION: string = "pagination";
+    public static CLR_SELECT_WRAPPER: string = "clr-select-wrapper";
+    public static CLR_PAGE_SIZE_SELECT: string = "clr-page-size-select ng-untouched ng-pristine ng-valid";
+    public static PAGINATION_DESC: string = "pagination-description";
+    public static PAGINATION_LIST: string = "pagination-list";
+    public static PAGINATION_FIRST: string = "pagination-first";
+    public static PAGINATION_PREVIOUS: string = "pagination-previous";
+    public static PAGINATION_CURRENT: string = "pagination-current";
+    public static PAGINATION_NEXT: string = "pagination-next";
+    public static PAGINATION_LAST: string = "pagination-last";
+    public static PAGINATION_SIZE: string = "pagination-size";
 }

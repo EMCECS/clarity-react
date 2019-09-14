@@ -21,6 +21,8 @@ import {
     expandableRows,
     filterFunction,
     sortFunction,
+    paginationDetails,
+    paginationRows,
 } from "./DataGridValues";
 import {CustomFilter} from "./CustomFilter";
 
@@ -204,7 +206,7 @@ storiesOf("DataGrid", module)
     ))
     .add("Empty data grid", () => (
         <div style={{width: "80%"}}>
-            <DataGrid columns={normalColumns} footer={{content: "0 users"}} />
+            <DataGrid columns={normalColumns} footer={{footerData: "0 users"}} />
         </div>
     ))
     .add("Grid with compact row", () => (
@@ -221,5 +223,10 @@ storiesOf("DataGrid", module)
                 //Give fixed height here
                 style={{height: "185px"}}
             />
+        </div>
+    ))
+    .add("Grid with pagination", () => (
+        <div style={{width: "80%"}}>
+            <DataGrid columns={normalColumns} rows={paginationRows.slice(0, 5)} pagination={paginationDetails} />
         </div>
     ));
