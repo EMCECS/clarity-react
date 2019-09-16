@@ -357,8 +357,12 @@ export const getPageData = (pageIndex: number, pageSize: number): Promise<DataGr
     return new Promise((resolve, reject) => {
         let rows: DataGridRow[] = [];
         if (pageSize == 5) {
-            if (pageIndex == 2) rows = paginationRows.slice(5, 10);
-            if (pageIndex == 1) rows = paginationRows.slice(0, 5);
+            if (pageIndex == 2) {
+                rows = paginationRows.slice(5, 10);
+            }
+            if (pageIndex == 1) {
+                rows = paginationRows.slice(0, 5);
+            }
         } else if (pageSize == 10) {
             rows = paginationRows;
         }
