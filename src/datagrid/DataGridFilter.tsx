@@ -124,10 +124,18 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
 
     private subscribeDocumentClick = () => {
         window.addEventListener("click", this.handleDocumentClick as any, true);
+        window.addEventListener("resize", this.resize as any, true);
     };
 
     private unsubscribeDocumentClick = () => {
         window.removeEventListener("click", this.handleDocumentClick as any, true);
+        window.removeEventListener("resize", this.resize as any, true);
+    };
+
+    private resize = () => {
+        if (this.state.isOpen) {
+            this.toggle();
+        }
     };
 
     private handleDocumentClick = (evt: Event) => {
@@ -145,6 +153,11 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
     private openFilter(): React.ReactElement {
         const {filterValue} = this.state;
         const {style, className, filterType, customFilter} = this.props;
+
+        // Calculate left and top for filter box
+        const filterBoxTop = this.refParent.current!.getClientRects()[0].top - 10;
+        const transformVal = "translateX(" + "-92" + "%) " + "translateY(" + filterBoxTop + "%)";
+
         return (
             <div>
                 <span className={ClassNames.OFFSCREEN_FOCUS_REBOUNDER} />
@@ -156,11 +169,13 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
                     className={classNames([ClassNames.DATARID_FILTER, ClassNames.CLR_POPOVER_CONTENT, className])}
                     style={{
                         zIndex: "5000",
-                        position: "fixed",
-                        top: "42px",
+                        position: "absolute",
+                        top: 0,
                         bottom: "auto",
                         right: "auto",
                         height: "90px",
+                        left: 0,
+                        transform: transformVal,
                         ...style,
                     }}
                 >

@@ -68,9 +68,9 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
     private accordionPanel(): React.ReactElement {
         return (
             <div>
-                {this.state.panelItems.map((content: any) => {
+                {this.state.panelItems.map((content: any, index: number) => {
                     return (
-                        <div className={classNames([ClassNames.ACCORDION_PANEL])}>
+                        <div className={classNames([ClassNames.ACCORDION_PANEL])} key={"accordionPanel_" + index}>
                             {content.content}
                             {content.isOpen && content.isOpen === true ? (
                                 this.accordionContent(content)
@@ -123,7 +123,7 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
                         <span className={ClassNames.ACCORDION_SR} />
                         <span className={ClassNames.ACCORDION_STATUS}>
                             <Icon className={ClassNames.ACCORDION_ANGLE} dir={Direction.RIGHT} shape="angle" />
-                            <span className={ClassNames.ACCORDION_NUMBER}></span>
+                            <span className={ClassNames.ACCORDION_NUMBER} />
                         </span>
                         <div className={ClassNames.ACCORDION_TITLE}>{title}</div>
                     </button>
@@ -154,7 +154,7 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
                                 <span className={ClassNames.ACCORDION_SR} />
                                 <span className={ClassNames.ACCORDION_STATUS}>
                                     <Icon className={ClassNames.ACCORDION_ANGLE} dir={Direction.RIGHT} shape="angle" />
-                                    <span className={ClassNames.ACCORDION_NUMBER}></span>
+                                    <span className={ClassNames.ACCORDION_NUMBER} />
                                 </span>
                                 <div className={ClassNames.ACCORDION_TITLE}>{content.title}</div>
                             </button>

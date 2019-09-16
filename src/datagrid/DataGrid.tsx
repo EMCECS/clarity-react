@@ -751,7 +751,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
             <div
                 role="gridcell"
                 key={"cell-" + index}
-                className={`${className} ${ClassNames.DATAGRID_CELLS}`}
+                className={classNames([ClassNames.DATAGRID_CELL, ClassNames.DATAGRID_NG_STAR_INSERTED, className])}
                 style={{width: width, ...style}}
             >
                 {cellData}

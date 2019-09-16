@@ -104,7 +104,6 @@ storiesOf("DataGrid", module)
                                 onFilter={filterFunction}
                                 columnName={"User ID"}
                                 datagridRef={datagridFilterRef}
-                                style={{left: "-8px"}}
                             />
                         ),
                     },
@@ -116,7 +115,6 @@ storiesOf("DataGrid", module)
                                 onFilter={filterFunction}
                                 columnName={"Name"}
                                 datagridRef={datagridFilterRef}
-                                style={{left: "203px"}}
                             />
                         ),
                     },
@@ -142,7 +140,6 @@ storiesOf("DataGrid", module)
                                 onFilter={filterFunction}
                                 columnName={"User ID"}
                                 datagridRef={datagridFilterSortRef}
-                                style={{left: "-8px"}}
                             />
                         ),
                     },
@@ -155,7 +152,6 @@ storiesOf("DataGrid", module)
                                 onFilter={filterFunction}
                                 columnName={"Name"}
                                 datagridRef={datagridFilterSortRef}
-                                style={{left: "203px"}}
                             />
                         ),
                     },
@@ -185,7 +181,6 @@ storiesOf("DataGrid", module)
                                 onFilter={filterFunction}
                                 columnName={"Name"}
                                 datagridRef={datagridCustomFilterRef}
-                                style={{left: "296px"}}
                                 filterType={FilterType.CUSTOM}
                                 customFilter={<CustomFilter datagridFilterRef={filterRef} />}
                             />

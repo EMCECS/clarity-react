@@ -27,7 +27,7 @@ export class ClassNames {
     public static DATAGRID_PLACEHOLDER_CONTAINER: string = "datagrid-placeholder-container";
     public static DATAGRID_PLACEHOLDER: string = "datagrid-placeholder";
     public static DATAGRID_SCROLLING_CELLS: string = "datagrid-scrolling-cells";
-    public static DATAGRID_CELLS: string = "datagrid-cell";
+    public static DATAGRID_CELL: string = "datagrid-cell";
     public static DATAGRID_FOOTER: string = "datagrid-footer";
     public static DATAGRID_FOOTER_DESC: string = "datagrid-footer-description";
     public static DATAGRID_FIXED_COLUMN: string = "datagrid-fixed-column";

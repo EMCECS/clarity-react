@@ -53,7 +53,7 @@ export class CustomFilter extends React.PureComponent<CustomFilterProps, CustomF
     render() {
         const {customFilterValue} = this.state;
         return (
-            <div>
+            <div style={{width: "166px"}}>
                 <Select onChange={evt => this.handleFilterChnage(evt)} value={customFilterValue}>
                     <SelectOption value="" />
                     <SelectOption value="Brad">Brad</SelectOption>
