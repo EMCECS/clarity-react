@@ -229,14 +229,14 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                               : [10, 20, 50, 100],
                       firstItem: 0,
                       lastItem: 0,
-                      totalPages: 0,
+                      totalPages: 1,
                   }
                 : undefined,
     };
 
     componentWillMount() {
         this.setInitalState();
-        if (this.props.pagination != undefined) this.setInitalStateForPagination();
+        if (this.props.pagination !== undefined) this.setInitalStateForPagination();
     }
 
     // Function to return all selected rows
@@ -821,7 +821,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                         key="right"
                         className={ClassNames.PAGINATION_NEXT}
                         icon={{shape: "angle right"}}
-                        disabled={currentPage == totalPages ? true : false}
+                        disabled={currentPage === totalPages ? true : false}
                         onClick={this.gotoNextPage}
                     />
                     <Button

@@ -117,7 +117,7 @@ export const filterFunction = (
         if (columnValue === "" || columnValue === undefined) {
             resolve(normalRows);
         }
-        let newRows = rows.filter(function(row) {
+        let newRows = rows.filter(row => {
             let matchFound = false;
             for (let index in row.rowData) {
                 let content = String(row.rowData[index].cellData);
@@ -140,37 +140,39 @@ export const filterFunction = (
 // Custom sorting function for number and string type
 export const sortFunction = (rows: DataGridRow[], sortOrder: SortOrder, columnName: string): Promise<DataGridRow[]> => {
     return new Promise((resolve, reject) => {
-        rows.sort(function(first: DataGridRow, second: DataGridRow): number {
-            let result = 0;
-            let firstRecord = first.rowData.find(function(element: any) {
-                if (element.columnName === columnName) return element;
-            });
+        rows.sort(
+            (first: DataGridRow, second: DataGridRow): number => {
+                let result = 0;
+                let firstRecord = first.rowData.find(function(element: any) {
+                    if (element.columnName === columnName) return element;
+                });
 
-            let secondRecord = second.rowData.find(function(element: any) {
-                if (element.columnName === columnName) return element;
-            });
+                let secondRecord = second.rowData.find(function(element: any) {
+                    if (element.columnName === columnName) return element;
+                });
 
-            if (firstRecord && secondRecord) {
-                const contentType = typeof firstRecord.cellData;
+                if (firstRecord && secondRecord) {
+                    const contentType = typeof firstRecord.cellData;
 
-                if (sortOrder === SortOrder.ASC) {
-                    if (contentType === "number") {
-                        result = firstRecord.cellData - secondRecord.cellData;
-                    } else if (contentType === "string") {
-                        if (firstRecord.cellData > secondRecord.cellData) result = -1;
-                        else if (firstRecord.cellData < secondRecord.cellData) result = 1;
-                    }
-                } else if (sortOrder == SortOrder.DESC) {
-                    if (contentType === "number") {
-                        result = secondRecord.cellData - firstRecord.cellData;
-                    } else if (contentType === "string") {
-                        if (secondRecord.cellData > firstRecord.cellData) result = -1;
-                        else if (secondRecord.cellData < firstRecord.cellData) result = 1;
+                    if (sortOrder === SortOrder.ASC) {
+                        if (contentType === "number") {
+                            result = firstRecord.cellData - secondRecord.cellData;
+                        } else if (contentType === "string") {
+                            if (firstRecord.cellData > secondRecord.cellData) result = -1;
+                            else if (firstRecord.cellData < secondRecord.cellData) result = 1;
+                        }
+                    } else if (sortOrder == SortOrder.DESC) {
+                        if (contentType === "number") {
+                            result = secondRecord.cellData - firstRecord.cellData;
+                        } else if (contentType === "string") {
+                            if (secondRecord.cellData > firstRecord.cellData) result = -1;
+                            else if (secondRecord.cellData < firstRecord.cellData) result = 1;
+                        }
                     }
                 }
-            }
-            return result;
-        });
+                return result;
+            },
+        );
         resolve(rows);
     });
 };
