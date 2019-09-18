@@ -257,7 +257,6 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         // update pagination footer
         if (pagination) {
             const {pageSize, currentPage} = pagination;
-            console.log(pageSize);
             const firstItem = this.getFirstItemIndex(currentPage, pageSize);
             const lastItem = this.getLastItemIndex(pageSize, totalItems, firstItem);
 
@@ -339,7 +338,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // Function to handle change in page sizes
     private handleSelectPageSize = (evt: React.ChangeEvent<HTMLSelectElement>) => {
-        this.getPage(1, parseInt(evt.target.value));
+        this.getPage(this.state.pagination!.currentPage, parseInt(evt.target.value));
     };
 
     private gotoFirstPage = () => {
@@ -366,18 +365,37 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         this.getPage(previousPage, pageSize);
     };
 
+    // Function to handle pageIndex change in input box
+    private handlePageChange = (evt: React.FocusEvent<HTMLInputElement>) => {
+        const {pageSize, currentPage} = this.state.pagination!;
+        const pageIndex = parseInt(evt.target.value);
+        if (isNaN(pageIndex)) {
+            this.pageIndexRef.current!.value = currentPage.toString();
+        } else {
+            this.getPage(pageIndex, pageSize);
+        }
+    };
+
     // Function to get page data for given page number
     private getPage(pageIndex: number, pageSize: number) {
         if (this.state.pagination && this.props.pagination) {
-            const {totalPages, totalItems} = this.state.pagination;
+            const {totalItems} = this.state.pagination;
             const {getPageData} = this.props.pagination;
+            const totalPages =
+                this.state.pagination.pageSize !== pageSize
+                    ? this.getTotalPages(totalItems, pageSize)
+                    : this.state.pagination.totalPages;
+
             // set pageIndex to last page if pageIndex is greater than total pages
             if (pageIndex > totalPages! && totalPages) {
                 pageIndex = totalPages;
             }
 
             // set pageIndex to first page if pageIndex is smaller than 1
-            if (pageIndex < 1) pageIndex = 1;
+            if (pageIndex < 1) {
+                pageIndex = 1;
+            }
+
             //Set page index in input box
             this.pageIndexRef.current!.value = pageIndex.toString();
 
@@ -806,7 +824,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // Function to build Next, previous, last and first page buttons
     private buildPageButtons(): React.ReactElement {
-        const {currentPage, totalPages, pageSize} = this.state.pagination!;
+        const {currentPage, totalPages} = this.state.pagination!;
         return (
             <div className={classNames([ClassNames.PAGINATION_LIST])}>
                 <Button
@@ -830,7 +848,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                     type="text"
                     ref={this.pageIndexRef}
                     aria-label="Current Page"
-                    onBlur={evt => this.getPage(parseInt(evt.target.value), pageSize)}
+                    onBlur={evt => this.handlePageChange(evt)}
                 />
                 &nbsp;/&nbsp;<span aria-label="Total Pages">{totalPages}</span>
                 <Button

@@ -288,88 +288,49 @@ export const expandableRows = [
 /**
  * Data for Pagination
  */
-export const paginationRows = [
-    {
-        rowData: [
-            {columnName: "User ID", cellData: 41512},
-            {columnName: "Name", cellData: "Georgia"},
-            {columnName: "Creation Date", cellData: "Sep 11, 2008"},
-            {columnName: "Favorite color", cellData: "Blue"},
-        ],
-    },
-    {
-        rowData: [
-            {columnName: "User ID", cellData: 16166},
-            {columnName: "Name", cellData: "Brynn"},
-            {columnName: "Creation Date", cellData: "Aug 2, 2014"},
-            {columnName: "Favorite color", cellData: "Orange"},
-        ],
-    },
-    {
-        rowData: [
-            {columnName: "User ID", cellData: 30574},
-            {columnName: "Name", cellData: "Brad"},
-            {columnName: "Creation Date", cellData: "Jan 4, 2019"},
-            {columnName: "Favorite color", cellData: "Yellow"},
-        ],
-    },
-    {
-        rowData: [
-            {columnName: "User ID", cellData: 2459},
-            {columnName: "Name", cellData: "Beverly"},
-            {columnName: "Creation Date", cellData: "Mar 2, 2019"},
-            {columnName: "Favorite color", cellData: "Pink"},
-        ],
-    },
-    {
-        rowData: [
-            {columnName: "User ID", cellData: 14262},
-            {columnName: "Name", cellData: "Johnson"},
-            {columnName: "Creation Date", cellData: "Jun 23, 2019"},
-            {columnName: "Favorite color", cellData: "Blue"},
-        ],
-    },
-    {
-        rowData: [
-            {columnName: "User ID", cellData: 14262},
-            {columnName: "Name", cellData: "Johnson"},
-            {columnName: "Creation Date", cellData: "Jun 23, 2019"},
-            {columnName: "Favorite color", cellData: "Blue"},
-        ],
-    },
-    {
-        rowData: [
-            {columnName: "User ID", cellData: 59729},
-            {columnName: "Name", cellData: "Sibyl"},
-            {columnName: "Creation Date", cellData: "Feb 27, 2016"},
-            {columnName: "Favorite color", cellData: "Red"},
-        ],
-    },
-    {
-        rowData: [
-            {columnName: "User ID", cellData: 55316},
-            {columnName: "Name", cellData: "Debby"},
-            {columnName: "Creation Date", cellData: "Mar 27, 2019"},
-            {columnName: "Favorite color", cellData: "Blue"},
-        ],
-    },
-    {
-        rowData: [
-            {columnName: "User ID", cellData: 92422},
-            {columnName: "Name", cellData: "Roslyn"},
-            {columnName: "Creation Date", cellData: "Apr 26, 2016"},
-            {columnName: "Favorite color", cellData: "Blue"},
-        ],
-    },
-    {
-        rowData: [
-            {columnName: "User ID", cellData: 83943},
-            {columnName: "Name", cellData: "Lottie"},
-            {columnName: "Creation Date", cellData: "Jun 21, 2018"},
-            {columnName: "Favorite color", cellData: "Yellow"},
-        ],
-    },
-];
+export function getRowData() {
+    const data = [
+        [41512, "Georgia", "Sep 11, 2008", "Blue"],
+        [16166, "Brynn", "Aug 2, 2014", "Orange"],
+        [30574, "Brad", "Jan 4, 2019", "Yellow"],
+        [2459, "Beverly", "Mar 2, 2019", "Pink"],
+        [14262, "Johnson", "Jun 23, 2019", "Blue"],
+        [59729, "Sibyl", "Feb 27, 2016", "Red"],
+        [92422, "Roslyn", "Apr 26, 2016", "Blue"],
+        [83943, "Lottie", "Mar 2, 2019", "Yellow"],
+        [83943, "Lottie", "Mar 2, 2019", "Yellow"],
+        [83943, "Lottie", "Mar 2, 2019", "Yellow"],
+    ];
+
+    let rowValues: DataGridRow[] = [];
+    data.forEach(function(element) {
+        const row: DataGridRow = {
+            rowData: [
+                {
+                    columnName: "User ID",
+                    cellData: element[0],
+                },
+                {
+                    columnName: "Name",
+                    cellData: element[1],
+                },
+                {
+                    columnName: "Creation Date",
+                    cellData: element[2],
+                },
+                {
+                    columnName: "Favorite color",
+                    cellData: element[3],
+                },
+            ],
+        };
+
+        rowValues.push(row);
+    });
+    return rowValues;
+}
+
+export const paginationRows = getRowData();
 
 // Function to get data for page based on pagenumber
 export const getPageData = (pageIndex: number, pageSize: number): Promise<DataGridRow[]> => {
@@ -390,11 +351,10 @@ export const getPageData = (pageIndex: number, pageSize: number): Promise<DataGr
 };
 
 export const paginationDetails = {
-    totalItems: 10,
+    totalItems: paginationRows.length,
     getPageData: getPageData,
     pageSize: 5,
     pageSizes: [5, 10],
-    itemText: "Users",
 };
 
 export const pageFilterFunction = (

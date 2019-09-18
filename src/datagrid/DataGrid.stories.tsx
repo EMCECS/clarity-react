@@ -33,7 +33,6 @@ const datagridActionsRef = React.createRef<GridActions>();
 const datagridFilterRef = React.createRef<DataGrid>();
 const datagridFilterSortRef = React.createRef<DataGrid>();
 const datagridCustomFilterRef = React.createRef<DataGrid>();
-const datagridPageFilterRef = React.createRef<DataGrid>();
 const datagridFullDemoRef = React.createRef<DataGrid>();
 const filterRef = React.createRef<DataGridFilter>();
 
