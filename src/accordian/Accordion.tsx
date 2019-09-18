@@ -68,9 +68,9 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
     private accordionPanel(): React.ReactElement {
         return (
             <div>
-                {this.state.panelItems.map((content: any) => {
+                {this.state.panelItems.map((content: any, index: number) => {
                     return (
-                        <div className={classNames([ClassNames.ACCORDION_PANEL])}>
+                        <div className={classNames([ClassNames.ACCORDION_PANEL])} key={"accordionPanel_" + index}>
                             {content.content}
                             {content.isOpen && content.isOpen === true ? (
                                 this.accordionContent(content)
@@ -101,17 +101,12 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
 
     getItemContent = (index: any, title: any, isPrevious: boolean) => {
         const {accordionMultiPanel} = this.props;
-        let panelClass = isPrevious
+        const panelClass = isPrevious
             ? ClassNames.ACCORDION_PANEL_INNER
             : classNames([ClassNames.ACCORDION_PANEL_INNER, ClassNames.ACCORDION_PANEL_OPEN]);
-        let expanded = !isPrevious;
+        const expanded = !isPrevious;
         return (
-            <div
-                role="group"
-                className={panelClass}
-                key={index}
-                onClick={() => this.handleButtonClick(index, accordionMultiPanel)}
-            >
+            <div role="group" className={panelClass} key={index}>
                 <div className={ClassNames.ACCORDION_HEADER}>
                     <button
                         className={ClassNames.ACCORDION_HEADER_BUTTON}
@@ -119,11 +114,12 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
                         aria-disabled="false"
                         aria-controls="clr-accordion-content"
                         aria-expanded={expanded}
+                        onClick={() => this.handleButtonClick(index, accordionMultiPanel)}
                     >
                         <span className={ClassNames.ACCORDION_SR} />
                         <span className={ClassNames.ACCORDION_STATUS}>
                             <Icon className={ClassNames.ACCORDION_ANGLE} dir={Direction.RIGHT} shape="angle" />
-                            <span className={ClassNames.ACCORDION_NUMBER}></span>
+                            <span className={ClassNames.ACCORDION_NUMBER} />
                         </span>
                         <div className={ClassNames.ACCORDION_TITLE}>{title}</div>
                     </button>
@@ -154,7 +150,7 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
                                 <span className={ClassNames.ACCORDION_SR} />
                                 <span className={ClassNames.ACCORDION_STATUS}>
                                     <Icon className={ClassNames.ACCORDION_ANGLE} dir={Direction.RIGHT} shape="angle" />
-                                    <span className={ClassNames.ACCORDION_NUMBER}></span>
+                                    <span className={ClassNames.ACCORDION_NUMBER} />
                                 </span>
                                 <div className={ClassNames.ACCORDION_TITLE}>{content.title}</div>
                             </button>
