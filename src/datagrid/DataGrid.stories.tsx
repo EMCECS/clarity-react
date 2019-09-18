@@ -23,6 +23,7 @@ import {
     sortFunction,
     paginationDetails,
     paginationRows,
+    pageFilterFunction,
 } from "./DataGridValues";
 import {CustomFilter} from "./CustomFilter";
 
@@ -33,6 +34,7 @@ const datagridFilterRef = React.createRef<DataGrid>();
 const datagridFilterSortRef = React.createRef<DataGrid>();
 const datagridCustomFilterRef = React.createRef<DataGrid>();
 const datagridPageFilterRef = React.createRef<DataGrid>();
+const datagridFullDemoRef = React.createRef<DataGrid>();
 const filterRef = React.createRef<DataGridFilter>();
 
 storiesOf("DataGrid", module)
@@ -161,6 +163,7 @@ storiesOf("DataGrid", module)
                 ]}
                 rows={normalRows}
                 footer={footer}
+                selectionType={GridSelectionType.MULTI}
             />
         </div>
     ))
@@ -223,6 +226,50 @@ storiesOf("DataGrid", module)
     ))
     .add("Grid with pagination", () => (
         <div style={{width: "80%"}}>
-            <DataGrid columns={normalColumns} rows={paginationRows.slice(0, 5)} pagination={paginationDetails} />
+            <DataGrid
+                columns={normalColumns}
+                rows={paginationRows.slice(0, 5)}
+                pagination={paginationDetails}
+                itemText={"Users"}
+            />
+        </div>
+    ))
+    .add("Grid full demo", () => (
+        <div style={{width: "80%"}}>
+            <DataGrid
+                ref={datagridFullDemoRef}
+                itemText={"Users"}
+                columns={[
+                    {
+                        columnName: "User ID",
+                        style: {width: "96px"},
+                        sort: {defaultSortOrder: SortOrder.ASC, sortFunction: sortFunction},
+                        filter: (
+                            <DataGridFilter
+                                onFilter={pageFilterFunction}
+                                columnName={"User ID"}
+                                datagridRef={datagridFullDemoRef}
+                            />
+                        ),
+                    },
+                    {
+                        columnName: "Name",
+                        style: {width: "96px"},
+                        sort: {defaultSortOrder: SortOrder.NONE, sortFunction: sortFunction},
+                        filter: (
+                            <DataGridFilter
+                                onFilter={pageFilterFunction}
+                                columnName={"Name"}
+                                datagridRef={datagridFullDemoRef}
+                            />
+                        ),
+                    },
+                    {columnName: "Creation Date", style: {width: "96px"}},
+                    {columnName: "Favorite color", style: {width: "96px"}},
+                ]}
+                rows={paginationRows.slice(0, 5)}
+                pagination={paginationDetails}
+                selectionType={GridSelectionType.MULTI}
+            />
         </div>
     ));

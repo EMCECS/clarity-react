@@ -11,7 +11,7 @@
 import * as React from "react";
 import {Icon} from "../icon";
 import {Button} from "../forms/button";
-import {SortOrder, DataGridRow} from ".";
+import {SortOrder, DataGridRow, DataGridFilterResult} from ".";
 
 /**
  * General file description :
@@ -107,29 +107,46 @@ export const customRows = [
  * Data for Filtering
  */
 
+function filterRows(rows: DataGridRow[], columnValue: string) {
+    const newRows = rows.filter(row => {
+        let matchFound = false;
+        for (const index in row.rowData) {
+            const content = String(row.rowData[index].cellData);
+            if (content.indexOf(columnValue) !== -1) {
+                matchFound = true;
+            }
+        }
+        if (matchFound) {
+            return row;
+        }
+    });
+    return newRows;
+}
+
 //Custom function to filter data
 export const filterFunction = (
     rows: DataGridRow[],
     columnValue: string,
     columnName: string,
-): Promise<DataGridRow[]> => {
+): Promise<DataGridFilterResult> => {
     return new Promise((resolve, reject) => {
+        let result: DataGridFilterResult = {
+            rows: [],
+            totalItems: 0,
+        };
         if (columnValue === "" || columnValue === undefined) {
-            resolve(normalRows);
+            result = {
+                rows: normalRows,
+                totalItems: normalRows.length,
+            };
+        } else {
+            const newRows = filterRows(rows, columnValue);
+            result = {
+                rows: newRows,
+                totalItems: newRows.length,
+            };
         }
-        let newRows = rows.filter(row => {
-            let matchFound = false;
-            for (let index in row.rowData) {
-                let content = String(row.rowData[index].cellData);
-                if (content.indexOf(columnValue) !== -1) {
-                    matchFound = true;
-                }
-            }
-            if (matchFound) {
-                return row;
-            }
-        });
-        resolve(newRows);
+        resolve(result);
     });
 };
 
@@ -378,4 +395,30 @@ export const paginationDetails = {
     pageSize: 5,
     pageSizes: [5, 10],
     itemText: "Users",
+};
+
+export const pageFilterFunction = (
+    rows: DataGridRow[],
+    columnValue: string,
+    columnName: string,
+): Promise<DataGridFilterResult> => {
+    return new Promise((resolve, reject) => {
+        let result: DataGridFilterResult = {
+            rows: [],
+            totalItems: 0,
+        };
+        if (columnValue === "" || columnValue === undefined) {
+            result = {
+                rows: paginationRows.slice(0, 5),
+                totalItems: paginationRows.length,
+            };
+        } else {
+            const newRows = filterRows(rows, columnValue);
+            result = {
+                rows: newRows,
+                totalItems: newRows.length,
+            };
+        }
+        resolve(result);
+    });
 };

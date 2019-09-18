@@ -39,9 +39,19 @@ export type DataGridFilterProps = {
     className?: string;
     datagridRef: any;
     columnName: string;
-    onFilter: (rows: DataGridRow[], columnValue: any, columnName: string) => Promise<DataGridRow[]>;
+    onFilter: (rows: DataGridRow[], columnValue: any, columnName: string) => Promise<DataGridFilterResult>;
     filterType?: FilterType;
     customFilter?: React.ReactNode;
+};
+
+/**
+ * Props for DataGridFilter :
+ * @param {rows} datagrid rows after applying filter
+ * @param {totalItems} total rows length
+ */
+export type DataGridFilterResult = {
+    rows: DataGridRow[];
+    totalItems: number;
 };
 
 /**
@@ -121,7 +131,8 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
             this.setState({filterValue: value}, () =>
                 onFilter(rows, value, columnName).then(data => {
                     // Update datagrid rows
-                    datagridRef.current!.updateRows(data);
+                    const {rows, totalItems} = data;
+                    datagridRef.current!.updateRows(rows, totalItems);
                 }),
             );
         }

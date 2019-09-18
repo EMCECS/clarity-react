@@ -200,7 +200,7 @@ type DataGridPaginationState = {
     firstItem: number;
     lastItem: number;
     totalPages: number;
-    pageSizes: number[];
+    pageSizes?: number[];
 };
 
 /**
@@ -224,9 +224,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                       pageSize: this.props.pagination.pageSize !== undefined ? this.props.pagination.pageSize : 10,
                       totalItems: this.props.pagination.totalItems !== undefined ? this.props.pagination.totalItems : 0,
                       pageSizes:
-                          this.props.pagination.pageSizes !== undefined
-                              ? this.props.pagination.pageSizes
-                              : [10, 20, 50, 100],
+                          this.props.pagination.pageSizes !== undefined ? this.props.pagination.pageSizes : undefined,
                       firstItem: 0,
                       lastItem: 0,
                       totalPages: 1,
@@ -252,12 +250,28 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     };
 
     // Function to update datagrid rows
-    updateRows = (rows: DataGridRow[]) => {
+    updateRows = (rows: DataGridRow[], totalItems: number) => {
         const updatedRows = this.updateRowIDs(rows);
+        let {pagination} = this.state;
+
+        // update pagination footer
+        if (pagination) {
+            const {pageSize, currentPage} = pagination;
+            console.log(pageSize);
+            const firstItem = this.getFirstItemIndex(currentPage, pageSize);
+            const lastItem = this.getLastItemIndex(pageSize, totalItems, firstItem);
+
+            pagination.totalPages = this.getTotalPages(totalItems, pageSize);
+            pagination.firstItem = firstItem;
+            pagination.lastItem = lastItem;
+            pagination.currentPage = 1;
+            pagination.totalItems = totalItems;
+        }
 
         this.setState({
             allRows: [...updatedRows],
-            selectAll: updatedRows.length == 0 ? false : this.state.selectAll,
+            selectAll: totalItems == 0 ? false : this.state.selectAll,
+            pagination: pagination ? pagination : undefined,
         });
     };
 
@@ -295,17 +309,17 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // Initialize state of grid with pagination
     private setInitalStateForPagination() {
-        const {currentPage, pageSize, totalItems} = this.state.pagination!;
+        let {pagination} = this.state;
+        if (pagination) {
+            const {currentPage, pageSize, totalItems} = pagination;
+            const firstItem = this.getFirstItemIndex(currentPage, pageSize);
+            const lastItem = this.getLastItemIndex(pageSize, totalItems, firstItem);
 
-        var firstItem = this.getFirstItemIndex(currentPage, pageSize);
-        var lastItem = this.getLastItemIndex(pageSize, totalItems, firstItem);
-        let paginationState = this.state.pagination;
-        if (paginationState) {
-            paginationState.totalPages = this.getTotalPages(totalItems, pageSize);
-            paginationState.firstItem = firstItem;
-            paginationState.lastItem = lastItem;
+            pagination.totalPages = this.getTotalPages(totalItems, pageSize);
+            pagination.firstItem = firstItem;
+            pagination.lastItem = lastItem;
+            this.setState({pagination: pagination});
         }
-        this.setState({pagination: paginationState});
     }
 
     /* ############################# Pagination methods start ####################################*/
@@ -325,7 +339,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // Function to handle change in page sizes
     private handleSelectPageSize = (evt: React.ChangeEvent<HTMLSelectElement>) => {
-        this.getPage(this.state.pagination!.currentPage, parseInt(evt.target.value));
+        this.getPage(1, parseInt(evt.target.value));
     };
 
     private gotoFirstPage = () => {
@@ -358,7 +372,9 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
             const {totalPages, totalItems} = this.state.pagination;
             const {getPageData} = this.props.pagination;
             // set pageIndex to last page if pageIndex is greater than total pages
-            if (pageIndex > totalPages! && totalPages) pageIndex = totalPages;
+            if (pageIndex > totalPages! && totalPages) {
+                pageIndex = totalPages;
+            }
 
             // set pageIndex to first page if pageIndex is smaller than 1
             if (pageIndex < 1) pageIndex = 1;
@@ -759,79 +775,100 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         );
     }
 
+    // Function to build pageSizes select
+    private buildPageSizesSelect(): React.ReactElement {
+        const {pageSizes, pageSize} = this.state.pagination!;
+        const {itemText} = this.state;
+
+        return (
+            <div className={ClassNames.PAGINATION_SIZE}>
+                <div _ngcontent-clarity-c8="">
+                    {` ${itemText}  ${" per page"} `}
+                    <div className={classNames([ClassNames.CLR_SELECT_WRAPPER])}>
+                        <select
+                            className={classNames([ClassNames.CLR_PAGE_SIZE_SELECT])}
+                            onChange={evt => this.handleSelectPageSize(evt)}
+                        >
+                            {pageSizes!.map((size: number, index: number) => {
+                                const selected = size === pageSize ? true : false;
+                                return (
+                                    <option key={index} value={size} selected={selected}>
+                                        {size}
+                                    </option>
+                                );
+                            })}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // Function to build Next, previous, last and first page buttons
+    private buildPageButtons(): React.ReactElement {
+        const {currentPage, totalPages, pageSize} = this.state.pagination!;
+        return (
+            <div className={classNames([ClassNames.PAGINATION_LIST])}>
+                <Button
+                    key="down"
+                    className={ClassNames.PAGINATION_FIRST}
+                    icon={{shape: "step-forward-2 down"}}
+                    disabled={currentPage == 1 ? true : false}
+                    onClick={this.gotoFirstPage}
+                />
+                <Button
+                    key="left"
+                    className={ClassNames.PAGINATION_PREVIOUS}
+                    icon={{shape: "angle left"}}
+                    disabled={currentPage == 1 ? true : false}
+                    onClick={this.gotoPreviousPage}
+                />
+                <input
+                    className={ClassNames.PAGINATION_CURRENT}
+                    size={2}
+                    defaultValue={this.state.pagination!.currentPage.toString()}
+                    type="text"
+                    ref={this.pageIndexRef}
+                    aria-label="Current Page"
+                    onBlur={evt => this.getPage(parseInt(evt.target.value), pageSize)}
+                />
+                &nbsp;/&nbsp;<span aria-label="Total Pages">{totalPages}</span>
+                <Button
+                    key="right"
+                    className={ClassNames.PAGINATION_NEXT}
+                    icon={{shape: "angle right"}}
+                    disabled={currentPage === totalPages ? true : false}
+                    onClick={this.gotoNextPage}
+                />
+                <Button
+                    key="up"
+                    className={ClassNames.PAGINATION_LAST}
+                    icon={{shape: "step-forward-2 up"}}
+                    disabled={currentPage == totalPages ? true : false}
+                    onClick={this.gotoLastPage}
+                />
+            </div>
+        );
+    }
+
     // function to build datagrid pagination footer
     private buildDataGridPagination(): React.ReactElement {
         const {className, style} = this.props.pagination!;
         const {itemText} = this.state;
-        const {totalItems, firstItem, lastItem, totalPages, currentPage, pageSizes, pageSize} = this.state.pagination!;
+        const {totalItems, firstItem, lastItem, pageSize, pageSizes} = this.state.pagination!;
         return (
             <div
                 _ngcontent-clarity-c8=""
                 style={style}
                 className={classNames([ClassNames.DATAGRID_PAGINATION, className])}
             >
-                <div className={ClassNames.PAGINATION_SIZE}>
-                    <div _ngcontent-clarity-c8="">
-                        {` ${itemText}  ${" per page"} `}
-                        <div className={classNames([ClassNames.CLR_SELECT_WRAPPER])}>
-                            <select
-                                className={classNames([ClassNames.CLR_PAGE_SIZE_SELECT])}
-                                onChange={evt => this.handleSelectPageSize(evt)}
-                            >
-                                {pageSizes!.map((size: number, index: number) => {
-                                    return (
-                                        <option key={index} value={size}>
-                                            {size}
-                                        </option>
-                                    );
-                                })}
-                            </select>
-                        </div>
-                    </div>
-                </div>
+                {pageSizes && totalItems >= pageSize && this.buildPageSizesSelect()}
+
                 <div className={classNames([ClassNames.PAGINATION_DESC])}>
                     {`${firstItem} - ${lastItem} ${" of "} ${totalItems} ${itemText}`}{" "}
                 </div>
-                <div className={classNames([ClassNames.PAGINATION_LIST])}>
-                    <Button
-                        key="down"
-                        className={ClassNames.PAGINATION_FIRST}
-                        icon={{shape: "step-forward-2 down"}}
-                        disabled={currentPage == 1 ? true : false}
-                        onClick={this.gotoFirstPage}
-                    />
-                    <Button
-                        key="left"
-                        className={ClassNames.PAGINATION_PREVIOUS}
-                        icon={{shape: "angle left"}}
-                        disabled={currentPage == 1 ? true : false}
-                        onClick={this.gotoPreviousPage}
-                    />
-                    <input
-                        className={ClassNames.PAGINATION_CURRENT}
-                        size={2}
-                        defaultValue={this.state.pagination!.currentPage.toString()}
-                        type="text"
-                        ref={this.pageIndexRef}
-                        aria-label="Current Page"
-                        onBlur={evt => this.getPage(parseInt(evt.target.value), pageSize)}
-                    />
-                    &nbsp;/&nbsp;<span aria-label="Total Pages">{totalPages}</span>
-                    <Button
-                        key="right"
-                        className={ClassNames.PAGINATION_NEXT}
-                        icon={{shape: "angle right"}}
-                        disabled={currentPage === totalPages ? true : false}
-                        onClick={this.gotoNextPage}
-                    />
-                    <Button
-                        key="up"
-                        className={ClassNames.PAGINATION_LAST}
-                        icon={{shape: "step-forward-2 up"}}
-                        disabled={currentPage == totalPages ? true : false}
-                        onClick={this.gotoLastPage}
-                    />
-                </div>
+
+                {totalItems >= pageSize && this.buildPageButtons()}
             </div>
         );
     }
