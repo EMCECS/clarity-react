@@ -15,6 +15,7 @@ import {CheckBox} from "../forms/checkbox";
 import {RadioButton} from "../forms/radio";
 import {Button} from "../forms/button";
 import {Icon, Direction} from "../icon";
+import {HideShowColumns} from "./HideShowColumns";
 
 /**
  * General component description :
@@ -61,6 +62,7 @@ type DataGridProps = {
  * @param {columns} column details
  * @param {style} CSS style
  * @param {filter} Filter component
+ * @param {isVisible} if true column will be visible else hide it
  */
 export type DataGridColumn = {
     columnName: string;
@@ -69,6 +71,7 @@ export type DataGridColumn = {
     className?: string;
     style?: any;
     filter?: React.ReactNode;
+    isVisible?: boolean;
 };
 
 /**
@@ -108,11 +111,13 @@ export type DataGridCell = {
  * @param {footerData} Footer data
  * @param {className} CSS class name
  * @param {style} CSS style
+ * @param {hideShowColBtn} Hide and Show column button
  */
 export type DataGridFooter = {
-    footerData: any;
+    footerData?: any;
     className?: string;
     style?: any;
+    hideShowColBtn?: boolean;
 };
 
 /**
@@ -294,15 +299,21 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     private setInitalState() {
         const {allRows, allColumns} = this.state;
         let rows = this.updateRowIDs(allRows);
+        let columns = this.updateColumnIDs(allColumns);
 
         rows.forEach(function(row) {
             row["isSelected"] = false;
             row["isExpanded"] = false;
         });
 
+        columns.forEach(function(column: DataGridColumn) {
+            // if isVisible is not provided in props then set it to true
+            column["isVisible"] = column.isVisible !== undefined ? column.isVisible : true;
+        });
+
         this.setState({
             allRows: [...rows],
-            allColumns: [...this.updateColumnIDs(allColumns)],
+            allColumns: [...columns],
         });
     }
 
@@ -424,7 +435,6 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     }
 
     /* ############################# Pagination methods end ####################################*/
-
     //toggle collapse of expandable row
     private toggleExpand(rowID: number) {
         const {allRows} = this.state;
@@ -519,11 +529,23 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     }
 
     // Get width of column
-    private getColWidth(columnName: string) {
+    private getColObject(columnName: string) {
         const {allColumns} = this.state;
         const column = allColumns.find(col => col.columnName === columnName);
 
+        return column;
+    }
+
+    // Get width of column
+    private getColWidth(columnName: string) {
+        const column = this.getColObject(columnName);
         return column && column.style && column.style.width ? column.style.width : undefined;
+    }
+
+    // Check if column is visible
+    private isColVisible(columnName: string) {
+        const column = this.getColObject(columnName);
+        return column && column.isVisible;
     }
     /* ##########  DataGrid private methods end  ############ */
 
@@ -660,8 +682,8 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                             {selectionType && this.buildSelectColumn()}
                             {rowType && rowType === GridRowType.EXPANDABLE && this.buildEmptyColumn()}
                             {allColumns &&
-                                allColumns.map((column: any, index: number) => {
-                                    return this.buildDataGridColumn(column, index);
+                                allColumns.map((column: DataGridColumn, index: number) => {
+                                    return column.isVisible ? this.buildDataGridColumn(column, index) : undefined;
                                 })}
                         </div>
                     </div>
@@ -779,13 +801,19 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         className?: string,
         style?: any,
     ): React.ReactElement {
-        let width: any = "";
-        if (columnName) width = this.getColWidth(columnName);
+        const width = this.getColWidth(columnName);
+        const isColVisible = this.isColVisible(columnName);
+
         return (
             <div
                 role="gridcell"
                 key={"cell-" + index}
-                className={classNames([ClassNames.DATAGRID_CELL, ClassNames.DATAGRID_NG_STAR_INSERTED, className])}
+                className={classNames([
+                    ClassNames.DATAGRID_CELL,
+                    ClassNames.DATAGRID_NG_STAR_INSERTED,
+                    isColVisible !== undefined && !isColVisible && ClassNames.DATAGRID_HIDDEN_COLUMN,
+                    className,
+                ])}
                 style={{width: width, ...style}}
             >
                 {cellData}
@@ -891,6 +919,12 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         );
     }
 
+    // function to build Hide and show columns menu
+    private buildHideShowColumnsBtn(): React.ReactElement {
+        const {allColumns} = this.state;
+        return <HideShowColumns columns={allColumns} updateColumns={this.updateColumns} />;
+    }
+
     // function to build datagrid footer
     private buildDataGridFooter(): React.ReactElement {
         // Need to take this from state in future
@@ -900,6 +934,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                 className={`${ClassNames.DATAGRID_FOOTER} ${footer && footer.className && footer.className}`}
                 style={footer && footer.style && footer.style}
             >
+                {footer && footer.hideShowColBtn && this.buildHideShowColumnsBtn()}
                 <div className={ClassNames.DATAGRID_FOOTER_DESC}>
                     {footer && footer.footerData && footer.footerData}
                 </div>

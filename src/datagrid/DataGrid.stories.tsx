@@ -24,6 +24,7 @@ import {
     paginationDetails,
     paginationRows,
     pageFilterFunction,
+    hideNshowCol,
 } from "./DataGridValues";
 import {CustomFilter} from "./CustomFilter";
 
@@ -233,15 +234,27 @@ storiesOf("DataGrid", module)
             />
         </div>
     ))
+    .add("Grid with HIde and Show Column", () => (
+        <div style={{width: "80%", paddingTop: "5%"}}>
+            <DataGrid
+                columns={hideNshowCol}
+                rows={normalRows}
+                footer={{
+                    footerData: "Total 2 users",
+                    hideShowColBtn: true,
+                }}
+            />
+        </div>
+    ))
     .add("Grid full demo", () => (
-        <div style={{width: "80%"}}>
+        <div style={{width: "80%", paddingTop: "5%"}}>
             <DataGrid
                 ref={datagridFullDemoRef}
                 itemText={"Users"}
                 columns={[
                     {
                         columnName: "User ID",
-                        style: {width: "96px"},
+                        style: {width: "20%"},
                         sort: {defaultSortOrder: SortOrder.ASC, sortFunction: sortFunction},
                         filter: (
                             <DataGridFilter
@@ -253,7 +266,7 @@ storiesOf("DataGrid", module)
                     },
                     {
                         columnName: "Name",
-                        style: {width: "96px"},
+                        style: {width: "20%"},
                         sort: {defaultSortOrder: SortOrder.NONE, sortFunction: sortFunction},
                         filter: (
                             <DataGridFilter
@@ -263,12 +276,15 @@ storiesOf("DataGrid", module)
                             />
                         ),
                     },
-                    {columnName: "Creation Date", style: {width: "96px"}},
-                    {columnName: "Favorite color", style: {width: "96px"}},
+                    {columnName: "Creation Date", style: {width: "20%"}},
+                    {columnName: "Favorite color", style: {width: "20%"}},
                 ]}
                 rows={paginationRows.slice(0, 5)}
                 pagination={paginationDetails}
                 selectionType={GridSelectionType.MULTI}
+                footer={{
+                    hideShowColBtn: true,
+                }}
             />
         </div>
     ));

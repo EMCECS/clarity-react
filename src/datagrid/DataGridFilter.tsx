@@ -45,7 +45,7 @@ export type DataGridFilterProps = {
 };
 
 /**
- * Props for DataGridFilter :
+ * Props for DataGridFilter results :
  * @param {rows} datagrid rows after applying filter
  * @param {totalItems} total rows length
  */
@@ -153,18 +153,10 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
 
     private afterToggle = () => {
         if (this.state.isOpen) {
-            this.subscribeDocumentClick();
+            window.addEventListener("click", this.handleDocumentClick as any, true);
         } else {
-            this.unsubscribeDocumentClick();
+            window.removeEventListener("click", this.handleDocumentClick as any, true);
         }
-    };
-
-    private subscribeDocumentClick = () => {
-        window.addEventListener("click", this.handleDocumentClick as any, true);
-    };
-
-    private unsubscribeDocumentClick = () => {
-        window.removeEventListener("click", this.handleDocumentClick as any, true);
     };
 
     private resize = () => {
@@ -199,8 +191,6 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
                     ref={this.refChild}
                     className={classNames([ClassNames.DATARID_FILTER, ClassNames.CLR_POPOVER_CONTENT, className])}
                     style={{
-                        zIndex: "5000",
-                        position: "fixed",
                         top: 0,
                         bottom: "auto",
                         right: "auto",
