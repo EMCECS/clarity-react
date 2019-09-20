@@ -29,3 +29,13 @@ export function allTrueOnKey(obj: any, key: any) {
     }
     return true;
 }
+
+// Find if a particular key in an object array is false for all elements in the array.
+export function allFalseOnKey(obj: any, key: any) {
+    for (let index in obj) {
+        if (obj[index][key]) {
+            return false;
+        }
+    }
+    return true;
+}

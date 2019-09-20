@@ -274,7 +274,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
         this.setState({
             allRows: [...updatedRows],
-            selectAll: totalItems == 0 ? false : this.state.selectAll,
+            selectAll: totalItems == 0 ? false : allTrueOnKey(updatedRows, "isSelected"),
             pagination: pagination ? pagination : undefined,
         });
     };
@@ -428,6 +428,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                     this.setState({
                         allRows: [...rows],
                         pagination: paginationState,
+                        selectAll: allTrueOnKey(rows, "isSelected"),
                     });
                 });
             }

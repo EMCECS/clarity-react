@@ -24,7 +24,7 @@ import {
     paginationDetails,
     paginationRows,
     pageFilterFunction,
-    hideNshowCol,
+    hideableColumns,
 } from "./DataGridValues";
 import {CustomFilter} from "./CustomFilter";
 
@@ -237,7 +237,7 @@ storiesOf("DataGrid", module)
     .add("Grid with HIde and Show Column", () => (
         <div style={{width: "80%", paddingTop: "5%"}}>
             <DataGrid
-                columns={hideNshowCol}
+                columns={hideableColumns}
                 rows={normalRows}
                 footer={{
                     footerData: "Total 2 users",

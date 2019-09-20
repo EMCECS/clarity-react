@@ -9,7 +9,7 @@
  */
 
 import * as React from "react";
-import {classNames, allTrueOnKey} from "../utils";
+import {classNames, allTrueOnKey, allFalseOnKey} from "../utils";
 import {ClassNames} from "./ClassNames";
 import {Button} from "../forms/button";
 import {DataGridRow, DataGridColumn} from "./DataGrid";
@@ -122,7 +122,6 @@ export class HideShowColumns extends React.PureComponent<HideShowColumnsProps, H
     // Handle for select All button
     private handleSelectAll = () => {
         this.updateDatagridColumns("All");
-        this.toggle();
     };
 
     // Handle for select single column
@@ -142,13 +141,15 @@ export class HideShowColumns extends React.PureComponent<HideShowColumnsProps, H
             }
         });
 
-        this.setState(
-            {
-                columns: [...columns],
-                SelectAll: allTrueOnKey(columns, "isVisible"),
-            },
-            () => updateColumns && updateColumns(columns),
-        );
+        if (!allFalseOnKey(columns, "isVisible")) {
+            this.setState(
+                {
+                    columns: [...columns],
+                    SelectAll: allTrueOnKey(columns, "isVisible"),
+                },
+                () => updateColumns && updateColumns(columns),
+            );
+        }
     };
 
     // function to build column list

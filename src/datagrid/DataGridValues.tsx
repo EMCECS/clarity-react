@@ -384,7 +384,7 @@ export const pageFilterFunction = (
 };
 
 // Data for Hide/show columns
-export const hideNshowCol = [
+export const hideableColumns = [
     {columnName: "User ID", style: {width: "96px"}},
     {columnName: "Name", style: {width: "96px"}},
     {columnName: "Creation Date", style: {width: "96px"}, isVisible: false},
