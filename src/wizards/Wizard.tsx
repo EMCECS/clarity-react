@@ -456,7 +456,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
                                 <div className={ClassNames.MODAL_CONTENT_WRAPPER}>
                                     {this.buildWizardNav()}
                                     <div className={ClassNames.MODAL_CONTENT}>
-                                        {showHeader ? (
+                                        {showHeader && (
                                             <div className={ClassNames.MODAL_HEADER}>
                                                 <button
                                                     aria-label="Close"
@@ -472,11 +472,11 @@ export class Wizard extends React.PureComponent<WizardProps> {
                                                     </span>
                                                 </h3>
                                             </div>
-                                        ) : null}{" "}
+                                        )}{" "}
                                         {/*Close modal-header */}
                                         <div className={ClassNames.MODAL_BODY}>{this.buildWizardSteps()}</div>{" "}
                                         {/*Close modal-body*/}
-                                        {showFooter ? this.buildWizardFooter() : null}
+                                        {showFooter && this.buildWizardFooter()}
                                     </div>{" "}
                                     {/*Close modal-content*/}
                                 </div>{" "}
