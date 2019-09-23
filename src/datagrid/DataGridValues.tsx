@@ -61,8 +61,17 @@ export const normalRows = [
 /**
  * Data for Footer
  */
-export const footer = {
+export const customFooter = {
     footerData: "Total 2 users",
+    showFooter:true,
+};
+
+export const defaultFooter = {
+    showFooter:true,
+};
+
+export const noFooter = {
+    showFooter:false,
 };
 
 /**

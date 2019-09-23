@@ -118,6 +118,7 @@ export type DataGridFooter = {
     className?: string;
     style?: any;
     hideShowColBtn?: boolean;
+    showFooter:boolean;
 };
 
 /**
@@ -926,6 +927,21 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         return <HideShowColumns columns={allColumns} updateColumns={this.updateColumns} />;
     }
 
+    private buildFooterContent():React.ReactElement{
+        const {footer} = this.props;
+        const {allRows, itemText} = this.state;
+        const footerDescription = allRows.length.toString() + " " + itemText;
+        let content;
+
+        if (footer !== undefined){
+            content =  footer.footerData !== undefined ?  footer.footerData : footerDescription;
+        }
+
+        return(
+                 <div> {content} </div>
+        );
+    }
+
     // function to build datagrid footer
     private buildDataGridFooter(): React.ReactElement {
         // Need to take this from state in future
@@ -937,16 +953,15 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
             >
                 {footer && footer.hideShowColBtn && this.buildHideShowColumnsBtn()}
                 <div className={ClassNames.DATAGRID_FOOTER_DESC}>
-                    {footer && footer.footerData && footer.footerData}
+                {pagination && pagination ? this.buildDataGridPagination(): this.buildFooterContent() }
                 </div>
-                {pagination && this.buildDataGridPagination()}
             </div>
         );
     }
 
     // render datagrid
     render() {
-        const {className, style, rowType} = this.props;
+        const {className, style, rowType, footer} = this.props;
         return (
             <div
                 className={classNames([
@@ -957,7 +972,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                 style={style}
             >
                 {this.buildDataGridBody()}
-                {this.buildDataGridFooter()}
+                {footer && footer.showFooter && this.buildDataGridFooter()}
                 <div className={ClassNames.DATAGRID_CAL_TABLE}>
                     <div className={ClassNames.DATAGRID_CAL_HEADER} />
                 </div>

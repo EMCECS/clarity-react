@@ -15,7 +15,9 @@ import {
     normalColumns,
     normalRows,
     customRows,
-    footer,
+    noFooter,
+    customFooter,
+    defaultFooter,
     GridActions,
     sortColumns,
     expandableRows,
@@ -40,21 +42,21 @@ const filterRef = React.createRef<DataGridFilter>();
 storiesOf("DataGrid", module)
     .add("Basic grid", () => (
         <div style={{width: "80%"}}>
-            <DataGrid columns={normalColumns} rows={normalRows} footer={footer} />
+            <DataGrid columns={normalColumns} rows={normalRows} footer={defaultFooter}/>
         </div>
     ))
-    .add("Grid with custom cells", () => (
+    .add("Grid with custom cells and footer", () => (
         <div style={{width: "80%"}}>
-            <DataGrid columns={normalColumns} rows={customRows} footer={footer} />
+            <DataGrid columns={normalColumns} rows={customRows} footer={customFooter}/>
         </div>
     ))
-    .add("Grid with multi select option", () => (
+    .add("Grid with multi select option and no footer", () => (
         <div style={{width: "80%"}}>
             <DataGrid
                 columns={normalColumns}
                 rows={normalRows}
-                footer={footer}
                 selectionType={GridSelectionType.MULTI}
+                footer={noFooter}
             />
         </div>
     ))
@@ -63,8 +65,8 @@ storiesOf("DataGrid", module)
             <DataGrid
                 columns={normalColumns}
                 rows={normalRows}
-                footer={footer}
                 selectionType={GridSelectionType.SINGLE}
+                footer={defaultFooter}
             />
         </div>
     ))
@@ -76,7 +78,6 @@ storiesOf("DataGrid", module)
                 ref={datagridRef}
                 columns={normalColumns}
                 rows={normalRows}
-                footer={footer}
                 selectionType={GridSelectionType.MULTI}
                 onRowSelect={() => {
                     const rows = datagridRef.current!.getSelectedRows();
@@ -86,12 +87,13 @@ storiesOf("DataGrid", module)
                     const rows = datagridRef.current!.getSelectedRows();
                     datagridActionsRef.current!.updateActions(rows);
                 }}
+                footer={defaultFooter}
             />
         </div>
     ))
     .add("Grid with sorting", () => (
         <div style={{width: "80%"}}>
-            <DataGrid columns={sortColumns} rows={normalRows} footer={footer} />
+            <DataGrid columns={sortColumns} rows={normalRows} footer={defaultFooter}/>
         </div>
     ))
     .add("Grid with filter", () => (
@@ -125,7 +127,7 @@ storiesOf("DataGrid", module)
                     {columnName: "Favorite color", style: {width: "96px"}},
                 ]}
                 rows={normalRows}
-                footer={footer}
+                footer={defaultFooter}
             />
         </div>
     ))
@@ -162,7 +164,7 @@ storiesOf("DataGrid", module)
                     {columnName: "Favorite color", style: {width: "96px"}},
                 ]}
                 rows={normalRows}
-                footer={footer}
+                footer={defaultFooter}
                 selectionType={GridSelectionType.MULTI}
             />
         </div>
@@ -194,23 +196,23 @@ storiesOf("DataGrid", module)
                     {columnName: "Favorite color", style: {width: "96px"}},
                 ]}
                 rows={normalRows}
-                footer={footer}
+                footer={defaultFooter}
             />
         </div>
     ))
     .add("Grid with expandable row", () => (
         <div style={{width: "80%"}}>
-            <DataGrid columns={normalColumns} rows={expandableRows} footer={footer} rowType={GridRowType.EXPANDABLE} />
+            <DataGrid columns={normalColumns} rows={expandableRows} footer={defaultFooter} rowType={GridRowType.EXPANDABLE} />
         </div>
     ))
     .add("Empty data grid", () => (
         <div style={{width: "80%"}}>
-            <DataGrid columns={normalColumns} footer={{footerData: "0 users"}} />
+            <DataGrid columns={normalColumns} footer={defaultFooter} />
         </div>
     ))
     .add("Grid with compact row", () => (
         <div style={{width: "80%"}}>
-            <DataGrid columns={normalColumns} rows={normalRows} footer={footer} rowType={GridRowType.COMPACT} />
+            <DataGrid columns={normalColumns} rows={normalRows} footer={defaultFooter} rowType={GridRowType.COMPACT} />
         </div>
     ))
     .add("Grid with fixed height", () => (
@@ -218,7 +220,7 @@ storiesOf("DataGrid", module)
             <DataGrid
                 columns={normalColumns}
                 rows={normalRows}
-                footer={footer}
+                footer={defaultFooter}
                 //Give fixed height here
                 style={{height: "185px"}}
             />
@@ -231,6 +233,7 @@ storiesOf("DataGrid", module)
                 rows={paginationRows.slice(0, 5)}
                 pagination={paginationDetails}
                 itemText={"Users"}
+                footer={{showFooter:true}}
             />
         </div>
     ))
@@ -240,8 +243,8 @@ storiesOf("DataGrid", module)
                 columns={hideableColumns}
                 rows={normalRows}
                 footer={{
-                    footerData: "Total 2 users",
                     hideShowColBtn: true,
+                    showFooter:true,
                 }}
             />
         </div>
@@ -284,6 +287,7 @@ storiesOf("DataGrid", module)
                 selectionType={GridSelectionType.MULTI}
                 footer={{
                     hideShowColBtn: true,
+                    showFooter:true,
                 }}
             />
         </div>
