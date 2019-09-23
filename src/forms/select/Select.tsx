@@ -103,9 +103,9 @@ export class Select extends React.PureComponent<SelectProps> {
                                         onBlur={onBlur}
                                         className="clr-select"
                                     >
-                                        {!showDefaultSelect ? (
+                                        {!showDefaultSelect && (
                                             <option selected disabled hidden style={{display: "none"}} value="" />
-                                        ) : null}
+                                        )}
                                         {children}
                                     </select>
                                     <Icon className="clr-validate-icon" shape="exclamation-circle" />
