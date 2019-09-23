@@ -51,6 +51,7 @@ type WizardProps = {
     onClose?: Function;
     navLinkClasses?: string;
     validationType?: WizardValidationType;
+    showFooter?: boolean;
 };
 
 type WizardState = {
@@ -89,6 +90,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
         showNav: true,
         defaultStepId: 0,
         validationType: WizardValidationType.NONE,
+        showFooter: true,
     };
 
     // Default state of wizard - Need this to reset Wizard state
@@ -434,7 +436,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
     }
 
     private buildWizard(): React.ReactElement {
-        const {size, closable, steps, children} = this.props;
+        const {size, closable, steps, children, showFooter} = this.props;
         const wizardSize = "wizard-" + size;
         const modalSize = "modal-" + size;
 
@@ -470,7 +472,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
                                         {/*Close modal-header */}
                                         <div className={ClassNames.MODAL_BODY}>{this.buildWizardSteps()}</div>{" "}
                                         {/*Close modal-body*/}
-                                        {this.buildWizardFooter()}
+                                        {showFooter ? this.buildWizardFooter() : null}
                                     </div>{" "}
                                     {/*Close modal-content*/}
                                 </div>{" "}
