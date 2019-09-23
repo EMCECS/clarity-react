@@ -51,6 +51,8 @@ type WizardProps = {
     onClose?: Function;
     navLinkClasses?: string;
     validationType?: WizardValidationType;
+    showHeader?: boolean;
+    showFooter?: boolean;
 };
 
 type WizardState = {
@@ -89,6 +91,8 @@ export class Wizard extends React.PureComponent<WizardProps> {
         showNav: true,
         defaultStepId: 0,
         validationType: WizardValidationType.NONE,
+        showHeader: true,
+        showFooter: true,
     };
 
     // Default state of wizard - Need this to reset Wizard state
@@ -434,7 +438,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
     }
 
     private buildWizard(): React.ReactElement {
-        const {size, closable, steps, children} = this.props;
+        const {size, closable, steps, children, showFooter, showHeader} = this.props;
         const wizardSize = "wizard-" + size;
         const modalSize = "modal-" + size;
 
@@ -452,25 +456,27 @@ export class Wizard extends React.PureComponent<WizardProps> {
                                 <div className={ClassNames.MODAL_CONTENT_WRAPPER}>
                                     {this.buildWizardNav()}
                                     <div className={ClassNames.MODAL_CONTENT}>
-                                        <div className={ClassNames.MODAL_HEADER}>
-                                            <button
-                                                aria-label="Close"
-                                                className="close"
-                                                type="button"
-                                                onClick={this.close.bind(this)}
-                                            >
-                                                <Icon aria-hidden={true} shape="close" />
-                                            </button>
-                                            <h3 className={ClassNames.MODAL_TITLE} style={Styles.MODAL_TITELE}>
-                                                <span className={ClassNames.MODAL_TITLE_TEXT}>
-                                                    {steps[this.state.currentStepId].stepName}
-                                                </span>
-                                            </h3>
-                                        </div>{" "}
+                                        {showHeader && (
+                                            <div className={ClassNames.MODAL_HEADER}>
+                                                <button
+                                                    aria-label="Close"
+                                                    className="close"
+                                                    type="button"
+                                                    onClick={this.close.bind(this)}
+                                                >
+                                                    <Icon aria-hidden={true} shape="close" />
+                                                </button>
+                                                <h3 className={ClassNames.MODAL_TITLE} style={Styles.MODAL_TITELE}>
+                                                    <span className={ClassNames.MODAL_TITLE_TEXT}>
+                                                        {steps[this.state.currentStepId].stepName}
+                                                    </span>
+                                                </h3>
+                                            </div>
+                                        )}{" "}
                                         {/*Close modal-header */}
                                         <div className={ClassNames.MODAL_BODY}>{this.buildWizardSteps()}</div>{" "}
                                         {/*Close modal-body*/}
-                                        {this.buildWizardFooter()}
+                                        {showFooter && this.buildWizardFooter()}
                                     </div>{" "}
                                     {/*Close modal-content*/}
                                 </div>{" "}

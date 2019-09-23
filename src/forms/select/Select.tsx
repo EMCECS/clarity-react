@@ -39,6 +39,7 @@ type SelectProps = {
     onChange?: (evt: React.ChangeEvent<HTMLSelectElement>) => void;
     className?: string;
     style?: any;
+    showDefaultSelect?: boolean;
 };
 
 export class Select extends React.PureComponent<SelectProps> {
@@ -58,6 +59,7 @@ export class Select extends React.PureComponent<SelectProps> {
             children,
             className,
             style,
+            showDefaultSelect,
         } = this.props;
         const setId = this.props.id;
         return (
@@ -73,7 +75,9 @@ export class Select extends React.PureComponent<SelectProps> {
                                     onChange={onChange}
                                     onBlur={onBlur}
                                 >
-                                    <option selected disabled hidden style={{display: "none"}} value="" />
+                                    {!showDefaultSelect ? (
+                                        <option selected disabled hidden style={{display: "none"}} value="" />
+                                    ) : null}
                                     {children}
                                 </select>
                             </div>
@@ -99,7 +103,9 @@ export class Select extends React.PureComponent<SelectProps> {
                                         onBlur={onBlur}
                                         className="clr-select"
                                     >
-                                        <option selected disabled hidden style={{display: "none"}} value="" />
+                                        {!showDefaultSelect && (
+                                            <option selected disabled hidden style={{display: "none"}} value="" />
+                                        )}
                                         {children}
                                     </select>
                                     <Icon className="clr-validate-icon" shape="exclamation-circle" />
