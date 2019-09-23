@@ -69,4 +69,13 @@ export class ClassNames {
     public static PAGINATION_NEXT: string = "pagination-next";
     public static PAGINATION_LAST: string = "pagination-last";
     public static PAGINATION_SIZE: string = "pagination-size";
+    public static COLUMN_SWITCH_WRAPPER: string = "column-switch-wrapper";
+    public static COLUMN_TOGGLE: string = "btn btn-sm btn-link column-toggle--action clr-anchor clr-smart-open-close";
+    public static SWITCH_BUTTON = "btn btn-sm btn-link switch-button";
+    public static SWITCH_FOOTER: string = "switch-footer";
+    public static DATAGRID_HIDDEN_COLUMN: string = "datagrid-hidden-column";
+    public static COLUMN_SWITCH: string = "column-switch";
+    public static SWITCH_HEADER: string = "switch-header";
+    public static CLR_CHECKBOX_WRAPPER: string = "clr-checkbox-wrapper";
+    public static SWITCH_CONTENT: string = "switch-content list-unstyled";
 }

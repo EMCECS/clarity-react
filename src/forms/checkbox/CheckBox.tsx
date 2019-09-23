@@ -21,6 +21,7 @@ type CheckBoxProps = {
     ariaLabelledby?: string;
     ariaLabel?: string;
     disabled?: boolean;
+    className?: string;
     onChange?: (evt: React.ChangeEvent<HTMLInputElement>) => void;
     onClick?: (evt: React.MouseEvent<HTMLInputElement>) => void;
 };
@@ -54,6 +55,7 @@ export class CheckBox extends React.PureComponent<CheckBoxProps, CheckBoxState> 
             onClick,
             checked,
             onChange,
+            className,
         } = this.props;
         const setId = this.props.id;
         const {value} = this.state;

@@ -61,8 +61,17 @@ export const normalRows = [
 /**
  * Data for Footer
  */
-export const footer = {
+export const customFooter = {
     footerData: "Total 2 users",
+    showFooter:true,
+};
+
+export const defaultFooter = {
+    showFooter:true,
+};
+
+export const noFooter = {
+    showFooter:false,
 };
 
 /**
@@ -382,3 +391,11 @@ export const pageFilterFunction = (
         resolve(result);
     });
 };
+
+// Data for Hide/show columns
+export const hideableColumns = [
+    {columnName: "User ID", style: {width: "96px"}},
+    {columnName: "Name", style: {width: "96px"}},
+    {columnName: "Creation Date", style: {width: "96px"}, isVisible: false},
+    {columnName: "Favorite color", style: {width: "96px"}, isVisible: false},
+];
