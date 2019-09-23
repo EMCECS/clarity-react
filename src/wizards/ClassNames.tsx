@@ -19,6 +19,8 @@ export class ClassNames {
     public static WIZARD_STEPNAV_WRAPPER: string = "modal-nav clr-wizard-stepnav-wrapper";
     public static WIZARD_STEPNAV: string = "clr-wizard-stepnav clr-wizard-stepnav-list";
     public static WIZARD_STEPNAV_LINK: string = "clr-wizard-stepnav-item clr-nav-link nav-item ng-star-inserted";
+    public static WIZARD_INLINE: string = "clr-wizard--inline";
+    public static WIZARD_NO_SHADOW: string = "clr-wizard--no-shadow";
     public static MODAL_HEADER: string = "modal-header";
     public static MODAL_CONTENT: string = "modal-content";
     public static MODAL_BODY: string = "modal-body";

@@ -34,6 +34,7 @@ type WizardStepNavDetails = {
 };
 
 type WizardProps = {
+    isInline?: boolean;
     show?: boolean;
     size?: WizardSize;
     title?: string;
@@ -81,6 +82,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
 
     // By default Wizard will have following prop values
     static defaultProps = {
+        isInline: false,
         previousButtonText: "BACK",
         nextButtonText: "NEXT",
         cancelButtonText: "CANCEL",
@@ -434,7 +436,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
     }
 
     private buildWizard(): React.ReactElement {
-        const {size, closable, steps, children} = this.props;
+        const {size, closable, steps, isInline, children} = this.props;
         const wizardSize = "wizard-" + size;
         const modalSize = "modal-" + size;
 
