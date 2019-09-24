@@ -15,6 +15,7 @@ import {CheckBox} from "../forms/checkbox";
 import {RadioButton} from "../forms/radio";
 import {Button} from "../forms/button";
 import {Icon, Direction} from "../icon";
+import {HideShowColumns} from "./HideShowColumns";
 
 /**
  * General component description :
@@ -33,14 +34,15 @@ import {Icon, Direction} from "../icon";
  * @param {footer} footer component
  * @param {onRowSelect} Function which will gets called on select/deselect of rows
  * @param {onSelectAll} Function which will gets called on select/deselect of all rows
+ * @param {keyfield} field to uniquely identify row
  * @param {rowType} Expandable or compact row type
  * @param {itemText} label to display for all items
+ * @param {pagination} pagination support
  */
 type DataGridProps = {
     className?: string;
     style?: any;
     selectionType?: GridSelectionType;
-    pagination?: boolean;
     columns: DataGridColumn[];
     rows?: DataGridRow[];
     footer?: DataGridFooter;
@@ -49,6 +51,7 @@ type DataGridProps = {
     keyfield?: string;
     rowType?: GridRowType;
     itemText?: string;
+    pagination?: DataGridPaginationProps;
 };
 
 /**
@@ -59,6 +62,7 @@ type DataGridProps = {
  * @param {columns} column details
  * @param {style} CSS style
  * @param {filter} Filter component
+ * @param {isVisible} if true column will be visible else hide it
  */
 export type DataGridColumn = {
     columnName: string;
@@ -67,11 +71,12 @@ export type DataGridColumn = {
     className?: string;
     style?: any;
     filter?: React.ReactNode;
+    isVisible?: boolean;
 };
 
 /**
  * type for DataGridRow :
- * @param {content} row data
+ * @param {rowData} row data
  * @param {rowID} unique ID to identify row
  * @param {isSelected} set to true if row is selected
  * @param {className} CSS class name
@@ -79,7 +84,7 @@ export type DataGridColumn = {
  * @param {expandableContent} Expandable data content
  */
 export type DataGridRow = {
-    content: DataGridCell[];
+    rowData: DataGridCell[];
     className?: string;
     style?: any;
     rowID?: number; // not to take from user
@@ -90,12 +95,12 @@ export type DataGridRow = {
 
 /**
  * type for DataGridCell :
- * @param {content} cell data
+ * @param {cellData} data for cell
  * @param {className} CSS class name
  * @param {style} CSS style
  */
 export type DataGridCell = {
-    content: any;
+    cellData: any;
     columnName: string;
     className?: string;
     style?: any;
@@ -103,14 +108,17 @@ export type DataGridCell = {
 
 /**
  * type for DataGridFooter :
- * @param {content} Footer data
+ * @param {footerData} Footer data
  * @param {className} CSS class name
  * @param {style} CSS style
+ * @param {hideShowColBtn} Hide and Show column button
  */
 export type DataGridFooter = {
-    content: any;
+    footerData?: any;
     className?: string;
     style?: any;
+    hideShowColBtn?: boolean;
+    showFooter: boolean;
 };
 
 /**
@@ -123,10 +131,24 @@ export type DataGridSort = {
     sortFunction: (rows: DataGridRow[], order: SortOrder, columnName: string) => Promise<DataGridRow[]>;
 };
 
-export type DatagridData = {
-    rows: DataGridRow[];
-    columns?: DataGridColumn[];
-    footer?: DataGridFooter;
+/**
+ * Props for DataGridPagination :
+ * @param {className} CSS
+ * @param {style} CSS styles
+ * @param {currentPage} Index of the currently displayed page, starting from 1
+ * @param {pageSize} Number of items displayed per page. Defaults to 10
+ * @param {totalItems} Total number of items present in the datagrid, after the filters have been applied
+ * @param {lastPage} Index of the last page for the current data
+ * @param {getPage} custom function to get page data for given page number
+ */
+type DataGridPaginationProps = {
+    className?: string;
+    style?: any;
+    currentPage?: number;
+    pageSize?: number;
+    pageSizes?: number[];
+    totalItems: number;
+    getPageData?: (pageIndex: number, pageSize: number) => Promise<DataGridRow[]>;
 };
 
 /**
@@ -167,12 +189,24 @@ export enum GridRowType {
  * @param {allColumns} column data
  * @param {allRows} row data
  * @param {itemText} label to display for all items
+ * @param {pagination} pagination data
  */
 type DataGridState = {
     selectAll: boolean;
     allColumns: DataGridColumn[];
     allRows: DataGridRow[];
     itemText: string;
+    pagination?: DataGridPaginationState;
+};
+
+type DataGridPaginationState = {
+    currentPage: number;
+    pageSize: number;
+    totalItems: number;
+    firstItem: number;
+    lastItem: number;
+    totalPages: number;
+    pageSizes?: number[];
 };
 
 /**
@@ -180,10 +214,7 @@ type DataGridState = {
  * Displays data in grid format
  */
 export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> {
-    // Default props for datagrid
-    static defaultProps = {
-        pagination: false,
-    };
+    private pageIndexRef = React.createRef<HTMLInputElement>();
 
     // Initial state of datagrid
     state: DataGridState = {
@@ -191,26 +222,25 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         allColumns: this.props.columns,
         allRows: this.props.rows !== undefined ? this.props.rows : [],
         itemText: this.props.itemText !== undefined ? this.props.itemText : "items",
+        pagination:
+            this.props.pagination !== undefined
+                ? {
+                      currentPage:
+                          this.props.pagination.currentPage !== undefined ? this.props.pagination.currentPage : 1,
+                      pageSize: this.props.pagination.pageSize !== undefined ? this.props.pagination.pageSize : 10,
+                      totalItems: this.props.pagination.totalItems !== undefined ? this.props.pagination.totalItems : 0,
+                      pageSizes:
+                          this.props.pagination.pageSizes !== undefined ? this.props.pagination.pageSizes : undefined,
+                      firstItem: 0,
+                      lastItem: 0,
+                      totalPages: 1,
+                  }
+                : undefined,
     };
 
     componentWillMount() {
         this.setInitalState();
-    }
-
-    // Initialize state of grid
-    private setInitalState() {
-        const {allRows, allColumns} = this.state;
-        let rows = this.updateRowIDs(allRows);
-
-        rows.forEach(function(row) {
-            row["isSelected"] = false;
-            row["isExpanded"] = false;
-        });
-
-        this.setState({
-            allRows: [...rows],
-            allColumns: [...this.updateColumnIDs(allColumns)],
-        });
+        if (this.props.pagination !== undefined) this.setInitalStateForPagination();
     }
 
     // Function to return all selected rows
@@ -226,12 +256,27 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     };
 
     // Function to update datagrid rows
-    updateRows = (rows: DataGridRow[]) => {
+    updateRows = (rows: DataGridRow[], totalItems: number) => {
         const updatedRows = this.updateRowIDs(rows);
+        let {pagination} = this.state;
+
+        // update pagination footer
+        if (pagination) {
+            const {pageSize, currentPage} = pagination;
+            const firstItem = this.getFirstItemIndex(currentPage, pageSize);
+            const lastItem = this.getLastItemIndex(pageSize, totalItems, firstItem);
+
+            pagination.totalPages = this.getTotalPages(totalItems, pageSize);
+            pagination.firstItem = firstItem;
+            pagination.lastItem = lastItem;
+            pagination.currentPage = 1;
+            pagination.totalItems = totalItems;
+        }
 
         this.setState({
             allRows: [...updatedRows],
-            selectAll: updatedRows.length == 0 ? false : this.state.selectAll,
+            selectAll: totalItems == 0 ? false : allTrueOnKey(updatedRows, "isSelected"),
+            pagination: pagination ? pagination : undefined,
         });
     };
 
@@ -250,6 +295,148 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     };
 
     /* ##########  DataGrid private methods start  ############ */
+
+    // Initialize state of grid
+    private setInitalState() {
+        const {allRows, allColumns} = this.state;
+        let rows = this.updateRowIDs(allRows);
+        let columns = this.updateColumnIDs(allColumns);
+
+        rows.forEach(function(row) {
+            row["isSelected"] = false;
+            row["isExpanded"] = false;
+        });
+
+        columns.forEach(function(column: DataGridColumn) {
+            // if isVisible is not provided in props then set it to true
+            column["isVisible"] = column.isVisible !== undefined ? column.isVisible : true;
+        });
+
+        this.setState({
+            allRows: [...rows],
+            allColumns: [...columns],
+        });
+    }
+
+    // Initialize state of grid with pagination
+    private setInitalStateForPagination() {
+        let {pagination} = this.state;
+        if (pagination) {
+            const {currentPage, pageSize, totalItems} = pagination;
+            const firstItem = this.getFirstItemIndex(currentPage, pageSize);
+            const lastItem = this.getLastItemIndex(pageSize, totalItems, firstItem);
+
+            pagination.totalPages = this.getTotalPages(totalItems, pageSize);
+            pagination.firstItem = firstItem;
+            pagination.lastItem = lastItem;
+            this.setState({pagination: pagination});
+        }
+    }
+
+    /* ############################# Pagination methods start ####################################*/
+    private getTotalPages = (totalItems: number, pageSize: number) => {
+        return Math.floor((totalItems + pageSize - 1) / pageSize);
+    };
+
+    // Get index of first item in page
+    private getFirstItemIndex = (page: number, pageSize: number) => {
+        return page * pageSize - (pageSize - 1);
+    };
+
+    // Get index of last item in page
+    private getLastItemIndex = (pageSize: number, totalItems: number, firstItem: number) => {
+        return Math.min(firstItem + pageSize - 1, totalItems);
+    };
+
+    // Function to handle change in page sizes
+    private handleSelectPageSize = (evt: React.ChangeEvent<HTMLSelectElement>) => {
+        this.getPage(this.state.pagination!.currentPage, parseInt(evt.target.value));
+    };
+
+    private gotoFirstPage = () => {
+        const {pageSize} = this.state.pagination!;
+        this.getPage(1, pageSize);
+    };
+
+    private gotoLastPage = () => {
+        const {pageSize, totalPages} = this.state.pagination!;
+        this.getPage(totalPages, pageSize);
+    };
+
+    private gotoNextPage = () => {
+        const {pageSize, currentPage, totalPages} = this.state.pagination!;
+        let nextPage = currentPage + 1;
+        if (nextPage > totalPages) nextPage = totalPages;
+        this.getPage(nextPage, pageSize);
+    };
+
+    private gotoPreviousPage = () => {
+        const {pageSize, currentPage, totalPages} = this.state.pagination!;
+        let previousPage = currentPage - 1;
+        if (previousPage < 1) previousPage = 1;
+        this.getPage(previousPage, pageSize);
+    };
+
+    // Function to handle pageIndex change in input box
+    private handlePageChange = (evt: React.FocusEvent<HTMLInputElement>) => {
+        const {pageSize, currentPage} = this.state.pagination!;
+        const pageIndex = parseInt(evt.target.value);
+        if (isNaN(pageIndex)) {
+            this.pageIndexRef.current!.value = currentPage.toString();
+        } else {
+            this.getPage(pageIndex, pageSize);
+        }
+    };
+
+    // Function to get page data for given page number
+    private getPage(pageIndex: number, pageSize: number) {
+        if (this.state.pagination && this.props.pagination) {
+            const {totalItems} = this.state.pagination;
+            const {getPageData} = this.props.pagination;
+            const totalPages =
+                this.state.pagination.pageSize !== pageSize
+                    ? this.getTotalPages(totalItems, pageSize)
+                    : this.state.pagination.totalPages;
+
+            // set pageIndex to last page if pageIndex is greater than total pages
+            if (pageIndex > totalPages! && totalPages) {
+                pageIndex = totalPages;
+            }
+
+            // set pageIndex to first page if pageIndex is smaller than 1
+            if (pageIndex < 1) {
+                pageIndex = 1;
+            }
+
+            //Set page index in input box
+            this.pageIndexRef.current!.value = pageIndex.toString();
+
+            if (getPageData) {
+                var firstItem = this.getFirstItemIndex(pageIndex, pageSize);
+                var lastItem = this.getLastItemIndex(pageSize, totalItems, firstItem);
+                let paginationState = this.state.pagination;
+                if (paginationState) {
+                    paginationState.pageSize =
+                        this.state.pagination.pageSize !== pageSize ? pageSize : this.state.pagination.pageSize;
+                    paginationState.currentPage = pageIndex;
+                    paginationState.firstItem = firstItem;
+                    paginationState.lastItem = lastItem;
+                    paginationState.totalPages = this.getTotalPages(totalItems, pageSize);
+                }
+
+                getPageData(pageIndex, pageSize).then((data: DataGridRow[]) => {
+                    const rows = this.updateRowIDs(data);
+                    this.setState({
+                        allRows: [...rows],
+                        pagination: paginationState,
+                        selectAll: allTrueOnKey(rows, "isSelected"),
+                    });
+                });
+            }
+        }
+    }
+
+    /* ############################# Pagination methods end ####################################*/
     //toggle collapse of expandable row
     private toggleExpand(rowID: number) {
         const {allRows} = this.state;
@@ -344,11 +531,23 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     }
 
     // Get width of column
-    private getColWidth(columnName: string) {
+    private getColObject(columnName: string) {
         const {allColumns} = this.state;
         const column = allColumns.find(col => col.columnName === columnName);
 
+        return column;
+    }
+
+    // Get width of column
+    private getColWidth(columnName: string) {
+        const column = this.getColObject(columnName);
         return column && column.style && column.style.width ? column.style.width : undefined;
+    }
+
+    // Check if column is visible
+    private isColVisible(columnName: string) {
+        const column = this.getColObject(columnName);
+        return column && column.isVisible;
     }
     /* ##########  DataGrid private methods end  ############ */
 
@@ -485,8 +684,8 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                             {selectionType && this.buildSelectColumn()}
                             {rowType && rowType === GridRowType.EXPANDABLE && this.buildEmptyColumn()}
                             {allColumns &&
-                                allColumns.map((column: any, index: number) => {
-                                    return this.buildDataGridColumn(column, index);
+                                allColumns.map((column: DataGridColumn, index: number) => {
+                                    return column.isVisible ? this.buildDataGridColumn(column, index) : undefined;
                                 })}
                         </div>
                     </div>
@@ -546,7 +745,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     // function to build datagrid rows
     private buildDataGridRow(row: DataGridRow, index: number): React.ReactElement {
         const {selectionType, rowType} = this.props;
-        const {rowID, content, className, style, isSelected, isExpanded, expandableContent} = row;
+        const {rowID, rowData, className, style, isSelected, isExpanded, expandableContent} = row;
         return (
             <div
                 role="rowgroup"
@@ -572,10 +771,10 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                             {rowType &&
                                 rowType === GridRowType.EXPANDABLE &&
                                 this.buildExpandableCell(rowID!, isExpanded!)}
-                            {content &&
-                                content.map((cell: any, index: number) => {
+                            {rowData &&
+                                rowData.map((cell: any, index: number) => {
                                     return this.buildDataGridCell(
-                                        cell.content,
+                                        cell.cellData,
                                         index,
                                         cell.columnName,
                                         cell.className,
@@ -598,43 +797,169 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // function to build datagrid cell
     private buildDataGridCell(
-        content: any,
+        cellData: any,
         index: number,
         columnName: string,
         className?: string,
         style?: any,
     ): React.ReactElement {
-        let width: any = "";
-        if (columnName) width = this.getColWidth(columnName);
+        const width = this.getColWidth(columnName);
+        const isColVisible = this.isColVisible(columnName);
+
         return (
             <div
                 role="gridcell"
                 key={"cell-" + index}
-                className={`${className} ${ClassNames.DATAGRID_CELLS}`}
+                className={classNames([
+                    ClassNames.DATAGRID_CELL,
+                    ClassNames.DATAGRID_NG_STAR_INSERTED,
+                    isColVisible !== undefined && !isColVisible && ClassNames.DATAGRID_HIDDEN_COLUMN,
+                    className,
+                ])}
                 style={{width: width, ...style}}
             >
-                {content}
+                {cellData}
             </div>
         );
+    }
+
+    // Function to build pageSizes select
+    private buildPageSizesSelect(): React.ReactElement {
+        const {pageSizes, pageSize} = this.state.pagination!;
+        const {itemText} = this.state;
+
+        return (
+            <div className={ClassNames.PAGINATION_SIZE}>
+                <div _ngcontent-clarity-c8="">
+                    {` ${itemText}  ${" per page"} `}
+                    <div className={classNames([ClassNames.CLR_SELECT_WRAPPER])}>
+                        <select
+                            className={classNames([ClassNames.CLR_PAGE_SIZE_SELECT])}
+                            onChange={evt => this.handleSelectPageSize(evt)}
+                        >
+                            {pageSizes!.map((size: number, index: number) => {
+                                const selected = size === pageSize ? true : false;
+                                return (
+                                    <option key={index} value={size} selected={selected}>
+                                        {size}
+                                    </option>
+                                );
+                            })}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // Function to build Next, previous, last and first page buttons
+    private buildPageButtons(): React.ReactElement {
+        const {currentPage, totalPages} = this.state.pagination!;
+        return (
+            <div className={classNames([ClassNames.PAGINATION_LIST])}>
+                <Button
+                    key="down"
+                    className={ClassNames.PAGINATION_FIRST}
+                    icon={{shape: "step-forward-2 down"}}
+                    disabled={currentPage == 1 ? true : false}
+                    onClick={this.gotoFirstPage}
+                />
+                <Button
+                    key="left"
+                    className={ClassNames.PAGINATION_PREVIOUS}
+                    icon={{shape: "angle left"}}
+                    disabled={currentPage == 1 ? true : false}
+                    onClick={this.gotoPreviousPage}
+                />
+                <input
+                    className={ClassNames.PAGINATION_CURRENT}
+                    size={2}
+                    defaultValue={this.state.pagination!.currentPage.toString()}
+                    type="text"
+                    ref={this.pageIndexRef}
+                    aria-label="Current Page"
+                    onBlur={evt => this.handlePageChange(evt)}
+                />
+                &nbsp;/&nbsp;<span aria-label="Total Pages">{totalPages}</span>
+                <Button
+                    key="right"
+                    className={ClassNames.PAGINATION_NEXT}
+                    icon={{shape: "angle right"}}
+                    disabled={currentPage === totalPages ? true : false}
+                    onClick={this.gotoNextPage}
+                />
+                <Button
+                    key="up"
+                    className={ClassNames.PAGINATION_LAST}
+                    icon={{shape: "step-forward-2 up"}}
+                    disabled={currentPage == totalPages ? true : false}
+                    onClick={this.gotoLastPage}
+                />
+            </div>
+        );
+    }
+
+    // function to build datagrid pagination footer
+    private buildDataGridPagination(): React.ReactElement {
+        const {className, style} = this.props.pagination!;
+        const {itemText} = this.state;
+        const {totalItems, firstItem, lastItem, pageSize, pageSizes} = this.state.pagination!;
+        return (
+            <div
+                _ngcontent-clarity-c8=""
+                style={style}
+                className={classNames([ClassNames.DATAGRID_PAGINATION, className])}
+            >
+                {pageSizes && totalItems >= pageSize && this.buildPageSizesSelect()}
+
+                <div className={classNames([ClassNames.PAGINATION_DESC])}>
+                    {`${firstItem} - ${lastItem} ${" of "} ${totalItems} ${itemText}`}{" "}
+                </div>
+
+                {totalItems >= pageSize && this.buildPageButtons()}
+            </div>
+        );
+    }
+
+    // function to build Hide and show columns menu
+    private buildHideShowColumnsBtn(): React.ReactElement {
+        const {allColumns} = this.state;
+        return <HideShowColumns columns={allColumns} updateColumns={this.updateColumns} />;
+    }
+
+    private buildFooterContent(): React.ReactElement {
+        const {footer} = this.props;
+        const {allRows, itemText} = this.state;
+        const footerDescription = allRows.length.toString() + " " + itemText;
+        let content;
+
+        if (footer !== undefined) {
+            content = footer.footerData !== undefined ? footer.footerData : footerDescription;
+        }
+
+        return <div> {content} </div>;
     }
 
     // function to build datagrid footer
     private buildDataGridFooter(): React.ReactElement {
         // Need to take this from state in future
-        const {footer} = this.props;
+        const {footer, pagination} = this.props;
         return (
             <div
                 className={`${ClassNames.DATAGRID_FOOTER} ${footer && footer.className && footer.className}`}
                 style={footer && footer.style && footer.style}
             >
-                <div className={ClassNames.DATAGRID_FOOTER_DESC}>{footer && footer.content && footer.content}</div>
+                {footer && footer.hideShowColBtn && this.buildHideShowColumnsBtn()}
+                <div className={ClassNames.DATAGRID_FOOTER_DESC}>
+                    {pagination && pagination ? this.buildDataGridPagination() : this.buildFooterContent()}
+                </div>
             </div>
         );
     }
 
     // render datagrid
     render() {
-        const {className, style, rowType} = this.props;
+        const {className, style, rowType, footer} = this.props;
         return (
             <div
                 className={classNames([
@@ -645,7 +970,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                 style={style}
             >
                 {this.buildDataGridBody()}
-                {this.buildDataGridFooter()}
+                {footer && footer.showFooter && this.buildDataGridFooter()}
                 <div className={ClassNames.DATAGRID_CAL_TABLE}>
                     <div className={ClassNames.DATAGRID_CAL_HEADER} />
                 </div>

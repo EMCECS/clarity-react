@@ -39,9 +39,19 @@ export type DataGridFilterProps = {
     className?: string;
     datagridRef: any;
     columnName: string;
-    onFilter: (rows: DataGridRow[], columnValue: any, columnName: string) => Promise<DataGridRow[]>;
+    onFilter: (rows: DataGridRow[], columnValue: any, columnName: string) => Promise<DataGridFilterResult>;
     filterType?: FilterType;
     customFilter?: React.ReactNode;
+};
+
+/**
+ * Props for DataGridFilter results :
+ * @param {rows} datagrid rows after applying filter
+ * @param {totalItems} total rows length
+ */
+export type DataGridFilterResult = {
+    rows: DataGridRow[];
+    totalItems: number;
 };
 
 /**
@@ -58,10 +68,12 @@ export enum FilterType {
  * State for DataGridFilter:
  * @param {isOpen} check if filter box is open
  * @param {filterValue} filter string
+ * @param {transformVal} value for transform css attribute
  */
 type DataGridFilterState = {
     isOpen: boolean;
     filterValue: any;
+    transformVal: string;
 };
 
 export class DataGridFilter extends React.PureComponent<DataGridFilterProps, DataGridFilterState> {
@@ -79,7 +91,31 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
     state: DataGridFilterState = {
         isOpen: false,
         filterValue: undefined,
+        transformVal: "translateX(0px) translateY(0px)",
     };
+
+    componentWillMount() {
+        window.addEventListener("resize", this.resize as any, true);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener("resize", this.resize as any, true);
+    }
+
+    componentDidUpdate() {
+        const {isOpen} = this.state;
+
+        if (isOpen) {
+            // Calculate left and top for filter box
+            const filterBoxTop = this.refParent.current!.getClientRects()[0].top + 15;
+            const filterBoxLeft =
+                this.refParent.current!.getClientRects()[0].left -
+                this.refChild.current!.getClientRects()[0].width +
+                20;
+            const transformVal = "translateX(" + filterBoxLeft + "px) " + "translateY(" + filterBoxTop + "px)";
+            this.setState({transformVal: transformVal});
+        }
+    }
 
     getFilterValue = () => {
         return this.state.filterValue;
@@ -95,7 +131,8 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
             this.setState({filterValue: value}, () =>
                 onFilter(rows, value, columnName).then(data => {
                     // Update datagrid rows
-                    datagridRef.current!.updateRows(data);
+                    const {rows, totalItems} = data;
+                    datagridRef.current!.updateRows(rows, totalItems);
                 }),
             );
         }
@@ -116,18 +153,16 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
 
     private afterToggle = () => {
         if (this.state.isOpen) {
-            this.subscribeDocumentClick();
+            window.addEventListener("click", this.handleDocumentClick as any, true);
         } else {
-            this.unsubscribeDocumentClick();
+            window.removeEventListener("click", this.handleDocumentClick as any, true);
         }
     };
 
-    private subscribeDocumentClick = () => {
-        window.addEventListener("click", this.handleDocumentClick as any, true);
-    };
-
-    private unsubscribeDocumentClick = () => {
-        window.removeEventListener("click", this.handleDocumentClick as any, true);
+    private resize = () => {
+        if (this.state.isOpen) {
+            this.toggle();
+        }
     };
 
     private handleDocumentClick = (evt: Event) => {
@@ -143,8 +178,9 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
 
     // Function to render filter box
     private openFilter(): React.ReactElement {
-        const {filterValue} = this.state;
+        const {filterValue, transformVal} = this.state;
         const {style, className, filterType, customFilter} = this.props;
+
         return (
             <div>
                 <span className={ClassNames.OFFSCREEN_FOCUS_REBOUNDER} />
@@ -155,12 +191,12 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
                     ref={this.refChild}
                     className={classNames([ClassNames.DATARID_FILTER, ClassNames.CLR_POPOVER_CONTENT, className])}
                     style={{
-                        zIndex: "5000",
-                        position: "fixed",
-                        top: "42px",
+                        top: 0,
                         bottom: "auto",
                         right: "auto",
                         height: "90px",
+                        left: 0,
+                        transform: transformVal,
                         ...style,
                     }}
                 >

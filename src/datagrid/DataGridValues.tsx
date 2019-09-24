@@ -11,14 +11,16 @@
 import * as React from "react";
 import {Icon} from "../icon";
 import {Button} from "../forms/button";
-import {SortOrder, DataGridRow} from ".";
+import {SortOrder, DataGridRow, DataGridFilterResult} from ".";
 
 /**
  * General file description :
  * Data to render diffrent datagrids in storybook
  */
 
-// Column Data
+/**
+ * Data for Columns
+ */
 export const normalColumns = [
     {columnName: "User ID", style: {width: "96px"}},
     {columnName: "Name", style: {width: "96px"}},
@@ -26,48 +28,64 @@ export const normalColumns = [
     {columnName: "Favorite color", style: {width: "96px"}},
 ];
 
-// Row Data
+/**
+ * Data for Rows
+ */
 export const normalRows = [
     {
-        content: [
-            {columnName: "User ID", content: 41512},
-            {columnName: "Name", content: "Georgia"},
-            {columnName: "Creation Date", content: "Sep 11, 2008"},
-            {columnName: "Favorite color", content: "Blue"},
+        rowData: [
+            {columnName: "User ID", cellData: 41512},
+            {columnName: "Name", cellData: "Georgia"},
+            {columnName: "Creation Date", cellData: "Sep 11, 2008"},
+            {columnName: "Favorite color", cellData: "Blue"},
         ],
     },
     {
-        content: [
-            {columnName: "User ID", content: 16166},
-            {columnName: "Name", content: "Brynn"},
-            {columnName: "Creation Date", content: "Aug 2, 2014"},
-            {columnName: "Favorite color", content: "Orange"},
+        rowData: [
+            {columnName: "User ID", cellData: 16166},
+            {columnName: "Name", cellData: "Brynn"},
+            {columnName: "Creation Date", cellData: "Aug 2, 2014"},
+            {columnName: "Favorite color", cellData: "Orange"},
         ],
     },
     {
-        content: [
-            {columnName: "User ID", content: 30574},
-            {columnName: "Name", content: "Brad"},
-            {columnName: "Creation Date", content: "Jan 4, 2019"},
-            {columnName: "Favorite color", content: "Yellow"},
+        rowData: [
+            {columnName: "User ID", cellData: 30574},
+            {columnName: "Name", cellData: "Brad"},
+            {columnName: "Creation Date", cellData: "Jan 4, 2019"},
+            {columnName: "Favorite color", cellData: "Yellow"},
         ],
     },
 ];
 
-// Footer data
-export const footer = {
-    content: "Total 2 users",
+/**
+ * Data for Footer
+ */
+export const customFooter = {
+    footerData: "Total 2 users",
+    showFooter: true,
 };
 
+export const defaultFooter = {
+    showFooter: true,
+};
+
+export const noFooter = {
+    showFooter: false,
+};
+
+/**
+ * Data for Custom content rendering
+ */
 export const customRows = [
     {
-        content: [
-            {columnName: "User ID", content: 41512},
-            {columnName: "Name", content: "Georgia"},
-            {columnName: "Creation Date", content: "Sep 11, 2008"},
+        rowData: [
+            {columnName: "User ID", cellData: 41512},
+            {columnName: "Name", cellData: "Georgia"},
+            {columnName: "Creation Date", cellData: "Sep 11, 2008"},
             {
                 columnName: "Favorite color",
-                content: (
+                cellData: (
                     <div>
                         <Icon shape="time" />
                         {"Critical"}
@@ -77,13 +95,13 @@ export const customRows = [
         ],
     },
     {
-        content: [
-            {columnName: "User ID", content: 16166},
-            {columnName: "Name", content: "Brynn"},
-            {columnName: "Creation Date", content: "Aug 2, 2014"},
+        rowData: [
+            {columnName: "User ID", cellData: 16166},
+            {columnName: "Name", cellData: "Brynn"},
+            {columnName: "Creation Date", cellData: "Aug 2, 2014"},
             {
                 columnName: "Favorite color",
-                content: (
+                cellData: (
                     <div>
                         <Icon shape="time" />
                         {"Critical"}
@@ -93,67 +111,94 @@ export const customRows = [
         ],
     },
 ];
+
+/**
+ * Data for Filtering
+ */
+
+function filterRows(rows: DataGridRow[], columnValue: string) {
+    const newRows = rows.filter(row => {
+        let matchFound = false;
+        for (const index in row.rowData) {
+            const content = String(row.rowData[index].cellData);
+            if (content.indexOf(columnValue) !== -1) {
+                matchFound = true;
+            }
+        }
+        if (matchFound) {
+            return row;
+        }
+    });
+    return newRows;
+}
 
 //Custom function to filter data
 export const filterFunction = (
     rows: DataGridRow[],
     columnValue: string,
     columnName: string,
-): Promise<DataGridRow[]> => {
+): Promise<DataGridFilterResult> => {
     return new Promise((resolve, reject) => {
+        let result: DataGridFilterResult = {
+            rows: [],
+            totalItems: 0,
+        };
         if (columnValue === "" || columnValue === undefined) {
-            resolve(normalRows);
+            result = {
+                rows: normalRows,
+                totalItems: normalRows.length,
+            };
+        } else {
+            const newRows = filterRows(rows, columnValue);
+            result = {
+                rows: newRows,
+                totalItems: newRows.length,
+            };
         }
-        let newRows = rows.filter(function(row) {
-            let matchFound = false;
-            for (let index in row.content) {
-                let content = String(row.content[index].content);
-                if (content.indexOf(columnValue) !== -1) {
-                    matchFound = true;
-                }
-            }
-            if (matchFound) {
-                return row;
-            }
-        });
-        resolve(newRows);
+        resolve(result);
     });
 };
+
+/**
+ * Data for Sorting
+ */
 
 // Custom sorting function for number and string type
 export const sortFunction = (rows: DataGridRow[], sortOrder: SortOrder, columnName: string): Promise<DataGridRow[]> => {
     return new Promise((resolve, reject) => {
-        rows.sort(function(first: DataGridRow, second: DataGridRow): number {
-            let result = 0;
-            let firstRecord = first.content.find(function(element: any) {
-                if (element.columnName === columnName) return element;
-            });
+        rows.sort(
+            (first: DataGridRow, second: DataGridRow): number => {
+                let result = 0;
+                let firstRecord = first.rowData.find(function(element: any) {
+                    if (element.columnName === columnName) return element;
+                });
 
-            let secondRecord = second.content.find(function(element: any) {
-                if (element.columnName === columnName) return element;
-            });
+                let secondRecord = second.rowData.find(function(element: any) {
+                    if (element.columnName === columnName) return element;
+                });
 
-            if (firstRecord && secondRecord) {
-                const contentType = typeof firstRecord.content;
+                if (firstRecord && secondRecord) {
+                    const contentType = typeof firstRecord.cellData;
 
-                if (sortOrder === SortOrder.ASC) {
-                    if (contentType === "number") {
-                        result = firstRecord.content - secondRecord.content;
-                    } else if (contentType === "string") {
-                        if (firstRecord.content > secondRecord.content) result = -1;
-                        else if (firstRecord.content < secondRecord.content) result = 1;
-                    }
-                } else if (sortOrder == SortOrder.DESC) {
-                    if (contentType === "number") {
-                        result = secondRecord.content - firstRecord.content;
-                    } else if (contentType === "string") {
-                        if (secondRecord.content > firstRecord.content) result = -1;
-                        else if (secondRecord.content < firstRecord.content) result = 1;
+                    if (sortOrder === SortOrder.ASC) {
+                        if (contentType === "number") {
+                            result = firstRecord.cellData - secondRecord.cellData;
+                        } else if (contentType === "string") {
+                            if (firstRecord.cellData > secondRecord.cellData) result = -1;
+                            else if (firstRecord.cellData < secondRecord.cellData) result = 1;
+                        }
+                    } else if (sortOrder == SortOrder.DESC) {
+                        if (contentType === "number") {
+                            result = secondRecord.cellData - firstRecord.cellData;
+                        } else if (contentType === "string") {
+                            if (secondRecord.cellData > firstRecord.cellData) result = -1;
+                            else if (secondRecord.cellData < firstRecord.cellData) result = 1;
+                        }
                     }
                 }
-            }
-            return result;
-        });
+                return result;
+            },
+        );
         resolve(rows);
     });
 };
@@ -170,6 +215,9 @@ export const sortColumns = [
     {columnName: "Favorite color", style: {width: "96px"}},
 ];
 
+/**
+ * Data for Batch Actions
+ */
 // Grid Action component
 type GridActionsState = {
     selectedRows: any[];
@@ -210,35 +258,144 @@ export class GridActions extends React.PureComponent<any, GridActionsState> {
     }
 }
 
+/**
+ * Data for Expandable Rows
+ */
 const expandableContent =
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin in neque in ante placerat mattis id sed quam. Proin rhoncus lacus et tempor dignissim. Vivamus sem quam, pellentesque aliquet suscipit eget, pellentesque sed arcu. Vivamus in dui lectus. Suspendisse cursus est ac nisl imperdiet viverra. Aenean sagittis nibh lacus, in eleifend urna ultrices et. Mauris porttitor nisi nec velit pharetra porttitor. Vestibulum vulputate sollicitudin dolor ut tincidunt. Phasellus vitae blandit felis. Nullam posuere ipsum tincidunt velit pellentesque rhoncus. Morbi faucibus ut ipsum at malesuada. Nam vestibulum felis sit amet metus finibus hendrerit. Fusce faucibus odio eget ex vulputate rhoncus. Fusce nec aliquam leo, at suscipit diam.";
-// Expandable row data
+
 export const expandableRows = [
     {
-        content: [
-            {columnName: "User ID", content: 41512},
-            {columnName: "Name", content: "Georgia"},
-            {columnName: "Creation Date", content: "Sep 11, 2008"},
-            {columnName: "Favorite color", content: "Blue"},
+        rowData: [
+            {columnName: "User ID", cellData: 41512},
+            {columnName: "Name", cellData: "Georgia"},
+            {columnName: "Creation Date", cellData: "Sep 11, 2008"},
+            {columnName: "Favorite color", cellData: "Blue"},
         ],
         expandableContent: expandableContent,
     },
     {
-        content: [
-            {columnName: "User ID", content: 16166},
-            {columnName: "Name", content: "Brynn"},
-            {columnName: "Creation Date", content: "Aug 2, 2014"},
-            {columnName: "Favorite color", content: "Orange"},
+        rowData: [
+            {columnName: "User ID", cellData: 16166},
+            {columnName: "Name", cellData: "Brynn"},
+            {columnName: "Creation Date", cellData: "Aug 2, 2014"},
+            {columnName: "Favorite color", cellData: "Orange"},
         ],
         expandableContent: expandableContent,
     },
     {
-        content: [
-            {columnName: "User ID", content: 30574},
-            {columnName: "Name", content: "Brad"},
-            {columnName: "Creation Date", content: "Jan 4, 2019"},
-            {columnName: "Favorite color", content: "Yellow"},
+        rowData: [
+            {columnName: "User ID", cellData: 30574},
+            {columnName: "Name", cellData: "Brad"},
+            {columnName: "Creation Date", cellData: "Jan 4, 2019"},
+            {columnName: "Favorite color", cellData: "Yellow"},
         ],
         expandableContent: expandableContent,
     },
+];
+
+/**
+ * Data for Pagination
+ */
+export function getRowData() {
+    const data = [
+        [41512, "Georgia", "Sep 11, 2008", "Blue"],
+        [16166, "Brynn", "Aug 2, 2014", "Orange"],
+        [30574, "Brad", "Jan 4, 2019", "Yellow"],
+        [2459, "Beverly", "Mar 2, 2019", "Pink"],
+        [14262, "Johnson", "Jun 23, 2019", "Blue"],
+        [59729, "Sibyl", "Feb 27, 2016", "Red"],
+        [92422, "Roslyn", "Apr 26, 2016", "Blue"],
+        [83943, "Lottie", "Mar 2, 2019", "Yellow"],
+        [83943, "Lottie", "Mar 2, 2019", "Yellow"],
+        [83943, "Lottie", "Mar 2, 2019", "Yellow"],
+    ];
+
+    let rowValues: DataGridRow[] = [];
+    data.forEach(function(element) {
+        const row: DataGridRow = {
+            rowData: [
+                {
+                    columnName: "User ID",
+                    cellData: element[0],
+                },
+                {
+                    columnName: "Name",
+                    cellData: element[1],
+                },
+                {
+                    columnName: "Creation Date",
+                    cellData: element[2],
+                },
+                {
+                    columnName: "Favorite color",
+                    cellData: element[3],
+                },
+            ],
+        };
+
+        rowValues.push(row);
+    });
+    return rowValues;
+}
+
+export const paginationRows = getRowData();
+
+// Function to get data for page based on pagenumber
+export const getPageData = (pageIndex: number, pageSize: number): Promise<DataGridRow[]> => {
+    return new Promise((resolve, reject) => {
+        let rows: DataGridRow[] = [];
+        if (pageSize == 5) {
+            if (pageIndex == 2) {
+                rows = paginationRows.slice(5, 10);
+            }
+            if (pageIndex == 1) {
+                rows = paginationRows.slice(0, 5);
+            }
+        } else if (pageSize == 10) {
+            rows = paginationRows;
+        }
+        resolve(rows);
+    });
+};
+
+export const paginationDetails = {
+    totalItems: paginationRows.length,
+    getPageData: getPageData,
+    pageSize: 5,
+    pageSizes: [5, 10],
+};
+
+export const pageFilterFunction = (
+    rows: DataGridRow[],
+    columnValue: string,
+    columnName: string,
+): Promise<DataGridFilterResult> => {
+    return new Promise((resolve, reject) => {
+        let result: DataGridFilterResult = {
+            rows: [],
+            totalItems: 0,
+        };
+        if (columnValue === "" || columnValue === undefined) {
+            result = {
+                rows: paginationRows.slice(0, 5),
+                totalItems: paginationRows.length,
+            };
+        } else {
+            const newRows = filterRows(rows, columnValue);
+            result = {
+                rows: newRows,
+                totalItems: newRows.length,
+            };
+        }
+        resolve(result);
+    });
+};
+
+// Data for Hide/show columns
+export const hideableColumns = [
+    {columnName: "User ID", style: {width: "96px"}},
+    {columnName: "Name", style: {width: "96px"}},
+    {columnName: "Creation Date", style: {width: "96px"}, isVisible: false},
+    {columnName: "Favorite color", style: {width: "96px"}, isVisible: false},
 ];

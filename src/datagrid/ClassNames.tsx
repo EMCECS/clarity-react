@@ -27,7 +27,7 @@ export class ClassNames {
     public static DATAGRID_PLACEHOLDER_CONTAINER: string = "datagrid-placeholder-container";
     public static DATAGRID_PLACEHOLDER: string = "datagrid-placeholder";
     public static DATAGRID_SCROLLING_CELLS: string = "datagrid-scrolling-cells";
-    public static DATAGRID_CELLS: string = "datagrid-cell";
+    public static DATAGRID_CELL: string = "datagrid-cell";
     public static DATAGRID_FOOTER: string = "datagrid-footer";
     public static DATAGRID_FOOTER_DESC: string = "datagrid-footer-description";
     public static DATAGRID_FIXED_COLUMN: string = "datagrid-fixed-column";
@@ -58,4 +58,24 @@ export class ClassNames {
     public static CLR_INPUT: string = "clr-input ng-pristine ng-valid ng-touched";
     public static DATAGRID_FILTERED: string = "datagrid-filtered datagrid-filter-open";
     public static DATAGRID_COMPACT: string = "datagrid-compact datagrid-host";
+    public static DATAGRID_PAGINATION: string = "pagination";
+    public static CLR_SELECT_WRAPPER: string = "clr-select-wrapper";
+    public static CLR_PAGE_SIZE_SELECT: string = "clr-page-size-select ng-untouched ng-pristine ng-valid";
+    public static PAGINATION_DESC: string = "pagination-description";
+    public static PAGINATION_LIST: string = "pagination-list";
+    public static PAGINATION_FIRST: string = "pagination-first";
+    public static PAGINATION_PREVIOUS: string = "pagination-previous";
+    public static PAGINATION_CURRENT: string = "pagination-current";
+    public static PAGINATION_NEXT: string = "pagination-next";
+    public static PAGINATION_LAST: string = "pagination-last";
+    public static PAGINATION_SIZE: string = "pagination-size";
+    public static COLUMN_SWITCH_WRAPPER: string = "column-switch-wrapper";
+    public static COLUMN_TOGGLE: string = "btn btn-sm btn-link column-toggle--action clr-anchor clr-smart-open-close";
+    public static SWITCH_BUTTON = "btn btn-sm btn-link switch-button";
+    public static SWITCH_FOOTER: string = "switch-footer";
+    public static DATAGRID_HIDDEN_COLUMN: string = "datagrid-hidden-column";
+    public static COLUMN_SWITCH: string = "column-switch";
+    public static SWITCH_HEADER: string = "switch-header";
+    public static CLR_CHECKBOX_WRAPPER: string = "clr-checkbox-wrapper";
+    public static SWITCH_CONTENT: string = "switch-content list-unstyled";
 }
