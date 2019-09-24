@@ -52,8 +52,7 @@ type WizardProps = {
     onClose?: Function;
     navLinkClasses?: string;
     validationType?: WizardValidationType;
-    showHeader?: boolean;
-    showFooter?: boolean;
+    style?: any;
 };
 
 type WizardState = {
@@ -93,8 +92,6 @@ export class Wizard extends React.PureComponent<WizardProps> {
         showNav: true,
         defaultStepId: 0,
         validationType: WizardValidationType.NONE,
-        showHeader: true,
-        showFooter: true,
     };
 
     // Default state of wizard - Need this to reset Wizard state
@@ -119,20 +116,26 @@ export class Wizard extends React.PureComponent<WizardProps> {
     }
 
     private createRefDiv() {
+        const {isInline} = this.props;
         if (this.divRef === null) {
             const el = document.createElement("div");
             document.body.appendChild(el);
             this.divRef = el;
         }
-        document.body.classList.add(ClassNames.NO_SCROLLING);
+        if (isInline) {
+            document.body.classList.add(ClassNames.NO_SCROLLING);
+        }
     }
 
     private cleanup() {
+        const {isInline} = this.props;
         if (this.divRef !== null) {
             document.body.removeChild(this.divRef);
             this.divRef = null;
         }
-        document.body.classList.remove(ClassNames.NO_SCROLLING);
+        if (isInline) {
+            document.body.classList.remove(ClassNames.NO_SCROLLING);
+        }
     }
 
     // Initialize state of wizard steps
@@ -331,11 +334,18 @@ export class Wizard extends React.PureComponent<WizardProps> {
 
     // Build DOM for Wizard footer
     private buildWizardFooter(): React.ReactElement {
-        const {cancelButtonText, nextButtonText, previousButtonText, finishButtonText} = this.props;
+        const {
+            cancelButtonText, // prettier
+            nextButtonText,
+            previousButtonText,
+            finishButtonText,
+            children,
+        } = this.props;
 
         return (
             <div className={ClassNames.WIZARD_FOOTER}>
                 <div className={ClassNames.WIZARD_FOOTER_BUTTON}>
+                    {children}
                     <Button key={cancelButtonText} link onClick={this.close.bind(this)}>
                         {cancelButtonText}{" "}
                     </Button>
@@ -445,16 +455,27 @@ export class Wizard extends React.PureComponent<WizardProps> {
             closable,
             steps,
             isInline,
-            showFooter,
-            showHeader,
-            children,
+            style,
         } = this.props;
         const wizardSize = "wizard-" + size;
         const modalSize = "modal-" + size;
+        const buttonStyle: any = () => {
+            if (isInline) {
+                return {display: "inline-block !important"};
+            }
+        };
 
         return (
             <React.Fragment>
-                <div className={`${ClassNames.WIZARD} ${wizardSize} ${ClassNames.WIZARD_OPEN}`}>
+                <div
+                    className={classNames([
+                        isInline && `${ClassNames.WIZARD_INLINE} ${ClassNames.WIZARD_NO_SHADOW}`,
+                        ClassNames.WIZARD,
+                        wizardSize,
+                        ClassNames.WIZARD_OPEN,
+                    ])}
+                    style={style}
+                >
                     <div className={ClassNames.WIZARD_MODAL}>
                         <div
                             className={`${ClassNames.WIZARD_MODAL_DIALOG} ${modalSize}`}
@@ -466,8 +487,8 @@ export class Wizard extends React.PureComponent<WizardProps> {
                                 <div className={ClassNames.MODAL_CONTENT_WRAPPER}>
                                     {this.buildWizardNav()}
                                     <div className={ClassNames.MODAL_CONTENT}>
-                                        {showHeader && (
-                                            <div className={ClassNames.MODAL_HEADER}>
+                                        <div className={ClassNames.MODAL_HEADER}>
+                                            {closable && (
                                                 <button
                                                     aria-label="Close"
                                                     className="close"
@@ -476,32 +497,26 @@ export class Wizard extends React.PureComponent<WizardProps> {
                                                 >
                                                     <Icon aria-hidden={true} shape="close" />
                                                 </button>
+                                            )}
+                                            <div className={ClassNames.MODAL_TITLE_WRAPPER}>
                                                 <h3 className={ClassNames.MODAL_TITLE} style={Styles.MODAL_TITELE}>
                                                     <span className={ClassNames.MODAL_TITLE_TEXT}>
                                                         {steps[this.state.currentStepId].stepName}
                                                     </span>
                                                 </h3>
                                             </div>
-                                        )}{" "}
+                                        </div>{" "}
                                         {/*Close modal-header */}
                                         <div className={ClassNames.MODAL_BODY}>{this.buildWizardSteps()}</div>{" "}
                                         {/*Close modal-body*/}
-                                        {showFooter && this.buildWizardFooter()}
+                                        {this.buildWizardFooter()}
                                     </div>{" "}
                                     {/*Close modal-content*/}
                                 </div>{" "}
                                 {/*Close modal-content-wrapper */}
                                 <div className={ClassNames.MODAL_GHOST_WRAPPER}>
-                                    <div
-                                        _ngcontent-c7=""
-                                        className={ClassNames.MODAL_GHOST_1}
-                                        style={Styles.MODAL_GHOST_1}
-                                    />
-                                    <div
-                                        _ngcontent-c7=""
-                                        className={ClassNames.MODAL_GHOST_2}
-                                        style={Styles.MODAL_GHOST_2}
-                                    />
+                                    <div className={ClassNames.MODAL_GHOST_1} style={Styles.MODAL_GHOST_1} />
+                                    <div className={ClassNames.MODAL_GHOST_2} style={Styles.MODAL_GHOST_2} />
                                 </div>
                             </div>{" "}
                             {/*Close modal-outer-wrapper */}
