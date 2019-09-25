@@ -219,7 +219,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
 
     // Close the wizard on finish
     finishButtonClick() {
-        const {onFinish, validationType} = this.props;
+        const {onFinish, validationType, isInline} = this.props;
         let finishWizard: boolean;
         const currenstStep = this.getStepObj(this.state.currentStepId);
         const {validState, disableNextStep} = this.checkStepValidity(this.state.currentStepId);
@@ -234,7 +234,9 @@ export class Wizard extends React.PureComponent<WizardProps> {
         if (finishWizard) {
             currenstStep.onStepSubmit && currenstStep.onStepSubmit();
             onFinish && onFinish();
-            this.close();
+            if (!isInline) {
+                this.close();
+            }
         }
     }
 
