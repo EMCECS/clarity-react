@@ -951,7 +951,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
             >
                 {footer && footer.hideShowColBtn && this.buildHideShowColumnsBtn()}
                 <div className={ClassNames.DATAGRID_FOOTER_DESC}>
-                    {pagination && pagination ? this.buildDataGridPagination() : this.buildFooterContent()}
+                    {pagination !== undefined ? this.buildDataGridPagination() : this.buildFooterContent()}
                 </div>
             </div>
         );
