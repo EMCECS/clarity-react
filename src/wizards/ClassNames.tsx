@@ -10,7 +10,7 @@
 
 export class ClassNames {
     public static WIZARD: string = "clr-wizard";
-    public static WIZARD_OPEN: string = "ng-tns-c7-2 open";
+    public static WIZARD_OPEN: string = "open";
     public static WIZARD_MODAL: string = "modal ng-tns-c9-2 ng-star-inserted";
     public static WIZARD_MODAL_DIALOG: string = "modal-dialog ng-trigger ng-trigger-fadeDown";
     public static WIZARD_OUTER_WRAPPER: string = "modal-outer-wrapper";
@@ -19,6 +19,8 @@ export class ClassNames {
     public static WIZARD_STEPNAV_WRAPPER: string = "modal-nav clr-wizard-stepnav-wrapper";
     public static WIZARD_STEPNAV: string = "clr-wizard-stepnav clr-wizard-stepnav-list";
     public static WIZARD_STEPNAV_LINK: string = "clr-wizard-stepnav-item clr-nav-link nav-item ng-star-inserted";
+    public static WIZARD_INLINE: string = "clr-wizard--inline";
+    public static WIZARD_NO_SHADOW: string = "clr-wizard--no-shadow";
     public static MODAL_HEADER: string = "modal-header";
     public static MODAL_CONTENT: string = "modal-content";
     public static MODAL_BODY: string = "modal-body";
@@ -27,6 +29,7 @@ export class ClassNames {
     public static WIZARD_TITLE: string = "clr-wizard-title";
     public static MODAL_TITLE: string = "modal-title";
     public static MODAL_TITLE_TEXT: string = "modal-title-text";
+    public static MODAL_TITLE_WRAPPER: string = "modal-title-wrapper";
     public static MODAL_BACKDROP: string = "modal-backdrop ng-trigger ng-trigger-fade";
     public static MODAL_GHOST_WRAPPER: string = "modal-ghost-wrapper";
     public static MODAL_GHOST_1: string = "modal-ghost modal-ghost-1 ng-trigger ng-trigger-ghostPageOneState";

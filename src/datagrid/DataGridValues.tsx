@@ -63,15 +63,15 @@ export const normalRows = [
  */
 export const customFooter = {
     footerData: "Total 2 users",
-    showFooter:true,
+    showFooter: true,
 };
 
 export const defaultFooter = {
-    showFooter:true,
+    showFooter: true,
 };
 
 export const noFooter = {
-    showFooter:false,
+    showFooter: false,
 };
 
 /**

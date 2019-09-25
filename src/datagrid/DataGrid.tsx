@@ -118,7 +118,7 @@ export type DataGridFooter = {
     className?: string;
     style?: any;
     hideShowColBtn?: boolean;
-    showFooter:boolean;
+    showFooter: boolean;
 };
 
 /**
@@ -927,19 +927,17 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         return <HideShowColumns columns={allColumns} updateColumns={this.updateColumns} />;
     }
 
-    private buildFooterContent():React.ReactElement{
+    private buildFooterContent(): React.ReactElement {
         const {footer} = this.props;
         const {allRows, itemText} = this.state;
         const footerDescription = allRows.length.toString() + " " + itemText;
         let content;
 
-        if (footer !== undefined){
-            content =  footer.footerData !== undefined ?  footer.footerData : footerDescription;
+        if (footer !== undefined) {
+            content = footer.footerData !== undefined ? footer.footerData : footerDescription;
         }
 
-        return(
-                 <div> {content} </div>
-        );
+        return <div> {content} </div>;
     }
 
     // function to build datagrid footer
@@ -953,7 +951,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
             >
                 {footer && footer.hideShowColBtn && this.buildHideShowColumnsBtn()}
                 <div className={ClassNames.DATAGRID_FOOTER_DESC}>
-                {pagination && pagination ? this.buildDataGridPagination(): this.buildFooterContent() }
+                    {pagination !== undefined ? this.buildDataGridPagination() : this.buildFooterContent()}
                 </div>
             </div>
         );

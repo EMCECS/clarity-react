@@ -42,12 +42,12 @@ const filterRef = React.createRef<DataGridFilter>();
 storiesOf("DataGrid", module)
     .add("Basic grid", () => (
         <div style={{width: "80%"}}>
-            <DataGrid columns={normalColumns} rows={normalRows} footer={defaultFooter}/>
+            <DataGrid columns={normalColumns} rows={normalRows} footer={defaultFooter} />
         </div>
     ))
     .add("Grid with custom cells and footer", () => (
         <div style={{width: "80%"}}>
-            <DataGrid columns={normalColumns} rows={customRows} footer={customFooter}/>
+            <DataGrid columns={normalColumns} rows={customRows} footer={customFooter} />
         </div>
     ))
     .add("Grid with multi select option and no footer", () => (
@@ -93,7 +93,7 @@ storiesOf("DataGrid", module)
     ))
     .add("Grid with sorting", () => (
         <div style={{width: "80%"}}>
-            <DataGrid columns={sortColumns} rows={normalRows} footer={defaultFooter}/>
+            <DataGrid columns={sortColumns} rows={normalRows} footer={defaultFooter} />
         </div>
     ))
     .add("Grid with filter", () => (
@@ -202,7 +202,12 @@ storiesOf("DataGrid", module)
     ))
     .add("Grid with expandable row", () => (
         <div style={{width: "80%"}}>
-            <DataGrid columns={normalColumns} rows={expandableRows} footer={defaultFooter} rowType={GridRowType.EXPANDABLE} />
+            <DataGrid
+                columns={normalColumns}
+                rows={expandableRows}
+                footer={defaultFooter}
+                rowType={GridRowType.EXPANDABLE}
+            />
         </div>
     ))
     .add("Empty data grid", () => (
@@ -233,7 +238,7 @@ storiesOf("DataGrid", module)
                 rows={paginationRows.slice(0, 5)}
                 pagination={paginationDetails}
                 itemText={"Users"}
-                footer={{showFooter:true}}
+                footer={{showFooter: true}}
             />
         </div>
     ))
@@ -244,7 +249,7 @@ storiesOf("DataGrid", module)
                 rows={normalRows}
                 footer={{
                     hideShowColBtn: true,
-                    showFooter:true,
+                    showFooter: true,
                 }}
             />
         </div>
@@ -287,7 +292,7 @@ storiesOf("DataGrid", module)
                 selectionType={GridSelectionType.MULTI}
                 footer={{
                     hideShowColBtn: true,
-                    showFooter:true,
+                    showFooter: true,
                 }}
             />
         </div>
