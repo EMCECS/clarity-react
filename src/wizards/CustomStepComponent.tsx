@@ -24,7 +24,7 @@ export class CustomStepComponent extends React.PureComponent<any, CustomStepComp
         this.setState({value: " "});
     }
 
-    private handleChnage = (evt: React.ChangeEvent<any>) => {
+    private handleChange = (evt: React.ChangeEvent<any>) => {
         const value = evt.target.value;
         this.setState({value: value});
     };
@@ -33,7 +33,7 @@ export class CustomStepComponent extends React.PureComponent<any, CustomStepComp
         const {value} = this.state;
         return (
             <div style={{width: "166px"}}>
-                <Input name="somevalue" value={value} onChange={this.handleChnage} />
+                <Input name="somevalue" value={value} onChange={this.handleChange} />
             </div>
         );
     }
