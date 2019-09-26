@@ -14,8 +14,17 @@ import {State, Store} from "@sambego/storybook-state";
 import {Wizard, WizardSize, WizardValidationType} from "./Wizard";
 import {Button} from "../forms/button";
 import {Badge, BadgeStatus, BadgeColor} from "../emphasis/badges";
+import {CustomStepComponent} from "./CustomStepComponent";
 
-const SingleStep = [{stepName: "page 1", stepId: 0, stepComponent: <p> Page 1</p>}];
+const CustomStepComponentRef = React.createRef<CustomStepComponent>();
+const SingleStep = [
+    {
+        stepName: "page 1",
+        stepId: 0,
+        stepComponent: <CustomStepComponent ref={CustomStepComponentRef} />,
+        onStepSubmit: () => CustomStepComponentRef.current!.resetComponent(),
+    },
+];
 
 const stepsMedium = [
     {stepName: "page 1", stepId: 0, stepComponent: <p> Page 1</p>},
