@@ -99,7 +99,6 @@ export class VerticalNav extends React.PureComponent<VerticalNavProps, VerticalN
                     });
                 }
             }
-            console.log(child);
             return child;
         });
     }

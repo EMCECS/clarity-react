@@ -17,12 +17,15 @@ import {Badge, BadgeStatus, BadgeColor} from "../emphasis/badges";
 import {CustomStepComponent} from "./CustomStepComponent";
 
 const CustomStepComponentRef = React.createRef<CustomStepComponent>();
+// Refrence to call step validation methods of wizard
+const wizardSingleRefSync = React.createRef<Wizard>();
 const SingleStep = [
     {
         stepName: "page 1",
         stepId: 0,
-        stepComponent: <CustomStepComponent ref={CustomStepComponentRef} />,
+        stepComponent: <CustomStepComponent ref={CustomStepComponentRef} wizardRef={wizardSingleRefSync} stepId={0} />,
         onStepSubmit: () => CustomStepComponentRef.current!.resetComponent(),
+        isStepValid: () => true,
     },
 ];
 
@@ -194,9 +197,11 @@ storiesOf("Wizard", module)
                 <Button onClick={() => storeSingleStep.set({show: true})}> Single Step </Button>
                 <State store={storeSingleStep}>
                     <Wizard
+                        ref={wizardSingleRefSync}
                         size={WizardSize.MEDIUM}
                         title="Wizard with Single Step"
                         steps={SingleStep}
+                        validationType={WizardValidationType.SYNC}
                         onClose={() => storeSingleStep.set({show: false})}
                     />
                 </State>
