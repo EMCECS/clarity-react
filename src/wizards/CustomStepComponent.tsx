@@ -40,7 +40,7 @@ export class CustomStepComponent extends React.PureComponent<CustomStepComponent
         const {wizardRef, stepId} = this.props;
         return (
             <div style={{width: "166px"}}>
-                {"Enter something"} :
+                Enter something :
                 <Input name="somevalue" value={value} onChange={this.handleChange} />
                 <br />
                 <Button
