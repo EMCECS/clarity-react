@@ -243,13 +243,14 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         if (this.props.pagination !== undefined) this.setInitalStateForPagination();
     }
 
-    componentWillReceiveProps(nextProps: DataGridProps) {
-        if (nextProps.rows) {
-            this.updateRows(nextProps.rows, nextProps.rows.length);
+    componentDidUpdate(prevProps: DataGridProps) {
+        const {rows, columns} = this.props;
+        if (rows && rows !== prevProps.rows) {
+            this.updateRows(rows, rows.length);
         }
 
-        if (nextProps.columns) {
-            this.updateColumns(nextProps.columns);
+        if (columns !== prevProps.columns) {
+            this.updateColumns(columns);
         }
     }
 
@@ -521,7 +522,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     private updateRowIDs(rows: DataGridRow[]) {
         // set rowID = index in array
-        rows.forEach(function(row: DataGridRow, index: number) {
+        rows.map((row: DataGridRow, index: number) => {
             row["rowID"] = index;
         });
 
@@ -530,14 +531,14 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     private updateColumnIDs(columns: DataGridColumn[]) {
         // set columnID = index in array
-        columns.forEach(function(column: DataGridColumn, index: number) {
+        columns.map((column: DataGridColumn, index: number) => {
             column["columnID"] = index;
         });
         return columns;
     }
 
     private setColumnVisibility(columns: DataGridColumn[]) {
-        columns.forEach(function(column: DataGridColumn) {
+        columns.map((column: DataGridColumn, index: number) => {
             // if isVisible is not provided in props then set it to true
             column["isVisible"] = column.isVisible !== undefined ? column.isVisible : true;
         });
