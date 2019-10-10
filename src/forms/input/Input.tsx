@@ -64,18 +64,19 @@ export class Input extends React.PureComponent<InputProps> {
             type,
             children,
             name,
+            id,
         } = this.props;
         let classNames = ["clr-control-container", className];
-        const setId = this.props.id;
+
         if (disabled) classNames.push("clr-form-control-disabled");
         return isBoxed ? (
             <UID>
-                {id => (
+                {uid => (
                     <div className="form-group">
                         <label>{label}</label>
                         <input
                             type={type || "text"}
-                            id={setId ? setId : id}
+                            id={id ? id : uid}
                             name={name}
                             value={value}
                             defaultValue={defaultValue}
@@ -91,7 +92,7 @@ export class Input extends React.PureComponent<InputProps> {
             </UID>
         ) : (
             <UID>
-                {id => (
+                {uid => (
                     <div className="clr-form-control">
                         {label && Input.renderLabel(label)}
                         <div className={utils.classNames(classNames)}>
@@ -99,7 +100,7 @@ export class Input extends React.PureComponent<InputProps> {
                                 <input
                                     type={type || "text"}
                                     name={name}
-                                    id={setId ? setId : id}
+                                    id={id ? id : uid}
                                     value={value}
                                     defaultValue={defaultValue}
                                     size={size}
