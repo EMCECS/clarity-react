@@ -10,6 +10,7 @@
 
 import * as React from "react";
 import * as utils from "../../utils";
+import {UID} from "react-uid";
 import {ReactNode} from "react";
 
 type InputProps = {
@@ -22,6 +23,7 @@ type InputProps = {
     onChange?: (evt: React.ChangeEvent<HTMLInputElement>) => void;
     placeholder?: string;
     name: string;
+    id?: string;
     value?: string;
     defaultValue?: string;
     size?: number;
@@ -61,46 +63,59 @@ export class Input extends React.PureComponent<InputProps> {
             size,
             type,
             children,
+            name,
+            id,
         } = this.props;
         let classNames = ["clr-control-container", className];
+
         if (disabled) classNames.push("clr-form-control-disabled");
         return isBoxed ? (
-            <div className="form-group">
-                <label>{label}</label>
-                <input
-                    type={type || "text"}
-                    id={name}
-                    value={value}
-                    defaultValue={defaultValue}
-                    size={size}
-                    disabled={disabled}
-                    placeholder={placeholder}
-                    onChange={this.handleChange}
-                    className={className}
-                />
-                {children}
-            </div>
-        ) : (
-            <div className="clr-form-control">
-                {label && Input.renderLabel(label)}
-                <div className={utils.classNames(classNames)}>
-                    <div className="clr-input-wrapper">
+            <UID>
+                {uid => (
+                    <div className="form-group">
+                        <label>{label}</label>
                         <input
                             type={type || "text"}
-                            id={name}
+                            id={id ? id : uid}
+                            name={name}
                             value={value}
                             defaultValue={defaultValue}
                             size={size}
                             disabled={disabled}
-                            className="clr-input"
                             placeholder={placeholder}
                             onChange={this.handleChange}
+                            className={className}
                         />
                         {children}
                     </div>
-                    {helperText && Input.renderHelperText(helperText)}
-                </div>
-            </div>
+                )}
+            </UID>
+        ) : (
+            <UID>
+                {uid => (
+                    <div className="clr-form-control">
+                        {label && Input.renderLabel(label)}
+                        <div className={utils.classNames(classNames)}>
+                            <div className="clr-input-wrapper">
+                                <input
+                                    type={type || "text"}
+                                    name={name}
+                                    id={id ? id : uid}
+                                    value={value}
+                                    defaultValue={defaultValue}
+                                    size={size}
+                                    disabled={disabled}
+                                    className="clr-input"
+                                    placeholder={placeholder}
+                                    onChange={this.handleChange}
+                                />
+                                {children}
+                            </div>
+                            {helperText && Input.renderHelperText(helperText)}
+                        </div>
+                    </div>
+                )}
+            </UID>
         );
     }
 }
