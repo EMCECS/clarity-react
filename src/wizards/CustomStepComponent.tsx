@@ -10,12 +10,18 @@
 
 import * as React from "react";
 import {Input} from "../forms/input/Input";
+import {Button} from "../forms/button";
 
 type CustomStepComponentState = {
     value: string;
 };
 
-export class CustomStepComponent extends React.PureComponent<any, CustomStepComponentState> {
+type CustomStepComponentProps = {
+    wizardRef: any;
+    stepId: number;
+};
+
+export class CustomStepComponent extends React.PureComponent<CustomStepComponentProps, CustomStepComponentState> {
     state: CustomStepComponentState = {
         value: " ",
     };
@@ -31,9 +37,20 @@ export class CustomStepComponent extends React.PureComponent<any, CustomStepComp
 
     render() {
         const {value} = this.state;
+        const {wizardRef, stepId} = this.props;
         return (
             <div style={{width: "166px"}}>
+                Enter something :
                 <Input name="somevalue" value={value} onChange={this.handleChange} />
+                <br />
+                <Button
+                    onClick={() => {
+                        wizardRef.current!.checkStepValidity(stepId);
+                    }}
+                >
+                    {" "}
+                    Finish Step{" "}
+                </Button>
             </div>
         );
     }

@@ -143,6 +143,13 @@ export class Wizard extends React.PureComponent<WizardProps> {
         const {validationType, steps} = this.props;
         // For 1st step disable Next button for synchronous validation
         const disableNext = validationType === WizardValidationType.SYNC ? true : false;
+        let disableFinish = this.state.disableFinishButton;
+
+        // In case of single step wizard we need to disable Finish button for synchronous validation
+        if (steps.length === 1) {
+            disableFinish = disableNext;
+        }
+
         steps.map((step, key) => {
             // Enable Nav for first step in case of Synchronous validation
             const disableNav =
@@ -153,6 +160,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
 
             this.setState({
                 disableNextButton: this.state.disableNextButton !== disableNext ? disableNext : undefined,
+                disableFinishButton: this.state.disableFinishButton !== disableFinish ? disableFinish : undefined,
                 allSteps: [
                     ...this.state.allSteps,
                     ((this.state.allSteps[step.stepId].stepCompleted = false),
