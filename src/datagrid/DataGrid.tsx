@@ -243,6 +243,17 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         if (this.props.pagination !== undefined) this.setInitalStateForPagination();
     }
 
+    componentDidUpdate(prevProps: DataGridProps) {
+        const {rows, columns} = this.props;
+        if (rows && rows !== prevProps.rows) {
+            this.updateRows(rows, rows.length);
+        }
+
+        if (columns !== prevProps.columns) {
+            this.updateColumns(columns);
+        }
+    }
+
     // Function to return all selected rows
     getSelectedRows = (): DataGridRow[] => {
         const {allRows} = this.state;
@@ -282,7 +293,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // Function to update datagrid rows
     updateColumns = (cols: DataGridColumn[]) => {
-        const updatedCols = this.updateColumnIDs(cols);
+        const updatedCols = this.updateColumnIDs(this.setColumnVisibility(cols));
 
         this.setState({
             allColumns: [...updatedCols],
@@ -300,16 +311,11 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     private setInitalState() {
         const {allRows, allColumns} = this.state;
         let rows = this.updateRowIDs(allRows);
-        let columns = this.updateColumnIDs(allColumns);
+        const columns = this.updateColumnIDs(this.setColumnVisibility(allColumns));
 
         rows.forEach(function(row) {
             row["isSelected"] = false;
             row["isExpanded"] = false;
-        });
-
-        columns.forEach(function(column: DataGridColumn) {
-            // if isVisible is not provided in props then set it to true
-            column["isVisible"] = column.isVisible !== undefined ? column.isVisible : true;
         });
 
         this.setState({
@@ -519,15 +525,24 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         rows.map((row: DataGridRow, index: number) => {
             row["rowID"] = index;
         });
+
         return rows;
     }
 
-    private updateColumnIDs(cols: DataGridColumn[]) {
+    private updateColumnIDs(columns: DataGridColumn[]) {
         // set columnID = index in array
-        cols.map((cols: DataGridColumn, index: number) => {
-            cols["columnID"] = index;
+        columns.map((column: DataGridColumn, index: number) => {
+            column["columnID"] = index;
         });
-        return cols;
+        return columns;
+    }
+
+    private setColumnVisibility(columns: DataGridColumn[]) {
+        columns.map((column: DataGridColumn, index: number) => {
+            // if isVisible is not provided in props then set it to true
+            column["isVisible"] = column.isVisible !== undefined ? column.isVisible : true;
+        });
+        return columns;
     }
 
     // Get width of column
