@@ -23,6 +23,22 @@ storiesOf("Select", module)
             </Select>
         </div>
     ))
+    .add("Select with custom width", () => (
+        <div>
+            <Select onChange={action("basic change")} style={{width: "30%"}} label="Basic Select">
+                <SelectOption value="1">One</SelectOption>
+                <SelectOption value="2">Two</SelectOption>
+                <SelectOption value="3">Three</SelectOption>
+            </Select>
+
+            <br />
+            <Select onChange={action("basic change")} style={{width: "20%"}} isBoxed label="Boxed Select">
+                <SelectOption value="1">One</SelectOption>
+                <SelectOption value="2">Two</SelectOption>
+                <SelectOption value="3">Three</SelectOption>
+            </Select>
+        </div>
+    ))
     .add("Labels", () => (
         <div>
             <Select onChange={action("label select - change")} label="I've got some options">
