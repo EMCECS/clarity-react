@@ -39,6 +39,7 @@ type SelectProps = {
     onChange?: (evt: React.ChangeEvent<HTMLSelectElement>) => void;
     className?: string;
     style?: any;
+    width?: string;
     showDefaultSelect?: boolean;
 };
 
@@ -60,20 +61,22 @@ export class Select extends React.PureComponent<SelectProps> {
             className,
             style,
             showDefaultSelect,
+            width,
         } = this.props;
         const setId = this.props.id;
         return (
             <UID>
                 {id =>
                     isBoxed ? (
-                        <div className="form-group">
+                        <div className="form-group" style={{width: width}}>
                             <label>{label}</label>
-                            <div className={classNames(["select", className])} style={style}>
+                            <div className={classNames(["select", className])} style={{width: width, ...style}}>
                                 <select
                                     value={value} // prettier
                                     id={setId ? setId : id}
                                     onChange={onChange}
                                     onBlur={onBlur}
+                                    style={{width: "100%"}}
                                 >
                                     {!showDefaultSelect ? (
                                         <option selected disabled hidden style={{display: "none"}} value="" />
@@ -90,18 +93,23 @@ export class Select extends React.PureComponent<SelectProps> {
                                 </label>
                             )}
                             <div
+                                style={{width: "100%"}}
                                 className={classNames([
                                     "clr-control-container", //prettier
                                     error && "clr-error",
                                 ])}
                             >
-                                <div className={classNames(["clr-select-wrapper", className])} style={style}>
+                                <div
+                                    className={classNames(["clr-select-wrapper", className])}
+                                    style={{width: width, ...style}}
+                                >
                                     <select
                                         value={value}
                                         id={setId ? setId : id}
                                         onChange={onChange}
                                         onBlur={onBlur}
-                                        className="clr-select"
+                                        className={classNames(["clr-select", className])}
+                                        style={{width: error ? "75%" : "100%"}}
                                     >
                                         {!showDefaultSelect && (
                                             <option selected disabled hidden style={{display: "none"}} value="" />
