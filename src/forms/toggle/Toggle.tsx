@@ -21,6 +21,7 @@ type ToggleProps = {
     checked?: boolean;
     defaultChecked?: boolean;
     onChange?: (newValue: boolean) => void;
+    onClick?: (evt: React.MouseEvent<HTMLInputElement>) => {};
 };
 
 type ToggleState = {
@@ -49,7 +50,7 @@ export class Toggle extends React.PureComponent<ToggleProps, ToggleState> {
         }
     }
     render() {
-        const {label, name, ariaLabelledby, disabled} = this.props;
+        const {label, name, ariaLabelledby, disabled, onClick} = this.props;
         const {checked} = this.state;
         const setId = this.props.id;
         return (
@@ -65,6 +66,7 @@ export class Toggle extends React.PureComponent<ToggleProps, ToggleState> {
                             className={ClassNames.CLR_TOGGLE}
                             aria-labelledby={ariaLabelledby}
                             disabled={disabled}
+                            onClick={onClick}
                         />
                         <label className={ClassNames.CLR_CONTROL_LABEL} htmlFor={setId ? setId : id}>
                             {label}
