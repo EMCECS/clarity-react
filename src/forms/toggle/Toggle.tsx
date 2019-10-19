@@ -21,7 +21,7 @@ type ToggleProps = {
     checked?: boolean;
     defaultChecked?: boolean;
     onChange?: (newValue: boolean) => void;
-    onClick?: (evt: React.MouseEvent<HTMLInputElement>) => {};
+    onClick?: (evt: React.MouseEvent<HTMLInputElement>) => void;
 };
 
 type ToggleState = {
