@@ -40,6 +40,13 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
         this.getAccordionContent();
     }
 
+    componentDidUpdate(prevProps: AccordionProps) {
+        const {content} = this.props;
+        if (content && content != prevProps.content) {
+            this.getAccordionContent();
+        }
+    }
+
     handleButtonClick = (index: any, accordionMultiPanel: any) => {
         let items = this.state.panelItems;
         const {prevItemIndex} = this.state;
