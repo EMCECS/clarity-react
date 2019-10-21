@@ -76,7 +76,7 @@ export class Select extends React.PureComponent<SelectProps> {
                             <div className={classNames(["select", className])} style={{width: width, ...style}}>
                                 <select
                                     value={value} // prettier
-                                    id={setId ? setId : id}
+                                    id={setId || id}
                                     name={name}
                                     required={required}
                                     onChange={onChange}
@@ -93,7 +93,7 @@ export class Select extends React.PureComponent<SelectProps> {
                     ) : (
                         <div className="clr-form-control">
                             {label && (
-                                <label htmlFor={setId ? setId : id} className="clr-control-label">
+                                <label htmlFor={setId || id} className="clr-control-label">
                                     {label}
                                 </label>
                             )}
@@ -110,7 +110,7 @@ export class Select extends React.PureComponent<SelectProps> {
                                 >
                                     <select
                                         value={value}
-                                        id={setId ? setId : id}
+                                        id={setId || id}
                                         name={name}
                                         required={required}
                                         onChange={onChange}

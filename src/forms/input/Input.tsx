@@ -76,7 +76,7 @@ export class Input extends React.PureComponent<InputProps> {
                 <input
                     type={type || "text"}
                     name={name}
-                    id={id ? id : uid}
+                    id={id || uid}
                     value={value}
                     defaultValue={defaultValue}
                     size={size}
