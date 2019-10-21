@@ -41,6 +41,7 @@ type SelectProps = {
     style?: any;
     width?: string;
     showDefaultSelect?: boolean;
+    name?: string;
 };
 
 export class Select extends React.PureComponent<SelectProps> {
@@ -62,6 +63,8 @@ export class Select extends React.PureComponent<SelectProps> {
             style,
             showDefaultSelect,
             width,
+            name,
+            required,
         } = this.props;
         const setId = this.props.id;
         return (
@@ -74,6 +77,8 @@ export class Select extends React.PureComponent<SelectProps> {
                                 <select
                                     value={value} // prettier
                                     id={setId ? setId : id}
+                                    name={name}
+                                    required={required}
                                     onChange={onChange}
                                     onBlur={onBlur}
                                     style={{width: "100%"}}
@@ -106,6 +111,8 @@ export class Select extends React.PureComponent<SelectProps> {
                                     <select
                                         value={value}
                                         id={setId ? setId : id}
+                                        name={name}
+                                        required={required}
                                         onChange={onChange}
                                         onBlur={onBlur}
                                         className={classNames(["clr-select", className])}

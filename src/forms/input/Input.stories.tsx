@@ -29,4 +29,57 @@ storiesOf("Input", module)
         <Input name="somevalue" onChange={action("changed")} placeholder="Type to search ...">
             <Icon shape="search" style={{marginLeft: "-20px", width: "16px", height: "16px"}} />
         </Input>
+    ))
+    .add("input box with custom width", () => (
+        <div>
+            <Input name="somevalue" placeholder="stuff goes here" onChange={action("changed")} style={{width: "40%"}} />
+            <br />
+            <Input
+                name="somevalue"
+                isBoxed
+                placeholder="stuff goes here"
+                onChange={action("changed")}
+                style={{width: "40%"}}
+            />
+            <br />
+            <Input
+                name="somevalue"
+                onChange={action("changed")}
+                placeholder="Type to search ..."
+                style={{width: "40%"}}
+            >
+                <Icon shape="search" style={{marginLeft: "-20px", width: "16px", height: "16px"}} />
+            </Input>
+        </div>
+    ))
+    .add("input box with error", () => (
+        <div>
+            <Input
+                name="somevalue"
+                placeholder="stuff goes here"
+                style={{width: "20%"}}
+                error={true}
+                onBlur={action("select with error - blur")}
+                onChange={action("select with error - change")}
+                errorHelperText="This field is reuired"
+            />
+            <br />
+            <Input
+                name="somevalue"
+                isBoxed
+                error={true}
+                onBlur={action("select with error - blur")}
+                onChange={action("select with error - change")}
+            />
+            <br />
+            <Input
+                name="somevalue"
+                error={true}
+                onBlur={action("select with error - blur")}
+                onChange={action("select with error - change")}
+                helperText="Provide search value"
+            >
+                <Icon shape="search" style={{marginLeft: "-20px", width: "16px", height: "16px"}} />
+            </Input>
+        </div>
     ));
