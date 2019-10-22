@@ -12,21 +12,27 @@ import * as React from "react";
 import * as utils from "../../utils";
 import {UID} from "react-uid";
 import {ReactNode} from "react";
+import {Icon} from "../../icon";
 
 type InputProps = {
     className?: string;
+    style?: any;
     type?: string;
     disabled?: boolean;
     helperText?: ReactNode;
+    errorHelperText?: string; // shown when state isError is true
     label?: string;
     isBoxed?: boolean;
     onChange?: (evt: React.ChangeEvent<HTMLInputElement>) => void;
+    onBlur?: (evt: React.FocusEvent<HTMLInputElement>) => void;
     placeholder?: string;
     name: string;
     id?: string;
     value?: string;
     defaultValue?: string;
     size?: number;
+    required?: boolean; // auto-check on blur if there's a value
+    error?: boolean; // force error state of component
 };
 
 const initialState = {value: null};
@@ -50,6 +56,44 @@ export class Input extends React.PureComponent<InputProps> {
         return <label className="clr-control-label">{label}</label>;
     }
 
+    private buildInput(className: any, uid: string) {
+        const {
+            style,
+            disabled,
+            value,
+            defaultValue,
+            placeholder,
+            size,
+            type,
+            children,
+            name,
+            id,
+            required,
+            onBlur,
+        } = this.props;
+        return (
+            <React.Fragment>
+                <input
+                    type={type || "text"}
+                    name={name}
+                    id={id || uid}
+                    value={value}
+                    defaultValue={defaultValue}
+                    size={size}
+                    disabled={disabled}
+                    className={className}
+                    placeholder={placeholder}
+                    onChange={this.handleChange}
+                    onBlur={onBlur}
+                    style={style}
+                    required={required}
+                />
+                {children}
+                <Icon className="clr-validate-icon" shape="exclamation-circle" />
+            </React.Fragment>
+        );
+    }
+
     render() {
         const {
             className, //prettier
@@ -59,34 +103,20 @@ export class Input extends React.PureComponent<InputProps> {
             value,
             defaultValue,
             isBoxed,
-            placeholder,
-            size,
-            type,
-            children,
-            name,
-            id,
+            errorHelperText,
+            error,
         } = this.props;
-        let classNames = ["clr-control-container", className];
+        let classNames = ["clr-control-container", error && "clr-error", className];
 
         if (disabled) classNames.push("clr-form-control-disabled");
         return isBoxed ? (
             <UID>
                 {uid => (
                     <div className="form-group">
-                        <label>{label}</label>
-                        <input
-                            type={type || "text"}
-                            id={id ? id : uid}
-                            name={name}
-                            value={value}
-                            defaultValue={defaultValue}
-                            size={size}
-                            disabled={disabled}
-                            placeholder={placeholder}
-                            onChange={this.handleChange}
-                            className={className}
-                        />
-                        {children}
+                        <div className={utils.classNames(classNames)} style={{width: "100%"}}>
+                            <label>{label}</label>
+                            {this.buildInput(className, uid)}
+                        </div>
                     </div>
                 )}
             </UID>
@@ -95,23 +125,12 @@ export class Input extends React.PureComponent<InputProps> {
                 {uid => (
                     <div className="clr-form-control">
                         {label && Input.renderLabel(label)}
-                        <div className={utils.classNames(classNames)}>
-                            <div className="clr-input-wrapper">
-                                <input
-                                    type={type || "text"}
-                                    name={name}
-                                    id={id ? id : uid}
-                                    value={value}
-                                    defaultValue={defaultValue}
-                                    size={size}
-                                    disabled={disabled}
-                                    className="clr-input"
-                                    placeholder={placeholder}
-                                    onChange={this.handleChange}
-                                />
-                                {children}
-                            </div>
-                            {helperText && Input.renderHelperText(helperText)}
+                        <div className={utils.classNames(classNames)} style={{width: "100%"}}>
+                            <div className="clr-input-wrapper">{this.buildInput("clr-input", uid)}</div>
+
+                            {error
+                                ? errorHelperText && Input.renderHelperText(errorHelperText)
+                                : helperText && Input.renderHelperText(helperText)}
                         </div>
                     </div>
                 )}

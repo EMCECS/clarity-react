@@ -41,54 +41,71 @@ type SelectProps = {
     style?: any;
     width?: string;
     showDefaultSelect?: boolean;
+    name?: string;
 };
 
 export class Select extends React.PureComponent<SelectProps> {
     constructor(props: SelectProps) {
         super(props);
     }
-    render() {
+
+    private buildSelect(className: any, setId: string) {
         const {
-            label, // prettier
-            value,
-            defaultHelperText,
-            errorHelperText,
-            isBoxed,
+            value, // prettier
             onBlur,
             onChange,
             error,
             children,
+            showDefaultSelect,
+            name,
+            required,
+            id,
+        } = this.props;
+
+        return (
+            <select
+                value={value} // prettier
+                id={setId || id}
+                name={name}
+                required={required}
+                onChange={onChange}
+                onBlur={onBlur}
+                className={className}
+                style={{width: error ? "75%" : "100%"}}
+            >
+                {!showDefaultSelect && <option selected disabled hidden style={{display: "none"}} value="" />}
+                {children}
+            </select>
+        );
+    }
+
+    render() {
+        const {
+            label, // prettier
+            defaultHelperText,
+            errorHelperText,
+            isBoxed,
+            error,
             className,
             style,
-            showDefaultSelect,
             width,
+            id,
         } = this.props;
-        const setId = this.props.id;
+
         return (
             <UID>
-                {id =>
+                {setId =>
                     isBoxed ? (
                         <div className="form-group" style={{width: width}}>
                             <label>{label}</label>
                             <div className={classNames(["select", className])} style={{width: width, ...style}}>
-                                <select
-                                    value={value} // prettier
-                                    id={setId ? setId : id}
-                                    onChange={onChange}
-                                    onBlur={onBlur}
-                                    style={{width: "100%"}}
-                                >
-                                    {!showDefaultSelect ? (
-                                        <option selected disabled hidden style={{display: "none"}} value="" />
-                                    ) : null}
-                                    {children}
-                                </select>
+                                {this.buildSelect(className, setId)}
                             </div>
                         </div>
                     ) : (
                         <div className="clr-form-control">
                             {label && (
-                                <label htmlFor={setId ? setId : id} className="clr-control-label">
+                                <label htmlFor={setId || id} className="clr-control-label">
                                     {label}
                                 </label>
                             )}
@@ -103,19 +120,8 @@ export class Select extends React.PureComponent<SelectProps> {
                                     className={classNames(["clr-select-wrapper", className])}
                                     style={{width: width, ...style}}
                                 >
-                                    <select
-                                        value={value}
-                                        id={setId ? setId : id}
-                                        onChange={onChange}
-                                        onBlur={onBlur}
-                                        className={classNames(["clr-select", className])}
-                                        style={{width: error ? "75%" : "100%"}}
-                                    >
-                                        {!showDefaultSelect && (
-                                            <option selected disabled hidden style={{display: "none"}} value="" />
-                                        )}
-                                        {children}
-                                    </select>
+                                    {this.buildSelect(classNames(["clr-select", className]), setId)}
+
                                     <Icon className="clr-validate-icon" shape="exclamation-circle" />
                                 </div>
                                 {error ? (
