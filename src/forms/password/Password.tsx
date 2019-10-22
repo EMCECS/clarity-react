@@ -87,45 +87,52 @@ export class Password extends React.PureComponent<PasswordProps, PasswordState> 
 
         const {show, type} = this.state;
 
-        let classNames = ["clr-control-container clr-col-md-10 clr-col-12", error && "clr-error", className];
+        let classNames = [
+            "clr-control-container",
+            error && "clr-error",
+            label && "clr-col-md-10 clr-col-12",
+            className,
+        ];
 
+        if (disabled) classNames.push("clr-form-control-disabled");
         return (
-            <div className="clr-form-control clr-row">
-                {label && Password.renderLabel(label)}
-                <div className={utils.classNames(classNames)} style={{width: "100%"}}>
-                    <div className="clr-input-wrapper">
-                        <div className="clr-input-group">
-                            <input
-                                maxLength={maxPasswordLength}
-                                minLength={minPasswordLength}
-                                name={name}
-                                value={value}
-                                placeholder={placeholder}
-                                required={required}
-                                type={type}
-                                aria-describedby="clr-form-control-8-error"
-                                className="clr-input ng-pristine ng-invalid ng-touched"
-                                id={id}
-                                style={style}
-                            />
+            <div className="clr-form clr-form-horizontal ng-pristine ng-valid ng-touched">
+                <div className={utils.classNames(["clr-form-control", label && "clr-row"])}>
+                    {label && Password.renderLabel(label)}
+                    <div className={utils.classNames(classNames)} style={{width: "100%"}}>
+                        <div className="clr-input-wrapper">
+                            <div className="clr-input-group clr-row" style={{...style, paddingRight: "1rem"}}>
+                                <input
+                                    maxLength={maxPasswordLength}
+                                    minLength={minPasswordLength}
+                                    name={name}
+                                    defaultValue={defaultValue}
+                                    value={value}
+                                    placeholder={placeholder}
+                                    required={required}
+                                    type={type}
+                                    disabled={disabled}
+                                    style={{width: "95%"}}
+                                    className="clr-input ng-pristine ng-invalid ng-touched clr-col-md-10 clr-col-12"
+                                    id={id}
+                                />
 
-                            {showPassword && (
-                                <Button
-                                    link={true}
-                                    className="clr-input-group-icon-action"
-                                    onClick={this.showHidePassword}
-                                    icon={{shape: show ? "eye" : "eye-hide"}}
-                                >
-                                    <span className="is-off-screen" id="_clr_icon_15">
-                                        Show
-                                    </span>
-                                </Button>
-                            )}
-                            <Icon className="clr-validate-icon" shape="exclamation-circle" />
+                                {showPassword && (
+                                    <Button
+                                        defaultBtn={false}
+                                        className="clr-input-group-icon-action clr-col-md-2 clr-col-12"
+                                        onClick={this.showHidePassword}
+                                        icon={{shape: show ? "eye" : "eye-hide"}}
+                                    >
+                                        <span className="is-off-screen">Show</span>
+                                    </Button>
+                                )}
+                                <Icon className="clr-validate-icon" shape="exclamation-circle" />
+                            </div>
+                            {error
+                                ? errorHelperText && Password.renderHelperText(errorHelperText)
+                                : helperText && Password.renderHelperText(helperText)}
                         </div>
-                        {error
-                            ? errorHelperText && Password.renderHelperText(errorHelperText)
-                            : helperText && Password.renderHelperText(helperText)}
                     </div>
                 </div>
             </div>

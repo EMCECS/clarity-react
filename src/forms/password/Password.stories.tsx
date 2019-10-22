@@ -15,8 +15,8 @@ import {Password} from "./Password";
 
 storiesOf("Password", module)
     .add("a simple password input", () => <Password name="password" onChange={action("changed")} />)
-    .add("a simple password box with value", () => (
-        <Password name="Password" value="Password123" onChange={action("changed")} />
+    .add("a simple password box with defaultValue", () => (
+        <Password name="Password" defaultValue="Password123" onChange={action("changed")} />
     ))
     .add("with a label", () => <Password name="Password" label="Password" onChange={action("changed")} />)
     .add("with placeholder text", () => (
@@ -37,7 +37,6 @@ storiesOf("Password", module)
         <Password
             name="Password"
             placeholder="Enter Password"
-            style={{width: "80%"}}
             error={true}
             onBlur={action("select with error - blur")}
             onChange={action("select with error - change")}
