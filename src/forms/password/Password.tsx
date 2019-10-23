@@ -33,21 +33,24 @@ type PasswordProps = {
     minPasswordLength?: number;
     required?: boolean; // auto-check on blur if there's a value
     error?: boolean; // force error state of component
-    showPassword?: boolean;
+    unmask?: boolean; // if true renders eye icon to hide/show or mask/unmask password
 };
 
 type PasswordState = {
     show: boolean;
     type: string;
+    value: any;
 };
+
 export class Password extends React.PureComponent<PasswordProps, PasswordState> {
     static defaultProps = {
-        showPassword: true,
+        unmask: true,
     };
 
     state: PasswordState = {
         show: false,
         type: "password",
+        value: null,
     };
 
     private showHidePassword = () => {
@@ -55,6 +58,13 @@ export class Password extends React.PureComponent<PasswordProps, PasswordState> 
             show: !prevState.show,
             type: !prevState.show ? "text" : "password",
         }));
+    };
+
+    private handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+        const {onChange} = this.props;
+
+        this.setState({value: evt.target.value});
+        onChange && onChange(evt);
     };
 
     private static renderHelperText(helperText: ReactNode): ReactNode {
@@ -82,7 +92,7 @@ export class Password extends React.PureComponent<PasswordProps, PasswordState> 
             maxPasswordLength,
             minPasswordLength,
             placeholder,
-            showPassword,
+            unmask,
         } = this.props;
 
         const {show, type} = this.state;
@@ -95,6 +105,7 @@ export class Password extends React.PureComponent<PasswordProps, PasswordState> 
         ];
 
         if (disabled) classNames.push("clr-form-control-disabled");
+
         return (
             <div className="clr-form clr-form-horizontal ng-pristine ng-valid ng-touched">
                 <div className={utils.classNames(["clr-form-control", label && "clr-row"])}>
@@ -115,9 +126,10 @@ export class Password extends React.PureComponent<PasswordProps, PasswordState> 
                                     style={{width: "95%"}}
                                     className="clr-input ng-pristine ng-invalid ng-touched clr-col-md-10 clr-col-12"
                                     id={id}
+                                    onChange={this.handleChange}
                                 />
 
-                                {showPassword && (
+                                {unmask && (
                                     <Button
                                         defaultBtn={false}
                                         className="clr-input-group-icon-action clr-col-md-2 clr-col-12"

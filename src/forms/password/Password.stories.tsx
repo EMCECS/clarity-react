@@ -43,4 +43,4 @@ storiesOf("Password", module)
             errorHelperText="This field is reuired"
         />
     ))
-    .add("Password box without show password icon", () => <Password name="Password" showPassword={false} />);
+    .add("Password box without show password icon", () => <Password name="Password" unmask={false} />);
