@@ -37,7 +37,7 @@ type WizardProps = {
     isInline?: boolean;
     show?: boolean;
     size?: WizardSize;
-    title?: string;
+    title?: any;
     steps: WizardStep[];
     defaultStepId?: number;
     showNav?: boolean;
