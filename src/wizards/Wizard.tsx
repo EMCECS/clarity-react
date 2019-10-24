@@ -285,7 +285,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
         }
     }
 
-    private navigationClick(stepId: number) {
+    navigationClick(stepId: number) {
         this.modifyButtonStates(stepId);
     }
 
