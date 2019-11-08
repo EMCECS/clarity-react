@@ -19,6 +19,7 @@ type LabelProps = {
     dismissable?: boolean;
     style?: any;
     className?: string;
+    dataqa?: string;
 };
 
 export enum LabelColor {
@@ -54,6 +55,7 @@ export class Label extends React.PureComponent<LabelProps> {
         }
         return (
             <Tag
+                data-qa={this.props.dataqa}
                 className={classNames([
                     className, // prettier
                     "label",

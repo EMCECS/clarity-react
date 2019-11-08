@@ -21,6 +21,7 @@ export type ProgressBarProps = {
     status?: ProgressBarStatus;
     type?: ProgressBarType;
     position?: ProgressBarPosition;
+    dataqa?: string;
 };
 
 export enum ProgressBarType {
@@ -67,6 +68,7 @@ export class ProgressBar extends React.PureComponent<ProgressBarProps> {
                     className, // prettier
                 ])}
                 style={style}
+                data-qa={this.props.dataqa}
             >
                 {/* Render normal progress bar if type is normal */}
                 {type == ProgressBarType.NORMAL && (

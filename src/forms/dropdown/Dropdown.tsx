@@ -24,6 +24,7 @@ export type DropdownProps = {
     className?: string;
     button?: ButtonProps;
     showCaret?: boolean;
+    dataqa?: string;
 } & DropdownMenuProps;
 
 const initialState = {
@@ -130,7 +131,7 @@ export class Dropdown extends React.PureComponent<DropdownProps> {
             ...button,
         };
         return (
-            <div ref={this.ddRef} className={classNames(this.getClassListMain())}>
+            <div ref={this.ddRef} className={classNames(this.getClassListMain())} data-qa={this.props}>
                 {isNested ? (
                     <DropdownItem isExpandable={true} onClick={this.handleButtonClick.bind(this)}>
                         {label}

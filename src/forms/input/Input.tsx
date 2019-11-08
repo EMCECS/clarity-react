@@ -33,6 +33,7 @@ type InputProps = {
     size?: number;
     required?: boolean; // auto-check on blur if there's a value
     error?: boolean; // force error state of component
+    dataqa?: string;
 };
 
 const initialState = {value: null};

@@ -22,6 +22,7 @@ type CheckBoxProps = {
     ariaLabel?: string;
     disabled?: boolean;
     className?: string;
+    dataqa?: string;
     onChange?: (evt: React.ChangeEvent<HTMLInputElement>) => void;
     onClick?: (evt: React.MouseEvent<HTMLInputElement>) => void;
 };
@@ -74,6 +75,7 @@ export class CheckBox extends React.PureComponent<CheckBoxProps, CheckBoxState> 
                             aria-labelledby={ariaLabelledby}
                             aria-label={ariaLabel}
                             disabled={disabled}
+                            data-qa={this.props.dataqa}
                             onClick={onClick}
                         />
                         <label className={ClassNames.CLR_CONTROL_LABEL} htmlFor={setId ? setId : id}>

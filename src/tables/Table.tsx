@@ -17,6 +17,7 @@ export type TableProps = {
     isVertical?: boolean;
     isCompact?: boolean;
     isNonBordered?: boolean;
+    dataqa?: string;
 };
 
 export class Table extends React.PureComponent<TableProps> {
@@ -30,6 +31,7 @@ export class Table extends React.PureComponent<TableProps> {
         } = this.props;
         return (
             <table
+                data-qa={this.props.dataqa}
                 className={classNames([
                     ClassNames.TABLE, //prettier hack
                     isVertical && ClassNames.TABLE_VERTICAL,

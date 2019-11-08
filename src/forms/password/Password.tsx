@@ -34,6 +34,7 @@ type PasswordProps = {
     required?: boolean; // auto-check on blur if there's a value
     error?: boolean; // force error state of component
     unmask?: boolean; // if true renders eye icon to hide/show or mask/unmask password
+    dataqa?: string;
 };
 
 type PasswordState = {

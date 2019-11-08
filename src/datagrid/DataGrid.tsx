@@ -38,6 +38,7 @@ import {HideShowColumns} from "./HideShowColumns";
  * @param {rowType} Expandable or compact row type
  * @param {itemText} label to display for all items
  * @param {pagination} pagination support
+ * @param {dataqa} quality engineering tag
  */
 type DataGridProps = {
     className?: string;
@@ -52,6 +53,7 @@ type DataGridProps = {
     rowType?: GridRowType;
     itemText?: string;
     pagination?: DataGridPaginationProps;
+    dataqa?: string;
 };
 
 /**
@@ -983,6 +985,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                     className,
                 ])}
                 style={style}
+                data-qa={this.props.dataqa}
             >
                 {this.buildDataGridBody()}
                 {footer && footer.showFooter && this.buildDataGridFooter()}
