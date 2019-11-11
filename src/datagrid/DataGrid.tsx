@@ -273,14 +273,15 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
         // update pagination footer
         if (pagination && totalItems !== undefined) {
-            const {pageSize, currentPage} = pagination;
+            const {pageSize} = pagination;
+            const currentPage = 1;
             const firstItem = this.getFirstItemIndex(currentPage, pageSize);
             const lastItem = this.getLastItemIndex(pageSize, totalItems, firstItem);
 
             pagination.totalPages = this.getTotalPages(totalItems, pageSize);
             pagination.firstItem = firstItem;
             pagination.lastItem = lastItem;
-            pagination.currentPage = 1;
+            pagination.currentPage = currentPage;
             pagination.totalItems = totalItems;
         }
 
