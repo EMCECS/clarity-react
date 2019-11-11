@@ -976,7 +976,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // render datagrid
     render() {
-        const {className, style, rowType, footer} = this.props;
+        const {className, style, rowType, footer, dataqa} = this.props;
         return (
             <div
                 className={classNames([
@@ -985,7 +985,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                     className,
                 ])}
                 style={style}
-                data-qa={this.props.dataqa}
+                data-qa={dataqa}
             >
                 {this.buildDataGridBody()}
                 {footer && footer.showFooter && this.buildDataGridFooter()}

@@ -12,6 +12,14 @@ import * as React from "react";
 import {classNames} from "../utils";
 import {ClassNames} from "../tables";
 
+/**
+ * Table Props
+ * className: css property
+ * isVertical: table orientation
+ * isCompact: compaction property
+ * isNonBordered: Border property
+ * dataqa: quality engineering testing field
+ */
 export type TableProps = {
     className?: string;
     isVertical?: boolean;
@@ -28,10 +36,11 @@ export class Table extends React.PureComponent<TableProps> {
             isCompact,
             isNonBordered,
             children,
+            dataqa,
         } = this.props;
         return (
             <table
-                data-qa={this.props.dataqa}
+                data-qa={dataqa}
                 className={classNames([
                     ClassNames.TABLE, //prettier hack
                     isVertical && ClassNames.TABLE_VERTICAL,

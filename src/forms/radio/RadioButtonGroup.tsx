@@ -13,6 +13,19 @@ import {RadioButton} from "./RadioButton";
 import * as utils from "../../utils";
 import {ReactElement, ReactNode} from "react";
 
+/**
+ * RadioButtonGroup Props
+ * defaultValue: default value of radio group
+ * children: nested radio button or group
+ * className: css property
+ * disabled: property to enable disable radio button group
+ * checked: if true checked else false
+ * helperText: helper text of radio group
+ * inline: inline style
+ * label: label of radio button group
+ * name: name of radio group
+ * dataqa: quality engineering testing field
+ */
 type RadioButtonGroupProps = {
     defaultValue?: any;
     children?: React.ReactNode[];
@@ -23,6 +36,7 @@ type RadioButtonGroupProps = {
     label?: string;
     onChange?: (evt: React.ChangeEvent<HTMLInputElement>) => void;
     name: string;
+    dataqa: string;
 };
 
 const initialState = {value: null};
@@ -80,12 +94,12 @@ export class RadioButtonGroup extends React.PureComponent<RadioButtonGroupProps>
     }
 
     render() {
-        const {className, disabled, helperText, inline, label} = this.props;
+        const {className, disabled, helperText, inline, label, dataqa} = this.props;
         let classNames = ["clr-control-container", className];
         if (disabled) classNames.push("clr-form-control-disabled");
         if (inline) classNames.push("clr-control-inline");
         return (
-            <div className="clr-form-control">
+            <div className="clr-form-control" data-qa={dataqa}>
                 {label && RadioButtonGroup.renderLabel(label)}
                 <div className={utils.classNames(classNames)}>{this.renderChildren()}</div>
                 {helperText && RadioButtonGroup.renderHelperText(helperText)}

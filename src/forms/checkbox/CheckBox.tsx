@@ -12,6 +12,19 @@ import * as React from "react";
 import {UID} from "react-uid";
 import {ClassNames} from "./ClassNames";
 
+/**
+ * CheckBox Props
+ * label: label of checkbox
+ * name: name of checkbox
+ * id: id of checkbox
+ * checked: if true checked else false
+ * defaultChecked: default checked value
+ * ariaLabel: arial label
+ * ariaLabelledby: arial label details
+ * disabled: property to enable disable checkbox
+ * className: css property
+ * dataqa: quality engineering testing field
+ */
 type CheckBoxProps = {
     label?: string;
     name?: string;
@@ -57,6 +70,7 @@ export class CheckBox extends React.PureComponent<CheckBoxProps, CheckBoxState> 
             checked,
             onChange,
             className,
+            dataqa,
         } = this.props;
         const setId = this.props.id;
         const {value} = this.state;
@@ -75,7 +89,7 @@ export class CheckBox extends React.PureComponent<CheckBoxProps, CheckBoxState> 
                             aria-labelledby={ariaLabelledby}
                             aria-label={ariaLabel}
                             disabled={disabled}
-                            data-qa={this.props.dataqa}
+                            data-qa={dataqa}
                             onClick={onClick}
                         />
                         <label className={ClassNames.CLR_CONTROL_LABEL} htmlFor={setId ? setId : id}>

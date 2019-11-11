@@ -33,7 +33,7 @@ type InputProps = {
     size?: number;
     required?: boolean; // auto-check on blur if there's a value
     error?: boolean; // force error state of component
-    dataqa?: string;
+    dataqa?: string; //quality engineering testing field
 };
 
 const initialState = {value: null};
@@ -71,6 +71,7 @@ export class Input extends React.PureComponent<InputProps> {
             id,
             required,
             onBlur,
+            dataqa,
         } = this.props;
         return (
             <React.Fragment>
@@ -84,6 +85,7 @@ export class Input extends React.PureComponent<InputProps> {
                     disabled={disabled}
                     className={className}
                     placeholder={placeholder}
+                    data-qa={dataqa}
                     onChange={this.handleChange}
                     onBlur={onBlur}
                     style={style}

@@ -18,6 +18,15 @@ import {ReactElement, ReactNode} from "react";
 import {ButtonProps, Button} from "../button";
 import {STOP_PROPAGATION} from ".";
 
+/**
+ * DropDown Props
+ * label: label of checkbox
+ * isNested: property to nest dropdown
+ * className: css property
+ * button: dropdown button
+ * showCaret: caret property
+ * dataqa: quality engineering testing field
+ */
 export type DropdownProps = {
     label?: string;
     isNested?: boolean;
@@ -125,13 +134,13 @@ export class Dropdown extends React.PureComponent<DropdownProps> {
     }
 
     render() {
-        const {label, isNested, button, showCaret} = this.props;
+        const {label, isNested, button, showCaret, dataqa} = this.props;
         const caretShape = showCaret && <Icon shape={this.state.isOpen ? "caret up" : "caret down"} />;
         const buttonProps = {
             ...button,
         };
         return (
-            <div ref={this.ddRef} className={classNames(this.getClassListMain())} data-qa={this.props}>
+            <div ref={this.ddRef} className={classNames(this.getClassListMain())} data-qa={dataqa}>
                 {isNested ? (
                     <DropdownItem isExpandable={true} onClick={this.handleButtonClick.bind(this)}>
                         {label}

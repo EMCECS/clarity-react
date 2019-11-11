@@ -11,7 +11,18 @@
 import * as React from "react";
 import {classNames} from "../utils";
 
-// Props for ProgressBar component
+/**
+ * ProgressBar Props
+ * value: value of progress
+ * max: maximum progress value
+ * labeled: if true label appears
+ * style: css style
+ * className: css property
+ * status: status of label
+ * type: type of progressbar
+ * position: progress Bar position
+ * dataqa: quality engineering testing field
+ */
 export type ProgressBarProps = {
     value?: number;
     max?: number;
@@ -53,7 +64,7 @@ export class ProgressBar extends React.PureComponent<ProgressBarProps> {
     };
 
     render() {
-        const {value, max, status, type, labeled, position, style, className} = this.props;
+        const {value, max, status, type, labeled, position, style, className, dataqa} = this.props;
 
         // Label style for labled progress bar
         const labelStyle = {display: "block"};
@@ -68,7 +79,7 @@ export class ProgressBar extends React.PureComponent<ProgressBarProps> {
                     className, // prettier
                 ])}
                 style={style}
-                data-qa={this.props.dataqa}
+                data-qa={dataqa}
             >
                 {/* Render normal progress bar if type is normal */}
                 {type == ProgressBarType.NORMAL && (

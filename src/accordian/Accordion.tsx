@@ -181,7 +181,7 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
         this.setState({panelItems: panelContent});
     };
     render() {
-        const {className, style} = this.props;
+        const {className, style, dataqa} = this.props;
         return (
             <div
                 className={classNames([
@@ -189,7 +189,7 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
                     className,
                 ])}
                 style={style}
-                data-qa={this.props.dataqa}
+                data-qa={dataqa}
             >
                 {this.accordionPanel()}
             </div>
