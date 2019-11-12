@@ -14,16 +14,16 @@ import {ClassNames} from "./ClassNames";
 
 /**
  * CheckBox Props
- * label: label of checkbox
- * name: name of checkbox
- * id: id of checkbox
- * checked: if true checked else false
- * defaultChecked: default checked value
- * ariaLabel: arial label
- * ariaLabelledby: arial label details
- * disabled: property to enable disable checkbox
- * className: css property
- * dataqa: quality engineering testing field
+ * @param {label} label of checkbox
+ * @param {name} name of checkbox
+ * @param {id} id of checkbox
+ * @param {checked} if true checked else false
+ * @param {defaultChecked} default checked value
+ * @param {ariaLabel} arial label
+ * @param {ariaLabelledby} arial label details
+ * @param {disabled} property to enable disable checkbox
+ * @param {className} css property
+ * @param {dataqa} quality engineering testing field
  */
 type CheckBoxProps = {
     label?: string;

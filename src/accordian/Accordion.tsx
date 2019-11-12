@@ -15,10 +15,10 @@ import {Icon, Direction} from "../icon";
 
 /**
  * Accordian Props
- * style: css style
- * className: css property
- * accordianMultiPanel: if yes multipanel enebled else not
- * dataqa: quality engineering testing field
+ * @param {style} css style
+ * @param {className} css property
+ * @param {accordianMultiPanel} if yes multipanel enebled else not
+ * @param {dataqa} quality engineering testing field
  */
 type AccordionProps = {
     style?: any;

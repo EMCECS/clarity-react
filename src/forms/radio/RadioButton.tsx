@@ -14,17 +14,17 @@ import {ReactNode} from "react";
 
 /**
  * RadioButton Props
- * checked: if true checked else false
- * className: css property
- * disabled: property to enable disable checkbox
- * label: label of checkbox
- * labelclass: label css style
- * name: name of checkbox
- * value: value of radio button
- * children: nested radio button or group
- * style: css style
- * inButtonGroup: button group property
- * dataqa: quality engineering testing field
+ * @param {checked} if true checked else false
+ * @param {className} css property
+ * @param {disabled} property to enable disable checkbox
+ * @param {label} label of checkbox
+ * @param {labelclass} label css style
+ * @param {name} name of checkbox
+ * @param {value} value of radio button
+ * @param {children} nested radio button or group
+ * @param {style} css style
+ * @param {inButtonGroup} button group property
+ * @param {dataqa} quality engineering testing field
  */
 type RadioButtonProps = {
     checked?: boolean;

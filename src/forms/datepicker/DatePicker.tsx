@@ -5,10 +5,10 @@ import {classNames} from "../../utils";
 
 /**
  * DatePicker Props
- * value: date value
- * locale: regional code
- * defaultValue: default date value
- * dataqa: quality engineering testing field
+ * @param {value} date value
+ * @param {locale} regional code
+ * @param {defaultValue} default date value
+ * @param {dataqa} quality engineering testing field
  */
 export type DatePickerProps = {
     value?: Date;

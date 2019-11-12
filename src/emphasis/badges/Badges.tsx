@@ -13,9 +13,9 @@ import {classNames} from "../../utils";
 
 /**
  * Badge Props
- * color: color of label
- * status: status of label
- * dataqa: quality engineering testing field
+ * @param {color} color of label
+ * @param {status} status of label
+ * @param {dataqa} quality engineering testing field
  */
 export type BadgeProps = {
     color?: BadgeColor;

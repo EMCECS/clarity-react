@@ -20,12 +20,12 @@ import {STOP_PROPAGATION} from ".";
 
 /**
  * DropDown Props
- * label: label of checkbox
- * isNested: property to nest dropdown
- * className: css property
- * button: dropdown button
- * showCaret: caret property
- * dataqa: quality engineering testing field
+ * @param {label} label of checkbox
+ * @param {isNested} property to nest dropdown
+ * @param {className} css property
+ * @param {button} dropdown button
+ * @param {showCaret} caret property
+ * @param {dataqa} quality engineering testing field
  */
 export type DropdownProps = {
     label?: string;

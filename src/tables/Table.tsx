@@ -14,11 +14,11 @@ import {ClassNames} from "../tables";
 
 /**
  * Table Props
- * className: css property
- * isVertical: table orientation
- * isCompact: compaction property
- * isNonBordered: Border property
- * dataqa: quality engineering testing field
+ * @param {className} css property
+ * @param {isVertical} table orientation
+ * @param {isCompact} compaction property
+ * @param {isNonBordered} Border property
+ * @param {dataqa} quality engineering testing field
  */
 export type TableProps = {
     className?: string;

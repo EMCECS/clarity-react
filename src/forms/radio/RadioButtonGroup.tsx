@@ -15,16 +15,16 @@ import {ReactElement, ReactNode} from "react";
 
 /**
  * RadioButtonGroup Props
- * defaultValue: default value of radio group
- * children: nested radio button or group
- * className: css property
- * disabled: property to enable disable radio button group
- * checked: if true checked else false
- * helperText: helper text of radio group
- * inline: inline style
- * label: label of radio button group
- * name: name of radio group
- * dataqa: quality engineering testing field
+ * @param {defaultValue} default value of radio group
+ * @param {children} nested radio button or group
+ * @param {className} css property
+ * @param {disabled} property to enable disable radio button group
+ * @param {checked} if true checked else false
+ * @param {helperText} helper text of radio group
+ * @param {inline} inline style
+ * @param {label} label of radio button group
+ * @param {name} name of radio group
+ * @param {dataqa} quality engineering testing field
  */
 type RadioButtonGroupProps = {
     defaultValue?: any;

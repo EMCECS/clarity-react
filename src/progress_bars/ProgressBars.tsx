@@ -13,15 +13,15 @@ import {classNames} from "../utils";
 
 /**
  * ProgressBar Props
- * value: value of progress
- * max: maximum progress value
- * labeled: if true label appears
- * style: css style
- * className: css property
- * status: status of label
- * type: type of progressbar
- * position: progress Bar position
- * dataqa: quality engineering testing field
+ * @param {value} value of progress
+ * @param {max} maximum progress value
+ * @param {labeled} if true label appears
+ * @param {style} css style
+ * @param {className} css property
+ * @param {status} status of label
+ * @param {type} type of progressbar
+ * @param {position} progress Bar position
+ * @param {dataqa} quality engineering testing field
  */
 export type ProgressBarProps = {
     value?: number;
