@@ -248,7 +248,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     componentDidUpdate(prevProps: DataGridProps) {
         const {rows, columns} = this.props;
         if (rows && rows !== prevProps.rows) {
-            this.updateRows(rows, rows.length);
+            this.updateRows(rows);
         }
 
         if (columns !== prevProps.columns) {
@@ -269,26 +269,27 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     };
 
     // Function to update datagrid rows
-    updateRows = (rows: DataGridRow[], totalItems: number) => {
+    updateRows = (rows: DataGridRow[], totalItems?: number) => {
         const updatedRows = this.updateRowIDs(rows);
         let {pagination} = this.state;
 
         // update pagination footer
-        if (pagination) {
-            const {pageSize, currentPage} = pagination;
+        if (pagination && totalItems !== undefined) {
+            const {pageSize} = pagination;
+            const currentPage = 1;
             const firstItem = this.getFirstItemIndex(currentPage, pageSize);
             const lastItem = this.getLastItemIndex(pageSize, totalItems, firstItem);
 
             pagination.totalPages = this.getTotalPages(totalItems, pageSize);
             pagination.firstItem = firstItem;
             pagination.lastItem = lastItem;
-            pagination.currentPage = 1;
+            pagination.currentPage = currentPage;
             pagination.totalItems = totalItems;
         }
 
         this.setState({
             allRows: [...updatedRows],
-            selectAll: totalItems == 0 ? false : allTrueOnKey(updatedRows, "isSelected"),
+            selectAll: rows.length == 0 ? false : allTrueOnKey(updatedRows, "isSelected"),
             pagination: pagination ? pagination : undefined,
         });
     };
@@ -920,7 +921,12 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     private buildDataGridPagination(): React.ReactElement {
         const {className, style} = this.props.pagination!;
         const {itemText} = this.state;
-        const {totalItems, firstItem, lastItem, pageSize, pageSizes} = this.state.pagination!;
+        let {totalItems, firstItem, lastItem, pageSize, pageSizes} = this.state.pagination!;
+        if (totalItems === 0) {
+            firstItem = lastItem = 0;
+        }
+        const paginationLabel = firstItem + "-" + lastItem + " of " + totalItems + " " + itemText;
+
         return (
             <div
                 _ngcontent-clarity-c8=""
@@ -929,9 +935,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
             >
                 {pageSizes && totalItems >= pageSize && this.buildPageSizesSelect()}
 
-                <div className={classNames([ClassNames.PAGINATION_DESC])}>
-                    {`${firstItem} - ${lastItem} ${" of "} ${totalItems} ${itemText}`}{" "}
-                </div>
+                <div className={classNames([ClassNames.PAGINATION_DESC])}>{paginationLabel}</div>
 
                 {totalItems >= pageSize && this.buildPageButtons()}
             </div>

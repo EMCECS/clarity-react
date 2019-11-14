@@ -37,7 +37,7 @@ type WizardProps = {
     isInline?: boolean;
     show?: boolean;
     size?: WizardSize;
-    title?: string;
+    title?: any;
     steps: WizardStep[];
     defaultStepId?: number;
     showNav?: boolean;
@@ -285,7 +285,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
         }
     }
 
-    private navigationClick(stepId: number) {
+    navigationClick(stepId: number) {
         this.modifyButtonStates(stepId);
     }
 
