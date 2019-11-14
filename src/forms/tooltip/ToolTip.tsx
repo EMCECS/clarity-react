@@ -12,6 +12,16 @@ import * as React from "react";
 import {classNames} from "../../utils";
 import {Icon} from "../../icon";
 
+/**
+ * @param {direction} tooltip direction
+ * @param {size} size of tooltip
+ * @param {status} status of tooltip
+ * @param {style} css style of tooltip
+ * @param {iconSize} iconsize of tooltip
+ * @param {shape} shape of tooltip
+ * @param {className} css div style
+ * @param {dataqa} quality engineering field
+ */
 type ToolTipProps = {
     direction?: ToolTipDirection;
     size?: ToolTipSize;
@@ -20,6 +30,7 @@ type ToolTipProps = {
     iconSize?: number;
     shape?: string;
     className?: string;
+    dataqa?: string;
 };
 
 export enum ToolTipDirection {

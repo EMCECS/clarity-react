@@ -36,7 +36,7 @@ type RadioButtonGroupProps = {
     label?: string;
     onChange?: (evt: React.ChangeEvent<HTMLInputElement>) => void;
     name: string;
-    dataqa: string;
+    dataqa?: string;
 };
 
 const initialState = {value: null};

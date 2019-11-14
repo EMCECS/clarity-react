@@ -12,6 +12,16 @@ import * as React from "react";
 import {UID} from "react-uid";
 import {ClassNames} from "./ClassNames";
 
+/**
+ * @param {id } id for toggle;
+ * @param { label } label for toggle;
+ * @param { name } name for toggle;
+ * @param { ariaLabelledby } aria label;
+ * @param { disabled } enable disable property;
+ * @param { checked } is checked property;
+ * @param { defaultChecked } default checked property;
+ * @param { dataqa } quality engineering property
+ */
 type ToggleProps = {
     id?: string;
     label?: string;
@@ -20,6 +30,7 @@ type ToggleProps = {
     disabled?: boolean;
     checked?: boolean;
     defaultChecked?: boolean;
+    dataqa?: string;
     onChange?: (newValue: boolean) => void;
     onClick?: (evt: React.MouseEvent<HTMLInputElement>) => void;
 };
