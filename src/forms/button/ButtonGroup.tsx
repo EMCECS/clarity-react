@@ -12,6 +12,17 @@ import * as React from "react";
 import {RadioButton} from "../radio";
 import {classNames} from "../../utils";
 
+/**
+ * @param {className} css stylke
+ * @param {children} childern UI
+ * @param {style} css style
+ * @param {defaultValue} default value to be passed
+ * @param {label} name for group
+ * @param {disabled} enable disable property
+ * @param {isRadio} radio group property
+ * @param {name} name for group
+ * @param {dataqa} quality engineering testing field
+ */
 type ButtonGroupProps = {
     className?: string;
     children?: React.ReactNode[];
@@ -21,6 +32,7 @@ type ButtonGroupProps = {
     disabled?: boolean;
     isRadio?: boolean;
     name: string;
+    dataqa?: string;
     onChange?: (evt: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
@@ -65,9 +77,9 @@ export class ButtonGroup extends React.PureComponent<ButtonGroupProps> {
     }
 
     render() {
-        const {className, style} = this.props;
+        const {className, style, dataqa} = this.props;
         return (
-            <div className={classNames(["btn-group", className])} style={style}>
+            <div className={classNames(["btn-group", className])} style={style} data-qa={dataqa}>
                 {this.renderChildren()}
             </div>
         );

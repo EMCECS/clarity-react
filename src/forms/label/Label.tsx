@@ -12,6 +12,15 @@ import * as React from "react";
 import {classNames} from "../../utils";
 import {Icon} from "../../icon";
 
+/**
+ * Label Props
+ * color: color of label
+ * status: status of label
+ * dismissable: if true label is dismissable
+ * style: css style
+ * className: css property
+ * dataqa: quality engineering testing field
+ */
 type LabelProps = {
     color?: LabelColor;
     status?: LabelStatus;
@@ -19,6 +28,7 @@ type LabelProps = {
     dismissable?: boolean;
     style?: any;
     className?: string;
+    dataqa?: string;
 };
 
 export enum LabelColor {
@@ -37,7 +47,7 @@ export enum LabelStatus {
 
 export class Label extends React.PureComponent<LabelProps> {
     render() {
-        const {color, status, onClick, dismissable, style, className, children} = this.props;
+        const {color, status, onClick, dismissable, style, className, children, dataqa} = this.props;
         let styled: any;
         let Tag: any;
         if (onClick) {
@@ -54,6 +64,7 @@ export class Label extends React.PureComponent<LabelProps> {
         }
         return (
             <Tag
+                data-qa={dataqa}
                 className={classNames([
                     className, // prettier
                     "label",

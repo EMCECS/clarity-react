@@ -13,11 +13,19 @@ import {classNames} from "../utils";
 import {ClassNames} from "./ClassNames";
 import {Icon, Direction} from "../icon";
 
+/**
+ * Accordian Props
+ * @param {style} css style
+ * @param {className} css property
+ * @param {accordianMultiPanel} if yes multipanel enebled else not
+ * @param {dataqa} quality engineering testing field
+ */
 type AccordionProps = {
     style?: any;
     className?: string;
     content: accordionContent[];
     accordionMultiPanel?: boolean;
+    dataqa?: string;
 };
 
 type accordionContent = {
@@ -173,7 +181,7 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
         this.setState({panelItems: panelContent});
     };
     render() {
-        const {className, style} = this.props;
+        const {className, style, dataqa} = this.props;
         return (
             <div
                 className={classNames([
@@ -181,6 +189,7 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
                     className,
                 ])}
                 style={style}
+                data-qa={dataqa}
             >
                 {this.accordionPanel()}
             </div>

@@ -11,9 +11,16 @@
 import * as React from "react";
 import {classNames} from "../../utils";
 
+/**
+ * Badge Props
+ * @param {color} color of label
+ * @param {status} status of label
+ * @param {dataqa} quality engineering testing field
+ */
 export type BadgeProps = {
     color?: BadgeColor;
     status?: BadgeStatus;
+    dataqa?: string;
 };
 
 export enum BadgeColor {
@@ -37,10 +44,13 @@ export enum BadgeStatus {
 
 export class Badge extends React.PureComponent<BadgeProps> {
     render() {
-        const {color, status, children} = this.props;
+        const {color, status, children, dataqa} = this.props;
         return (
-            <span className={classNames(["badge", color && "badge-" + color, status && "badge-" + status])}>
-                {this.props.children}
+            <span
+                className={classNames(["badge", color && "badge-" + color, status && "badge-" + status])}
+                data-qa={dataqa}
+            >
+                {children}
             </span>
         );
     }

@@ -42,6 +42,7 @@ type SelectProps = {
     width?: string;
     showDefaultSelect?: boolean;
     name?: string;
+    dataqa?: string;
 };
 
 export class Select extends React.PureComponent<SelectProps> {
@@ -90,20 +91,21 @@ export class Select extends React.PureComponent<SelectProps> {
             style,
             width,
             id,
+            dataqa,
         } = this.props;
 
         return (
             <UID>
                 {setId =>
                     isBoxed ? (
-                        <div className="form-group" style={{width: width}}>
+                        <div className="form-group" style={{width: width}} data-qa={dataqa}>
                             <label>{label}</label>
                             <div className={classNames(["select", className])} style={{width: width, ...style}}>
                                 {this.buildSelect(className, setId)}
                             </div>
                         </div>
                     ) : (
-                        <div className="clr-form-control">
+                        <div className="clr-form-control" data-qa={dataqa}>
                             {label && (
                                 <label htmlFor={setId || id} className="clr-control-label">
                                     {label}

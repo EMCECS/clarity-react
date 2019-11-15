@@ -12,6 +12,20 @@ import * as React from "react";
 import * as utils from "../../utils";
 import {ReactNode} from "react";
 
+/**
+ * RadioButton Props
+ * @param {checked} if true checked else false
+ * @param {className} css property
+ * @param {disabled} property to enable disable checkbox
+ * @param {label} label of checkbox
+ * @param {labelclass} label css style
+ * @param {name} name of checkbox
+ * @param {value} value of radio button
+ * @param {children} nested radio button or group
+ * @param {style} css style
+ * @param {inButtonGroup} button group property
+ * @param {dataqa} quality engineering testing field
+ */
 type RadioButtonProps = {
     checked?: boolean;
     className?: string;
@@ -25,6 +39,7 @@ type RadioButtonProps = {
     children?: ReactNode;
     style?: any;
     inButtonGroup?: boolean;
+    dataqa?: string;
 };
 
 export class RadioButton extends React.PureComponent<RadioButtonProps> {
@@ -61,13 +76,14 @@ export class RadioButton extends React.PureComponent<RadioButtonProps> {
             value,
             inButtonGroup,
             style,
+            dataqa,
         } = this.props;
         const labelClassNames = utils.classNames([
             !inButtonGroup && "clr-control-label", // prettier hack
             labelClass,
         ]);
         return (
-            <div className={utils.classNames(RadioButton.getClassNames(this.props))}>
+            <div className={utils.classNames(RadioButton.getClassNames(this.props))} data-qa={dataqa}>
                 <input
                     className="radio"
                     name={name}

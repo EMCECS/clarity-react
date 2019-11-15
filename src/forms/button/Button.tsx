@@ -30,6 +30,7 @@ export type ButtonProps = {
     defaultBtn?: boolean;
     show?: boolean;
     type?: string;
+    dataqa?: string;
 };
 
 export enum ButtonState {
@@ -70,11 +71,12 @@ export class Button extends React.PureComponent<ButtonProps> {
     }
 
     render() {
-        const {disabled, children, onClick, onSubmit, icon, show, type} = this.props;
+        const {disabled, children, onClick, onSubmit, icon, show, type, dataqa} = this.props;
         return show ? (
             <button
                 disabled={disabled}
                 className={classNames(Button.getClassNames(this.props))}
+                data-qa={dataqa}
                 onClick={onClick}
                 onSubmit={onSubmit}
                 type={type}

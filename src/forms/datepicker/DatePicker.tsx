@@ -3,10 +3,18 @@ import {Icon, Direction} from "../../icon";
 import Moment from "moment";
 import {classNames} from "../../utils";
 
+/**
+ * DatePicker Props
+ * @param {value} date value
+ * @param {locale} regional code
+ * @param {defaultValue} default date value
+ * @param {dataqa} quality engineering testing field
+ */
 export type DatePickerProps = {
     value?: Date;
     locale?: string;
     defaultValue?: Date | string;
+    dataqa?: string;
     onChange?: (newValue: string | Date) => void;
 };
 
@@ -230,7 +238,7 @@ export class DatePicker extends React.PureComponent<DatePickerProps, DatePickerS
 
     render() {
         const {isOpen, viewMode, navValue, inputFocused, value} = this.state;
-        const {locale} = this.props;
+        const {locale, dataqa} = this.props;
         const navMonth = navValue.month();
         const navYear = navValue.year();
         const daysFromPrevMonth = DatePicker.numDaysFromPrevMonth(navYear, navMonth);
@@ -242,7 +250,7 @@ export class DatePicker extends React.PureComponent<DatePickerProps, DatePickerS
         const moment = Moment(value, Moment.localeData(locale).longDateFormat("L"));
         const selectedSameMonth = moment.isSame(navValue, "month");
         return (
-            <div ref={this.calRef} className="clr-control-container">
+            <div ref={this.calRef} className="clr-control-container" data-qa={dataqa}>
                 <div className="clr-input-wrapper">
                     <div
                         className={classNames([
