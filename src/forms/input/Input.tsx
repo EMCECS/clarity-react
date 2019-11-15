@@ -103,15 +103,16 @@ export class Input extends React.PureComponent<InputProps> {
             disabled,
             helperText,
             label,
-            value,
-            defaultValue,
             isBoxed,
             errorHelperText,
             error,
         } = this.props;
-        let classNames = ["clr-control-container", error && "clr-error", className];
+        let classNames = ["clr-control-container", error && "clr-error"];
 
-        if (disabled) classNames.push("clr-form-control-disabled");
+        if (disabled) {
+            classNames.push("clr-form-control-disabled");
+        }
+
         return isBoxed ? (
             <UID>
                 {uid => (
@@ -129,7 +130,9 @@ export class Input extends React.PureComponent<InputProps> {
                     <div className="clr-form-control">
                         {label && Input.renderLabel(label)}
                         <div className={utils.classNames(classNames)} style={{width: "100%"}}>
-                            <div className="clr-input-wrapper">{this.buildInput("clr-input", uid)}</div>
+                            <div className="clr-input-wrapper">
+                                {this.buildInput(utils.classNames(["clr-input", className]), uid)}
+                            </div>
 
                             {error
                                 ? errorHelperText && Input.renderHelperText(errorHelperText)
