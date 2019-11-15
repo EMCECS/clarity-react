@@ -53,6 +53,7 @@ type WizardProps = {
     navLinkClasses?: string;
     validationType?: WizardValidationType;
     style?: any;
+    className?: string;
 };
 
 type WizardState = {
@@ -466,6 +467,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
             steps,
             isInline,
             style,
+            className,
         } = this.props;
         const wizardSize = "wizard-" + size;
         const modalSize = "modal-" + size;
@@ -483,6 +485,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
                         ClassNames.WIZARD,
                         wizardSize,
                         ClassNames.WIZARD_OPEN,
+                        className,
                     ])}
                     style={style}
                 >
