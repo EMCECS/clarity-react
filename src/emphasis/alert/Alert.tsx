@@ -26,6 +26,7 @@ export interface AlertProps {
     isStatic?: boolean;
     style?: any;
     type: AlertType;
+    dataqa?: string;
 }
 
 export enum AlertType {
@@ -64,9 +65,14 @@ export class Alert extends React.PureComponent<AlertProps> {
     }
 
     render() {
-        const {type, children, closeable, onClose, style} = this.props;
+        const {type, children, closeable, onClose, style, dataqa} = this.props;
         return (
-            <div className={utils.classNames(Alert.getClassNames(this.props))} role="alert" style={style}>
+            <div
+                className={utils.classNames(Alert.getClassNames(this.props))}
+                role="alert"
+                style={style}
+                data-qa={dataqa}
+            >
                 <div className="alert-items">{Alert.withAlertType(type, children)}</div>
                 {closeable && (
                     <button type="button" onClick={onClose} className="close" aria-label="Close">

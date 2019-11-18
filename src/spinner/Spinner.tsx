@@ -14,6 +14,7 @@ import {classNames} from "../utils";
 type SpinnerProps = {
     type?: SpinnerType;
     size?: SpinnerSize;
+    dataqa?: string;
 };
 
 export enum SpinnerType {
@@ -27,7 +28,7 @@ export enum SpinnerSize {
     LARGE = "lg",
 }
 
-export const Spinner: React.FunctionComponent<SpinnerProps> = ({type, size, children}) => {
+export const Spinner: React.FunctionComponent<SpinnerProps> = ({type, size, children, dataqa}) => {
     return (
         <span>
             <span
@@ -36,6 +37,7 @@ export const Spinner: React.FunctionComponent<SpinnerProps> = ({type, size, chil
                     type && "spinner-" + type,
                     size && "spinner-" + size,
                 ])}
+                data-qa={dataqa}
             />
             <span> {children}</span>
         </span>

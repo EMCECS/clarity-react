@@ -13,10 +13,18 @@ import {classNames} from "../utils";
 import {Styles} from "./ClassNames";
 import {Icon, Direction} from "../icon";
 
+/**
+ * PortletProp Types
+ * @param{style} css style
+ * @param{classname} css style classnames
+ * @param{header} portlet header
+ * @param{dataqa} quality engineering field
+ */
 type PortletProps = {
     style?: any;
     className?: string;
     header: string;
+    dataqa?: string;
 };
 
 type PortletState = {
@@ -48,10 +56,10 @@ export class Portlet extends React.PureComponent<PortletProps, PortletState> {
     };
 
     render() {
-        const {className, header, children} = this.props;
+        const {className, header, children, dataqa} = this.props;
         const {toggleContent, iconStyle} = this.state;
         return (
-            <div style={Styles.MAIN_DIV}>
+            <div style={Styles.MAIN_DIV} data-qa={dataqa}>
                 <div style={Styles.HEADER_DIV} aria-expanded={toggleContent} onClick={this.handleClick}>
                     <span>
                         <Icon dir={Direction.UP} shape="angle" style={iconStyle} />
