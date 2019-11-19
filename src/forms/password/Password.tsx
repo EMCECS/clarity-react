@@ -99,12 +99,7 @@ export class Password extends React.PureComponent<PasswordProps, PasswordState> 
 
         const {show, type} = this.state;
 
-        let classNames = [
-            "clr-control-container",
-            error && "clr-error",
-            label && "clr-col-md-10 clr-col-12",
-            className,
-        ];
+        let classNames = ["clr-control-container", error && "clr-error", label && "clr-col-md-10 clr-col-12"];
 
         if (disabled) classNames.push("clr-form-control-disabled");
 
@@ -114,7 +109,10 @@ export class Password extends React.PureComponent<PasswordProps, PasswordState> 
                     {label && Password.renderLabel(label)}
                     <div className={utils.classNames(classNames)} style={{width: "100%"}}>
                         <div className="clr-input-wrapper">
-                            <div className="clr-input-group clr-row" style={{...style, paddingRight: "1rem"}}>
+                            <div
+                                className={utils.classNames(["clr-input-group clr-row", className])}
+                                style={{...style, paddingRight: "1rem"}}
+                            >
                                 <input
                                     maxLength={maxPasswordLength}
                                     minLength={minPasswordLength}
