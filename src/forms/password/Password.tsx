@@ -110,7 +110,7 @@ export class Password extends React.PureComponent<PasswordProps, PasswordState> 
                     <div className={utils.classNames(classNames)} style={{width: "100%"}}>
                         <div className="clr-input-wrapper">
                             <div
-                                className={utils.classNames(["clr-input-group clr-row", className])}
+                                className={utils.classNames(["clr-input-group", "clr-row", className])}
                                 style={{...style, paddingRight: "1rem"}}
                             >
                                 <input
