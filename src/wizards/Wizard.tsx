@@ -33,6 +33,9 @@ type WizardStepNavDetails = {
     stepNavChildren?: React.ReactNode;
 };
 
+/**
+ * @param {dataqa} Quality Engineering field
+ */
 type WizardProps = {
     isInline?: boolean;
     show?: boolean;
@@ -54,6 +57,7 @@ type WizardProps = {
     validationType?: WizardValidationType;
     style?: any;
     className?: string;
+    dataqa?: string;
 };
 
 type WizardState = {
@@ -468,6 +472,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
             isInline,
             style,
             className,
+            dataqa,
         } = this.props;
         const wizardSize = "wizard-" + size;
         const modalSize = "modal-" + size;
@@ -480,6 +485,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
         return (
             <React.Fragment>
                 <div
+                    data-qa={dataqa}
                     className={classNames([
                         isInline && `${ClassNames.WIZARD_INLINE} ${ClassNames.WIZARD_NO_SHADOW}`,
                         ClassNames.WIZARD,

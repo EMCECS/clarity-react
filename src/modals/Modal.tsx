@@ -14,12 +14,21 @@ import {Icon} from "../icon";
 import {classNames} from "../utils";
 import {ClassNames} from "./ClassNames";
 
+/**
+ * @param {isOpen} property stating if modal open
+ * @param {size} size of modal
+ * @param {title} title of modal
+ * @param {closable} property stating if modal is closable
+ * @param {onClose} function onClose
+ * @param {dataqa} Quality Engineering field
+ */
 type ModalProps = {
     isOpen?: boolean;
     size?: ModalSize;
     title?: string;
     closable?: boolean;
     onClose?: Function;
+    dataqa?: string;
 };
 
 type ModalState = {
