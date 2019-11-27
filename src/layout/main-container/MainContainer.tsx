@@ -13,12 +13,21 @@ import * as utils from "../../utils";
 import {ClassNames as NavClassNames, Header, Nav, NavLevel} from "../nav";
 import {ClassNames} from ".";
 
+/**
+ * @param {actions} for actions
+ * @param {title} for title;
+ * @param {headerNav} for header navigation;
+ * @param {sideNav} for side navigation;
+ * @param {subNav} for sub navigation;
+ * @param {dataqa} for Quality Engineering
+ */
 export type MainContainerProps = {
-    actions?: React.ReactNode
+    actions?: React.ReactNode;
     title: string;
     headerNav?: any;
     sideNav?: any;
     subNav?: any;
+    dataqa?: string;
 };
 
 const initialState = {
@@ -57,17 +66,10 @@ export class MainContainer extends React.PureComponent<MainContainerProps> {
     }
 
     render() {
-        const {
-            actions,
-            children,
-            headerNav,
-            sideNav,
-            subNav,
-            title
-        } = this.props;
+        const {actions, children, headerNav, sideNav, subNav, title, dataqa} = this.props;
         const {primary, secondary} = MainContainer.detectNavs(headerNav, sideNav, subNav);
         return (
-            <div className={utils.classNames(this.getClassList())}>
+            <div className={utils.classNames(this.getClassList())} data-qa={dataqa}>
                 <Header
                     primaryShown={primary}
                     secondaryShown={secondary}
@@ -82,15 +84,11 @@ export class MainContainer extends React.PureComponent<MainContainerProps> {
                         </a>
                     </div>
                     {headerNav && headerNav}
-                    <div className="header-actions">
-                        {actions}
-                    </div>
+                    <div className="header-actions">{actions}</div>
                 </Header>
                 {subNav && subNav}
                 <div className="content-container">
-                    <div className="content-area">
-                        {children}
-                    </div>
+                    <div className="content-area">{children}</div>
                     {sideNav && sideNav}
                 </div>
             </div>

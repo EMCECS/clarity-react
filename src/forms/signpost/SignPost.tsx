@@ -18,12 +18,19 @@ type SignPostState = {
     isOpen: boolean;
     transformVal: string;
 };
-
+/**
+ *@param {direction} for SignPostDirection;
+ *@param {style} for css style;
+ *@param {icon} for IconProps;
+ *@param {showCloseButton} for close button;
+ *@param {dataqa} for Quality Engineering
+ */
 type SignPostProps = {
     direction?: SignPostDirection;
     style?: any;
     icon?: IconProps;
     showCloseButton?: boolean;
+    dataqa?: string;
 };
 
 export enum SignPostDirection {
@@ -116,9 +123,10 @@ export class SignPost extends React.PureComponent<SignPostProps> {
             children,
             icon,
             showCloseButton,
+            dataqa,
         } = this.props;
         return (
-            <div ref={this.refParent} className="signpost" style={{position: "relative"}}>
+            <div ref={this.refParent} className="signpost" style={{position: "relative"}} data-qa={dataqa}>
                 <Button
                     className={classNames([
                         "signpost-action", //prettier

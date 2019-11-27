@@ -13,10 +13,17 @@ import {Icon, Direction} from "../../icon";
 import {NavLink, NavLinkProps} from "../nav";
 import {VerticalNavGroup, VerticalNavGroupProps} from ".";
 
+/**
+ * @param {isCollapsible} for collapsing;
+ * @param {collapseButtonOnBottom} for collapse button;
+ * @param { className} for css style;
+ * @param { dataqa} for Quality Engineering
+ */
 type VerticalNavProps = {
     isCollapsible?: boolean;
     collapseButtonOnBottom?: boolean;
     className?: string;
+    dataqa?: string;
 };
 
 type VerticalNavState = {
@@ -105,8 +112,9 @@ export class VerticalNav extends React.PureComponent<VerticalNavProps, VerticalN
 
     render() {
         const {isCollapsed} = this.state;
+        const {dataqa} = this.props;
         return (
-            <div className={this.getClassList().join(" ")}>
+            <div className={this.getClassList().join(" ")} data-qa={dataqa}>
                 {this.props.isCollapsible && (
                     <button type="button" className="nav-trigger" onClick={this.toggleVertical.bind(this)}>
                         <Icon

@@ -90,10 +90,10 @@ export class Modal extends React.PureComponent<ModalProps> {
     }
 
     buildModal(): React.ReactElement {
-        const {size, closable, title, children} = this.props;
+        const {size, closable, title, children, dataqa} = this.props;
         return (
             <React.Fragment>
-                <div className={ClassNames.MODAL}>
+                <div className={ClassNames.MODAL} data-qa={dataqa}>
                     <div
                         className={classNames([
                             ClassNames.MODAL_DIALOG, //prettier
