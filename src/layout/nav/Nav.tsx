@@ -13,12 +13,15 @@ import * as utils from "../../utils";
 import {ReactElement} from "react";
 import {NavLink} from "./NavLink";
 
+/**
+ * @param {navLevel} for The level of navigation invoked.
+ * @param {navType} for  The navigation type (header, sub side).
+ * @param {dataqa} for Quality Engineering
+ */
 export type NavProps = {
-    // The level of navigation invoked.
     navLevel: NavLevel;
-
-    // The navigation type (header, sub side).
     navType: NavType;
+    dataqa?: string;
 };
 
 export enum NavLevel {
@@ -63,8 +66,12 @@ export class Nav extends React.PureComponent<NavProps> {
     }
 
     render() {
-        const {children, navLevel, navType} = this.props;
+        const {children, navLevel, navType, dataqa} = this.props;
         const classList: string[] = [Nav.classForNavType(navType), Nav.classForNavLevel(navLevel)];
-        return <nav className={utils.classNames(classList)}>{Nav.maybeWrapInList(navType, children)}</nav>;
+        return (
+            <nav className={utils.classNames(classList)} data-qa={dataqa}>
+                {Nav.maybeWrapInList(navType, children)}
+            </nav>
+        );
     }
 }

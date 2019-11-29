@@ -33,6 +33,9 @@ type WizardStepNavDetails = {
     stepNavChildren?: React.ReactNode;
 };
 
+/**
+ * @param {dataqa} Quality Engineering field
+ */
 type WizardProps = {
     isInline?: boolean;
     show?: boolean;
@@ -54,6 +57,7 @@ type WizardProps = {
     validationType?: WizardValidationType;
     style?: any;
     className?: string;
+    dataqa?: string;
 };
 
 type WizardState = {
@@ -78,6 +82,13 @@ export enum WizardValidationType {
     SYNC = "Synchronous",
     NONE = "None",
 }
+
+//Quality Engineering Fields
+let dataqa_wizard = "prefix";
+let dataqa_wizard_btn_cancel = "prefix_btn_cancel";
+let dataqa_wizard_btn_previous = "prefix_btn_back";
+let dataqa_wizard_btn_next = "prefix_btn_next";
+let dataqa_wizard_btn_finish = "prefix_btn_finish";
 
 export class Wizard extends React.PureComponent<WizardProps> {
     private divRef: HTMLDivElement | null = null;
@@ -357,12 +368,21 @@ export class Wizard extends React.PureComponent<WizardProps> {
             <div className={ClassNames.WIZARD_FOOTER}>
                 <div className={ClassNames.WIZARD_FOOTER_BUTTON}>
                     {children}
-                    <Button key={cancelButtonText} link onClick={this.close.bind(this)}>
+                    <Button
+                        key={cancelButtonText}
+                        link
+                        dataqa={dataqa_wizard_btn_cancel}
+                        onClick={this.close.bind(this)}
+                    >
                         {cancelButtonText}{" "}
                     </Button>
 
                     {this.state.showPreviousButton && (
-                        <Button key={previousButtonText} onClick={this.previousButtonClick.bind(this)}>
+                        <Button
+                            key={previousButtonText}
+                            dataqa={dataqa_wizard_btn_previous}
+                            onClick={this.previousButtonClick.bind(this)}
+                        >
                             {previousButtonText}{" "}
                         </Button>
                     )}
@@ -372,6 +392,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
                             key={nextButtonText}
                             primary
                             disabled={this.state.disableNextButton}
+                            dataqa={dataqa_wizard_btn_next}
                             onClick={this.nextButtonClick.bind(this)}
                         >
                             {nextButtonText}{" "}
@@ -383,6 +404,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
                             key={finishButtonText}
                             state={ButtonState.SUCCESS}
                             disabled={this.state.disableFinishButton}
+                            dataqa={dataqa_wizard_btn_finish}
                             onClick={this.finishButtonClick.bind(this)}
                         >
                             {finishButtonText}
@@ -468,7 +490,12 @@ export class Wizard extends React.PureComponent<WizardProps> {
             isInline,
             style,
             className,
+            dataqa,
         } = this.props;
+
+        //replace prefix with incoming prop
+        if (dataqa) this.updateDataQAStrings(dataqa);
+
         const wizardSize = "wizard-" + size;
         const modalSize = "modal-" + size;
         const buttonStyle: any = () => {
@@ -480,6 +507,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
         return (
             <React.Fragment>
                 <div
+                    data-qa={dataqa_wizard}
                     className={classNames([
                         isInline && `${ClassNames.WIZARD_INLINE} ${ClassNames.WIZARD_NO_SHADOW}`,
                         ClassNames.WIZARD,
@@ -542,6 +570,15 @@ export class Wizard extends React.PureComponent<WizardProps> {
                 {/*Close Size div */}
             </React.Fragment>
         );
+    }
+
+    updateDataQAStrings(dataqa: string) {
+        let prefix = "prefix";
+        dataqa_wizard_btn_cancel = dataqa_wizard_btn_cancel.replace(new RegExp("^" + prefix), dataqa);
+        dataqa_wizard_btn_previous = dataqa_wizard_btn_previous.replace(new RegExp("^" + prefix), dataqa);
+        dataqa_wizard_btn_next = dataqa_wizard_btn_next.replace(new RegExp("^" + prefix), dataqa);
+        dataqa_wizard_btn_finish = dataqa_wizard_btn_finish.replace(new RegExp("^" + prefix), dataqa);
+        dataqa_wizard = dataqa_wizard.replace(new RegExp("^" + prefix), dataqa);
     }
 
     /* ##########  Wizard private methods end  ############ */

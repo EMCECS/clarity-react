@@ -30,6 +30,18 @@ export enum MessageType {
 
 const DEFAULT_HIDE_TIME = 3000;
 
+/**
+ * @param {showToast} for showing toast;
+ * @param {duration} for time;
+ * @param {position} for Direction;
+ * @param {type} for MessageType;
+ * @param {icon} for icon;
+ * @param {text} for text;
+ * @param {onClose} for close function;
+ * @param {style} for css style;
+ * @param {className} for css style;
+ * @param {dataqa} for Qulaity engineering;
+ */
 type ToastProps = {
     showToast?: boolean;
     duration?: number;
@@ -40,6 +52,7 @@ type ToastProps = {
     onClose?: Function;
     style?: any;
     className?: string;
+    dataqa?: string;
 };
 
 type ToastState = {
@@ -113,7 +126,7 @@ export class Toast extends React.PureComponent<ToastProps> {
     }
 
     buildToast(): React.ReactElement {
-        const {text, icon, position, type, duration, showToast, style, className} = this.props;
+        const {text, icon, position, type, duration, showToast, style, className, dataqa} = this.props;
 
         let styled = {
             ...style,
@@ -129,7 +142,7 @@ export class Toast extends React.PureComponent<ToastProps> {
         styled[place] = 0;
 
         return (
-            <div className={classNames(["alert", `alert-${type}`, className])} style={styled}>
+            <div className={classNames(["alert", `alert-${type}`, className])} style={styled} data-qa={dataqa}>
                 {icon && <span style={{paddingRight: "5px"}}>{<Icon shape={icon} />}</span>}
                 {text}
             </div>

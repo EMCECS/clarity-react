@@ -14,12 +14,21 @@ import {Icon} from "../icon";
 import {classNames} from "../utils";
 import {ClassNames} from "./ClassNames";
 
+/**
+ * @param {isOpen} property stating if modal open
+ * @param {size} size of modal
+ * @param {title} title of modal
+ * @param {closable} property stating if modal is closable
+ * @param {onClose} function onClose
+ * @param {dataqa} Quality Engineering field
+ */
 type ModalProps = {
     isOpen?: boolean;
     size?: ModalSize;
     title?: string;
     closable?: boolean;
     onClose?: Function;
+    dataqa?: string;
 };
 
 type ModalState = {
@@ -81,10 +90,10 @@ export class Modal extends React.PureComponent<ModalProps> {
     }
 
     buildModal(): React.ReactElement {
-        const {size, closable, title, children} = this.props;
+        const {size, closable, title, children, dataqa} = this.props;
         return (
             <React.Fragment>
-                <div className={ClassNames.MODAL}>
+                <div className={ClassNames.MODAL} data-qa={dataqa}>
                     <div
                         className={classNames([
                             ClassNames.MODAL_DIALOG, //prettier
