@@ -66,8 +66,8 @@ type WizardStepNavDetails = {
  * @param {onFinish} callback function to call on click of finsih button
  * @param {finishButtonClassName} extranla CSS for finish button
  * @param {cancelButtonText} custom text for cancel button
- * @param {showCancleButton} if true show cancel button on wizard else hide
- * @param {cancleButtonClassName} extranla CSS for cancel button
+ * @param {showCancelButton} if true show cancel button on wizard else hide
+ * @param {cancelButtonClassName} extranla CSS for cancel button
  * @param {navLinkClasses} extranal css class for navigation links
  * @param {validationType} validation type for wizard steps
  * @param {dataqa} Quality Engineering field
@@ -92,8 +92,8 @@ type WizardProps = {
     onFinish?: Function;
     finishButtonClassName?: string;
     cancelButtonText?: string;
-    showCancleButton?: boolean;
-    cancleButtonClassName?: string;
+    showCancelButton?: boolean;
+    cancelButtonClassName?: string;
     onClose?: Function;
     navLinkClasses?: string;
     validationType?: WizardValidationType;
@@ -109,7 +109,7 @@ type WizardProps = {
  * @param {showFinishButton} if true show finish button of wizard
  * @param {showPreviousButton} if true show finish button of wizard
  * @param {showNextButton} if true show next button of wizard
- * @param {showCancleButton} if true show cancel button of wizard
+ * @param {showCancelButton} if true show cancel button of wizard
  * @param {disableFinishButton} label to display for all items
  * @param {allSteps} wizard step data
  */
@@ -120,7 +120,7 @@ type WizardState = {
     disableFinishButton: boolean;
     showPreviousButton: boolean;
     showNextButton: boolean;
-    showCancleButton: boolean;
+    showCancelButton: boolean;
     disableNextButton: boolean;
     allSteps: WizardStep[];
 };
@@ -179,7 +179,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
         showFinishButton: this.props.defaultStepId === this.props.steps.length - 1 ? true : false,
         disableFinishButton: false,
         showPreviousButton: this.props.showPreviousButton ? this.props.showPreviousButton : false,
-        showCancleButton: this.props.showCancleButton ? this.props.showCancleButton : true,
+        showCancelButton: this.props.showCancelButton ? this.props.showCancelButton : true,
         showNextButton: this.props.defaultStepId === this.props.steps.length - 1 ? false : true,
         disableNextButton: false,
         allSteps: this.props.steps,
@@ -328,7 +328,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
     }
 
     private modifyButtonStates(stepId: number) {
-        const {steps, validationType, showPreviousButton, showCancleButton} = this.props;
+        const {steps, validationType, showPreviousButton, showCancelButton} = this.props;
         const step = this.getStepObj(stepId);
 
         if (stepId === 0) {
@@ -339,7 +339,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
                 showNextButton: true,
                 disableNextButton: !step.stepCompleted && validationType == WizardValidationType.SYNC ? true : false,
                 showFinishButton: false,
-                showCancleButton: showCancleButton !== undefined ? showCancleButton : true,
+                showCancelButton: showCancelButton !== undefined ? showCancelButton : true,
                 currentStepId: step.stepId,
             });
         } else if (stepId === steps.length - 1) {
@@ -350,7 +350,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
                 showFinishButton: true,
                 disableFinishButton: !step.stepCompleted && validationType == WizardValidationType.SYNC ? true : false,
                 showNextButton: false,
-                showCancleButton: showCancleButton !== undefined ? showCancleButton : true,
+                showCancelButton: showCancelButton !== undefined ? showCancelButton : true,
                 currentStepId: step.stepId,
             });
         } else {
@@ -361,7 +361,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
                 showNextButton: true,
                 disableNextButton: !step.stepCompleted && validationType == WizardValidationType.SYNC ? true : false,
                 showFinishButton: false,
-                showCancleButton: showCancleButton !== undefined ? showCancleButton : true,
+                showCancelButton: showCancelButton !== undefined ? showCancelButton : true,
                 currentStepId: step.stepId,
             });
         }
@@ -434,21 +434,21 @@ export class Wizard extends React.PureComponent<WizardProps> {
             nextButtonClassName,
             previousButtonClassName,
             finishButtonClassName,
-            cancleButtonClassName,
+            cancelButtonClassName,
             children,
         } = this.props;
 
-        const {showPreviousButton, showNextButton, showFinishButton, showCancleButton} = this.state;
+        const {showPreviousButton, showNextButton, showFinishButton, showCancelButton} = this.state;
 
         return (
             <div className={ClassNames.WIZARD_FOOTER}>
                 <div className={ClassNames.WIZARD_FOOTER_BUTTON}>
                     {children}
 
-                    {showCancleButton && (
+                    {showCancelButton && (
                         <Button
                             key={cancelButtonText}
-                            className={cancleButtonClassName}
+                            className={cancelButtonClassName}
                             link
                             dataqa={dataqa_wizard_btn_cancel}
                             onClick={this.close.bind(this)}
