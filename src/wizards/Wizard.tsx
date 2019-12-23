@@ -16,6 +16,14 @@ import {ClassNames, Styles} from "./ClassNames";
 import {Button, ButtonState} from "../forms/button";
 import {VerticalNav} from "../layout/vertical-nav";
 
+/**
+ * General component description :
+ * Wizard :
+ * Wizards are used to help users walk through a defined step-by-step process.
+ * Each step is in the sidebar on the left. As users complete steps,
+ * the steps are marked with a green bar to the left.
+ */
+
 type WizardStep = {
     stepName: string;
     stepComponent: React.ReactNode;
@@ -34,6 +42,34 @@ type WizardStepNavDetails = {
 };
 
 /**
+ * Props for Wizard :
+ * @param {isInline} if true then do not render border of wizard.
+ * Used for rendering wizard in vSphere plugin
+ * @param {style} CSS styles
+ * @param {className} CSS classname
+ * @param {show} if true show the wizard
+ * @param {size} enum value for size of wizard
+ * @param {title} wizard title
+ * @param {steps} wizard steps
+ * @param {defaultStepId} on which step wiazrd should open at first by default it will get open at first step
+ * @param {showNav} if true it will show left side navigation on wizard
+ * @param {closable} if true user can close the wizard
+ * @param {onClose} callback function to call on close of wizard
+ * @param {previousButtonText} custom text for previous button
+ * @param {showPreviousButton} if true show previous button on wizard else hide
+ * @param {onPrevious} callback function to call on click of previous button
+ * @param {previousButtonClassName} extranla CSS for previous button
+ * @param {nextButtonText} custom text for next button
+ * @param {onNext} callback function to call on click of next button
+ * @param {nextButtonClassName} extranla CSS for next button
+ * @param {finishButtonText} custom text for finish button
+ * @param {onFinish} callback function to call on click of finsih button
+ * @param {finishButtonClassName} extranla CSS for finish button
+ * @param {cancelButtonText} custom text for cancel button
+ * @param {showCancleButton} if true show cancel button on wizard else hide
+ * @param {cancleButtonClassName} extranla CSS for cancel button
+ * @param {navLinkClasses} extranal css class for navigation links
+ * @param {validationType} validation type for wizard steps
  * @param {dataqa} Quality Engineering field
  */
 type WizardProps = {
@@ -46,12 +82,18 @@ type WizardProps = {
     showNav?: boolean;
     closable?: boolean;
     previousButtonText?: string;
+    showPreviousButton?: boolean;
     onPrevious?: Function;
+    previousButtonClassName?: string;
     nextButtonText?: string;
     onNext?: Function;
+    nextButtonClassName?: string;
     finishButtonText?: string;
     onFinish?: Function;
+    finishButtonClassName?: string;
     cancelButtonText?: string;
+    showCancleButton?: boolean;
+    cancleButtonClassName?: string;
     onClose?: Function;
     navLinkClasses?: string;
     validationType?: WizardValidationType;
@@ -60,6 +102,17 @@ type WizardProps = {
     dataqa?: string;
 };
 
+/**
+ * State for Wizard :
+ * @param {show} if true show the wizard else close
+ * @param {currentStepId} ID of active step in wizard startig form 0
+ * @param {showFinishButton} if true show finish button of wizard
+ * @param {showPreviousButton} if true show finish button of wizard
+ * @param {showNextButton} if true show next button of wizard
+ * @param {showCancleButton} if true show cancel button of wizard
+ * @param {disableFinishButton} label to display for all items
+ * @param {allSteps} wizard step data
+ */
 type WizardState = {
     show: boolean;
     currentStepId: number;
@@ -67,16 +120,29 @@ type WizardState = {
     disableFinishButton: boolean;
     showPreviousButton: boolean;
     showNextButton: boolean;
+    showCancleButton: boolean;
     disableNextButton: boolean;
     allSteps: WizardStep[];
 };
 
+/**
+ * Enum for wizard sizes:
+ * @param {MEDIUM} midum size wizard
+ * @param {LARGE} large size wizard
+ * @param {XLARGE} xtra-large size wizard
+ */
 export enum WizardSize {
     MEDIUM = "md",
     LARGE = "lg",
     XLARGE = "xl",
 }
 
+/**
+ * Enum for sorting order :
+ * @param {ASYNC} Asynchronous validation
+ * @param {SYNC} Synchronous validation
+ * @param {NONE} no validation
+ */
 export enum WizardValidationType {
     ASYNC = "Asynchronous",
     SYNC = "Synchronous",
@@ -112,7 +178,8 @@ export class Wizard extends React.PureComponent<WizardProps> {
         currentStepId: this.props.defaultStepId!,
         showFinishButton: this.props.defaultStepId === this.props.steps.length - 1 ? true : false,
         disableFinishButton: false,
-        showPreviousButton: false,
+        showPreviousButton: this.props.showPreviousButton ? this.props.showPreviousButton : false,
+        showCancleButton: this.props.showCancleButton ? this.props.showCancleButton : true,
         showNextButton: this.props.defaultStepId === this.props.steps.length - 1 ? false : true,
         disableNextButton: false,
         allSteps: this.props.steps,
@@ -261,7 +328,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
     }
 
     private modifyButtonStates(stepId: number) {
-        const {steps, validationType} = this.props;
+        const {steps, validationType, showPreviousButton, showCancleButton} = this.props;
         const step = this.getStepObj(stepId);
 
         if (stepId === 0) {
@@ -272,26 +339,29 @@ export class Wizard extends React.PureComponent<WizardProps> {
                 showNextButton: true,
                 disableNextButton: !step.stepCompleted && validationType == WizardValidationType.SYNC ? true : false,
                 showFinishButton: false,
+                showCancleButton: showCancleButton !== undefined ? showCancleButton : true,
                 currentStepId: step.stepId,
             });
         } else if (stepId === steps.length - 1) {
             /* for last step : If currenst step is last step of workflow
           then hide next button and show privious and finish buttons */
             this.setState({
-                showPreviousButton: true,
+                showPreviousButton: showPreviousButton !== undefined ? showPreviousButton : true,
                 showFinishButton: true,
                 disableFinishButton: !step.stepCompleted && validationType == WizardValidationType.SYNC ? true : false,
                 showNextButton: false,
+                showCancleButton: showCancleButton !== undefined ? showCancleButton : true,
                 currentStepId: step.stepId,
             });
         } else {
             /* for in between step : If currenst step is not last or first step of workflow
         then show next , privious buttons and hide finish button */
             this.setState({
-                showPreviousButton: true,
+                showPreviousButton: showPreviousButton !== undefined ? showPreviousButton : true,
                 showNextButton: true,
                 disableNextButton: !step.stepCompleted && validationType == WizardValidationType.SYNC ? true : false,
                 showFinishButton: false,
+                showCancleButton: showCancleButton !== undefined ? showCancleButton : true,
                 currentStepId: step.stepId,
             });
         }
@@ -361,25 +431,36 @@ export class Wizard extends React.PureComponent<WizardProps> {
             nextButtonText,
             previousButtonText,
             finishButtonText,
+            nextButtonClassName,
+            previousButtonClassName,
+            finishButtonClassName,
+            cancleButtonClassName,
             children,
         } = this.props;
+
+        const {showPreviousButton, showNextButton, showFinishButton, showCancleButton} = this.state;
 
         return (
             <div className={ClassNames.WIZARD_FOOTER}>
                 <div className={ClassNames.WIZARD_FOOTER_BUTTON}>
                     {children}
-                    <Button
-                        key={cancelButtonText}
-                        link
-                        dataqa={dataqa_wizard_btn_cancel}
-                        onClick={this.close.bind(this)}
-                    >
-                        {cancelButtonText}{" "}
-                    </Button>
 
-                    {this.state.showPreviousButton && (
+                    {showCancleButton && (
+                        <Button
+                            key={cancelButtonText}
+                            className={cancleButtonClassName}
+                            link
+                            dataqa={dataqa_wizard_btn_cancel}
+                            onClick={this.close.bind(this)}
+                        >
+                            {cancelButtonText}{" "}
+                        </Button>
+                    )}
+
+                    {showPreviousButton && (
                         <Button
                             key={previousButtonText}
+                            className={previousButtonClassName}
                             dataqa={dataqa_wizard_btn_previous}
                             onClick={this.previousButtonClick.bind(this)}
                         >
@@ -387,9 +468,10 @@ export class Wizard extends React.PureComponent<WizardProps> {
                         </Button>
                     )}
 
-                    {this.state.showNextButton && (
+                    {showNextButton && (
                         <Button
                             key={nextButtonText}
+                            className={nextButtonClassName}
                             primary
                             disabled={this.state.disableNextButton}
                             dataqa={dataqa_wizard_btn_next}
@@ -399,9 +481,10 @@ export class Wizard extends React.PureComponent<WizardProps> {
                         </Button>
                     )}
 
-                    {this.state.showFinishButton && (
+                    {showFinishButton && (
                         <Button
                             key={finishButtonText}
+                            className={finishButtonClassName}
                             state={ButtonState.SUCCESS}
                             disabled={this.state.disableFinishButton}
                             dataqa={dataqa_wizard_btn_finish}

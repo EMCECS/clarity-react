@@ -19,6 +19,16 @@ import {CustomStepComponent} from "./CustomStepComponent";
 const CustomStepComponentRef = React.createRef<CustomStepComponent>();
 // Refrence to call step validation methods of wizard
 const wizardSingleRefSync = React.createRef<Wizard>();
+
+// Refrence to call resetWizard() of Wizard component
+const wizardRef = React.createRef<Wizard>();
+
+// Refrence to call step validation methods of wizard
+const wizardRefSync = React.createRef<Wizard>();
+
+// Refrence to call close methods of wizard
+const wizardRefClose = React.createRef<Wizard>();
+
 const SingleStep = [
     {
         stepName: "page 1",
@@ -139,6 +149,18 @@ const stepsAsyncValidation = [
     },
 ];
 
+// Function to close and reset wizard
+const closeWizard = () => {
+    wizardRefClose.current!.close();
+    wizardRefClose.current!.resetWizard();
+};
+
+const stepclosewizard = [
+    {stepName: "page 1", stepId: 0, stepComponent: <p> Page 1</p>, onStepSubmit: closeWizard},
+    {stepName: "page 2", stepId: 1, stepComponent: <p> Page 2</p>, onStepSubmit: closeWizard},
+    {stepName: "page 3", stepId: 2, stepComponent: <p> Page 3</p>, onStepSubmit: closeWizard},
+];
+
 const storeMedium = new Store({show: false});
 const storeLarge = new Store({show: false});
 const storeXlarge = new Store({show: false});
@@ -150,12 +172,7 @@ const storeNavWithIcon = new Store({show: false});
 const storeSyncValidation = new Store({show: false});
 const storeAsyncValidation = new Store({show: false});
 const storeResetWizard = new Store({show: false});
-
-// Refrence to call resetWizard() of Wizard component
-const wizardRef = React.createRef<Wizard>();
-
-// Refrence to call step validation methods of wizard
-const wizardRefSync = React.createRef<Wizard>();
+const storeCloseWizard = new Store({show: false});
 
 storiesOf("Wizard", module)
     .add("Wizard Sizes", () => (
@@ -284,6 +301,25 @@ storiesOf("Wizard", module)
                         steps={stepsMedium}
                         onClose={() => storeResetWizard.set({show: false})}
                         onFinish={() => wizardRef.current!.resetWizard()}
+                    />
+                </State>
+            </div>
+        </div>
+    ))
+    .add("Wizard which will close on any step", () => (
+        <div className="clr-row">
+            <div className="clr-col-12">
+                <Button onClick={() => storeCloseWizard.set({show: true})}> Wizard with Close on any Step </Button>
+                <State store={storeCloseWizard}>
+                    <Wizard
+                        size={WizardSize.MEDIUM}
+                        title="Wizard which can close on any step"
+                        steps={stepclosewizard}
+                        ref={wizardRefClose}
+                        onClose={() => storeCloseWizard.set({show: false})}
+                        nextButtonText={"Apply"}
+                        finishButtonText={"Apply"}
+                        showPreviousButton={false}
                     />
                 </State>
             </div>
