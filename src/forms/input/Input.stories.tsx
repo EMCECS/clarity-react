@@ -30,6 +30,9 @@ storiesOf("Input", module)
             <Icon shape="search" style={{marginLeft: "-20px", width: "16px", height: "16px"}} />
         </Input>
     ))
+    .add("input with number", () => (
+        <Input name="somevalue" type={"number"} min={1} max={10} onChange={action("changed")} defaultValue={1} />
+    ))
     .add("input box with custom width", () => (
         <div>
             <Input name="somevalue" placeholder="stuff goes here" onChange={action("changed")} style={{width: "40%"}} />
