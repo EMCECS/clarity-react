@@ -28,9 +28,11 @@ type InputProps = {
     placeholder?: string;
     name: string;
     id?: string;
-    value?: string;
-    defaultValue?: string;
+    value?: any;
+    defaultValue?: any;
     size?: number;
+    min?: number;
+    max?: number;
     required?: boolean; // auto-check on blur if there's a value
     error?: boolean; // force error state of component
     dataqa?: string; //quality engineering testing field
@@ -72,6 +74,8 @@ export class Input extends React.PureComponent<InputProps> {
             required,
             onBlur,
             dataqa,
+            min,
+            max,
         } = this.props;
         return (
             <React.Fragment>
@@ -90,6 +94,8 @@ export class Input extends React.PureComponent<InputProps> {
                     onBlur={onBlur}
                     style={style}
                     required={required}
+                    min={min}
+                    max={max}
                 />
                 {children}
                 <Icon className="clr-validate-icon" shape="exclamation-circle" />
