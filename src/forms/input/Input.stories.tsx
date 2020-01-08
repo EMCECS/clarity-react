@@ -22,7 +22,16 @@ storiesOf("Input", module)
         <Input name="somevalue" placeholder="stuff goes here" onChange={action("changed")} />
     ))
     .add("with helper text", () => (
-        <Input name="somevalue" helperText="this should help you figure it out" onChange={action("changed")} />
+        <div>
+            <Input name="somevalue" helperText="this should help you figure it out" onChange={action("changed")} />
+            <br /> <br />
+            <Input
+                name="somevalue"
+                isBoxed
+                helperText="this should help you figure it out"
+                onChange={action("changed")}
+            />
+        </div>
     ))
     .add("when disabled", () => <Input name="somevalue" disabled={true} onChange={action("changed")} />)
     .add("input box with icon", () => (
@@ -66,11 +75,12 @@ storiesOf("Input", module)
                 onChange={action("select with error - change")}
                 errorHelperText="This field is reuired"
             />
-            <br />
+            <br /> <br />
             <Input
                 name="somevalue"
                 isBoxed
                 error={true}
+                errorHelperText="This field is reuired"
                 onBlur={action("select with error - blur")}
                 onChange={action("select with error - change")}
             />
