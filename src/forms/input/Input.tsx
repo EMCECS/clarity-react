@@ -76,6 +76,9 @@ export class Input extends React.PureComponent<InputProps> {
             dataqa,
             min,
             max,
+            error,
+            errorHelperText,
+            helperText,
         } = this.props;
         return (
             <React.Fragment>
@@ -99,6 +102,9 @@ export class Input extends React.PureComponent<InputProps> {
                 />
                 {children}
                 <Icon className="clr-validate-icon" shape="exclamation-circle" />
+                {error
+                    ? errorHelperText && Input.renderHelperText(errorHelperText)
+                    : helperText && Input.renderHelperText(helperText)}
             </React.Fragment>
         );
     }
@@ -107,10 +113,8 @@ export class Input extends React.PureComponent<InputProps> {
         const {
             className, //prettier
             disabled,
-            helperText,
             label,
             isBoxed,
-            errorHelperText,
             error,
         } = this.props;
         let classNames = ["clr-control-container", error && "clr-error"];
@@ -139,10 +143,6 @@ export class Input extends React.PureComponent<InputProps> {
                             <div className="clr-input-wrapper">
                                 {this.buildInput(utils.classNames(["clr-input", className]), uid)}
                             </div>
-
-                            {error
-                                ? errorHelperText && Input.renderHelperText(errorHelperText)
-                                : helperText && Input.renderHelperText(helperText)}
                         </div>
                     </div>
                 )}
