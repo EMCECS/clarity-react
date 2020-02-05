@@ -212,7 +212,11 @@ export const sortColumns = [
     },
     {columnName: "Name", style: {width: "96px"}, sort: {defaultSortOrder: SortOrder.NONE, sortFunction: sortFunction}},
     {columnName: "Creation Date", style: {width: "96px"}},
-    {columnName: "Favorite color", style: {width: "96px"}},
+    {
+        columnName: "Favorite color",
+        style: {width: "96px"},
+        sort: {defaultSortOrder: SortOrder.ASC, sortFunction: sortFunction, isCurrentlySorted: true},
+    },
 ];
 
 /**
