@@ -52,7 +52,7 @@ const stepsLarge = [
 ];
 
 const stepsXLarge = [
-    {stepName: "page 1", stepId: 0, stepComponent: <p> Page 1</p>},
+    {stepName: "page 1", stepId: 0, stepComponent: <p> Page 1</p>, showStepTitle: false},
     {stepName: "page 2", stepId: 1, stepComponent: <p> Page 2</p>},
     {stepName: "page 3", stepId: 2, stepComponent: <p> Page 3</p>},
 ];
