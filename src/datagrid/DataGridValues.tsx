@@ -215,7 +215,7 @@ export const sortColumns = [
     {
         columnName: "Favorite color",
         style: {width: "96px"},
-        sort: {defaultSortOrder: SortOrder.ASC, sortFunction: sortFunction, isCurrentlySorted: true},
+        sort: {defaultSortOrder: SortOrder.ASC, sortFunction: sortFunction, isSorted: true},
     },
 ];
 

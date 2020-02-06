@@ -131,7 +131,7 @@ export type DataGridFooter = {
  */
 export type DataGridSort = {
     defaultSortOrder: SortOrder;
-    isCurrentlySorted?: boolean;
+    isSorted?: boolean;
     sortFunction: (rows: DataGridRow[], order: SortOrder, columnName: string) => Promise<DataGridRow[]>;
 };
 
@@ -511,7 +511,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
             // Set currentlySorted flag for all columns as false
             allColumns.forEach(col => {
                 if (col.sort) {
-                    col.sort.isCurrentlySorted = false;
+                    col.sort.isSorted = false;
                 }
             });
 
@@ -525,7 +525,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
                 // update sort order
                 allColumns[columnID].sort!.defaultSortOrder = nextSortOrder;
-                allColumns[columnID].sort!.isCurrentlySorted = true;
+                allColumns[columnID].sort!.isSorted = true;
 
                 this.setState({
                     allRows: [...rows],
@@ -749,7 +749,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                             }
                         >
                             {columnName}
-                            {sort.isCurrentlySorted && sort.defaultSortOrder !== SortOrder.NONE && (
+                            {sort.isSorted && sort.defaultSortOrder !== SortOrder.NONE && (
                                 <Icon
                                     shape={sort.defaultSortOrder == SortOrder.DESC ? "arrow down" : "arrow up"}
                                     className={classNames([
