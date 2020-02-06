@@ -24,10 +24,24 @@ import {VerticalNav} from "../layout/vertical-nav";
  * the steps are marked with a green bar to the left.
  */
 
+/**
+ * Step details for wizard
+ * @param {stepName} Name or title for step this name will be used in
+ * left side Navigation as well.
+ * @param {stepComponent} React component for step
+ * @param {stepId} unique ID to identfy the steo should start from 0
+ * @param {showStepTitle} if false do not show step title
+ * @param {stepCompleted} flag to check if step is valid and complete
+ * @param {customStepNav} custom navigation details for step
+ * @param {disableNav} if true then navigation for step is disabled
+ * @param {isStepValid} function to check validity of step
+ * @param {onStepSubmit} function to perform on step submission
+ */
 type WizardStep = {
     stepName: string;
     stepComponent: React.ReactNode;
     stepId: number;
+    showStepTitle?: boolean;
     stepCompleted?: boolean;
     customStepNav?: WizardStepNavDetails;
     disableNav?: boolean;
@@ -625,7 +639,8 @@ export class Wizard extends React.PureComponent<WizardProps> {
                                             <div className={ClassNames.MODAL_TITLE_WRAPPER}>
                                                 <h3 className={ClassNames.MODAL_TITLE} style={Styles.MODAL_TITELE}>
                                                     <span className={ClassNames.MODAL_TITLE_TEXT}>
-                                                        {steps[this.state.currentStepId].stepName}
+                                                        {steps[this.state.currentStepId].showStepTitle !== false &&
+                                                            steps[this.state.currentStepId].stepName}
                                                     </span>
                                                 </h3>
                                             </div>

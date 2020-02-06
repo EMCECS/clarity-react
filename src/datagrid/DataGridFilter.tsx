@@ -67,18 +67,17 @@ export enum FilterType {
 /**
  * State for DataGridFilter:
  * @param {isOpen} check if filter box is open
- * @param {filterValue} filter string
  * @param {transformVal} value for transform css attribute
  */
 type DataGridFilterState = {
     isOpen: boolean;
-    filterValue: any;
     transformVal: string;
 };
 
 export class DataGridFilter extends React.PureComponent<DataGridFilterProps, DataGridFilterState> {
     private refParent = React.createRef<HTMLDivElement>();
     private refChild = React.createRef<HTMLDivElement>();
+    private filterValue: any;
 
     static defaultProps = {
         filterType: FilterType.STR,
@@ -90,9 +89,13 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
     // Initial state for filter
     state: DataGridFilterState = {
         isOpen: false,
-        filterValue: undefined,
         transformVal: "translateX(0px) translateY(0px)",
     };
+
+    constructor(props: DataGridFilterProps) {
+        super(props);
+        this.filterValue = undefined;
+    }
 
     componentWillMount() {
         window.addEventListener("resize", this.resize as any, true);
@@ -118,7 +121,7 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
     }
 
     getFilterValue = () => {
-        return this.state.filterValue;
+        return this.filterValue;
     };
 
     updateFilter = (value: any) => {
@@ -128,13 +131,13 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
         const rows = datagridRef.current!.getAllRows();
 
         if (onFilter && datagridRef) {
-            this.setState({filterValue: value}, () =>
-                onFilter(rows, value, columnName).then(data => {
-                    // Update datagrid rows
-                    const {rows, totalItems} = data;
-                    datagridRef.current!.updateRows(rows, totalItems);
-                }),
-            );
+            this.filterValue = value;
+
+            onFilter(rows, value, columnName).then(data => {
+                // Update datagrid rows
+                const {rows, totalItems} = data;
+                datagridRef.current!.updateRows(rows, totalItems);
+            });
         }
     };
 
@@ -178,7 +181,8 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
 
     // Function to render filter box
     private openFilter(): React.ReactElement {
-        const {filterValue, transformVal} = this.state;
+        const {filterValue} = this;
+        const {transformVal} = this.state;
         const {style, className, filterType, customFilter} = this.props;
 
         return (
@@ -230,7 +234,8 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
     }
 
     render() {
-        const {isOpen, filterValue} = this.state;
+        const {isOpen} = this.state;
+        const {filterValue} = this;
         const FilterBtnClasses = classNames([
             ClassNames.DATAGRID_FILTER_BUTTON,
             filterValue && ClassNames.DATAGRID_FILTERED,
