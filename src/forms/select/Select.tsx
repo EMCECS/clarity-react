@@ -55,7 +55,6 @@ export class Select extends React.PureComponent<SelectProps> {
             value, // prettier
             onBlur,
             onChange,
-            error,
             children,
             showDefaultSelect,
             name,
@@ -72,12 +71,26 @@ export class Select extends React.PureComponent<SelectProps> {
                 onChange={onChange}
                 onBlur={onBlur}
                 className={className}
-                style={{width: error ? "75%" : "100%"}}
+                style={{width: this.getSelectWidth()}}
             >
                 {!showDefaultSelect && <option selected disabled hidden style={{display: "none"}} value="" />}
                 {children}
             </select>
         );
+    }
+
+    // Function to calulate width of select tag
+    private getSelectWidth() {
+        const {width, error} = this.props;
+        let customWidth = "auto";
+        if (width && error) {
+            // if both user defined width and error prop is present
+            customWidth = "95%";
+        } else if (width) {
+            // if only user defined width is present
+            customWidth = "100%";
+        }
+        return customWidth;
     }
 
     render() {
