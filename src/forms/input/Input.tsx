@@ -51,6 +51,14 @@ export class Input extends React.PureComponent<InputProps> {
         if (onChange) onChange(evt);
     };
 
+    //prevents 'e' button click when input type is number
+    private handleKeyDown = (evt: React.KeyboardEvent) => {
+        const {type} = this.props;
+        if (type === "number" && evt.key === "e") {
+            evt.preventDefault();
+        }
+    };
+
     private static renderHelperText(helperText: ReactNode): ReactNode {
         return <span className="clr-subtext">{helperText}</span>;
     }
@@ -94,6 +102,7 @@ export class Input extends React.PureComponent<InputProps> {
                     placeholder={placeholder}
                     data-qa={dataqa}
                     onChange={this.handleChange}
+                    onKeyDown={this.handleKeyDown}
                     onBlur={onBlur}
                     style={style}
                     required={required}
