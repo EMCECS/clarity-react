@@ -12,6 +12,7 @@ import * as React from "react";
 import {UID} from "react-uid";
 import {Icon} from "../../icon";
 import {classNames} from "../../utils";
+import "./Select.css";
 
 type SelectOption = {
     value?: string;
@@ -55,7 +56,6 @@ export class Select extends React.PureComponent<SelectProps> {
             value, // prettier
             onBlur,
             onChange,
-            error,
             children,
             showDefaultSelect,
             name,
@@ -71,13 +71,26 @@ export class Select extends React.PureComponent<SelectProps> {
                 required={required}
                 onChange={onChange}
                 onBlur={onBlur}
-                className={className}
-                style={{width: error ? "75%" : "100%"}}
+                className={classNames([this.getSelectWidth(), className])}
             >
-                {!showDefaultSelect && <option selected disabled hidden style={{display: "none"}} value="" />}
+                {!showDefaultSelect && <option selected disabled hidden className="hideOption" value="" />}
                 {children}
             </select>
         );
+    }
+
+    // Function to calulate width of select tag
+    private getSelectWidth() {
+        const {width, error} = this.props;
+        let customWidth = "auto";
+        if (width && error) {
+            // if both user defined width and error prop is present
+            customWidth = "selectWithError";
+        } else if (width) {
+            // if only user defined width is present
+            customWidth = "selectWidth";
+        }
+        return customWidth;
     }
 
     render() {
@@ -112,10 +125,10 @@ export class Select extends React.PureComponent<SelectProps> {
                                 </label>
                             )}
                             <div
-                                style={{width: "100%"}}
                                 className={classNames([
                                     "clr-control-container", //prettier
                                     error && "clr-error",
+                                    "selectWidth",
                                 ])}
                             >
                                 <div

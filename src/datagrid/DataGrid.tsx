@@ -301,7 +301,10 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // Function to update datagrid rows
     updateColumns = (cols: DataGridColumn[]) => {
-        const updatedCols = this.updateColumnIDs(this.setColumnVisibility(cols));
+        // Update visibility and sorting details of columns
+        const columnsWithVisibility = this.setColumnVisibility(cols);
+        const columnsWithSort = this.setSortingState(columnsWithVisibility);
+        const updatedCols = this.updateColumnIDs(columnsWithSort);
 
         this.setState({
             allColumns: [...updatedCols],
@@ -579,6 +582,19 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         const column = this.getColObject(columnName);
         return column && column.isVisible;
     }
+
+    // Update sorting state of columns
+    private setSortingState(columns: DataGridColumn[]) {
+        const {allColumns} = this.state;
+        columns.map((column: DataGridColumn, index: number) => {
+            if (column.sort) {
+                const col = allColumns.find(({columnName}) => columnName === column.columnName);
+                column.sort = col && col.sort;
+            }
+        });
+        return columns;
+    }
+
     /* ##########  DataGrid private methods end  ############ */
 
     /* ##########  DataGrid DOM methods start  ############ */

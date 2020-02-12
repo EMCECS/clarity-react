@@ -25,14 +25,14 @@ storiesOf("Select", module)
     ))
     .add("Select with custom width", () => (
         <div>
-            <Select onChange={action("basic change")} style={{width: "30%"}} label="Basic Select">
+            <Select onChange={action("basic change")} width="30%" label="Basic Select">
                 <SelectOption value="1">One</SelectOption>
                 <SelectOption value="2">Two</SelectOption>
                 <SelectOption value="3">Three</SelectOption>
             </Select>
 
             <br />
-            <Select onChange={action("basic change")} style={{width: "20%"}} isBoxed label="Boxed Select">
+            <Select onChange={action("basic change")} width="50%" isBoxed label="Boxed Select">
                 <SelectOption value="1">One</SelectOption>
                 <SelectOption value="2">Two</SelectOption>
                 <SelectOption value="3">Three</SelectOption>
@@ -64,6 +64,20 @@ storiesOf("Select", module)
     ))
     .add("Select with error", () => (
         <div>
+            <Select
+                error={true}
+                width="30%"
+                onBlur={action("select with error and custom width - blur")}
+                onChange={action("select with error - change")}
+                defaultHelperText="You have these choices"
+                errorHelperText="This field is required!"
+                label="I've got some options"
+            >
+                <SelectOption value="1">One</SelectOption>
+                <SelectOption value="2">Two</SelectOption>
+                <SelectOption value="3">Three</SelectOption>
+            </Select>
+
             <Select
                 error={true}
                 onBlur={action("select with error - blur")}
