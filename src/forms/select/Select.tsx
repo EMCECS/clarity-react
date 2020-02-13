@@ -12,7 +12,6 @@ import * as React from "react";
 import {UID} from "react-uid";
 import {Icon} from "../../icon";
 import {classNames} from "../../utils";
-import "./Select.css";
 
 type SelectOption = {
     value?: string;
@@ -71,9 +70,12 @@ export class Select extends React.PureComponent<SelectProps> {
                 required={required}
                 onChange={onChange}
                 onBlur={onBlur}
-                className={classNames([this.getSelectWidth(), className])}
+                className={classNames([className])}
+                style={{width: this.getSelectWidth()}}
             >
-                {!showDefaultSelect && <option selected disabled hidden className="hideOption" value="" />}
+                {!showDefaultSelect && (
+                    <option selected disabled hidden className="hideOption" value="" style={{display: "none"}} />
+                )}
                 {children}
             </select>
         );
@@ -85,10 +87,10 @@ export class Select extends React.PureComponent<SelectProps> {
         let customWidth = "auto";
         if (width && error) {
             // if both user defined width and error prop is present
-            customWidth = "selectWithError";
+            customWidth = "95%";
         } else if (width) {
             // if only user defined width is present
-            customWidth = "selectWidth";
+            customWidth = "100%";
         }
         return customWidth;
     }
@@ -125,10 +127,10 @@ export class Select extends React.PureComponent<SelectProps> {
                                 </label>
                             )}
                             <div
+                                style={{width: "100%"}}
                                 className={classNames([
                                     "clr-control-container", //prettier
                                     error && "clr-error",
-                                    "selectWidth",
                                 ])}
                             >
                                 <div
