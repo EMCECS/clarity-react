@@ -151,8 +151,11 @@ const stepsAsyncValidation = [
 
 // Function to close and reset wizard
 const closeWizard = () => {
-    wizardRefClose.current!.close();
-    wizardRefClose.current!.resetWizard();
+    return new Promise((resolve, reject) => {
+        wizardRefClose.current!.close();
+        wizardRefClose.current!.resetWizard();
+        resolve();
+    });
 };
 
 const stepclosewizard = [

@@ -27,7 +27,10 @@ export class CustomStepComponent extends React.PureComponent<CustomStepComponent
     };
 
     resetComponent() {
-        this.setState({value: " "});
+        return new Promise((resolve, reject) => {
+            this.setState({value: " "});
+            resolve();
+        });
     }
 
     private handleChange = (evt: React.ChangeEvent<any>) => {
