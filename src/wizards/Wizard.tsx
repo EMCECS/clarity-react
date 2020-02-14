@@ -46,7 +46,7 @@ type WizardStep = {
     customStepNav?: WizardStepNavDetails;
     disableNav?: boolean;
     isStepValid?: Function /* This function should return boolen value. And use to determine if step is valid or not */;
-    onStepSubmit?: Function /* Function to perform on submittion of step at click of Next or Finish */;
+    onStepSubmit?: () => Promise<any> /* Function to perform on submittion of step at click of Next or Finish */;
 };
 
 type WizardStepNavDetails = {
@@ -97,10 +97,10 @@ type WizardProps = {
     closable?: boolean;
     previousButtonText?: string;
     showPreviousButton?: boolean;
-    onPrevious?: Function;
+    onPrevious?: () => Promise<any>;
     previousButtonClassName?: string;
     nextButtonText?: string;
-    onNext?: Function;
+    onNext?: () => Promise<any>;
     nextButtonClassName?: string;
     finishButtonText?: string;
     onFinish?: Function;
@@ -304,9 +304,22 @@ export class Wizard extends React.PureComponent<WizardProps> {
         const {validState, disableNextStep} = this.checkStepValidity(this.state.currentStepId);
 
         if (!disableNextStep && nextStepId <= steps.length - 1) {
-            this.modifyButtonStates(nextStepId);
-            currenstStep.onStepSubmit && currenstStep.onStepSubmit();
-            onNext && onNext();
+            if (currenstStep.onStepSubmit) {
+                currenstStep
+                    .onStepSubmit()
+                    .then(() => {
+                        onNext && onNext();
+                    })
+                    .then(() => {
+                        this.modifyButtonStates(nextStepId);
+                    });
+            } else if (onNext) {
+                onNext().then(() => {
+                    this.modifyButtonStates(nextStepId);
+                });
+            } else {
+                this.modifyButtonStates(nextStepId);
+            }
         }
     }
 
@@ -314,8 +327,15 @@ export class Wizard extends React.PureComponent<WizardProps> {
         const {onPrevious} = this.props;
         const previousStepId = this.state.currentStepId - 1;
 
-        if (previousStepId >= 0) this.modifyButtonStates(previousStepId);
-        onPrevious && onPrevious();
+        if (onPrevious) {
+            onPrevious().then(() => {
+                if (previousStepId >= 0) {
+                    this.modifyButtonStates(previousStepId);
+                }
+            });
+        } else {
+            this.modifyButtonStates(previousStepId);
+        }
     }
 
     // Close the wizard on finish
@@ -333,8 +353,13 @@ export class Wizard extends React.PureComponent<WizardProps> {
         }
 
         if (finishWizard) {
-            currenstStep.onStepSubmit && currenstStep.onStepSubmit();
-            onFinish && onFinish();
+            if (currenstStep.onStepSubmit) {
+                currenstStep.onStepSubmit().then(() => {
+                    onFinish && onFinish();
+                });
+            } else {
+                onFinish && onFinish();
+            }
             if (!isInline) {
                 this.close();
             }
