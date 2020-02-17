@@ -207,6 +207,7 @@ storiesOf("DataGrid", module)
                 rows={expandableRows}
                 footer={defaultFooter}
                 rowType={GridRowType.EXPANDABLE}
+                showContentSaperator={true}
             />
         </div>
     ))

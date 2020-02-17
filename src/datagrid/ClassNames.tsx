@@ -78,4 +78,5 @@ export class ClassNames {
     public static SWITCH_HEADER: string = "switch-header";
     public static CLR_CHECKBOX_WRAPPER: string = "clr-checkbox-wrapper";
     public static SWITCH_CONTENT: string = "switch-content list-unstyled";
+    public static CONTENT_SAPERATOR: any = {borderTop: "1px solid #CCC"};
 }

@@ -54,6 +54,7 @@ type DataGridProps = {
     itemText?: string;
     pagination?: DataGridPaginationProps;
     dataqa?: string;
+    showContentSaperator?: boolean;
 };
 
 /**
@@ -790,7 +791,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // function to build datagrid rows
     private buildDataGridRow(row: DataGridRow, index: number): React.ReactElement {
-        const {selectionType, rowType} = this.props;
+        const {selectionType, rowType, showContentSaperator} = this.props;
         const {rowID, rowData, className, style, isSelected, isExpanded, expandableContent} = row;
         return (
             <div
@@ -830,7 +831,10 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                         </div>
                         {/* //Insert Expandable item view */}
                         {rowType && rowType === GridRowType.EXPANDABLE && expandableContent && isExpanded && (
-                            <div className={ClassNames.DATAGRID_ROW_FLEX}>
+                            <div
+                                className={ClassNames.DATAGRID_ROW_FLEX}
+                                style={showContentSaperator ? ClassNames.CONTENT_SAPERATOR : {}}
+                            >
                                 <div className={ClassNames.DATAGRID_EXPANDABLE_CARET} />
                                 {expandableContent}
                             </div>
