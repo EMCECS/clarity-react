@@ -290,6 +290,8 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
             pagination.lastItem = lastItem;
             pagination.currentPage = currentPage;
             pagination.totalItems = totalItems;
+
+            this.pageIndexRef.current!.value = currentPage.toString();
         }
 
         this.setState({
@@ -920,7 +922,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                 <input
                     className={ClassNames.PAGINATION_CURRENT}
                     size={2}
-                    defaultValue={this.state.pagination!.currentPage.toString()}
+                    defaultValue={currentPage.toString()}
                     type="text"
                     ref={this.pageIndexRef}
                     aria-label="Current Page"
