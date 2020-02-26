@@ -101,6 +101,7 @@ type WizardProps = {
     previousButtonClassName?: string;
     nextButtonText?: string;
     onNext?: () => Promise<any>;
+    onNavClick?: Function;
     nextButtonClassName?: string;
     finishButtonText?: string;
     onFinish?: Function;
@@ -407,6 +408,8 @@ export class Wizard extends React.PureComponent<WizardProps> {
     }
 
     navigationClick(stepId: number) {
+        const {onNavClick} = this.props;
+        onNavClick && onNavClick(stepId);
         this.modifyButtonStates(stepId);
     }
 
