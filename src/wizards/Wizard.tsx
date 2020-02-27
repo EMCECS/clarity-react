@@ -53,6 +53,7 @@ type WizardStepNavDetails = {
     stepNavIcon?: string;
     stepNavTitle?: string;
     stepNavChildren?: React.ReactNode;
+    onNavClick?: () => Promise<any>;
 };
 
 /**
@@ -101,7 +102,6 @@ type WizardProps = {
     previousButtonClassName?: string;
     nextButtonText?: string;
     onNext?: () => Promise<any>;
-    onNavClick?: Function;
     nextButtonClassName?: string;
     finishButtonText?: string;
     onFinish?: Function;
@@ -407,10 +407,14 @@ export class Wizard extends React.PureComponent<WizardProps> {
         }
     }
 
-    navigationClick(stepId: number) {
-        const {onNavClick} = this.props;
-        onNavClick && onNavClick(stepId);
-        this.modifyButtonStates(stepId);
+    navigationClick(step: WizardStep) {
+        if (step && step.customStepNav && step.customStepNav.onNavClick) {
+            step.customStepNav.onNavClick().then(() => {
+                this.modifyButtonStates(step.stepId);
+            });
+        } else {
+            this.modifyButtonStates(step.stepId);
+        }
     }
 
     private getStepNavClasses(stepId: number) {
@@ -564,7 +568,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
                                         disabled={this.state.allSteps[step.stepId].disableNav}
                                         link={true}
                                         className="clr-wizard-stepnav-link"
-                                        onClick={this.navigationClick.bind(this, step.stepId)}
+                                        onClick={this.navigationClick.bind(this, step)}
                                         icon={this.buildStepIcon(step)}
                                     >
                                         &nbsp;

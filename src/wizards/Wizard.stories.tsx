@@ -29,6 +29,14 @@ const wizardRefSync = React.createRef<Wizard>();
 // Refrence to call close methods of wizard
 const wizardRefClose = React.createRef<Wizard>();
 
+// Promise Function to call on left pane navigation link click
+const handleNavClick = () => {
+    return new Promise((resolve, reject) => {
+        alert("Power Navigation clicked");
+        resolve();
+    });
+};
+
 const SingleStep = [
     {
         stepName: "page 1",
@@ -78,7 +86,11 @@ const stepsNavIcon = [
         stepName: "Power",
         stepId: 2,
         stepComponent: <p> Power </p>,
-        customStepNav: {stepNavIcon: "power", stepNavChildren: <Badge status={BadgeStatus.BADGE_DANGER}>15</Badge>},
+        customStepNav: {
+            stepNavIcon: "power",
+            stepNavChildren: <Badge status={BadgeStatus.BADGE_DANGER}>15</Badge>,
+            onNavClick: handleNavClick,
+        },
     },
 ];
 
