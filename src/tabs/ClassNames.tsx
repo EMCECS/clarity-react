@@ -4,5 +4,4 @@ export class ClassNames {
     public static VERTICALTAB: string = "tabs-vertical";
     public static TABACTIVE: string = "btn btn-link nav-link active";
     public static TABINACTIVE: string = "btn btn-link nav-link";
-    static DROPDOWN_BTN: any;
 }

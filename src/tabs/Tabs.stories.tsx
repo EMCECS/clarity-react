@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2018 Dell Inc., or its subsidiaries. All Rights Reserved.
+ * Copyright (c) 2020 Dell Inc., or its subsidiaries. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,46 +14,46 @@ import {Tab, TabOrientation, TabType} from ".";
 
 const tabsData = [
     {
-        tabName: "Dashboard",
-        disableTab: false,
-        tabComponent: <div>Content for Dashboard tab.</div>,
+        name: "Dashboard",
+        isDisabled: false,
+        component: <div>Content for Dashboard tab.</div>,
     },
     {
-        tabName: "Management",
-        disableTab: false,
-        tabComponent: <div>Content for Management tab.</div>,
+        name: "Management",
+        isDisabled: false,
+        component: <div>Content for Management tab.</div>,
     },
     {
-        tabName: "Cloud",
-        disableTab: false,
-        tabComponent: <div>Content for Cloud tab.</div>,
+        name: "Cloud",
+        isDisabled: false,
+        component: <div>Content for Cloud tab.</div>,
     },
     {
-        tabName: "Infrastructure",
-        disableTab: false,
-        tabComponent: <div>Content for Infrastructure tab.</div>,
+        name: "Infrastructure",
+        isDisabled: false,
+        component: <div>Content for Infrastructure tab.</div>,
     },
 ];
 const staticTabsData = [
     {
-        tabName: "Dashboard",
-        disableTab: false,
-        tabComponent: <div>Content for Dashboard tab.</div>,
+        name: "Dashboard",
+        isDisabled: false,
+        component: <div>Content for Dashboard tab.</div>,
     },
     {
-        tabName: "Management",
-        disableTab: false,
-        tabComponent: <div>Content for Management tab.</div>,
+        name: "Management",
+        isDisabled: false,
+        component: <div>Content for Management tab.</div>,
     },
     {
-        tabName: "Cloud",
-        disableTab: true,
-        tabComponent: <div>Content for Cloud tab.</div>,
+        name: "Cloud",
+        isDisabled: true,
+        component: <div>Content for Cloud tab.</div>,
     },
     {
-        tabName: "Infrastructure",
-        disableTab: true,
-        tabComponent: <div>Content for Infrastructure tab.</div>,
+        name: "Infrastructure",
+        isDisabled: true,
+        component: <div>Content for Infrastructure tab.</div>,
     },
 ];
 
@@ -68,5 +68,10 @@ storiesOf("Tab", module)
         <Tab tabs={staticTabsData} tabOrientation={TabOrientation.HORIZONTAL} tabType={TabType.STATIC} />
     ))
     .add("Tab Overflow", () => (
-        <Tab tabs={tabsData} tabOrientation={TabOrientation.HORIZONTAL} tabType={TabType.OVERFLOW} overflowPivot={2} />
+        <Tab
+            tabs={tabsData}
+            tabOrientation={TabOrientation.HORIZONTAL}
+            tabType={TabType.SIMPLE}
+            overflowTabsFrom={"Cloud"}
+        />
     ));

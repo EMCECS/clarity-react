@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2018 Dell Inc., or its subsidiaries. All Rights Reserved.
+ * Copyright (c) 2020 Dell Inc., or its subsidiaries. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,29 +16,28 @@ import {Dropdown, DropdownMenu, DropdownItem, MenuItemType} from "../forms/dropd
 /**
  * state for tabs
  * @param {tabs} List of all Tabs
- * @param {tabComponent} currently selected tab's component
- * @param {overflowTab} overflow tab button
+ * @param {component} currently selected tab's component
+ * @param {overflowTab} overflow tab button. optional param activates only when overflow prop set.
  */
 type TabState = {
     tabs: TabPane[];
-    tabComponent: React.ReactElement;
+    component: React.ReactElement;
     overflowTab?: TabPane;
 };
 
 /**
  * props for tabs
  * @param {index} index of tab in array
- * @param {tabName} name or title of tab
- * @param {tabComponent} React element loaded on tab selection
- * @param {isTabSelected} true if tab is selected
- * @param {disableTab} true if tab is disabled
+ * @param {name} name or title of tab
+ * @param {component} React element loaded on tab selection
+ * @param {isSelected} true if tab is selected
+ * @param {isDisabled} true if tab is disabled
  */
 type TabPane = {
-    index?: number;
-    tabName: string;
-    tabComponent: React.ReactElement;
-    isTabSelected?: boolean;
-    disableTab?: boolean;
+    name: string;
+    component: React.ReactElement;
+    isSelected?: boolean;
+    isDisabled?: boolean;
 };
 
 /**
@@ -53,14 +52,12 @@ export enum TabOrientation {
 
 /**
  * Tab Types
- * @param {STATIC} User cannot switch between tabs in this static
- * @param {SIMPLE} simple tabs user can switch between tabs
- * @param {OVERFLOW} overflow is configurable so you can assign tabs to the dropdown menu below ellipses.
+ * @param {STATIC} tabs are allowed to be disable enabled confitionally in this type.
+ * @param {SIMPLE} simple tabs user can switch between tabs, tabs are always enabled.
  */
 export enum TabType {
     STATIC = "static",
     SIMPLE = "simple",
-    OVERFLOW = "overflow",
 }
 
 /**
@@ -68,15 +65,15 @@ export enum TabType {
  * @param {tabs} List of all Tabs
  * @param {tabOrientation} orientation of tabs
  * @param {tabType} type of tabs
- * @param {selectedTabIndex} which tab to is selected to show first
- * @param {overflowPivot} after how many tab remaining to put in overflow menu
+ * @param {selectedTabName} which tab is selected to show first.optional prop, if set shows given tab explicitly selected
+ * @param {overflowTabsFrom} name of tab from which tabs added to overflow menu. optional prop, if set activates overflow tabs
  */
 type TabProp = {
     tabs: TabPane[];
     tabOrientation: TabOrientation;
     tabType: TabType;
-    selectedTabIndex?: number;
-    overflowPivot?: number;
+    selectedTabName?: string;
+    overflowTabsFrom?: string;
 };
 
 /**
@@ -85,32 +82,37 @@ type TabProp = {
 export class Tab extends React.PureComponent<TabProp, TabState> {
     constructor(props: TabProp) {
         super(props);
-        this.initializeTabs(this.props.tabs);
+        this.initializeTabs();
     }
 
     //Initialize tabs
-    initializeTabs = (tabs: TabPane[]) => {
+    initializeTabs = () => {
         // set index in array and selected tab
-        const {tabType, selectedTabIndex} = this.props;
-        tabs.map((tab: TabPane, index: number) => {
-            tab.index = index;
-            index === (selectedTabIndex && selectedTabIndex <= tabs.length ? selectedTabIndex : 0)
-                ? (tab.isTabSelected = true)
-                : (tab.isTabSelected = false);
-            tabType == TabType.SIMPLE
-                ? (tab.disableTab = false)
-                : tab.disableTab
-                ? (tab.disableTab = true)
-                : (tab.disableTab = false);
+        const {tabs, tabType, selectedTabName} = this.props;
+
+        //set first tab as selected by default
+        tabs[0].isSelected = true;
+        let initialVisibleTabComponent = tabs[0].component;
+
+        tabs.map((tab: TabPane) => {
+            //if initial selected tab name is given by user set it visible first
+            if (tab.name === selectedTabName) {
+                tab.isSelected = true;
+                initialVisibleTabComponent = tab.component;
+                tabs[0].isSelected = false;
+            }
+
+            //disabled tabs work only for STATIC Type
+            tabType === TabType.STATIC && tab.isDisabled ? (tab.isDisabled = true) : (tab.isDisabled = false);
         });
         this.state = {
             tabs: [...tabs],
-            tabComponent: tabs[selectedTabIndex && selectedTabIndex <= tabs.length ? selectedTabIndex : 0].tabComponent,
+            component: initialVisibleTabComponent,
             overflowTab: {
-                tabName: "overflow",
-                tabComponent: <div />,
-                isTabSelected: false,
-                disableTab: false,
+                name: "overflow",
+                component: <div />,
+                isSelected: false,
+                isDisabled: false,
             },
         };
     };
@@ -120,22 +122,21 @@ export class Tab extends React.PureComponent<TabProp, TabState> {
         const {tabs} = this.state;
 
         tabs.map((tab: TabPane) => {
-            clickedTab.index === tab.index ? (tab.isTabSelected = true) : (tab.isTabSelected = false);
+            clickedTab.name === tab.name ? (tab.isSelected = true) : (tab.isSelected = false);
         });
         this.setState({
             tabs: [...tabs],
-            tabComponent: clickedTab.tabComponent,
+            component: clickedTab.component,
         });
     };
 
     //Render Tab Button
     private renderTab = (tab: TabPane) => {
-        let className;
-        tab.isTabSelected ? (className = ClassNames.TABACTIVE) : (className = ClassNames.TABINACTIVE);
+        const className = tab.isSelected ? ClassNames.TABACTIVE : ClassNames.TABINACTIVE;
         return (
             <li className={ClassNames.TABITEM}>
-                <Button className={className} disabled={tab.disableTab} onClick={evt => this.tabClicked(evt, tab)}>
-                    {tab.tabName}
+                <Button className={className} disabled={tab.isDisabled} onClick={evt => this.tabClicked(evt, tab)}>
+                    {tab.name}
                 </Button>
             </li>
         );
@@ -143,15 +144,20 @@ export class Tab extends React.PureComponent<TabProp, TabState> {
 
     //Render Tab bar
     private renderTabList = (tabs: TabPane[]) => {
-        const {tabType, overflowPivot} = this.props;
+        const {tabType, tabOrientation, overflowTabsFrom} = this.props;
+        let isOverflowRendered = false;
         return (
             <ul className={ClassNames.TABMAIN}>
                 {tabs.map((tab: TabPane, index: number) => {
-                    if (tabType === TabType.OVERFLOW && overflowPivot && index < overflowPivot)
+                    //once overflow tab rendered push all tans in overflow list
+                    if (tabOrientation === TabOrientation.HORIZONTAL && tab.name === overflowTabsFrom) {
+                        isOverflowRendered = true;
+                        return this.renderOverflowTab(tabs.slice(index, tabs.length));
+                    }
+                    //Render normal tab unless overflow tab rendered
+                    if (!isOverflowRendered) {
                         return this.renderTab(tab);
-                    if (tabType === TabType.OVERFLOW && overflowPivot && index === overflowPivot)
-                        return this.renderOverflowTab(tabs.slice(overflowPivot, tabs.length));
-                    if (tabType === TabType.SIMPLE || tabType === TabType.STATIC) return this.renderTab(tab);
+                    }
                 })}
             </ul>
         );
@@ -162,7 +168,7 @@ export class Tab extends React.PureComponent<TabProp, TabState> {
         const {overflowTab} = this.state;
         let className: string | undefined;
         if (overflowTab) {
-            overflowTab.isTabSelected ? (className = ClassNames.TABACTIVE) : (className = ClassNames.TABINACTIVE);
+            overflowTab.isSelected ? (className = ClassNames.TABACTIVE) : (className = ClassNames.TABINACTIVE);
             return (
                 <li className={ClassNames.TABITEM}>
                     <Dropdown
@@ -175,9 +181,9 @@ export class Tab extends React.PureComponent<TabProp, TabState> {
                                     <DropdownItem
                                         menuItemType={MenuItemType.ITEM}
                                         isHeaderChild={true}
-                                        label={tab.tabName}
+                                        label={tab.name}
                                         onClick={evt => this.tabClicked(evt, tab)}
-                                        isDisabled={tab.disableTab}
+                                        isDisabled={tab.isDisabled}
                                     />
                                 );
                             })}
@@ -189,13 +195,13 @@ export class Tab extends React.PureComponent<TabProp, TabState> {
     };
 
     render() {
-        const {tabs, tabComponent} = this.state;
+        const {tabs, component} = this.state;
         const {tabOrientation} = this.props;
         return (
             <div className={tabOrientation === TabOrientation.VERTICAL ? ClassNames.VERTICALTAB : ""}>
                 {this.renderTabList(tabs)}
 
-                {tabComponent}
+                {component}
             </div>
         );
     }
