@@ -291,7 +291,9 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
             pagination.currentPage = currentPage;
             pagination.totalItems = totalItems;
 
-            this.pageIndexRef.current!.value = currentPage.toString();
+            if (this.pageIndexRef.current) {
+                this.pageIndexRef.current.value = currentPage.toString();
+            }
         }
 
         this.setState({
