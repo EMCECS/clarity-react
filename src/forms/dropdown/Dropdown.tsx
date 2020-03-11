@@ -20,25 +20,39 @@ import {STOP_PROPAGATION} from ".";
 
 /**
  * DropDown Props
- * @param {label} label of checkbox
+ * @param {label} label of dropdown
  * @param {isNested} property to nest dropdown
  * @param {className} css property
  * @param {button} dropdown button
  * @param {showCaret} caret property
+ * @param {direction} direction to open a menu
  * @param {dataqa} quality engineering testing field
  */
 export type DropdownProps = {
-    label?: string;
+    label?: any;
     isNested?: boolean;
     className?: string;
     button?: ButtonProps;
     showCaret?: boolean;
+    direction?: Direction;
     dataqa?: string;
 } & DropdownMenuProps;
 
 const initialState = {
     isOpen: false,
 };
+
+// Open the menu in the respective direction.
+export enum Direction {
+    BOTTOM_LEFT = "bottom-left",
+    BOTTOM_RIGHT = "bottom-right",
+    TOP_LEFT = "top-left",
+    TOP_RIGHT = "top-right",
+    LEFT_BOTTOM = "left-bottom",
+    LEFT_TOP = "left-top",
+    RIGHT_TOP = "right-top",
+    RIGHT_BOTTOM = "right-bottom",
+}
 
 type DropdownState = Readonly<typeof initialState>;
 
@@ -91,11 +105,12 @@ export class Dropdown extends React.PureComponent<DropdownProps> {
     };
 
     getClassListMain(): (string | undefined)[] {
-        const {className, _level} = this.props;
+        const {className, _level, direction} = this.props;
         const {isOpen} = this.state;
         return [
             _level === 0 && className === "btn-group-overflow" ? undefined : ClassNames.DROPDOWN, // prettier hack
             isOpen ? ClassNames.OPEN : undefined,
+            direction && direction,
             className ? className : undefined,
         ];
     }
@@ -128,7 +143,6 @@ export class Dropdown extends React.PureComponent<DropdownProps> {
                     _level: _level + 1,
                 });
             }
-            console.log(child);
             return child;
         });
     }

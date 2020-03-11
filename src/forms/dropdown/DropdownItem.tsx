@@ -16,10 +16,12 @@ import {Button} from "../button";
 export type DropdownItemProps = {
     menuItemType: MenuItemType;
     label?: string;
+    value?: string;
     key?: string;
     isDisabled?: boolean;
     isExpandable?: boolean;
     isHeaderChild?: boolean;
+    active?: boolean;
     onClickEvent?: Function;
     onClick?: (evt: React.MouseEvent<HTMLElement>) => void;
 };
@@ -30,15 +32,7 @@ export enum MenuItemType {
     ITEM,
 }
 
-const initialState = {
-    isActive: false,
-};
-
-type DropdownItemState = Readonly<typeof initialState>;
-
-export class DropdownItem extends React.PureComponent<DropdownItemProps, DropdownItemState> {
-    readonly state: DropdownItemState = initialState;
-
+export class DropdownItem extends React.PureComponent<DropdownItemProps> {
     static defaultProps = {
         isDisabled: false,
         isExpandable: false,
@@ -48,8 +42,8 @@ export class DropdownItem extends React.PureComponent<DropdownItemProps, Dropdow
     };
 
     getClassList(): (string | undefined)[] {
-        const {menuItemType, isExpandable, isHeaderChild} = this.props;
-        const {isActive} = this.state;
+        const {menuItemType, isExpandable, isHeaderChild, active} = this.props;
+
         let result: string[] = [];
         switch (menuItemType) {
             case MenuItemType.HEADER:
@@ -63,7 +57,7 @@ export class DropdownItem extends React.PureComponent<DropdownItemProps, Dropdow
             case MenuItemType.ITEM:
                 result.push(ClassNames.DROPDOWN_ITEM);
                 isExpandable && result.push(ClassNames.EXPANDABLE);
-                isActive && result.push("active");
+                active && result.push("active");
                 break;
             case MenuItemType.DIVIDER:
                 result.push(ClassNames.DROPDOWN_DIVIDER);
@@ -79,6 +73,7 @@ export class DropdownItem extends React.PureComponent<DropdownItemProps, Dropdow
             children,
             onClick,
             label,
+            value,
         } = this.props;
         const classList = this.getClassList();
         switch (menuItemType) {
@@ -93,7 +88,7 @@ export class DropdownItem extends React.PureComponent<DropdownItemProps, Dropdow
                 return <div className={classNames(classList)} />;
             case MenuItemType.ITEM:
                 return (
-                    <Button className={classNames(classList)} disabled={isDisabled} onClick={onClick}>
+                    <Button value={value} className={classNames(classList)} disabled={isDisabled} onClick={onClick}>
                         {label}
                         {children}
                     </Button>

@@ -27,7 +27,7 @@ storiesOf("Dropdown", module)
                         isDisabled={true}
                     />
                     <DropdownItem menuItemType={MenuItemType.DIVIDER} />
-                    <DropdownItem onClick={action("onClick - Lorem")} label="Lorem" />
+                    <DropdownItem onClick={action("onClick - Lorem")} label="Lorem" active={true} />
                     <Dropdown label="Lorem ipsum." isNested={true}>
                         <DropdownMenu>
                             <DropdownItem onClick={action("onClick - Foo.")} label="Foo." />
