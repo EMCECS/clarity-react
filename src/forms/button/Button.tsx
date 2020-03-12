@@ -30,6 +30,7 @@ export type ButtonProps = {
     defaultBtn?: boolean;
     show?: boolean;
     type?: string;
+    value?: string;
     dataqa?: string;
 };
 
@@ -71,7 +72,7 @@ export class Button extends React.PureComponent<ButtonProps> {
     }
 
     render() {
-        const {disabled, children, onClick, onSubmit, icon, show, type, dataqa} = this.props;
+        const {disabled, children, onClick, onSubmit, icon, show, type, value, dataqa} = this.props;
         return show ? (
             <button
                 disabled={disabled}
@@ -80,6 +81,7 @@ export class Button extends React.PureComponent<ButtonProps> {
                 onClick={onClick}
                 onSubmit={onSubmit}
                 type={type}
+                value={value}
             >
                 {icon && <Icon {...icon} />}
                 {children}
