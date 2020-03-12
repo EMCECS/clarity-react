@@ -21,7 +21,7 @@ export type DropdownItemProps = {
     isDisabled?: boolean;
     isExpandable?: boolean;
     isHeaderChild?: boolean;
-    active?: boolean;
+    isActive?: boolean;
     onClickEvent?: Function;
     onClick?: (evt: React.MouseEvent<HTMLElement>) => void;
 };
@@ -42,7 +42,7 @@ export class DropdownItem extends React.PureComponent<DropdownItemProps> {
     };
 
     getClassList(): (string | undefined)[] {
-        const {menuItemType, isExpandable, isHeaderChild, active} = this.props;
+        const {menuItemType, isExpandable, isHeaderChild, isActive} = this.props;
 
         let result: string[] = [];
         switch (menuItemType) {
@@ -57,7 +57,7 @@ export class DropdownItem extends React.PureComponent<DropdownItemProps> {
             case MenuItemType.ITEM:
                 result.push(ClassNames.DROPDOWN_ITEM);
                 isExpandable && result.push(ClassNames.EXPANDABLE);
-                active && result.push("active");
+                isActive && result.push("active");
                 break;
             case MenuItemType.DIVIDER:
                 result.push(ClassNames.DROPDOWN_DIVIDER);
