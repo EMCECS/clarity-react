@@ -9,7 +9,7 @@
  */
 
 import * as React from "react";
-import {ClassNames} from "./ClassNames";
+import {ClassNames, Styles} from "./ClassNames";
 import {classNames, allTrueOnKey} from "../utils";
 import {CheckBox} from "../forms/checkbox";
 import {RadioButton} from "../forms/radio";
@@ -144,6 +144,7 @@ export type DataGridSort = {
  * @param {totalItems} Total number of items present in the datagrid, after the filters have been applied
  * @param {lastPage} Index of the last page for the current data
  * @param {getPage} custom function to get page data for given page number
+ * @param {compactFooter} if true will render compact pagination footer
  */
 type DataGridPaginationProps = {
     className?: string;
@@ -152,6 +153,7 @@ type DataGridPaginationProps = {
     pageSize?: number;
     pageSizes?: number[];
     totalItems: number;
+    compactFooter?: boolean;
     getPageData?: (pageIndex: number, pageSize: number) => Promise<DataGridRow[]>;
 };
 
@@ -211,6 +213,7 @@ type DataGridPaginationState = {
     lastItem: number;
     totalPages: number;
     pageSizes?: number[];
+    compactFooter?: boolean;
 };
 
 /**
@@ -238,6 +241,10 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                       firstItem: 0,
                       lastItem: 0,
                       totalPages: 1,
+                      compactFooter:
+                          this.props.pagination.compactFooter !== undefined
+                              ? this.props.pagination.compactFooter
+                              : false,
                   }
                 : undefined,
     };
@@ -277,7 +284,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
         // update pagination footer
         if (pagination && totalItems !== undefined) {
-            const {pageSize} = pagination;
+            const {pageSize, compactFooter} = pagination;
 
             pagination.totalPages = this.getTotalPages(totalItems, pageSize);
 
@@ -294,6 +301,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
             if (this.pageIndexRef.current) {
                 this.pageIndexRef.current.value = currentPage.toString();
             }
+            pagination.compactFooter = compactFooter !== undefined ? compactFooter : false;
         }
 
         this.setState({
@@ -343,13 +351,14 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     private setInitalStateForPagination() {
         let {pagination} = this.state;
         if (pagination) {
-            const {currentPage, pageSize, totalItems} = pagination;
+            const {currentPage, pageSize, totalItems, compactFooter} = pagination;
             const firstItem = this.getFirstItemIndex(currentPage, pageSize);
             const lastItem = this.getLastItemIndex(pageSize, totalItems, firstItem);
 
             pagination.totalPages = this.getTotalPages(totalItems, pageSize);
             pagination.firstItem = firstItem;
             pagination.lastItem = lastItem;
+            pagination.compactFooter = compactFooter !== undefined ? compactFooter : false;
             this.setState({pagination: pagination});
         }
     }
@@ -430,7 +439,9 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
             }
 
             //Set page index in input box
-            this.pageIndexRef.current!.value = pageIndex.toString();
+            if (this.pageIndexRef.current) {
+                this.pageIndexRef.current.value = pageIndex.toString();
+            }
 
             if (getPageData) {
                 var firstItem = this.getFirstItemIndex(pageIndex, pageSize);
@@ -902,6 +913,29 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         );
     }
 
+    private buildCompactPageButtons(): React.ReactElement {
+        const {currentPage, totalPages} = this.state.pagination!;
+        return (
+            <div className={classNames([ClassNames.PAGINATION_LIST])}>
+                <Button
+                    key="left-compact"
+                    className={ClassNames.PAGINATION_PREVIOUS}
+                    icon={{shape: "angle left"}}
+                    disabled={currentPage == 1 ? true : false}
+                    onClick={this.gotoPreviousPage}
+                />
+                <span>{currentPage}</span>
+                <Button
+                    key="right-compact"
+                    className={ClassNames.PAGINATION_NEXT}
+                    icon={{shape: "angle right"}}
+                    disabled={currentPage === totalPages ? true : false}
+                    onClick={this.gotoNextPage}
+                />
+            </div>
+        );
+    }
+
     // Function to build Next, previous, last and first page buttons
     private buildPageButtons(): React.ReactElement {
         const {currentPage, totalPages} = this.state.pagination!;
@@ -951,13 +985,15 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // function to build datagrid pagination footer
     private buildDataGridPagination(): React.ReactElement {
-        const {className, style} = this.props.pagination!;
+        const {className, style, compactFooter} = this.props.pagination!;
         const {itemText} = this.state;
         let {totalItems, firstItem, lastItem, pageSize, pageSizes} = this.state.pagination!;
         if (totalItems === 0) {
             firstItem = lastItem = 0;
         }
-        const paginationLabel = firstItem + "-" + lastItem + " of " + totalItems + " " + itemText;
+        const paginationLabel = compactFooter
+            ? firstItem + "-" + lastItem + " / " + totalItems
+            : firstItem + "-" + lastItem + " of " + totalItems + " " + itemText;
 
         return (
             <div
@@ -965,11 +1001,17 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                 style={style}
                 className={classNames([ClassNames.DATAGRID_PAGINATION, className])}
             >
-                {pageSizes && totalItems >= pageSize && this.buildPageSizesSelect()}
+                {!compactFooter && pageSizes && totalItems >= pageSize && this.buildPageSizesSelect()}
 
-                <div className={classNames([ClassNames.PAGINATION_DESC])}>{paginationLabel}</div>
+                {compactFooter ? (
+                    <div className={ClassNames.DATAGRID_NG_STAR_INSERTED} style={Styles.PAGINATION_DESCRIPTION_COMPACT}>
+                        {paginationLabel}
+                    </div>
+                ) : (
+                    <div className={classNames([ClassNames.PAGINATION_DESC])}>{paginationLabel}</div>
+                )}
 
-                {totalItems >= pageSize && this.buildPageButtons()}
+                {totalItems >= pageSize && compactFooter ? this.buildCompactPageButtons() : this.buildPageButtons()}
             </div>
         );
     }

@@ -24,6 +24,7 @@ import {
     filterFunction,
     sortFunction,
     paginationDetails,
+    paginationDetailsWithCompactFooter,
     paginationRows,
     pageFilterFunction,
     hideableColumns,
@@ -237,6 +238,17 @@ storiesOf("DataGrid", module)
                 columns={normalColumns}
                 rows={paginationRows.slice(0, 5)}
                 pagination={paginationDetails}
+                itemText={"Users"}
+                footer={{showFooter: true}}
+            />
+        </div>
+    ))
+    .add("Grid with pagination and compact footer", () => (
+        <div style={{width: "40%"}}>
+            <DataGrid
+                columns={normalColumns}
+                rows={paginationRows.slice(0, 5)}
+                pagination={paginationDetailsWithCompactFooter}
                 itemText={"Users"}
                 footer={{showFooter: true}}
             />
