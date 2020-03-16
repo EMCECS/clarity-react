@@ -370,6 +370,14 @@ export const paginationDetails = {
     pageSizes: [5, 10],
 };
 
+export const paginationDetailsWithCompactFooter = {
+    totalItems: paginationRows.length,
+    getPageData: getPageData,
+    pageSize: 5,
+    pageSizes: [5, 10],
+    compactFooter: true,
+};
+
 export const pageFilterFunction = (
     rows: DataGridRow[],
     columnValue: string,

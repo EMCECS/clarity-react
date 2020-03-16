@@ -79,3 +79,11 @@ export class ClassNames {
     public static CLR_CHECKBOX_WRAPPER: string = "clr-checkbox-wrapper";
     public static SWITCH_CONTENT: string = "switch-content list-unstyled";
 }
+
+export class Styles {
+    public static PAGINATION_DESCRIPTION_COMPACT = {
+        textAlign: "left" as "left",
+        webkitBoxFlex: 1,
+        flex: 1,
+    };
+}
