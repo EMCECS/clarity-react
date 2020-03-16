@@ -43,6 +43,7 @@ type SelectProps = {
     showDefaultSelect?: boolean;
     name?: string;
     dataqa?: string;
+    disabled?: boolean;
 };
 
 export class Select extends React.PureComponent<SelectProps> {
@@ -60,6 +61,7 @@ export class Select extends React.PureComponent<SelectProps> {
             name,
             required,
             id,
+            disabled,
         } = this.props;
 
         return (
@@ -72,6 +74,7 @@ export class Select extends React.PureComponent<SelectProps> {
                 onBlur={onBlur}
                 className={classNames([className])}
                 style={{width: this.getSelectWidth()}}
+                disabled={disabled}
             >
                 {!showDefaultSelect && (
                     <option selected disabled hidden className="hideOption" value="" style={{display: "none"}} />
