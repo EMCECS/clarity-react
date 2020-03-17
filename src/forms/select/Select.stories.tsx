@@ -91,4 +91,13 @@ storiesOf("Select", module)
                 <SelectOption value="3">Three</SelectOption>
             </Select>
         </div>
+    ))
+    .add("Disabled select", () => (
+        <div>
+            <Select onChange={action("Disabled select - change")} disabled={true}>
+                <SelectOption value="1">One</SelectOption>
+                <SelectOption value="2">Two</SelectOption>
+                <SelectOption value="3">Three</SelectOption>
+            </Select>
+        </div>
     ));
