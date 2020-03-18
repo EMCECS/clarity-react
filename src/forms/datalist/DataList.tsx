@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2018 Dell Inc., or its subsidiaries. All Rights Reserved.
+ * Copyright (c) 2019 Dell Inc., or its subsidiaries. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ import {ClassNames} from "./ClassNames";
 type DataListOptionProps = {
     value?: string;
     selected?: boolean;
-    clasName?: string;
+    className?: string;
     style?: any;
 };
 
@@ -42,11 +42,16 @@ export const DataListOption: React.FunctionComponent<DataListOptionProps> = ({
     value,
     selected,
     children,
-    clasName,
+    className,
     style,
 }) => {
     return (
-        <option value={value} selected={selected} className={ClassNames.NG_STAR_INSERTED} style={style}>
+        <option
+            value={value}
+            selected={selected}
+            className={classNames([ClassNames.NG_STAR_INSERTED, className])}
+            style={style}
+        >
             {children}
         </option>
     );
