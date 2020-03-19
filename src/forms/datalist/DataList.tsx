@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2019 Dell Inc., or its subsidiaries. All Rights Reserved.
+ * Copyright (c) 2020 Dell Inc., or its subsidiaries. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,6 +68,7 @@ export const DataListOption: React.FunctionComponent<DataListOptionProps> = ({
  * @param {helperText} helper message for datalist
  * @param {onChange} function to handle onChange event
  * @param {onBlur} function to handle onBlur event
+ * @param {dataqa} quality engineering parameter
  * @param {style} CSS styles
  * @param {className} CSS classname
  **/
@@ -81,6 +82,7 @@ type DataListProps = {
     helperText?: string;
     onChange?: (evt: React.ChangeEvent<HTMLInputElement>) => void;
     onBlur?: (evt: React.FocusEvent<HTMLInputElement>) => void;
+    dataqa?: string;
     className?: string;
     style?: any;
 };
@@ -189,10 +191,11 @@ export class DataList extends React.PureComponent<DataListProps, DataListState> 
     }
 
     render() {
-        const {label, isError} = this.props;
+        const {label, isError, dataqa} = this.props;
 
         return (
             <div
+                data-qa={dataqa}
                 className={classNames([
                     ClassNames.NG_VALID,
                     ClassNames.CLR_FORM,
