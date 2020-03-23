@@ -58,6 +58,14 @@ export const DataListOption: React.FunctionComponent<DataListOptionProps> = ({
 };
 
 /**
+ * Enum for datalist autocomplete status
+ */
+export enum DataListAutoComplete {
+    ON = "on",
+    OFF = "off",
+}
+
+/**
  * Props for DataList:
  * @param {placeHolder} placeHolder for datalist
  * @param {label} label for datalist
@@ -71,6 +79,7 @@ export const DataListOption: React.FunctionComponent<DataListOptionProps> = ({
  * @param {dataqa} quality engineering parameter
  * @param {style} CSS styles
  * @param {className} CSS classname
+ * @param {autoComplete} if "off" disable browser autocomplete
  **/
 type DataListProps = {
     placeHolder?: string;
@@ -82,6 +91,7 @@ type DataListProps = {
     helperText?: string;
     onChange?: (evt: React.ChangeEvent<HTMLInputElement>) => void;
     onBlur?: (evt: React.FocusEvent<HTMLInputElement>) => void;
+    autoComplete?: DataListAutoComplete;
     dataqa?: string;
     className?: string;
     style?: any;
@@ -145,6 +155,7 @@ export class DataList extends React.PureComponent<DataListProps, DataListState> 
             style,
             children,
             onChange,
+            autoComplete,
         } = this.props;
 
         const {hasFocus} = this.state;
@@ -177,6 +188,8 @@ export class DataList extends React.PureComponent<DataListProps, DataListState> 
                                     ClassNames.NG_DIRTY,
                                 ])}
                                 aria-describedby="clr-form-control-3-helper"
+                                type="text"
+                                autoComplete={autoComplete ? autoComplete : DataListAutoComplete.OFF}
                             />
                             <datalist id={listId}>{children}</datalist>
                         </div>
