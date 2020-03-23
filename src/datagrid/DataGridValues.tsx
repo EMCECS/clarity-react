@@ -22,10 +22,10 @@ import {SortOrder, DataGridRow, DataGridFilterResult} from ".";
  * Data for Columns
  */
 export const normalColumns = [
-    {columnName: "User ID", style: {width: "96px"}},
-    {columnName: "Name", style: {width: "96px"}},
-    {columnName: "Creation Date", style: {width: "96px"}},
-    {columnName: "Favorite color", style: {width: "96px"}},
+    {columnName: "User ID"},
+    {columnName: "Name"},
+    {columnName: "Creation Date"},
+    {columnName: "Favorite color"},
 ];
 
 /**
@@ -207,14 +207,15 @@ export const sortFunction = (rows: DataGridRow[], sortOrder: SortOrder, columnNa
 export const sortColumns = [
     {
         columnName: "User ID",
-        style: {width: "96px"},
         sort: {defaultSortOrder: SortOrder.ASC, sortFunction: sortFunction},
     },
-    {columnName: "Name", style: {width: "96px"}, sort: {defaultSortOrder: SortOrder.NONE, sortFunction: sortFunction}},
-    {columnName: "Creation Date", style: {width: "96px"}},
+    {
+        columnName: "Name",
+        sort: {defaultSortOrder: SortOrder.NONE, sortFunction: sortFunction},
+    },
+    {columnName: "Creation Date"},
     {
         columnName: "Favorite color",
-        style: {width: "96px"},
         sort: {defaultSortOrder: SortOrder.ASC, sortFunction: sortFunction, isSorted: true},
     },
 ];
@@ -406,8 +407,8 @@ export const pageFilterFunction = (
 
 // Data for Hide/show columns
 export const hideableColumns = [
-    {columnName: "User ID", style: {width: "96px"}},
-    {columnName: "Name", style: {width: "96px"}},
-    {columnName: "Creation Date", style: {width: "96px"}, isVisible: false},
-    {columnName: "Favorite color", style: {width: "96px"}, isVisible: false},
+    {columnName: "User ID"},
+    {columnName: "Name"},
+    {columnName: "Creation Date", isVisible: false},
+    {columnName: "Favorite color", isVisible: false},
 ];

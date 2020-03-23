@@ -65,6 +65,7 @@ type DataGridProps = {
  * @param {style} CSS style
  * @param {filter} Filter component
  * @param {isVisible} if true column will be visible else hide it
+ * @param {width} Width of datagrid column the default width will be 100px
  */
 export type DataGridColumn = {
     columnName: string;
@@ -74,6 +75,7 @@ export type DataGridColumn = {
     style?: any;
     filter?: React.ReactNode;
     isVisible?: boolean;
+    width?: string;
 };
 
 /**
@@ -215,6 +217,9 @@ type DataGridPaginationState = {
     pageSizes?: number[];
     compactFooter?: boolean;
 };
+
+// Default width to datagrid column
+const DEFAULT_COLUMN_WIDTH = "100px";
 
 /**
  * DataGrid Componnet :
@@ -589,7 +594,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     // Get width of column
     private getColWidth(columnName: string) {
         const column = this.getColObject(columnName);
-        return column && column.style && column.style.width ? column.style.width : undefined;
+        return column && column.width ? column.width : DEFAULT_COLUMN_WIDTH;
     }
 
     // Check if column is visible
@@ -757,13 +762,13 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // Function to build datagrid colums
     private buildDataGridColumn(column: DataGridColumn, index: number): React.ReactElement {
-        const {columnName, columnID, className, style, sort, filter} = column;
+        const {columnName, columnID, className, style, sort, filter, width} = column;
         return (
             <div
                 role="columnheader"
                 className={classNames([ClassNames.DATAGRID_COLUMN, className])}
                 aria-sort="none"
-                style={{...style}}
+                style={{...style, width: width ? width : DEFAULT_COLUMN_WIDTH}}
                 key={"col-" + index}
             >
                 <div className={ClassNames.DATAGRID_COLUMN_FLEX}>
@@ -807,12 +812,21 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     private buildDataGridRow(row: DataGridRow, index: number): React.ReactElement {
         const {selectionType, rowType} = this.props;
         const {rowID, rowData, className, style, isSelected, isExpanded, expandableContent} = row;
+        let rowStyle = style;
+        if (index === 0) {
+            rowStyle = {...style, borderTop: "none"};
+        }
         return (
             <div
                 role="rowgroup"
-                className={classNames([ClassNames.DATAGRID_ROW, isSelected && ClassNames.DATAGRID_SELECTED, className])}
+                className={classNames([
+                    ClassNames.DATAGRID_ROW,
+                    ClassNames.DATAGRID_NG_STAR_INSERTED,
+                    isSelected && ClassNames.DATAGRID_SELECTED,
+                    className,
+                ])}
                 aria-owns={"clr-dg-row" + index}
-                style={style}
+                style={rowStyle}
                 key={"row-" + index}
             >
                 <div className={ClassNames.DATAGRID_ROW_MASTER} role="row" id="clr-dg-row1">
@@ -877,7 +891,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                     isColVisible !== undefined && !isColVisible && ClassNames.DATAGRID_HIDDEN_COLUMN,
                     className,
                 ])}
-                style={{width: width, ...style}}
+                style={{...style, width: width}}
             >
                 {cellData}
             </div>
