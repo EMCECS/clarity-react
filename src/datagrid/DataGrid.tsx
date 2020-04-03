@@ -412,14 +412,30 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         this.getPage(previousPage, pageSize);
     };
 
+    // Function to handle pageIndex change in input box on blur event
+    private handlePageChangeOnBlur = (evt: React.FocusEvent<HTMLInputElement>) => {
+        this.handlePageChange();
+    };
+
+    // Function to handle pageIndex change in input box on Enter ot Tab key press event
+    private handlePageChangeOnKeyDown = (evt: React.KeyboardEvent<HTMLInputElement>) => {
+        // Check for 'Enter' or 'tab' key
+        const keyCode = evt.keyCode;
+        if (keyCode == 13 || keyCode == 9) {
+            this.handlePageChange();
+        }
+    };
+
     // Function to handle pageIndex change in input box
-    private handlePageChange = (evt: React.FocusEvent<HTMLInputElement>) => {
+    private handlePageChange = () => {
         const {pageSize, currentPage} = this.state.pagination!;
-        const pageIndex = parseInt(evt.target.value);
-        if (isNaN(pageIndex)) {
-            this.pageIndexRef.current!.value = currentPage.toString();
-        } else {
-            this.getPage(pageIndex, pageSize);
+        const pageIndex = this.pageIndexRef.current && parseInt(this.pageIndexRef.current.value);
+        if (pageIndex) {
+            if (isNaN(pageIndex)) {
+                this.pageIndexRef.current!.value = currentPage.toString();
+            } else {
+                this.getPage(pageIndex, pageSize);
+            }
         }
     };
 
@@ -976,7 +992,8 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                     type="text"
                     ref={this.pageIndexRef}
                     aria-label="Current Page"
-                    onBlur={evt => this.handlePageChange(evt)}
+                    onBlur={evt => this.handlePageChangeOnBlur(evt)}
+                    onKeyDown={evt => this.handlePageChangeOnKeyDown(evt)}
                 />
                 &nbsp;/&nbsp;<span aria-label="Total Pages">{totalPages}</span>
                 <Button

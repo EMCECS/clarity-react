@@ -107,6 +107,7 @@ storiesOf("DataGrid", module)
                         style: {width: "96px"},
                         filter: (
                             <DataGridFilter
+                                placeholder={"Enter user ID"}
                                 onFilter={filterFunction}
                                 columnName={"User ID"}
                                 datagridRef={datagridFilterRef}

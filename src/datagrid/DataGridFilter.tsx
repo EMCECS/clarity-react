@@ -26,6 +26,7 @@ import {DataGridRow} from "./DataGrid";
  * @param {className} CSS classnames
  * @param {datagridRef} Refrence for DataGrid on which filter will gets apply. We need this to call method which will update datagird rows.
  * @param {columnName} columnName on which filter will apply
+ * @param {placeholder} placeholder for string filter input
  * @param {onFilter} Custom filter logic
  * @param {filterType} Type of filter string or custom
  * @param {customFilter} custom Filter component
@@ -39,6 +40,7 @@ export type DataGridFilterProps = {
     className?: string;
     datagridRef: any;
     columnName: string;
+    placeholder?: string;
     onFilter: (rows: DataGridRow[], columnValue: any, columnName: string) => Promise<DataGridFilterResult>;
     filterType?: FilterType;
     customFilter?: React.ReactNode;
@@ -183,7 +185,7 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
     private openFilter(): React.ReactElement {
         const {filterValue} = this;
         const {transformVal} = this.state;
-        const {style, className, filterType, customFilter} = this.props;
+        const {style, className, filterType, customFilter, placeholder} = this.props;
 
         return (
             <div>
@@ -219,6 +221,7 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
                             className={ClassNames.CLR_INPUT}
                             name="search"
                             type="text"
+                            placeholder={placeholder}
                             defaultValue={filterValue}
                             onChange={evt => {
                                 this.updateFilter(evt.target.value);
