@@ -635,19 +635,21 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     /* ##########  DataGrid DOM methods start  ############ */
     //funtion to render expandable icon cell
-    private buildExpandableCell(rowID: number, isExpanded: boolean): React.ReactElement {
+    private buildExpandableCell(rowID: number, isExpanded: boolean, expandableContent: any): React.ReactElement {
         return (
             <div className={ClassNames.DATAGRID_EXPANDABLE_CARET} role="gridcell" key={rowID}>
-                <Button
-                    key="expand"
-                    className={ClassNames.DATAGRID_EXPANDABLE_CARET_BUTTON}
-                    onClick={() => this.toggleExpand(rowID)}
-                    icon={{
-                        shape: "caret",
-                        className: ClassNames.DATAGRID_EXPANDABLE_CARET_ICON,
-                        dir: isExpanded ? Direction.DOWN : Direction.RIGHT,
-                    }}
-                />
+                {expandableContent && (
+                    <Button
+                        key={`${"expand-"} ${rowID}`}
+                        className={ClassNames.DATAGRID_EXPANDABLE_CARET_BUTTON}
+                        onClick={() => this.toggleExpand(rowID)}
+                        icon={{
+                            shape: "caret",
+                            className: ClassNames.DATAGRID_EXPANDABLE_CARET_ICON,
+                            dir: isExpanded ? Direction.DOWN : Direction.RIGHT,
+                        }}
+                    />
+                )}
             </div>
         );
     }
@@ -861,7 +863,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                                 )}
                             {rowType &&
                                 rowType === GridRowType.EXPANDABLE &&
-                                this.buildExpandableCell(rowID!, isExpanded!)}
+                                this.buildExpandableCell(rowID!, isExpanded!, expandableContent)}
                             {rowData &&
                                 rowData.map((cell: any, index: number) => {
                                     return this.buildDataGridCell(
