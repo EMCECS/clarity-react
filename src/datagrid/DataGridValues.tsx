@@ -297,6 +297,15 @@ export const expandableRows = [
         ],
         expandableContent: expandableContent,
     },
+    {
+        rowData: [
+            {columnName: "User ID", cellData: 345574},
+            {columnName: "Name", cellData: "Harry"},
+            {columnName: "Creation Date", cellData: "Jan 8, 2009"},
+            {columnName: "Favorite color", cellData: "Pink"},
+        ],
+        expandableContent: null,
+    },
 ];
 
 /**
