@@ -73,7 +73,7 @@ $ npm install
 Any run the "storybook" script:
 ```shell
 # Using yarn
-$ yarn run storyook
+$ yarn storyook
 
 # Using NPM
 $ npm run storybook
