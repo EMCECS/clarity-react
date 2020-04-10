@@ -49,6 +49,13 @@ export class ButtonGroup extends React.PureComponent<ButtonGroupProps> {
         if (defaultValue) this.state = {value: defaultValue};
     }
 
+    componentDidUpdate(prevProps: ButtonGroupProps) {
+        const {defaultValue} = this.props;
+        if (!(defaultValue === prevProps.defaultValue)) {
+            this.setState({value: defaultValue});
+        }
+    }
+
     private handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({value: evt.target.value});
         const {onChange} = this.props;
