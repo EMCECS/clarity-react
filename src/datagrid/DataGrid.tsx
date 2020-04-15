@@ -1044,7 +1044,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                     <div className={classNames([ClassNames.PAGINATION_DESC])}>{paginationLabel}</div>
                 )}
 
-                {totalItems >= pageSize && compactFooter ? this.buildCompactPageButtons() : this.buildPageButtons()}
+                {compactFooter ? this.buildCompactPageButtons() : this.buildPageButtons()}
             </div>
         );
     }
@@ -1072,6 +1072,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     private buildDataGridFooter(): React.ReactElement {
         // Need to take this from state in future
         const {footer, pagination} = this.props;
+        const {pageSize, totalItems} = this.state.pagination!;
         return (
             <div
                 className={`${ClassNames.DATAGRID_FOOTER} ${footer && footer.className && footer.className}`}
@@ -1079,7 +1080,9 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
             >
                 {footer && footer.hideShowColBtn && this.buildHideShowColumnsBtn()}
                 <div className={ClassNames.DATAGRID_FOOTER_DESC}>
-                    {pagination !== undefined ? this.buildDataGridPagination() : this.buildFooterContent()}
+                    {pagination !== undefined && totalItems >= pageSize
+                        ? this.buildDataGridPagination()
+                        : this.buildFooterContent()}
                 </div>
             </div>
         );
