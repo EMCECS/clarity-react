@@ -407,13 +407,16 @@ export class Wizard extends React.PureComponent<WizardProps> {
         }
     }
 
-    navigationClick(step: WizardStep) {
+    // Function to call on left side navigation click
+    navigationClick(stepId: number) {
+        const step = this.getStepObj(stepId);
+
         if (step && step.customStepNav && step.customStepNav.onNavClick) {
             step.customStepNav.onNavClick().then(() => {
-                this.modifyButtonStates(step.stepId);
+                this.modifyButtonStates(stepId);
             });
         } else {
-            this.modifyButtonStates(step.stepId);
+            this.modifyButtonStates(stepId);
         }
     }
 
@@ -568,7 +571,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
                                         disabled={this.state.allSteps[step.stepId].disableNav}
                                         link={true}
                                         className="clr-wizard-stepnav-link"
-                                        onClick={this.navigationClick.bind(this, step)}
+                                        onClick={this.navigationClick.bind(this, step.stepId)}
                                         icon={this.buildStepIcon(step)}
                                     >
                                         &nbsp;
