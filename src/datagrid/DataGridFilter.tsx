@@ -128,6 +128,7 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
 
     updateFilter = (value: any) => {
         const {columnName, datagridRef, onFilter} = this.props;
+        datagridRef.current!.showLoader();
 
         // get latest data from grid
         const rows = datagridRef.current!.getAllRows();
@@ -139,6 +140,7 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
                 // Update datagrid rows
                 const {rows, totalItems} = data;
                 datagridRef.current!.updateRows(rows, totalItems);
+                datagridRef.current!.hideLoader();
             });
         }
     };

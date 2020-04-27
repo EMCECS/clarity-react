@@ -78,6 +78,9 @@ export class ClassNames {
     public static SWITCH_HEADER: string = "switch-header";
     public static CLR_CHECKBOX_WRAPPER: string = "clr-checkbox-wrapper";
     public static SWITCH_CONTENT: string = "switch-content list-unstyled";
+    public static DATAGRID_SPINNER: string = "datagrid-spinner";
+    public static DATAGRID_OUTER_WRAPPER: string = "datagrid-outer-wrapper";
+    public static DATAGRID_INNER_WRAPPER: string = "datagrid-inner-wrapper";
 }
 
 export class Styles {
