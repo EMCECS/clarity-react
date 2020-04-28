@@ -73,14 +73,14 @@ storiesOf("Input", module)
                 error={true}
                 onBlur={action("select with error - blur")}
                 onChange={action("select with error - change")}
-                errorHelperText="This field is reuired"
+                errorHelperText="This field is required"
             />
             <br /> <br />
             <Input
                 name="somevalue"
                 isBoxed
                 error={true}
-                errorHelperText="This field is reuired"
+                errorHelperText="This field is required"
                 onBlur={action("select with error - blur")}
                 onChange={action("select with error - change")}
             />
