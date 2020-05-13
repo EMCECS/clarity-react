@@ -70,7 +70,7 @@ export class RadioButtonGroup extends React.PureComponent<RadioButtonGroupProps>
                 return React.cloneElement(childEl as React.ReactElement<any>, {
                     checked: value === childEl.props.value,
                     className: className,
-                    disabled: disabled,
+                    disabled: disabled ? disabled : childEl.props.disabled,
                     id: name + "-" + index,
                     name: name,
                     onChange: this.handleChange,
