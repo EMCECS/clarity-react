@@ -34,6 +34,7 @@ import {VerticalNav} from "../layout/vertical-nav";
  * @param {stepCompleted} flag to check if step is valid and complete
  * @param {customStepNav} custom navigation details for step
  * @param {disableNav} if true then navigation for step is disabled
+ * @param {stepFooter} custom footer for step
  * @param {isStepValid} function to check validity of step
  * @param {onStepSubmit} function to perform on step submission
  */
@@ -45,6 +46,7 @@ type WizardStep = {
     stepCompleted?: boolean;
     customStepNav?: WizardStepNavDetails;
     disableNav?: boolean;
+    stepFooter?: React.ReactElement;
     isStepValid?: Function /* This function should return boolen value. And use to determine if step is valid or not */;
     onStepSubmit?: () => Promise<any> /* Function to perform on submittion of step at click of Next or Finish */;
 };
@@ -83,6 +85,7 @@ type WizardStepNavDetails = {
  * @param {cancelButtonText} custom text for cancel button
  * @param {showCancelButton} if true show cancel button on wizard else hide
  * @param {cancelButtonClassName} extranla CSS for cancel button
+ * @param {customFooter} custom footer for all steps
  * @param {navLinkClasses} extranal css class for navigation links
  * @param {validationType} validation type for wizard steps
  * @param {dataqa} Quality Engineering field
@@ -110,6 +113,7 @@ type WizardProps = {
     showCancelButton?: boolean;
     cancelButtonClassName?: string;
     onClose?: Function;
+    customFooter?: React.ReactElement;
     navLinkClasses?: string;
     validationType?: WizardValidationType;
     style?: any;
@@ -272,6 +276,11 @@ export class Wizard extends React.PureComponent<WizardProps> {
     /* ##########  Wizard private methods start  ############ */
     private getStepObj(stepId: number) {
         return this.state.allSteps[stepId];
+    }
+
+    // Function to return details of current step
+    getCurrentStepDetails() {
+        return this.getStepObj(this.state.currentStepId);
     }
 
     // Close the wizard
@@ -484,16 +493,17 @@ export class Wizard extends React.PureComponent<WizardProps> {
             previousButtonClassName,
             finishButtonClassName,
             cancelButtonClassName,
-            children,
+            customFooter,
         } = this.props;
 
-        const {showPreviousButton, showNextButton, showFinishButton, showCancelButton} = this.state;
+        const {showPreviousButton, showNextButton, showFinishButton, showCancelButton, currentStepId} = this.state;
 
+        const stepObj = this.getStepObj(currentStepId);
         return (
             <div className={ClassNames.WIZARD_FOOTER}>
                 <div className={ClassNames.WIZARD_FOOTER_BUTTON}>
-                    {children}
-
+                    {customFooter}
+                    {stepObj.stepFooter}
                     {showCancelButton && (
                         <Button
                             key={cancelButtonText}
