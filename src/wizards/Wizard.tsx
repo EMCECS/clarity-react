@@ -574,9 +574,9 @@ export class Wizard extends React.PureComponent<WizardProps> {
                 className={classNames([ClassNames.WIZARD_STEPNAV_WRAPPER, ClassNames.NG_TNS])}
                 style={Styles.WIZARD_STEPNAV_WRAPPER_STYLE}
             >
-                <h1 className={ClassNames.WIZARD_TITLE}>
+                <h2 className={ClassNames.WIZARD_TITLE}>
                     <span style={Styles.WIZARD_TITLE_STYLE}>{title}</span>
-                </h1>
+                </h2>
                 {showNav && (
                     <div className={ClassNames.WIZARD_STEPNAV}>
                         {steps.map((step, key) => {
