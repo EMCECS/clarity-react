@@ -379,6 +379,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
     private modifyButtonStates(stepId: number) {
         const {steps, validationType, showPreviousButton, showCancelButton} = this.props;
         const step = this.getStepObj(stepId);
+        this.scrollToTop();
 
         if (stepId === 0) {
             /* for first step : If currenst step is first step of workflow
@@ -699,21 +700,24 @@ export class Wizard extends React.PureComponent<WizardProps> {
                                                     ClassNames.NG_TNS,
                                                 ])}
                                             >
-                                                <h2 className={classNames([ClassNames.MODAL_TITLE, ClassNames.NG_TNS])}>
+                                                <h3
+                                                    className={classNames([ClassNames.MODAL_TITLE, ClassNames.NG_TNS])}
+                                                    style={Styles.MODAL_TITLE_STYLE}
+                                                >
                                                     <span className={ClassNames.MODAL_TITLE_TEXT}>
                                                         {steps[this.state.currentStepId].showStepTitle !== false &&
                                                             steps[this.state.currentStepId].stepName}
                                                     </span>
-                                                </h2>
+                                                </h3>
                                             </div>
                                         </div>
                                         {/*Close modal-header */}
                                         <div className={ClassNames.MODAL_BODY}>{this.buildWizardSteps()}</div>{" "}
                                         {/*Close modal-body*/}
                                         {this.buildWizardFooter()}
-                                    </div>{" "}
+                                    </div>
                                     {/*Close modal-content*/}
-                                </div>{" "}
+                                </div>
                                 {/*Close modal-content-wrapper */}
                                 <div className={ClassNames.MODAL_GHOST_WRAPPER}>
                                     <div className={ClassNames.MODAL_GHOST_1} style={Styles.MODAL_GHOST_1} />
@@ -739,6 +743,11 @@ export class Wizard extends React.PureComponent<WizardProps> {
         dataqa_wizard_btn_next = dataqa_wizard_btn_next.replace(new RegExp("^" + prefix), dataqa);
         dataqa_wizard_btn_finish = dataqa_wizard_btn_finish.replace(new RegExp("^" + prefix), dataqa);
         dataqa_wizard = dataqa_wizard.replace(new RegExp("^" + prefix), dataqa);
+    }
+
+    // Function to keep scroll bar on top on step change
+    scrollToTop() {
+        document.getElementsByClassName("modal-body")[0].scrollTo(0, 0);
     }
 
     /* ##########  Wizard private methods end  ############ */
