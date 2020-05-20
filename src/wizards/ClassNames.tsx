@@ -11,8 +11,8 @@
 export class ClassNames {
     public static WIZARD: string = "clr-wizard";
     public static WIZARD_OPEN: string = "open";
-    public static WIZARD_MODAL: string = "modal ng-tns-c9-2 ng-star-inserted";
-    public static WIZARD_MODAL_DIALOG: string = "modal-dialog ng-trigger ng-trigger-fadeDown";
+    public static WIZARD_MODAL: string = "modal ng-tns-c167-4 ng-star-inserted";
+    public static WIZARD_MODAL_DIALOG: string = "modal-dialog ng-tns-c167-4 ng-trigger ng-trigger-fadeDown";
     public static WIZARD_OUTER_WRAPPER: string = "modal-outer-wrapper";
     public static MODAL_CONTENT_WRAPPER: string = "modal-content-wrapper";
     public static WIZARD_CONTENT: string = "clr-wizard-content";
@@ -41,11 +41,16 @@ export class ClassNames {
     public static ACTIVE: string = "active";
     public static COMPLETE: string = "complete";
     public static ERROR: string = "error";
+    public static NG_TNS: string = "ng-tns-c167-4";
+    public static CLOSE: string = "close";
+    public static NG_STAR_INSERTED: string = "ng-star-inserted";
 }
 
 export class Styles {
     public static MODAL_GHOST_2 = {left: "-24px", top: "24px", bottom: "24px"};
     public static MODAL_GHOST_1 = {left: "-24px"};
-    public static MODAL_TITELE = {paddingTop: "0.5rem"};
+    public static WIZARD_STEPNAV_WRAPPER_STYLE = {paddingTop: "0"};
+    public static WIZARD_TITLE_STYLE = {marginTop: "-0.3rem"};
+    public static MODAL_TITLE_STYLE = {marginTop: "-0.17rem"};
     public static WIZARD_OUTER_WRAPPER = {height: "100%", width: "100%"};
 }

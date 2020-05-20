@@ -379,6 +379,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
     private modifyButtonStates(stepId: number) {
         const {steps, validationType, showPreviousButton, showCancelButton} = this.props;
         const step = this.getStepObj(stepId);
+        this.scrollToTop();
 
         if (stepId === 0) {
             /* for first step : If currenst step is first step of workflow
@@ -570,8 +571,13 @@ export class Wizard extends React.PureComponent<WizardProps> {
     private buildWizardNav(): React.ReactElement {
         const {steps, title, showNav} = this.props;
         return (
-            <VerticalNav className={ClassNames.WIZARD_STEPNAV_WRAPPER}>
-                <h3 className={ClassNames.WIZARD_TITLE}> {title} </h3>
+            <VerticalNav
+                className={classNames([ClassNames.WIZARD_STEPNAV_WRAPPER, ClassNames.NG_TNS])}
+                style={Styles.WIZARD_STEPNAV_WRAPPER_STYLE}
+            >
+                <h2 className={ClassNames.WIZARD_TITLE}>
+                    <span style={Styles.WIZARD_TITLE_STYLE}>{title}</span>
+                </h2>
                 {showNav && (
                     <div className={ClassNames.WIZARD_STEPNAV}>
                         {steps.map((step, key) => {
@@ -587,7 +593,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
                                         &nbsp;
                                         {step.customStepNav !== undefined && step.customStepNav.stepNavTitle
                                             ? step.customStepNav.stepNavTitle
-                                            : step.stepName}{" "}
+                                            : step.stepName}
                                         &nbsp;
                                         {step.customStepNav !== undefined && step.customStepNav!.stepNavChildren}
                                     </Button>
@@ -654,49 +660,64 @@ export class Wizard extends React.PureComponent<WizardProps> {
                         isInline && `${ClassNames.WIZARD_INLINE} ${ClassNames.WIZARD_NO_SHADOW}`,
                         ClassNames.WIZARD,
                         wizardSize,
+                        ClassNames.NG_TNS,
                         ClassNames.WIZARD_OPEN,
                         className,
                     ])}
                     style={style}
                 >
+                    <span className="offscreen-focus-rebounder ng-tns-c167-4 ng-star-inserted" />
                     <div className={ClassNames.WIZARD_MODAL}>
                         <div
-                            className={`${ClassNames.WIZARD_MODAL_DIALOG} ${modalSize}`}
+                            className={classNames([ClassNames.WIZARD_MODAL_DIALOG, modalSize])}
                             role="dialog"
                             aria-hidden="false"
                             aria-labelledby="clr-id-3"
                         >
+                            <div _ngcontent-clarity-c167="" className="clr-sr-only ng-tns-c167-4" />
                             <div className={ClassNames.WIZARD_OUTER_WRAPPER} style={Styles.WIZARD_OUTER_WRAPPER}>
-                                <div className={ClassNames.MODAL_CONTENT_WRAPPER}>
+                                <div className={classNames([ClassNames.MODAL_CONTENT_WRAPPER, ClassNames.NG_TNS])}>
                                     {this.buildWizardNav()}
-                                    <div className={ClassNames.MODAL_CONTENT}>
-                                        <div className={ClassNames.MODAL_HEADER}>
+                                    <div className={classNames([ClassNames.MODAL_CONTENT, ClassNames.NG_TNS])}>
+                                        <div className={classNames([ClassNames.MODAL_HEADER, ClassNames.NG_TNS])}>
                                             {closable && (
                                                 <button
                                                     aria-label="Close"
-                                                    className="close"
+                                                    className={classNames([
+                                                        ClassNames.CLOSE,
+                                                        ClassNames.NG_TNS,
+                                                        ClassNames.NG_STAR_INSERTED,
+                                                    ])}
                                                     type="button"
                                                     onClick={this.close.bind(this)}
                                                 >
                                                     <Icon aria-hidden={true} shape="close" />
                                                 </button>
                                             )}
-                                            <div className={ClassNames.MODAL_TITLE_WRAPPER}>
-                                                <h3 className={ClassNames.MODAL_TITLE} style={Styles.MODAL_TITELE}>
+                                            <div
+                                                className={classNames([
+                                                    ClassNames.MODAL_TITLE_WRAPPER,
+                                                    ClassNames.NG_TNS,
+                                                ])}
+                                            >
+                                                <h3
+                                                    className={classNames([ClassNames.MODAL_TITLE, ClassNames.NG_TNS])}
+                                                    style={Styles.MODAL_TITLE_STYLE}
+                                                >
                                                     <span className={ClassNames.MODAL_TITLE_TEXT}>
                                                         {steps[this.state.currentStepId].showStepTitle !== false &&
                                                             steps[this.state.currentStepId].stepName}
                                                     </span>
                                                 </h3>
                                             </div>
-                                        </div>{" "}
+                                        </div>
                                         {/*Close modal-header */}
                                         <div className={ClassNames.MODAL_BODY}>{this.buildWizardSteps()}</div>{" "}
                                         {/*Close modal-body*/}
                                         {this.buildWizardFooter()}
-                                    </div>{" "}
+                                    </div>
                                     {/*Close modal-content*/}
-                                </div>{" "}
+                                </div>
                                 {/*Close modal-content-wrapper */}
                                 <div className={ClassNames.MODAL_GHOST_WRAPPER}>
                                     <div className={ClassNames.MODAL_GHOST_1} style={Styles.MODAL_GHOST_1} />
@@ -722,6 +743,11 @@ export class Wizard extends React.PureComponent<WizardProps> {
         dataqa_wizard_btn_next = dataqa_wizard_btn_next.replace(new RegExp("^" + prefix), dataqa);
         dataqa_wizard_btn_finish = dataqa_wizard_btn_finish.replace(new RegExp("^" + prefix), dataqa);
         dataqa_wizard = dataqa_wizard.replace(new RegExp("^" + prefix), dataqa);
+    }
+
+    // Function to keep scroll bar on top on step change
+    scrollToTop() {
+        document.getElementsByClassName("modal-body")[0].scrollTo(0, 0);
     }
 
     /* ##########  Wizard private methods end  ############ */
