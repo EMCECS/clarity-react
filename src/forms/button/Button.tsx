@@ -57,7 +57,6 @@ export class Button extends React.PureComponent<ButtonProps> {
         return [
             props.defaultBtn && "btn",
             props.defaultBtn && props.icon && "btn-icon",
-            props.className,
             ...["block", "flat", "inverse", "link", "primary"].map(field => {
                 const value = (props as any)[field];
                 if (typeof value === "boolean" && value) return `btn-${field}`;
@@ -68,6 +67,7 @@ export class Button extends React.PureComponent<ButtonProps> {
                 if (typeof value !== "undefined" && value !== null) return `btn-${value}`;
                 return undefined;
             }),
+            props.className,
         ];
     }
 
