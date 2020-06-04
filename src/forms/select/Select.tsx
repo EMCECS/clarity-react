@@ -16,11 +16,13 @@ import {classNames} from "../../utils";
 type SelectOption = {
     value?: string;
     selected?: boolean;
+    disabled?: boolean;
+    hidden?: boolean;
 };
 
-export const SelectOption: React.FunctionComponent<SelectOption> = ({value, selected, children}) => {
+export const SelectOption: React.FunctionComponent<SelectOption> = ({value, selected, disabled, hidden, children}) => {
     return (
-        <option value={value} selected={selected}>
+        <option value={value} selected={selected} disabled={disabled} hidden={hidden}>
             {children}
         </option>
     );
