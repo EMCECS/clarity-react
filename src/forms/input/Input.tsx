@@ -25,6 +25,8 @@ type InputProps = {
     isBoxed?: boolean;
     onChange?: (evt: React.ChangeEvent<HTMLInputElement>) => void;
     onBlur?: (evt: React.FocusEvent<HTMLInputElement>) => void;
+    onKeyDown?: (evt: React.KeyboardEvent<HTMLInputElement>) => void;
+    onKeyPress?: (evt: React.KeyboardEvent<HTMLInputElement>) => void;
     placeholder?: string;
     name: string;
     id?: string;
@@ -33,6 +35,7 @@ type InputProps = {
     size?: number;
     min?: number;
     max?: number;
+    step?: any;
     required?: boolean; // auto-check on blur if there's a value
     error?: boolean; // force error state of component
     dataqa?: string; //quality engineering testing field
@@ -52,11 +55,12 @@ export class Input extends React.PureComponent<InputProps> {
     };
 
     //prevents 'e' button click when input type is number
-    private handleKeyDown = (evt: React.KeyboardEvent) => {
-        const {type} = this.props;
+    private handleKeyDown = (evt: React.KeyboardEvent<HTMLInputElement>) => {
+        const {type, onKeyDown} = this.props;
         if (type === "number" && evt.key === "e") {
             evt.preventDefault();
         }
+        onKeyDown && onKeyDown(evt);
     };
 
     private static renderHelperText(helperText: ReactNode): ReactNode {
@@ -81,9 +85,11 @@ export class Input extends React.PureComponent<InputProps> {
             id,
             required,
             onBlur,
+            onKeyPress,
             dataqa,
             min,
             max,
+            step,
             error,
             errorHelperText,
             helperText,
@@ -103,11 +109,13 @@ export class Input extends React.PureComponent<InputProps> {
                     data-qa={dataqa}
                     onChange={this.handleChange}
                     onKeyDown={this.handleKeyDown}
+                    onKeyPress={onKeyPress}
                     onBlur={onBlur}
                     style={style}
                     required={required}
                     min={min}
                     max={max}
+                    step={step}
                 />
                 {children}
                 <Icon className="clr-validate-icon" shape="exclamation-circle" />
