@@ -53,7 +53,6 @@ import {WizardStep} from "./index";
  * @param {cancelClassName} external CSS for cancel button
  * @param {customFooter} custom footer for all steps
  * @param {navLinkClasses} external css class for navigation links
- * @param {validationType} validation type for wizard steps
  * @param {dataqa} Quality Engineering field
  */
 type WizardProps = {
@@ -80,7 +79,6 @@ type WizardProps = {
     cancelClassName?: string;
     customFooter?: React.ReactElement;
     navLinkClasses?: string;
-    validationType?: WizardValidationType;
     showStepTitle?: boolean;
     showTitle?: boolean;
     show: boolean;
@@ -109,18 +107,6 @@ export enum WizardSize {
     XLARGE = "xl",
 }
 
-/**
- * Enum for sorting order :
- * @param {ASYNC} Asynchronous validation
- * @param {SYNC} Synchronous validation
- * @param {NONE} no validation
- */
-export enum WizardValidationType {
-    ASYNC = "Asynchronous",
-    SYNC = "Synchronous",
-    NONE = "None",
-}
-
 const modalContentWrapperClassNames = classNames([ClassNames.MODAL_CONTENT_WRAPPER, ClassNames.NG_TNS]);
 const modalContentClassNames = classNames([ClassNames.MODAL_CONTENT, ClassNames.NG_TNS]);
 
@@ -136,7 +122,6 @@ export class Wizard extends React.PureComponent<WizardProps, WizardState> {
         showNavigation: true,
         showStepTitle: true,
         showTitle: true,
-        validationType: WizardValidationType.NONE,
         // onClose: () => {
         //     by default do nothing on click, since a non-closable wizard won't
         //     be clickable
@@ -257,11 +242,15 @@ export class Wizard extends React.PureComponent<WizardProps, WizardState> {
         }) as ReadonlyArray<WizardStep>;
         const steps = (maybeSteps ? maybeSteps : []).filter(el => el !== null); // compact down the step list
 
-        // extract the position & info about the current step
+        // show complete if this is the last temp
         const showComplete = (steps.length > 0 && currentStepID === steps[steps.length - 1].id) || undefined;
+        // show previous if this is the first temp
         const showPrevious = (steps.length > 0 && currentStepID !== steps[0].id) || undefined;
+        // show next if this is the last temp
         const showNext = (steps.length > 0 && currentStepID !== steps[steps.length - 1].id) || undefined;
+
         const stepTitle = (steps.length > 0 && steps[currentStepID] && steps[currentStepID].name) || undefined;
+        const stepValid = (steps.length > 0 && steps[currentStepID] && steps[currentStepID].valid) || undefined;
 
         return (
             <React.Fragment>
@@ -309,7 +298,7 @@ export class Wizard extends React.PureComponent<WizardProps, WizardState> {
                                             </div>
                                             <WizardFooter
                                                 currentStepID={currentStepID}
-                                                disableNext={false}
+                                                disableNext={!stepValid}
                                                 disableComplete={false}
                                                 showCancel={showCancel}
                                                 showComplete={showComplete}

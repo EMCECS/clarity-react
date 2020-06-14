@@ -44,7 +44,6 @@ export default class WizardFooter extends React.PureComponent<WizardFooterProps>
             completeClassName,
             completeText,
             customFooter,
-            // curentStepID,
             disableComplete,
             disableNext,
             nextClassName,

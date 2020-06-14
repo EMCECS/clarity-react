@@ -31,12 +31,13 @@ class WizardNavigationStep extends React.PureComponent<WizardStepProps> {
     };
 
     render() {
-        const {currentStepID, name, id, navigationChildren, navigationIcon, navigationTitle} = this.props;
-        const navigationDisabled = id !== 0 && (currentStepID === undefined || currentStepID < id - 1);
+        const {currentStepID, name, id, navigationChildren, navigationIcon, navigationTitle, valid} = this.props;
+        // const navigableOffset = valid ? 1 : 0
+        const navigationEnabled = id === 0 || id < (currentStepID || 0);
         return (
             <div className={this.navigationClasses()}>
                 <Button
-                    disabled={navigationDisabled}
+                    disabled={!navigationEnabled}
                     link={true}
                     className="clr-wizard-stepnav-link"
                     onClick={this.handleNavigationClick}

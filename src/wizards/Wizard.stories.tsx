@@ -20,6 +20,7 @@ import {Select, SelectOption} from "../forms/select";
 const store = new Store({
     open: false,
     activeWizard: "",
+    basicInfoValid: false,
     handleToggleWizard: (size: string) =>
         store.set({
             open: true,
@@ -29,6 +30,13 @@ const store = new Store({
         store.set({
             open: false,
         }),
+    handleValidateName: (evt: React.ChangeEvent<HTMLInputElement>) => {
+        if (evt.target.value.length > 2) {
+            store.set({basicInfoValid: true});
+        } else {
+            store.set({basicInfoValid: false});
+        }
+    },
 });
 
 // export const WizardSizes = props => (
@@ -55,8 +63,8 @@ storiesOf("Wizard", module).add("Wizard Sizes", props => (
                     onClose={() => state.handleClose()}
                     title="Medium Wizard"
                 >
-                    <WizardStep id={0} name="Basic Information">
-                        <Input label="Name" name="name" />
+                    <WizardStep id={0} name="Basic Information" valid={state.basicInfoValid}>
+                        <Input label="Name" name="name" onChange={state.handleValidateName} />
                         <Input
                             label="Height (feet)"
                             defaultValue={1}
