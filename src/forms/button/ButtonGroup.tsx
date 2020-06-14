@@ -64,7 +64,7 @@ export class ButtonGroup extends React.PureComponent<ButtonGroupProps> {
         if (onChange) onChange(evt);
     };
 
-    private renderChildren(): React.ReactNode[] {
+    private renderChildren(): React.ReactNode[] | undefined | null {
         const {value} = this.state;
         const {children, name} = this.props;
         if (typeof children === "undefined" || children === null) {

@@ -36,7 +36,7 @@ export interface WizardFooterProps extends InheritedWizardFooterProps {
     activeStepFooter?: React.ReactElement;
     disableNext?: boolean;
     disableComplete?: boolean;
-    onClose: (evt: React.MouseEvent<HTMLElement, MouseEvent>) => void;
+    onClose?: (evt: React.MouseEvent<HTMLElement, MouseEvent>) => void;
     onComplete: (evt: React.MouseEvent<HTMLElement, MouseEvent>) => void;
     onNext: (evt: React.MouseEvent<HTMLElement, MouseEvent>) => void;
     onPrevious: (evt: React.MouseEvent<HTMLElement, MouseEvent>) => void;

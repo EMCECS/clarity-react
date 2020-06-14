@@ -148,13 +148,13 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
     }
 
     // and this step's position in the list
-    private static progressionStatus(currentStepID: number, steps: ReactElement<WizardStep>[]): ProgressionStatus {
+    private static progressionStatus(currentStepID: number, steps: ReadonlyArray<WizardStep>): ProgressionStatus {
         if (steps.length > 0 && steps[currentStepID]) {
             const currentStep = steps[currentStepID];
             return {
                 previousStepExists: currentStepID !== steps[0].props.id,
                 nextStepExists: currentStepID !== steps[steps.length - 1].props.id,
-                currentStepIsCompleteAndValid: currentStep.props.valid && currentStep.props.complete,
+                currentStepIsCompleteAndValid: (currentStep.props.valid && currentStep.props.complete) || false,
                 currentStepTitle: currentStep.props.name,
             };
         }
@@ -189,6 +189,12 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
             this.setState({currentStepID: currentStepID - 1});
         }
         onPrevious && onPrevious(evt);
+    };
+
+    handleComplete = (evt: React.MouseEvent<HTMLElement, MouseEvent>) => {
+        const {onComplete} = this.props;
+        // TODO reset wizard on completion
+        this.setState({currentStepID: 0});
     };
 
     handleSelectStep = (stepID: number) => {
@@ -239,6 +245,7 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
                     }),
                 );
                 // subsequent iterations are navigable if all previous iterations are valid
+                // @ts-ignore //step is of type WizardStep not ReactElement<WizardStep>
                 navigable = navigable && step.props.valid && step.props.complete;
                 return step;
             }
@@ -250,9 +257,11 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
             currentStepIsCompleteAndValid,
             nextStepExists,
             previousStepExists,
+            // @ts-ignore // steps is actually of type ReadonlyArray<WizardStep> not ReadonlyArray<ReactElement<WizardStep>>
         } = Wizard.progressionStatus(currentStepID, steps);
 
         const navigationSteps = steps.map((step, index) => (
+            // @ts-ignore // since step is of type WizardStep, name and id are ensured on WizardNavigationStep
             <WizardNavigationStep
                 key={step.key || index}
                 currentStepID={currentStepID}
@@ -295,7 +304,6 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
                                                 <div className={ClassNames.WIZARD_CONTENT}>{steps}</div>
                                             </div>
                                             <WizardFooter
-                                                currentStepID={currentStepID}
                                                 disableNext={!currentStepIsCompleteAndValid}
                                                 disableComplete={!allStepsCompleteAndValid}
                                                 showCancel={showCancel}
@@ -303,6 +311,7 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
                                                 showNext={nextStepExists}
                                                 showPrevious={previousStepExists}
                                                 onClose={onClose}
+                                                onComplete={this.handleComplete}
                                                 onNext={this.handleNext}
                                                 onPrevious={this.handlePrevious}
                                                 {...this.footerProps()}

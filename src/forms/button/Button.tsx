@@ -12,6 +12,7 @@ import * as React from "react";
 import {ReactNode} from "react";
 import {classNames} from "../../utils";
 import {Icon, IconProps} from "../../icon";
+import {findAllInRenderedTree} from "react-dom/test-utils";
 
 export type ButtonProps = {
     block?: boolean;
@@ -29,7 +30,7 @@ export type ButtonProps = {
     icon?: IconProps;
     defaultBtn?: boolean;
     show?: boolean;
-    type?: string;
+    type?: "button" | "reset" | "submit";
     value?: string;
     dataqa?: string;
 };

@@ -15,6 +15,7 @@ import {classNames, allTrue} from "../utils";
 import {ClassNames, Styles} from "./ClassNames";
 import {Button, ButtonState} from "../forms/button";
 import {VerticalNav} from "../layout/vertical-nav";
+import {ReactNode} from "react";
 
 /**
  * General component description :
@@ -752,7 +753,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
 
     /* ##########  Wizard private methods end  ############ */
 
-    render() {
+    render(): ReactNode {
         return this.props.show ? ReactDOM.createPortal(this.buildWizard(), this.divRef!) : null;
     }
 }
