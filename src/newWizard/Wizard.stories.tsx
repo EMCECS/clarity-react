@@ -45,7 +45,7 @@ const store = new Store({
     },
 });
 
-storiesOf("Wizard", module).add("Wizard Sizes", _props => (
+storiesOf("New Wizard", module).add("Wizard Sizes", _props => (
     <State store={store}>
         {state => (
             <div>

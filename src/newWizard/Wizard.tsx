@@ -117,7 +117,7 @@ export enum WizardSize {
 const modalContentWrapperClassNames = classNames([ClassNames.MODAL_CONTENT_WRAPPER, ClassNames.NG_TNS]);
 const modalContentClassNames = classNames([ClassNames.MODAL_CONTENT, ClassNames.NG_TNS]);
 
-export class Wizard extends React.PureComponent<WizardProps, WizardState> {
+export default class Wizard extends React.PureComponent<WizardProps, WizardState> {
     // By default Wizard will have following prop values
     static defaultProps = {
         isInline: false,
