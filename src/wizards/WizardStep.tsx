@@ -16,7 +16,7 @@ export type WizardStepProps = {
     name: string;
     id: number;
     currentStepID?: number;
-    completed?: boolean;
+    complete?: boolean;
     valid?: boolean;
     onNavigationClick?: (evt: React.MouseEvent<HTMLElement, MouseEvent>) => void;
     onSelectStep?: (step: number) => void;
@@ -24,11 +24,12 @@ export type WizardStepProps = {
     navigationTitle?: string;
     navigationChildren?: ReadonlyArray<React.ReactNode>;
     navigationClasses?: ReadonlyArray<string>;
+    navigable: boolean;
 };
 
-export class WizardStep extends React.PureComponent<WizardStepProps> {
+export default class WizardStep extends React.PureComponent<WizardStepProps> {
     static defaultProps = {
-        completed: false,
+        complete: false,
         valid: true,
         navigationClasses: [],
     };

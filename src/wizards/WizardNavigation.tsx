@@ -1,43 +1,67 @@
-import React, {ReactElement} from "react";
+/**
+ * Copyright (c) 2020 Dell Inc., or its subsidiaries. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ */
+
+import React from "react";
 import {classNames} from "../utils";
 import {ClassNames, Styles} from "./ClassNames";
 import {VerticalNav} from "../layout/vertical-nav";
-import {WizardStep, WizardStepProps} from "./WizardStep";
+import {WizardStepProps} from "./WizardStep";
 import {Button} from "../forms/button";
 
 type WizardNavigationProps = {
     id: number;
     currentStepID: number;
+    currentStepValid: boolean;
     onSelectStep: (stepID: number) => void;
     show?: boolean;
     showTitle?: boolean;
     title?: string;
 };
 
-class WizardNavigationStep extends React.PureComponent<WizardStepProps> {
+export default class WizardNavigation extends React.PureComponent<WizardNavigationProps> {
+    render() {
+        const {title, show, children} = this.props;
+        const classNamesList = classNames([ClassNames.WIZARD_STEPNAV_WRAPPER, ClassNames.NG_TNS]);
+        return (
+            <VerticalNav className={classNamesList} style={Styles.WIZARD_STEPNAV_WRAPPER_STYLE}>
+                <h2 className={ClassNames.WIZARD_TITLE}>
+                    <span style={Styles.WIZARD_TITLE_STYLE}>{title}</span>
+                </h2>
+                {show && <div className={ClassNames.WIZARD_STEPNAV}>{children}</div>}
+            </VerticalNav>
+        );
+    }
+}
+
+export class WizardNavigationStep extends React.PureComponent<WizardStepProps> {
     private navigationClasses(): string {
-        const {id, currentStepID, completed, valid} = this.props;
+        const {id, currentStepID, complete, valid} = this.props;
         return classNames([
             ClassNames.WIZARD_STEPNAV_LINK,
             id === currentStepID && ClassNames.ACTIVE,
-            completed && ClassNames.COMPLETE,
+            complete && ClassNames.COMPLETE,
             !valid && ClassNames.ERROR,
         ]);
     }
 
-    handleNavigationClick = (evt: React.MouseEvent<HTMLElement, MouseEvent>): void => {
+    handleNavigationClick = (_evt: React.MouseEvent<HTMLElement, MouseEvent>): void => {
         const {id, onSelectStep} = this.props;
         onSelectStep && onSelectStep(id);
     };
 
     render() {
-        const {currentStepID, name, id, navigationChildren, navigationIcon, navigationTitle, valid} = this.props;
-        // const navigableOffset = valid ? 1 : 0
-        const navigationEnabled = id === 0 || id < (currentStepID || 0);
+        const {name, navigationChildren, navigationIcon, navigationTitle, navigable} = this.props;
         return (
             <div className={this.navigationClasses()}>
                 <Button
-                    disabled={!navigationEnabled}
+                    disabled={!navigable}
                     link={true}
                     className="clr-wizard-stepnav-link"
                     onClick={this.handleNavigationClick}
@@ -47,36 +71,6 @@ class WizardNavigationStep extends React.PureComponent<WizardStepProps> {
                     {navigationChildren}
                 </Button>
             </div>
-        );
-    }
-}
-
-export default class WizardNavigation extends React.PureComponent<WizardNavigationProps> {
-    render() {
-        const {title, show, children, currentStepID, onSelectStep} = this.props;
-        const classNamesList = classNames([ClassNames.WIZARD_STEPNAV_WRAPPER, ClassNames.NG_TNS]);
-        return (
-            <VerticalNav className={classNamesList} style={Styles.WIZARD_STEPNAV_WRAPPER_STYLE}>
-                <h2 className={ClassNames.WIZARD_TITLE}>
-                    <span style={Styles.WIZARD_TITLE_STYLE}>{title}</span>
-                </h2>
-                {show && (
-                    <div className={ClassNames.WIZARD_STEPNAV}>
-                        {React.Children.map(children, child => {
-                            if (React.isValidElement<WizardStep>(child)) {
-                                const wizardStepProps = (child as ReactElement<WizardStep>).props;
-                                return (
-                                    <WizardNavigationStep
-                                        currentStepID={currentStepID}
-                                        onSelectStep={onSelectStep}
-                                        {...wizardStepProps}
-                                    />
-                                );
-                            }
-                        })}
-                    </div>
-                )}
-            </VerticalNav>
         );
     }
 }

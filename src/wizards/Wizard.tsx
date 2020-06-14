@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2018 Dell Inc., or its subsidiaries. All Rights Reserved.
+ * Copyright (c) 2020 Dell Inc., or its subsidiaries. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,10 +12,10 @@ import * as React from "react";
 import {ReactElement, ReactNode} from "react";
 import {classNames} from "../utils";
 import {ClassNames, Styles} from "./ClassNames";
-import WizardNavigation from "./WizardNavigation";
+import WizardNavigation, {WizardNavigationStep} from "./WizardNavigation";
 import WizardHeader from "./WizardHeader";
+import WizardStep from "./WizardStep";
 import WizardFooter, {InheritedWizardFooterProps} from "./WizardFooter";
-import {WizardStep} from "./index";
 
 /**
  * General component description :
@@ -95,6 +95,13 @@ type WizardState = {
     currentStepID: number;
 };
 
+type ProgressionStatus = {
+    previousStepExists: boolean;
+    nextStepExists: boolean;
+    currentStepTitle: string;
+    currentStepIsCompleteAndValid: boolean;
+};
+
 /**
  * Enum for wizard sizes:
  * @param {MEDIUM} midum size wizard
@@ -122,21 +129,14 @@ export class Wizard extends React.PureComponent<WizardProps, WizardState> {
         showNavigation: true,
         showStepTitle: true,
         showTitle: true,
-        // onClose: () => {
-        //     by default do nothing on click, since a non-closable wizard won't
-        //     be clickable
-        // },
         onComplete: () => {
-            // by default do nothing on click, since a non-closable wizard won't
-            // be clickable
+            // by default do nothing in addition the the default handler
         },
         onPrevious: () => {
-            // by default do nothing on click, since a non-closable wizard won't
-            // be clickable
+            // by default do nothing in addition the the default handler
         },
         onNext: () => {
-            // by default do nothing on click, since a non-closable wizard won't
-            // be clickable
+            // by default do nothing in addition the the default handler
         },
     };
 
@@ -152,6 +152,8 @@ export class Wizard extends React.PureComponent<WizardProps, WizardState> {
         document.getElementsByClassName("modal-body")[0].scrollTo(0, 0);
     }
 
+    // footerProps is a convenience method for selecting a subset of properties to pass
+    // inherited properties from the Wizard to the WizardFooter
     private footerProps(): InheritedWizardFooterProps {
         const {
             cancelText,
@@ -178,6 +180,26 @@ export class Wizard extends React.PureComponent<WizardProps, WizardState> {
             previousText,
             dataqa,
             showCancel,
+        };
+    }
+
+    // progressionStatus determines the status of the wizard based on the current step properties
+    // and this step's position in the list
+    private static progressionStatus(currentStepID: number, steps: ReactElement<WizardStep>[]): ProgressionStatus {
+        if (steps.length > 0 && steps[currentStepID]) {
+            const currentStep = steps[currentStepID];
+            return {
+                previousStepExists: currentStepID !== steps[0].props.id,
+                nextStepExists: currentStepID !== steps[steps.length - 1].props.id,
+                currentStepIsCompleteAndValid: currentStep.props.valid && currentStep.props.complete,
+                currentStepTitle: currentStep.props.name,
+            };
+        }
+        return {
+            previousStepExists: false,
+            nextStepExists: false,
+            currentStepIsCompleteAndValid: false,
+            currentStepTitle: "",
         };
     }
 
@@ -235,22 +257,38 @@ export class Wizard extends React.PureComponent<WizardProps, WizardState> {
         // determine which buttons to show based on our position in the steps
         const {currentStepID} = this.state;
         // get a list of all of the step IDs in component children
+        let navigable: boolean = true;
         const maybeSteps = React.Children.map(children, child => {
             if (React.isValidElement<WizardStep>(child)) {
-                return (child as ReactElement<WizardStep>).props;
+                const step = React.cloneElement<WizardStep>(
+                    child as ReactElement<WizardStep>,
+                    Object.assign({}, child.props, {
+                        currentStepID,
+                        navigable,
+                    }),
+                );
+                // subsequent iterations are navigable if all previous iterations are valid
+                navigable = navigable && step.props.valid && step.props.complete;
+                return step;
             }
-        }) as ReadonlyArray<WizardStep>;
-        const steps = (maybeSteps ? maybeSteps : []).filter(el => el !== null); // compact down the step list
+        }) as ReadonlyArray<ReactElement<WizardStep>>;
+        const allStepsCompleteAndValid = navigable; // if navigable stayed true throughout, then the wizard is completed
+        const steps = (maybeSteps ? maybeSteps : []).filter(el => el !== null); // compact the step list
+        const {
+            currentStepTitle,
+            currentStepIsCompleteAndValid,
+            nextStepExists,
+            previousStepExists,
+        } = Wizard.progressionStatus(currentStepID, steps);
 
-        // show complete if this is the last temp
-        const showComplete = (steps.length > 0 && currentStepID === steps[steps.length - 1].id) || undefined;
-        // show previous if this is the first temp
-        const showPrevious = (steps.length > 0 && currentStepID !== steps[0].id) || undefined;
-        // show next if this is the last temp
-        const showNext = (steps.length > 0 && currentStepID !== steps[steps.length - 1].id) || undefined;
-
-        const stepTitle = (steps.length > 0 && steps[currentStepID] && steps[currentStepID].name) || undefined;
-        const stepValid = (steps.length > 0 && steps[currentStepID] && steps[currentStepID].valid) || undefined;
+        const navigationSteps = steps.map((step, index) => (
+            <WizardNavigationStep
+                key={step.key || index}
+                currentStepID={currentStepID}
+                onSelectStep={this.handleSelectStep}
+                {...step.props}
+            />
+        ));
 
         return (
             <React.Fragment>
@@ -269,41 +307,30 @@ export class Wizard extends React.PureComponent<WizardProps, WizardState> {
                                     <div className={modalContentWrapperClassNames}>
                                         <WizardNavigation
                                             currentStepID={currentStepID}
-                                            onSelectStep={this.handleSelectStep}
                                             show={showNavigation}
                                             showTitle={showTitle}
                                             title={title}
                                         >
-                                            {children}
+                                            {navigationSteps}
                                         </WizardNavigation>
                                         <div className={modalContentClassNames}>
                                             <WizardHeader
-                                                title={stepTitle}
+                                                title={currentStepTitle}
                                                 showTitle={showStepTitle}
                                                 onClose={onClose}
                                                 closable={closable}
                                             />
                                             <div className={ClassNames.MODAL_BODY}>
-                                                <div className={ClassNames.WIZARD_CONTENT}>
-                                                    {React.Children.map(children, child => {
-                                                        if (!React.isValidElement<WizardStep>(child)) {
-                                                            return child;
-                                                        }
-                                                        return React.cloneElement<WizardStep>(
-                                                            child as ReactElement<WizardStep>,
-                                                            Object.assign({}, child.props, {currentStepID}),
-                                                        );
-                                                    })}
-                                                </div>
+                                                <div className={ClassNames.WIZARD_CONTENT}>{steps}</div>
                                             </div>
                                             <WizardFooter
                                                 currentStepID={currentStepID}
-                                                disableNext={!stepValid}
-                                                disableComplete={false}
+                                                disableNext={!currentStepIsCompleteAndValid}
+                                                disableComplete={!allStepsCompleteAndValid}
                                                 showCancel={showCancel}
-                                                showComplete={showComplete}
-                                                showNext={showNext}
-                                                showPrevious={showPrevious}
+                                                showComplete={!nextStepExists}
+                                                showNext={nextStepExists}
+                                                showPrevious={previousStepExists}
                                                 onClose={onClose}
                                                 onNext={this.handleNext}
                                                 onPrevious={this.handlePrevious}

@@ -11,7 +11,7 @@
 import React from "react";
 import {storiesOf} from "@storybook/react";
 import {Wizard, WizardSize} from "./Wizard";
-import {WizardStep} from "./WizardStep";
+import WizardStep from "./WizardStep";
 import {State, Store} from "@sambego/storybook-state";
 import {Button} from "../forms/button";
 import {Input} from "../forms/input/Input";
@@ -20,7 +20,8 @@ import {Select, SelectOption} from "../forms/select";
 const store = new Store({
     open: false,
     activeWizard: "",
-    basicInfoValid: false,
+    basicInfoValid: true,
+    basicInfoComplete: false,
     handleToggleWizard: (size: string) =>
         store.set({
             open: true,
@@ -30,11 +31,17 @@ const store = new Store({
         store.set({
             open: false,
         }),
-    handleValidateName: (evt: React.ChangeEvent<HTMLInputElement>) => {
+    handleValidate: (evt: React.ChangeEvent<HTMLInputElement>) => {
         if (evt.target.value.length > 2) {
-            store.set({basicInfoValid: true});
+            store.set({
+                basicInfoValid: true,
+                basicInfoComplete: true,
+            });
         } else {
-            store.set({basicInfoValid: false});
+            store.set({
+                basicInfoValid: false,
+                basicInfoComplete: false,
+            });
         }
     },
 });
@@ -63,8 +70,13 @@ storiesOf("Wizard", module).add("Wizard Sizes", props => (
                     onClose={() => state.handleClose()}
                     title="Medium Wizard"
                 >
-                    <WizardStep id={0} name="Basic Information" valid={state.basicInfoValid}>
-                        <Input label="Name" name="name" onChange={state.handleValidateName} />
+                    <WizardStep
+                        id={0}
+                        name="Basic Information"
+                        valid={state.basicInfoValid}
+                        complete={state.basicInfoComplete}
+                    >
+                        <Input label="Name" name="name" onChange={state.handleValidate} />
                         <Input
                             label="Height (feet)"
                             defaultValue={1}
@@ -102,8 +114,8 @@ storiesOf("Wizard", module).add("Wizard Sizes", props => (
                     onClose={() => state.handleClose()}
                     title="Medium Wizard"
                 >
-                    <WizardStep key={0} name={"Page 1"} />
-                    <WizardStep key={1} name={"Page 2"} />
+                    <WizardStep id={0} key={0} name={"Page 1"} />
+                    <WizardStep id={1} key={1} name={"Page 2"} />
                 </Wizard>
                 <Wizard
                     key={5}
@@ -112,8 +124,8 @@ storiesOf("Wizard", module).add("Wizard Sizes", props => (
                     onClose={() => state.handleClose()}
                     title="Medium Wizard"
                 >
-                    <WizardStep key={0} name={"Page 1"} />
-                    <WizardStep key={1} name={"Page 2"} />
+                    <WizardStep id={0} key={0} name={"Page 1"} />
+                    <WizardStep id={1} key={1} name={"Page 2"} />
                 </Wizard>
             </div>
         )}
