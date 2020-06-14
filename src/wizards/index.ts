@@ -8,4 +8,5 @@
  *     http://www.apache.org/licenses/LICENSE-2.0
  */
 
-export * from "./Wizard";
+export {default as Wizard, WizardSize, WizardValidationType} from "./Wizard";
+export {default as WizardStep} from "./WizardStep";
