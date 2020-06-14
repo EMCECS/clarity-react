@@ -19,6 +19,7 @@ export type WizardStepProps = {
     completed?: boolean;
     valid?: boolean;
     onNavigationClick?: (evt: React.MouseEvent<HTMLElement, MouseEvent>) => void;
+    onSelectStep?: (step: number) => void;
     navigationIcon?: string;
     navigationTitle?: string;
     navigationChildren?: ReadonlyArray<React.ReactNode>;

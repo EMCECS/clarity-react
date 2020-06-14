@@ -6,7 +6,9 @@ import {WizardStep, WizardStepProps} from "./WizardStep";
 import {Button} from "../forms/button";
 
 type WizardNavigationProps = {
+    id: number;
     currentStepID: number;
+    onSelectStep: (stepID: number) => void;
     show?: boolean;
     showTitle?: boolean;
     title?: string;
@@ -23,17 +25,13 @@ class WizardNavigationStep extends React.PureComponent<WizardStepProps> {
         ]);
     }
 
+    handleNavigationClick = (evt: React.MouseEvent<HTMLElement, MouseEvent>): void => {
+        const {id, onSelectStep} = this.props;
+        onSelectStep && onSelectStep(id);
+    };
+
     render() {
-        const {
-            currentStepID,
-            name,
-            id,
-            navigationChildren,
-            onNavigationClick,
-            navigationIcon,
-            navigationTitle,
-        } = this.props;
-        // const navigationDisabled = (id !== 0 || !currentStepID || currentStepID > id)
+        const {currentStepID, name, id, navigationChildren, navigationIcon, navigationTitle} = this.props;
         const navigationDisabled = id !== 0 && (currentStepID === undefined || currentStepID < id - 1);
         return (
             <div className={this.navigationClasses()}>
@@ -41,7 +39,7 @@ class WizardNavigationStep extends React.PureComponent<WizardStepProps> {
                     disabled={navigationDisabled}
                     link={true}
                     className="clr-wizard-stepnav-link"
-                    onClick={onNavigationClick}
+                    onClick={this.handleNavigationClick}
                     icon={navigationIcon === undefined ? undefined : {shape: navigationIcon}}
                 >
                     {navigationTitle === undefined ? name : navigationTitle}
@@ -54,7 +52,7 @@ class WizardNavigationStep extends React.PureComponent<WizardStepProps> {
 
 export default class WizardNavigation extends React.PureComponent<WizardNavigationProps> {
     render() {
-        const {title, show, children, currentStepID} = this.props;
+        const {title, show, children, currentStepID, onSelectStep} = this.props;
         const classNamesList = classNames([ClassNames.WIZARD_STEPNAV_WRAPPER, ClassNames.NG_TNS]);
         return (
             <VerticalNav className={classNamesList} style={Styles.WIZARD_STEPNAV_WRAPPER_STYLE}>
@@ -66,7 +64,13 @@ export default class WizardNavigation extends React.PureComponent<WizardNavigati
                         {React.Children.map(children, child => {
                             if (React.isValidElement<WizardStep>(child)) {
                                 const wizardStepProps = (child as ReactElement<WizardStep>).props;
-                                return <WizardNavigationStep currentStepID={currentStepID} {...wizardStepProps} />;
+                                return (
+                                    <WizardNavigationStep
+                                        currentStepID={currentStepID}
+                                        onSelectStep={onSelectStep}
+                                        {...wizardStepProps}
+                                    />
+                                );
                             }
                         })}
                     </div>

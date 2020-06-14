@@ -212,6 +212,10 @@ export class Wizard extends React.PureComponent<WizardProps, WizardState> {
         onPrevious && onPrevious(evt);
     };
 
+    handleSelectStep = (stepID: number) => {
+        this.setState({currentStepID: stepID});
+    };
+
     render() {
         const {
             children,
@@ -276,9 +280,10 @@ export class Wizard extends React.PureComponent<WizardProps, WizardState> {
                                     <div className={modalContentWrapperClassNames}>
                                         <WizardNavigation
                                             currentStepID={currentStepID}
+                                            onSelectStep={this.handleSelectStep}
                                             show={showNavigation}
-                                            title={title}
                                             showTitle={showTitle}
+                                            title={title}
                                         >
                                             {children}
                                         </WizardNavigation>
