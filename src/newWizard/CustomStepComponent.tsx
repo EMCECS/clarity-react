@@ -33,11 +33,6 @@ export class CustomStepComponent extends React.PureComponent<CustomStepComponent
         });
     }
 
-    private handleChange = (evt: React.ChangeEvent<any>) => {
-        const value = evt.target.value;
-        this.setState({value: value});
-    };
-
     render() {
         const {value} = this.state;
         const {wizardRef, stepId} = this.props;
@@ -57,4 +52,9 @@ export class CustomStepComponent extends React.PureComponent<CustomStepComponent
             </div>
         );
     }
+
+    private handleChange = (evt: React.ChangeEvent<any>) => {
+        const value = evt.target.value;
+        this.setState({value: value});
+    };
 }

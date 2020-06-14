@@ -16,10 +16,10 @@ import {WizardStepProps} from "./WizardStep";
 import {Button} from "../forms/button";
 
 type WizardNavigationProps = {
-    id: number;
+    id?: number;
     currentStepID: number;
-    currentStepValid: boolean;
-    onSelectStep: (stepID: number) => void;
+    currentStepValid?: boolean;
+    onSelectStep?: (stepID: number) => void;
     show?: boolean;
     showTitle?: boolean;
     title?: string;
@@ -41,16 +41,6 @@ export default class WizardNavigation extends React.PureComponent<WizardNavigati
 }
 
 export class WizardNavigationStep extends React.PureComponent<WizardStepProps> {
-    private navigationClasses(): string {
-        const {id, currentStepID, complete, valid} = this.props;
-        return classNames([
-            ClassNames.WIZARD_STEPNAV_LINK,
-            id === currentStepID && ClassNames.ACTIVE,
-            complete && ClassNames.COMPLETE,
-            !valid && ClassNames.ERROR,
-        ]);
-    }
-
     handleNavigationClick = (_evt: React.MouseEvent<HTMLElement, MouseEvent>): void => {
         const {id, onSelectStep} = this.props;
         onSelectStep && onSelectStep(id);
@@ -72,5 +62,15 @@ export class WizardNavigationStep extends React.PureComponent<WizardStepProps> {
                 </Button>
             </div>
         );
+    }
+
+    private navigationClasses(): string {
+        const {id, currentStepID, complete, valid} = this.props;
+        return classNames([
+            ClassNames.WIZARD_STEPNAV_LINK,
+            id === currentStepID && ClassNames.ACTIVE,
+            complete && ClassNames.COMPLETE,
+            !valid && ClassNames.ERROR,
+        ]);
     }
 }

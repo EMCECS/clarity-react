@@ -55,7 +55,7 @@ import WizardFooter, {InheritedWizardFooterProps} from "./WizardFooter";
  * @param {navLinkClasses} external css class for navigation links
  * @param {dataqa} Quality Engineering field
  */
-type WizardProps = {
+export type WizardProps = {
     className?: string;
     children: ReactNode;
     dataqa?: string;
@@ -147,43 +147,6 @@ export class Wizard extends React.PureComponent<WizardProps, WizardState> {
         };
     }
 
-    // Function to keep scroll bar on top on step change
-    scrollToTop() {
-        document.getElementsByClassName("modal-body")[0].scrollTo(0, 0);
-    }
-
-    // footerProps is a convenience method for selecting a subset of properties to pass
-    // inherited properties from the Wizard to the WizardFooter
-    private footerProps(): InheritedWizardFooterProps {
-        const {
-            cancelText,
-            cancelClassName,
-            completeClassName,
-            completeText,
-            customFooter,
-            nextClassName,
-            nextText,
-            previousClassName,
-            previousText,
-            dataqa,
-            showCancel,
-        } = this.props;
-        return {
-            cancelText,
-            cancelClassName,
-            completeClassName,
-            completeText,
-            customFooter,
-            nextClassName,
-            nextText,
-            previousClassName,
-            previousText,
-            dataqa,
-            showCancel,
-        };
-    }
-
-    // progressionStatus determines the status of the wizard based on the current step properties
     // and this step's position in the list
     private static progressionStatus(currentStepID: number, steps: ReactElement<WizardStep>[]): ProgressionStatus {
         if (steps.length > 0 && steps[currentStepID]) {
@@ -202,6 +165,15 @@ export class Wizard extends React.PureComponent<WizardProps, WizardState> {
             currentStepTitle: "",
         };
     }
+
+    // footerProps is a convenience method for selecting a subset of properties to pass
+
+    // Function to keep scroll bar on top on step change
+    scrollToTop() {
+        document.getElementsByClassName("modal-body")[0].scrollTo(0, 0);
+    }
+
+    // progressionStatus determines the status of the wizard based on the current step properties
 
     handleNext = (evt: React.MouseEvent<HTMLElement, MouseEvent>) => {
         const {onNext} = this.props;
@@ -224,6 +196,7 @@ export class Wizard extends React.PureComponent<WizardProps, WizardState> {
     };
 
     render() {
+        const {currentStepID} = this.state;
         const {
             children,
             className,
@@ -254,12 +227,10 @@ export class Wizard extends React.PureComponent<WizardProps, WizardState> {
         ]);
         const modalClassNames = classNames([ClassNames.WIZARD_MODAL_DIALOG, modalSize]);
 
-        // determine which buttons to show based on our position in the steps
-        const {currentStepID} = this.state;
         // get a list of all of the step IDs in component children
         let navigable: boolean = true;
         const maybeSteps = React.Children.map(children, child => {
-            if (React.isValidElement<WizardStep>(child)) {
+            if (React.isValidElement<WizardStep>(child) && child.type === WizardStep) {
                 const step = React.cloneElement<WizardStep>(
                     child as ReactElement<WizardStep>,
                     Object.assign({}, child.props, {
@@ -350,5 +321,35 @@ export class Wizard extends React.PureComponent<WizardProps, WizardState> {
                 )}
             </React.Fragment>
         );
+    }
+
+    // inherited properties from the Wizard to the WizardFooter
+    private footerProps(): InheritedWizardFooterProps {
+        const {
+            cancelText,
+            cancelClassName,
+            completeClassName,
+            completeText,
+            customFooter,
+            nextClassName,
+            nextText,
+            previousClassName,
+            previousText,
+            dataqa,
+            showCancel,
+        } = this.props;
+        return {
+            cancelText,
+            cancelClassName,
+            completeClassName,
+            completeText,
+            customFooter,
+            nextClassName,
+            nextText,
+            previousClassName,
+            previousText,
+            dataqa,
+            showCancel,
+        };
     }
 }

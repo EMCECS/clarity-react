@@ -10,8 +10,7 @@
 
 import React from "react";
 import {storiesOf} from "@storybook/react";
-import {Wizard, WizardSize} from "./Wizard";
-import WizardStep from "./WizardStep";
+import {Wizard, WizardSize, WizardStep} from ".";
 import {State, Store} from "@sambego/storybook-state";
 import {Button} from "../forms/button";
 import {Input} from "../forms/input/Input";
@@ -46,8 +45,7 @@ const store = new Store({
     },
 });
 
-// export const WizardSizes = props => (
-storiesOf("Wizard", module).add("Wizard Sizes", props => (
+storiesOf("Wizard", module).add("Wizard Sizes", _props => (
     <State store={store}>
         {state => (
             <div>
@@ -70,6 +68,7 @@ storiesOf("Wizard", module).add("Wizard Sizes", props => (
                     onClose={() => state.handleClose()}
                     title="Medium Wizard"
                 >
+                    <p>A non wizardstep child in here</p>
                     <WizardStep
                         id={0}
                         name="Basic Information"
@@ -94,7 +93,7 @@ storiesOf("Wizard", module).add("Wizard Sizes", props => (
                             type="number"
                         />
                         <Input label="Weight" name="weight" placeholder="lbs" />
-                        <Select defaultValue="3" label="Gender">
+                        <Select value="3" label="Gender">
                             <SelectOption value="1"> Male </SelectOption>
                             <SelectOption value="2"> Female </SelectOption>
                             <SelectOption value="3"> Non-binary </SelectOption>
