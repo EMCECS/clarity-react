@@ -15,7 +15,7 @@ import {ClassNames, Styles} from "./ClassNames";
 import WizardNavigation, {WizardNavigationStep} from "./WizardNavigation";
 import WizardHeader from "./WizardHeader";
 import WizardStep from "./WizardStep";
-import WizardFooter, {InheritedWizardFooterProps} from "./WizardFooter";
+import WizardFooter, {InheritedWizardFooterProps, WizardFooterProps} from "./WizardFooter";
 
 /**
  * General component description :
@@ -77,14 +77,14 @@ export type WizardProps = {
     cancelText?: string;
     showCancel?: boolean;
     cancelClassName?: string;
-    customFooter?: React.ReactElement;
+    customFooter?: ((props: WizardFooterProps) => any) | any;
     navLinkClasses?: string;
     showStepTitle?: boolean;
     showTitle?: boolean;
     show: boolean;
     size: WizardSize;
     style?: Object;
-    title?: string;
+    title?: ReactNode;
 };
 
 /**
@@ -98,7 +98,7 @@ type WizardState = {
 type ProgressionStatus = {
     previousStepExists: boolean;
     nextStepExists: boolean;
-    currentStepTitle: string;
+    currentStepTitle: ReactNode;
     currentStepIsCompleteAndValid: boolean;
 };
 

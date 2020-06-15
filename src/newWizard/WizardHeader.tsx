@@ -8,7 +8,7 @@
  *     http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import React from "react";
+import React, {ReactNode} from "react";
 import {classNames} from "../utils";
 import {ClassNames, Styles} from "./ClassNames";
 import {Icon} from "../icon";
@@ -16,7 +16,7 @@ import {Icon} from "../icon";
 type WizardHeaderProps = {
     closable: boolean;
     closeIcon: Icon;
-    title?: string;
+    title?: ReactNode;
     showTitle: boolean;
     onClose?: (evt: React.MouseEvent<HTMLElement, MouseEvent>) => void;
 };

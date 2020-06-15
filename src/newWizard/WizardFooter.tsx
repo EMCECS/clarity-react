@@ -8,7 +8,7 @@
  *     http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import React from "react";
+import React, {ReactNode} from "react";
 import {ClassNames} from "./ClassNames";
 import {Button, ButtonState} from "../forms/button";
 import {
@@ -23,7 +23,7 @@ export type InheritedWizardFooterProps = {
     cancelClassName?: string;
     completeClassName?: string;
     completeText?: string;
-    customFooter?: React.ReactElement;
+    customFooter?: ((props: WizardFooterProps) => any) | any;
     nextClassName?: string;
     nextText?: string;
     previousClassName?: string;
@@ -73,7 +73,8 @@ export default class WizardFooter extends React.PureComponent<WizardFooterProps>
         return (
             <div className={ClassNames.WIZARD_FOOTER}>
                 <div className={ClassNames.WIZARD_FOOTER_BUTTON}>
-                    {customFooter}
+                    {typeof customFooter === "function" && customFooter(this.props)}
+                    {typeof customFooter !== "function" && customFooter}
                     {activeStepFooter}
                     {showCancel && (
                         <Button

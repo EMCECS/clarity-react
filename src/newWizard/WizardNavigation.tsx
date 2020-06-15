@@ -8,7 +8,7 @@
  *     http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import React from "react";
+import React, {ReactNode} from "react";
 import {classNames} from "../utils";
 import {ClassNames, Styles} from "./ClassNames";
 import {VerticalNav} from "../layout/vertical-nav";
@@ -22,7 +22,7 @@ type WizardNavigationProps = {
     onSelectStep?: (stepID: number) => void;
     show?: boolean;
     showTitle?: boolean;
-    title?: string;
+    title?: ReactNode;
 };
 
 export default class WizardNavigation extends React.PureComponent<WizardNavigationProps> {
