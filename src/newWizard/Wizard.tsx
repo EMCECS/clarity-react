@@ -320,10 +320,11 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
                                                 showComplete={!nextStepExists}
                                                 showNext={nextStepExists}
                                                 showPrevious={previousStepExists}
-                                                onClose={onClose}
+                                                onClose={this.handleClose}
                                                 onComplete={this.handleComplete}
                                                 onNext={this.handleNext}
                                                 onPrevious={this.handlePrevious}
+                                                wizardState={this.state}
                                                 {...this.footerProps()}
                                             />
                                         </div>
