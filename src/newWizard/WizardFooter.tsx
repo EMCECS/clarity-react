@@ -17,6 +17,7 @@ import {
     dataqa_wizard_btn_next,
     dataqa_wizard_btn_previous,
 } from "./qualityFields";
+import {WizardState} from "./Wizard";
 
 export type InheritedWizardFooterProps = {
     cancelText?: string;
@@ -43,6 +44,7 @@ export interface WizardFooterProps extends InheritedWizardFooterProps {
     showComplete?: boolean;
     showNext?: boolean;
     showPrevious?: boolean;
+    wizardState: WizardState;
 }
 
 export default class WizardFooter extends React.PureComponent<WizardFooterProps> {

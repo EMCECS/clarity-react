@@ -68,16 +68,16 @@ export type WizardProps = {
     previousClassName?: string;
     nextText?: string;
     nextClassName?: string;
-    onClose?: (evt: React.MouseEvent<HTMLElement, MouseEvent>) => void;
-    onComplete?: (evt: React.MouseEvent<HTMLElement, MouseEvent>) => void;
-    onNext?: (evt: React.MouseEvent<HTMLElement, MouseEvent>) => void;
-    onPrevious?: (evt: React.MouseEvent<HTMLElement, MouseEvent>) => void;
+    onClose?: (wizardState: WizardState, evt: React.MouseEvent<HTMLElement, MouseEvent>) => void;
+    onComplete?: (wizardState: WizardState, evt: React.MouseEvent<HTMLElement, MouseEvent>) => void;
+    onNext?: (wizardState: WizardState, evt: React.MouseEvent<HTMLElement, MouseEvent>) => void;
+    onPrevious?: (wizardState: WizardState, evt: React.MouseEvent<HTMLElement, MouseEvent>) => void;
     previousText?: string;
     completeClassName?: string;
     cancelText?: string;
     showCancel?: boolean;
     cancelClassName?: string;
-    customFooter?: ((props: WizardFooterProps) => any) | any;
+    customFooter?: ((wizardState: WizardState, props: WizardFooterProps) => any) | any;
     navLinkClasses?: string;
     showStepTitle?: boolean;
     showTitle?: boolean;
@@ -91,7 +91,7 @@ export type WizardProps = {
  * State for Wizard :
  * @param {currentStepID} ID of active step in wizard startig form 0
  */
-type WizardState = {
+export type WizardState = {
     currentStepID: number;
 };
 
@@ -138,6 +138,9 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
         onNext: () => {
             // by default do nothing in addition the the default handler
         },
+        onClose: () => {
+            // by default do nothing in addition the the default handler
+        },
     };
 
     constructor(props: WizardProps) {
@@ -148,6 +151,7 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
     }
 
     // and this step's position in the list
+    // progressionStatus determines the status of the wizard based on the current step properties
     private static progressionStatus(currentStepID: number, steps: ReadonlyArray<WizardStep>): ProgressionStatus {
         if (steps.length > 0 && steps[currentStepID]) {
             const currentStep = steps[currentStepID];
@@ -173,28 +177,34 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
         document.getElementsByClassName("modal-body")[0].scrollTo(0, 0);
     }
 
-    // progressionStatus determines the status of the wizard based on the current step properties
-
     handleNext = (evt: React.MouseEvent<HTMLElement, MouseEvent>) => {
         const {onNext} = this.props;
         const {currentStepID} = this.state;
+        onNext && onNext(this.state, evt);
         this.setState({currentStepID: currentStepID + 1});
-        onNext && onNext(evt);
     };
 
     handlePrevious = (evt: React.MouseEvent<HTMLElement, MouseEvent>) => {
         const {onPrevious} = this.props;
         const {currentStepID} = this.state;
         if (currentStepID > 0) {
+            onPrevious && onPrevious(this.state, evt);
             this.setState({currentStepID: currentStepID - 1});
         }
-        onPrevious && onPrevious(evt);
     };
 
     handleComplete = (evt: React.MouseEvent<HTMLElement, MouseEvent>) => {
         const {onComplete} = this.props;
         // TODO reset wizard on completion
+        onComplete && onComplete(this.state, evt);
         this.setState({currentStepID: 0});
+    };
+
+    handleClose = (evt: React.MouseEvent<HTMLElement, MouseEvent>) => {
+        const {onClose} = this.props;
+        const {currentStepID} = this.state;
+        onClose && onClose(this.state, evt);
+        this.setState({currentStepID: currentStepID + 1});
     };
 
     handleSelectStep = (stepID: number) => {
@@ -297,7 +307,7 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
                                             <WizardHeader
                                                 title={currentStepTitle}
                                                 showTitle={showStepTitle}
-                                                onClose={onClose}
+                                                onClose={this.handleClose}
                                                 closable={closable}
                                             />
                                             <div className={ClassNames.MODAL_BODY}>
