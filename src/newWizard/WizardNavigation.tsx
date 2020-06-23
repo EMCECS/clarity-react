@@ -41,9 +41,9 @@ export default class WizardNavigation extends React.PureComponent<WizardNavigati
 }
 
 export class WizardNavigationStep extends React.PureComponent<WizardStepProps> {
-    handleNavigationClick = (_evt: React.MouseEvent<HTMLElement, MouseEvent>): void => {
+    handleNavigationClick = (evt: React.MouseEvent<HTMLElement, MouseEvent>): void => {
         const {id, onSelectStep} = this.props;
-        onSelectStep && onSelectStep(id);
+        onSelectStep && onSelectStep(id, evt);
     };
 
     render() {
