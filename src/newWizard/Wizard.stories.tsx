@@ -16,12 +16,14 @@ import {Button} from "../forms/button";
 import {Input} from "../forms/input/Input";
 import {Select, SelectOption} from "../forms/select";
 import {WizardFooterProps} from "./WizardFooter";
+import {action} from "@storybook/addon-actions";
 
 const store = new Store({
     open: false,
     activeWizard: "",
     basicInfoValid: true,
     basicInfoComplete: false,
+    currentWizardStepID: 0,
     handleToggleWizard: (size: string) =>
         store.set({
             open: true,
@@ -31,7 +33,29 @@ const store = new Store({
         store.set({
             open: false,
         }),
-    handleValidate: (evt: React.ChangeEvent<HTMLInputElement>) => {
+    handleNext: (): void => {
+        action("next");
+        store.set({
+            currentWizardStepID: store.get("currentWizardStepID") + 1,
+        });
+    },
+    handlePrevious: (): void =>
+        action("previous") &&
+        store.set({
+            currentWizardStepID: store.get("currentWizardStepID") - 1,
+        }),
+    handleComplete: (): void =>
+        action("complete") &&
+        store.set({
+            open: false,
+        }),
+    handleSelectStep: (selectedStepID: number): void => {
+        action("selected step ", selectedStepID) &&
+            store.set({
+                currentWizardStepID: selectedStepID,
+            });
+    },
+    handleValidate: (evt: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
         if (evt.target.value.length > 2) {
             store.set({
                 basicInfoValid: true,
@@ -63,11 +87,16 @@ storiesOf("New Wizard", module)
                     </Button>
 
                     <Wizard
+                        currentStepID={state.currentWizardStepID}
                         key={3}
                         size={WizardSize.MEDIUM}
                         show={state.open && state.activeWizard === WizardSize.MEDIUM}
                         showCancel={true}
                         onClose={() => state.handleClose()}
+                        onNext={state.handleNext}
+                        onPrevious={state.handlePrevious}
+                        onComplete={state.handleComplete}
+                        onNavigateTo={state.handleSelectStep}
                         title="Medium Wizard"
                     >
                         <WizardStep
@@ -97,7 +126,7 @@ storiesOf("New Wizard", module)
                                     onChange={state.handleValidate}
                                 />
                                 <Input label="Weight" name="weight" placeholder="lbs" onChange={state.handleValidate} />
-                                <Select value="3" label="Gender">
+                                <Select value="3" label="Gender" onChange={state.handleValidate}>
                                     <SelectOption value="1"> Male </SelectOption>
                                     <SelectOption value="2"> Female </SelectOption>
                                     <SelectOption value="3"> Non-binary </SelectOption>
@@ -112,21 +141,28 @@ storiesOf("New Wizard", module)
                         <WizardStep id={3} name="Summary" />
                     </Wizard>
                     <Wizard
+                        currentStepID={state.currentWizardStepID}
                         key={4}
                         size={WizardSize.LARGE}
                         show={state.open && state.activeWizard === WizardSize.LARGE}
-                        onClose={() => state.handleClose()}
                         title="Medium Wizard"
+                        onClose={state.handleClose}
+                        onNavigateTo={state.handleSelectStep}
                     >
                         <WizardStep id={0} key={0} name={"Page 1"} />
                         <WizardStep id={1} key={1} name={"Page 2"} />
                     </Wizard>
                     <Wizard
+                        currentStepID={state.currentWizardStepID}
                         key={5}
                         size={WizardSize.XLARGE}
                         show={state.open && state.activeWizard === WizardSize.XLARGE}
-                        onClose={() => state.handleClose()}
                         title="Medium Wizard"
+                        onClose={state.handleClose}
+                        onNext={state.handleNext}
+                        onPrevious={state.handlePrevious}
+                        onComplete={state.handleComplete}
+                        onNavigateTo={state.handleSelectStep}
                     >
                         <WizardStep id={0} key={0} name={"Page 1"} />
                         <WizardStep id={1} key={1} name={"Page 2"} />
@@ -143,11 +179,16 @@ storiesOf("New Wizard", module)
                         OPEN WIZARD
                     </Button>
                     <Wizard
+                        currentStepID={state.currentWizardStepID}
                         key={1}
                         size={WizardSize.MEDIUM}
                         show={state.open}
-                        onClose={() => state.handleClose()}
                         title={<h1>Rich Text Wizard Title</h1>}
+                        onClose={() => state.handleClose()}
+                        onNext={() => state.handleNext()}
+                        onPrevious={() => state.handlePrevious()}
+                        onComplete={() => state.handleComplete()}
+                        onNavigateTo={state.handleSelectStep}
                     >
                         <WizardStep id={0} key={0} name={"Page 1"} />
                     </Wizard>
@@ -163,14 +204,19 @@ storiesOf("New Wizard", module)
                         OPEN WIZARD
                     </Button>
                     <Wizard
+                        currentStepID={state.currentWizardStepID}
                         key={1}
                         size={WizardSize.LARGE}
                         show={state.open}
-                        onClose={() => state.handleClose()}
                         title="Wizard with custom footer"
+                        onClose={() => state.handleClose()}
+                        onNext={() => state.handleNext()}
+                        onPrevious={() => state.handlePrevious()}
+                        onComplete={() => state.handleComplete()}
                         customFooter={(props: WizardFooterProps) =>
                             !props.disableComplete && <Input helperText="Save As" name="save-as" />
                         }
+                        onNavigateTo={state.handleSelectStep}
                     >
                         <WizardStep
                             id={0}

@@ -34,7 +34,6 @@ import WizardFooter, {InheritedWizardFooterProps, WizardFooterProps} from "./Wiz
  * @param {show} if true show the wizard
  * @param {size} enum value for size of wizard
  * @param {title} wizard title
- * @param {defaultStepID} on which step wizard should open at first by default it will get open at first step
  * @param {showNavigation} if true it will show left side navigation on wizard
  * @param {closable} if true user can close the wizard
  * @param {onClose} callback function to call on close of wizard
@@ -54,12 +53,47 @@ import WizardFooter, {InheritedWizardFooterProps, WizardFooterProps} from "./Wiz
  * @param {customFooter} custom footer for all steps
  * @param {navLinkClasses} external css class for navigation links
  * @param {dataqa} Quality Engineering field
+ *
+ * @param {className} custom CSS class to use for the wizard
+ * @param {children} child components that make up the internal pages of the wizard.
+ *                   These will generally be WizardStep components
+ * @param {currentStepID} The current step ID that the wizard is displaying
+ * @param {dataqa?} a string to embed within HTML components for instrumentation of
+ *                  fields
+ * @param {showNavigation?} indicates if the left step navigation pane should be displayed
+ * @param {closable?} indicates if the wizard is closable before completion
+ * @param {completeText?} test for the completion button
+ * @param {isInline?} indicates if the wizard border should be displayed
+ * @param {showPrevious?} indicates if the previous button should be shown
+ * @param {previousClassName?} custom class name for the previous button
+ * @param {nextText?} text for the next button
+ * @param {nextClassName?} custom class for the next button
+ * @param {onClose?} event handler to execute when the wizard has been closed
+ * @param {onComplete?} event handler to execute when the wizard has been completed
+ * @param {onNext?} event handler to execute when the next button has been pressed
+ * @param {onPrevious?} event handler to execute when the previous button has been pressed
+ * @param {onNavigateTo?} event handler to execute when the wizard should navigate to a specific step
+ * @param {previousText?} text to display in previous button;
+ * @param {completeClassName?} custom class for the completion button
+ * @param {cancelText} text to use for the cancellation button
+ * @param {showCancel} indicates if the cancel button should be displayed
+ * @param {cancelClassName} custom class name for the cancel button
+ * @param {customFooter} custom footer component to display to the left of bottom navigation buttons
+ * @param {navLinkClasses} custom classes to use for navigation links
+ * @param {showStepTitle} indicates if the step title should be displayed
+ * @param {showTitle} indicates if the wizard title should be displayed
+ * @param {show} indicates if the wizard should be displayed
+ * @param {size} indicates the size of the wizard component
+ * @param {style} custom inline CSS styles for the wizard component
+ * @param {title} title React component to use for the wizard
+ *
+ *
  */
 export type WizardProps = {
     className?: string;
     children: ReactNode;
+    currentStepID: number;
     dataqa?: string;
-    defaultStepID?: number;
     showNavigation?: boolean;
     closable?: boolean;
     completeText?: string;
@@ -68,10 +102,11 @@ export type WizardProps = {
     previousClassName?: string;
     nextText?: string;
     nextClassName?: string;
-    onClose?: (wizardState: WizardState, evt: React.MouseEvent<HTMLElement, MouseEvent>) => void;
-    onComplete?: (wizardState: WizardState, evt: React.MouseEvent<HTMLElement, MouseEvent>) => void;
-    onNext?: (wizardState: WizardState, evt: React.MouseEvent<HTMLElement, MouseEvent>) => void;
-    onPrevious?: (wizardState: WizardState, evt: React.MouseEvent<HTMLElement, MouseEvent>) => void;
+    onClose?: (evt: React.MouseEvent<HTMLElement, MouseEvent>) => void;
+    onComplete?: (evt: React.MouseEvent<HTMLElement, MouseEvent>) => void;
+    onNext?: (evt: React.MouseEvent<HTMLElement, MouseEvent>) => void;
+    onPrevious?: (evt: React.MouseEvent<HTMLElement, MouseEvent>) => void;
+    onNavigateTo?: (stepID: number, evt: React.MouseEvent<HTMLElement, MouseEvent>) => void;
     previousText?: string;
     completeClassName?: string;
     cancelText?: string;
@@ -89,11 +124,8 @@ export type WizardProps = {
 
 /**
  * State for Wizard :
- * @param {currentStepID} ID of active step in wizard startig form 0
  */
-export type WizardState = {
-    currentStepID: number;
-};
+export type WizardState = {};
 
 type ProgressionStatus = {
     previousStepExists: boolean;
@@ -143,13 +175,6 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
         },
     };
 
-    constructor(props: WizardProps) {
-        super(props);
-        this.state = {
-            currentStepID: props.defaultStepID || 0,
-        };
-    }
-
     // and this step's position in the list
     // progressionStatus determines the status of the wizard based on the current step properties
     private static progressionStatus(currentStepID: number, steps: ReadonlyArray<WizardStep>): ProgressionStatus {
@@ -170,56 +195,24 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
         };
     }
 
-    // footerProps is a convenience method for selecting a subset of properties to pass
-
     // Function to keep scroll bar on top on step change
     scrollToTop() {
         document.getElementsByClassName("modal-body")[0].scrollTo(0, 0);
     }
 
-    handleNext = (evt: React.MouseEvent<HTMLElement, MouseEvent>) => {
-        const {onNext} = this.props;
-        const {currentStepID} = this.state;
-        onNext && onNext(this.state, evt);
-        this.setState({currentStepID: currentStepID + 1});
-    };
-
-    handlePrevious = (evt: React.MouseEvent<HTMLElement, MouseEvent>) => {
-        const {onPrevious} = this.props;
-        const {currentStepID} = this.state;
-        if (currentStepID > 0) {
-            onPrevious && onPrevious(this.state, evt);
-            this.setState({currentStepID: currentStepID - 1});
-        }
-    };
-
-    handleComplete = (evt: React.MouseEvent<HTMLElement, MouseEvent>) => {
-        const {onComplete} = this.props;
-        // TODO reset wizard on completion
-        onComplete && onComplete(this.state, evt);
-        this.setState({currentStepID: 0});
-    };
-
-    handleClose = (evt: React.MouseEvent<HTMLElement, MouseEvent>) => {
-        const {onClose} = this.props;
-        const {currentStepID} = this.state;
-        onClose && onClose(this.state, evt);
-        this.setState({currentStepID: currentStepID + 1});
-    };
-
-    handleSelectStep = (stepID: number) => {
-        this.setState({currentStepID: stepID});
-    };
-
     render() {
-        const {currentStepID} = this.state;
         const {
             children,
             className,
             closable,
+            currentStepID,
             dataqa,
             isInline,
             onClose,
+            onPrevious,
+            onNext,
+            onComplete,
+            onNavigateTo,
             show,
             showCancel,
             showNavigation,
@@ -275,7 +268,7 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
             <WizardNavigationStep
                 key={step.key || index}
                 currentStepID={currentStepID}
-                onSelectStep={this.handleSelectStep}
+                onSelectStep={onNavigateTo}
                 {...step.props}
             />
         ));
@@ -307,24 +300,24 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
                                             <WizardHeader
                                                 title={currentStepTitle}
                                                 showTitle={showStepTitle}
-                                                onClose={this.handleClose}
+                                                onClose={onClose}
                                                 closable={closable}
                                             />
                                             <div className={ClassNames.MODAL_BODY}>
                                                 <div className={ClassNames.WIZARD_CONTENT}>{steps}</div>
                                             </div>
                                             <WizardFooter
+                                                currentStepID={currentStepID}
                                                 disableNext={!currentStepIsCompleteAndValid}
                                                 disableComplete={!allStepsCompleteAndValid}
                                                 showCancel={showCancel}
                                                 showComplete={!nextStepExists}
                                                 showNext={nextStepExists}
                                                 showPrevious={previousStepExists}
-                                                onClose={this.handleClose}
-                                                onComplete={this.handleComplete}
-                                                onNext={this.handleNext}
-                                                onPrevious={this.handlePrevious}
-                                                wizardState={this.state}
+                                                onClose={onClose}
+                                                onComplete={onComplete}
+                                                onNext={onNext}
+                                                onPrevious={onPrevious}
                                                 {...this.footerProps()}
                                             />
                                         </div>

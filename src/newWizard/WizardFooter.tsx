@@ -8,7 +8,7 @@
  *     http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import React, {ReactNode} from "react";
+import React from "react";
 import {ClassNames} from "./ClassNames";
 import {Button, ButtonState} from "../forms/button";
 import {
@@ -35,16 +35,16 @@ export type InheritedWizardFooterProps = {
 
 export interface WizardFooterProps extends InheritedWizardFooterProps {
     activeStepFooter?: React.ReactElement;
+    currentStepID: number;
     disableNext?: boolean;
     disableComplete?: boolean;
     onClose?: (evt: React.MouseEvent<HTMLElement, MouseEvent>) => void;
-    onComplete: (evt: React.MouseEvent<HTMLElement, MouseEvent>) => void;
-    onNext: (evt: React.MouseEvent<HTMLElement, MouseEvent>) => void;
-    onPrevious: (evt: React.MouseEvent<HTMLElement, MouseEvent>) => void;
+    onComplete?: (evt: React.MouseEvent<HTMLElement, MouseEvent>) => void;
+    onNext?: (evt: React.MouseEvent<HTMLElement, MouseEvent>) => void;
+    onPrevious?: (evt: React.MouseEvent<HTMLElement, MouseEvent>) => void;
     showComplete?: boolean;
     showNext?: boolean;
     showPrevious?: boolean;
-    wizardState: WizardState;
 }
 
 export default class WizardFooter extends React.PureComponent<WizardFooterProps> {
