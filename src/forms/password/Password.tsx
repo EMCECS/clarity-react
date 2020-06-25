@@ -109,10 +109,7 @@ export class Password extends React.PureComponent<PasswordProps, PasswordState> 
                     {label && Password.renderLabel(label)}
                     <div className={utils.classNames(classNames)} style={{width: "100%"}}>
                         <div className="clr-input-wrapper">
-                            <div
-                                className={utils.classNames(["clr-input-group", className])}
-                                // style={{...style, paddingRight: "1rem"}}
-                            >
+                            <div className={utils.classNames(["clr-input-group", className])} style={style}>
                                 <input
                                     maxLength={maxPasswordLength}
                                     minLength={minPasswordLength}
