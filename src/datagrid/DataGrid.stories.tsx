@@ -276,6 +276,7 @@ storiesOf("DataGrid", module)
                     {
                         columnName: "User ID",
                         style: {width: "20%"},
+                        isVisible: false,
                         sort: {defaultSortOrder: SortOrder.ASC, sortFunction: sortFunction},
                         filter: (
                             <DataGridFilter
