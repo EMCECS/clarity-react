@@ -127,24 +127,28 @@ export class HideShowColumns extends React.PureComponent<HideShowColumnsProps, H
     };
 
     private updateDatagridColumns = (columnName: string) => {
-        const {updateColumns, columns} = this.props;
+        let {columns} = this.props;
+        const {updateColumns} = this.props;
 
         columns.forEach((column: DataGridColumn) => {
             if (columnName === column.columnName) {
                 column.isVisible = !column.isVisible;
+
+                // To make sure at least 1 column is visible
+                if (allFalseOnKey(columns, "isVisible")) {
+                    column.isVisible = !column.isVisible;
+                }
             } else if (columnName === "All") {
                 column.isVisible = true;
             }
         });
 
-        if (!allFalseOnKey(columns, "isVisible")) {
-            this.setState(
-                {
-                    SelectAll: allTrueOnKey(columns, "isVisible"),
-                },
-                () => updateColumns && updateColumns(columns),
-            );
-        }
+        this.setState(
+            {
+                SelectAll: allTrueOnKey(columns, "isVisible"),
+            },
+            () => updateColumns && updateColumns(columns),
+        );
     };
 
     // function to build column list
