@@ -128,11 +128,11 @@ export type DataGridFooter = {
 
 /**
  * type for DataGridFooter hide show columns :
- * @param {updateDataGridColunms} Function to update datagrid columns in parent
+ * @param {updateDataGridColumns} Function to update datagrid columns in parent
  */
 export type DataGRidHideShowColumns = {
     hideShowColBtn: boolean;
-    updateDataGridColunms?: (columns: DataGridColumn[]) => void;
+    updateDataGridColumns?: (columns: DataGridColumn[]) => void;
 };
 
 /**
@@ -349,8 +349,8 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
             () => {
                 footer &&
                     footer.hideShowColumns &&
-                    footer.hideShowColumns.updateDataGridColunms &&
-                    footer.hideShowColumns.updateDataGridColunms(updatedCols);
+                    footer.hideShowColumns.updateDataGridColumns &&
+                    footer.hideShowColumns.updateDataGridColumns(updatedCols);
             },
         );
     };
