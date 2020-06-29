@@ -92,7 +92,7 @@ export class VerticalNav extends React.PureComponent<VerticalNavProps, VerticalN
         this.setState({isCollapsed: false});
     }
 
-    private renderChildren(): React.ReactNode[] {
+    private renderChildren(): React.ReactNode[] | undefined | null {
         const {isCollapsed} = this.state;
         const {children} = this.props;
         if (typeof children === "undefined" || children === null) {

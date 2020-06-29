@@ -67,7 +67,7 @@ export class RadioButtonGroup extends React.PureComponent<RadioButtonGroupProps>
         if (onChange) onChange(evt);
     };
 
-    private renderChildren(): React.ReactNode[] {
+    private renderChildren(): React.ReactElement<RadioButton>[] | undefined | null {
         const {value} = this.state;
         const {children, className, disabled, name} = this.props;
         if (typeof children === "undefined" || children === null) {
@@ -76,7 +76,8 @@ export class RadioButtonGroup extends React.PureComponent<RadioButtonGroupProps>
         return React.Children.map(children, (child: ReactNode, index: number) => {
             const childEl = child as ReactElement;
             if (childEl.type === RadioButton) {
-                return React.cloneElement(childEl as React.ReactElement<any>, {
+                return React.cloneElement(childEl as React.ReactElement<RadioButton>, {
+                    // @ts-ignore // childEl is of type RadioButton
                     checked: value === childEl.props.value,
                     className: className,
                     disabled: disabled ? disabled : childEl.props.disabled,
@@ -85,9 +86,8 @@ export class RadioButtonGroup extends React.PureComponent<RadioButtonGroupProps>
                     onChange: this.handleChange,
                 });
             }
-            console.log(child);
             return child;
-        });
+        }) as React.ReactElement<RadioButton>[];
     }
 
     private static renderHelperText(helperText: ReactNode): ReactNode {

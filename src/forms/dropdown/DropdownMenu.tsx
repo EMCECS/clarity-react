@@ -51,7 +51,7 @@ export class DropdownMenu extends React.PureComponent<DropdownMenuProps> {
         style: {},
         className: "",
     };
-    private renderChildren(): React.ReactNode[] {
+    private renderChildren(): React.ReactNode[] | undefined | null {
         const {
             children, //prettier hack
             itemsPath,

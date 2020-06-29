@@ -13,6 +13,7 @@ import * as ReactDOM from "react-dom";
 import {Icon} from "../icon";
 import {classNames} from "../utils";
 import {ClassNames} from "../modals/ClassNames";
+import {ReactNode} from "react";
 
 export enum Direction {
     TOP_RIGHT = "top-right",
@@ -164,7 +165,7 @@ export class Toast extends React.PureComponent<ToastProps> {
         return state.showToast;
     }
 
-    render() {
+    render(): ReactNode {
         return this.showToast() ? ReactDOM.createPortal(this.buildToast(), this.divRef!) : null;
     }
 }

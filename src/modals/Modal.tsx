@@ -13,6 +13,7 @@ import * as ReactDOM from "react-dom";
 import {Icon} from "../icon";
 import {classNames} from "../utils";
 import {ClassNames} from "./ClassNames";
+import {ReactNode} from "react";
 
 /**
  * @param {isOpen} property stating if modal open
@@ -140,7 +141,7 @@ export class Modal extends React.PureComponent<ModalProps> {
         return state.isOpen;
     }
 
-    render() {
+    render(): ReactNode {
         return this.isOpen() ? ReactDOM.createPortal(this.buildModal(), this.divRef!) : null;
     }
 }
