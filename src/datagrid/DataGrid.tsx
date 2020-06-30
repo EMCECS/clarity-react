@@ -122,8 +122,17 @@ export type DataGridFooter = {
     footerData?: any;
     className?: string;
     style?: any;
-    hideShowColBtn?: boolean;
+    hideShowColumns?: DataGRidHideShowColumns;
     showFooter: boolean;
+};
+
+/**
+ * type for DataGridFooter hide show columns :
+ * @param {updateDataGridColumns} Function to update datagrid columns in parent
+ */
+export type DataGRidHideShowColumns = {
+    hideShowColBtn: boolean;
+    updateDataGridColumns?: (columns: DataGridColumn[]) => void;
 };
 
 /**
@@ -273,7 +282,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
             this.updateRows(rows, pagination && pagination.totalItems);
         }
 
-        if (columns !== prevProps.columns) {
+        if (columns && columns !== prevProps.columns) {
             this.updateColumns(columns);
         }
     }
@@ -326,14 +335,24 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // Function to update datagrid rows
     updateColumns = (cols: DataGridColumn[]) => {
+        const {footer} = this.props;
+
         // Update visibility and sorting details of columns
         const columnsWithVisibility = this.setColumnVisibility(cols);
         const columnsWithSort = this.setSortingState(columnsWithVisibility);
         const updatedCols = this.updateColumnIDs(columnsWithSort);
 
-        this.setState({
-            allColumns: [...updatedCols],
-        });
+        this.setState(
+            {
+                allColumns: [...updatedCols],
+            },
+            () => {
+                footer &&
+                    footer.hideShowColumns &&
+                    footer.hideShowColumns.updateDataGridColumns &&
+                    footer.hideShowColumns.updateDataGridColumns(updatedCols);
+            },
+        );
     };
 
     // Function to get all rows
@@ -1135,7 +1154,11 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                 className={`${ClassNames.DATAGRID_FOOTER} ${footer && footer.className && footer.className}`}
                 style={footer && footer.style && footer.style}
             >
-                {footer && footer.hideShowColBtn && this.buildHideShowColumnsBtn()}
+                {footer &&
+                    footer.hideShowColumns &&
+                    footer.hideShowColumns.hideShowColBtn &&
+                    this.buildHideShowColumnsBtn()}
+
                 <div className={ClassNames.DATAGRID_FOOTER_DESC}>
                     {renderPaginationFooter ? this.buildDataGridPagination() : this.buildFooterContent()}
                 </div>

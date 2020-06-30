@@ -12,7 +12,7 @@ import * as React from "react";
 import {classNames, allTrueOnKey, allFalseOnKey} from "../utils";
 import {ClassNames} from "./ClassNames";
 import {Button} from "../forms/button";
-import {DataGridRow, DataGridColumn} from "./DataGrid";
+import {DataGridColumn} from "./DataGrid";
 import {CheckBox} from "../forms/checkbox";
 
 /**
@@ -35,14 +35,12 @@ export type HideShowColumnsProps = {
 
 /**
  * State for HideShowColumns :
- * @param {columns} datagrid columns
  * @param {isOpen} true if hide and columns menu is open
  * @param {transformVal} CSS value for transform attribute
  * @param {SelectAll} true if all columns has selected
  */
 type HideShowColumnsState = {
     isOpen: boolean;
-    columns: DataGridColumn[];
     transformVal: string;
     SelectAll: boolean;
 };
@@ -54,7 +52,6 @@ export class HideShowColumns extends React.PureComponent<HideShowColumnsProps, H
     // Initial state for HideShowColumns
     state: HideShowColumnsState = {
         isOpen: false,
-        columns: this.props.columns,
         transformVal: "translateX(0px) translateY(0px)",
         SelectAll: allTrueOnKey(this.props.columns, "isVisible"),
     };
@@ -130,26 +127,28 @@ export class HideShowColumns extends React.PureComponent<HideShowColumnsProps, H
     };
 
     private updateDatagridColumns = (columnName: string) => {
-        const {columns} = this.state;
+        let {columns} = this.props;
         const {updateColumns} = this.props;
 
         columns.forEach((column: DataGridColumn) => {
             if (columnName === column.columnName) {
                 column.isVisible = !column.isVisible;
+
+                // To make sure at least 1 column is visible
+                if (allFalseOnKey(columns, "isVisible")) {
+                    column.isVisible = !column.isVisible;
+                }
             } else if (columnName === "All") {
                 column.isVisible = true;
             }
         });
 
-        if (!allFalseOnKey(columns, "isVisible")) {
-            this.setState(
-                {
-                    columns: [...columns],
-                    SelectAll: allTrueOnKey(columns, "isVisible"),
-                },
-                () => updateColumns && updateColumns(columns),
-            );
-        }
+        this.setState(
+            {
+                SelectAll: allTrueOnKey(columns, "isVisible"),
+            },
+            () => updateColumns && updateColumns(columns),
+        );
     };
 
     // function to build column list
@@ -170,8 +169,8 @@ export class HideShowColumns extends React.PureComponent<HideShowColumnsProps, H
     }
 
     render() {
-        const {isOpen, columns, transformVal, SelectAll} = this.state;
-        const {className} = this.props;
+        const {isOpen, transformVal, SelectAll} = this.state;
+        const {className, columns} = this.props;
 
         return (
             <div>

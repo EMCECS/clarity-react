@@ -74,6 +74,13 @@ export const noFooter = {
     showFooter: false,
 };
 
+export const hideShowColFooter = {
+    hideShowColumns: {
+        hideShowColBtn: true,
+    },
+    showFooter: true,
+};
+
 /**
  * Data for Custom content rendering
  */
