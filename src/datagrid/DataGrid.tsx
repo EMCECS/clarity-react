@@ -277,7 +277,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     }
 
     componentDidUpdate(prevProps: DataGridProps) {
-        const {rows, columns, pagination, footer} = this.props;
+        const {rows, columns, pagination} = this.props;
         if (rows && rows !== prevProps.rows) {
             this.updateRows(rows, pagination && pagination.totalItems);
         }
