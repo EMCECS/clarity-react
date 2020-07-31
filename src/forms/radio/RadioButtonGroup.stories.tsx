@@ -46,6 +46,12 @@ storiesOf("RadioButton", module)
             <RadioButton key="two" label="Two" value="two" />
         </RadioButtonGroup>
     ))
+    .add("With one radio disabled", () => (
+        <RadioButtonGroup label={"Radio Label"} name="number" onChange={action("changed")}>
+            <RadioButton key="one" label="One" value="one" disabled={true} />
+            <RadioButton key="two" label="Two" value="two" />
+        </RadioButtonGroup>
+    ))
     .add("With helper text", () => (
         <RadioButtonGroup
             helperText={"This text should help you figure things out"}

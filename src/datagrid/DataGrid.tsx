@@ -15,6 +15,7 @@ import {CheckBox} from "../forms/checkbox";
 import {RadioButton} from "../forms/radio";
 import {Button} from "../forms/button";
 import {Icon, Direction} from "../icon";
+import {Spinner, SpinnerSize} from "../spinner/Spinner";
 import {HideShowColumns} from "./HideShowColumns";
 
 /**
@@ -121,8 +122,17 @@ export type DataGridFooter = {
     footerData?: any;
     className?: string;
     style?: any;
-    hideShowColBtn?: boolean;
+    hideShowColumns?: DataGRidHideShowColumns;
     showFooter: boolean;
+};
+
+/**
+ * type for DataGridFooter hide show columns :
+ * @param {updateDataGridColumns} Function to update datagrid columns in parent
+ */
+export type DataGRidHideShowColumns = {
+    hideShowColBtn: boolean;
+    updateDataGridColumns?: (columns: DataGridColumn[]) => void;
 };
 
 /**
@@ -198,6 +208,7 @@ export enum GridRowType {
  * @param {allRows} row data
  * @param {itemText} label to display for all items
  * @param {pagination} pagination data
+ * @param {isLoading} if true shows loading spinner else shows datagrid
  */
 type DataGridState = {
     selectAll: boolean;
@@ -205,6 +216,7 @@ type DataGridState = {
     allRows: DataGridRow[];
     itemText: string;
     pagination?: DataGridPaginationState;
+    isLoading: boolean;
 };
 
 type DataGridPaginationState = {
@@ -230,6 +242,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // Initial state of datagrid
     state: DataGridState = {
+        isLoading: true,
         selectAll: false,
         allColumns: this.props.columns,
         allRows: this.props.rows !== undefined ? this.props.rows : [],
@@ -259,13 +272,17 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         if (this.props.pagination !== undefined) this.setInitalStateForPagination();
     }
 
+    componentDidMount() {
+        this.hideLoader();
+    }
+
     componentDidUpdate(prevProps: DataGridProps) {
         const {rows, columns, pagination} = this.props;
         if (rows && rows !== prevProps.rows) {
             this.updateRows(rows, pagination && pagination.totalItems);
         }
 
-        if (columns !== prevProps.columns) {
+        if (columns && columns !== prevProps.columns) {
             this.updateColumns(columns);
         }
     }
@@ -318,20 +335,40 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // Function to update datagrid rows
     updateColumns = (cols: DataGridColumn[]) => {
+        const {footer} = this.props;
+
         // Update visibility and sorting details of columns
         const columnsWithVisibility = this.setColumnVisibility(cols);
         const columnsWithSort = this.setSortingState(columnsWithVisibility);
         const updatedCols = this.updateColumnIDs(columnsWithSort);
 
-        this.setState({
-            allColumns: [...updatedCols],
-        });
+        this.setState(
+            {
+                allColumns: [...updatedCols],
+            },
+            () => {
+                footer &&
+                    footer.hideShowColumns &&
+                    footer.hideShowColumns.updateDataGridColumns &&
+                    footer.hideShowColumns.updateDataGridColumns(updatedCols);
+            },
+        );
     };
 
     // Function to get all rows
     getAllRows = () => {
         return this.state.allRows;
     };
+
+    // Function to hide loading spinner on datagrid
+    hideLoader() {
+        this.setState({isLoading: false});
+    }
+
+    // Function to show loading spinner on datagrid
+    showLoader() {
+        this.setState({isLoading: true});
+    }
 
     /* ##########  DataGrid private methods start  ############ */
 
@@ -442,6 +479,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     // Function to get page data for given page number
     private getPage(pageIndex: number, pageSize: number) {
         if (this.state.pagination && this.props.pagination) {
+            this.showLoader();
             const {totalItems} = this.state.pagination;
             const {getPageData} = this.props.pagination;
             const totalPages =
@@ -484,12 +522,14 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                         pagination: paginationState,
                         selectAll: allTrueOnKey(rows, "isSelected"),
                     });
+                    this.hideLoader();
                 });
             }
         }
     }
 
     /* ############################# Pagination methods end ####################################*/
+
     //toggle collapse of expandable row
     private toggleExpand(rowID: number) {
         const {allRows} = this.state;
@@ -545,6 +585,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         sortFunction: Function,
         defaultSortOrder: SortOrder,
     ) => {
+        this.showLoader();
         const {allRows, allColumns} = this.state;
         if (columnID != undefined) {
             // Set currentlySorted flag for all columns as false
@@ -570,6 +611,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                     allRows: [...rows],
                     allColumns: [...allColumns],
                 });
+                this.hideLoader();
             });
         }
     };
@@ -724,34 +766,56 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // function to build datagrid body
     private buildDataGridBody(): React.ReactElement {
-        const {allRows, itemText} = this.state;
+        const {allRows} = this.state;
         return (
             <div className={ClassNames.DATAGRID}>
                 <div className={ClassNames.DATAGRID_TABLE_WRAPPER}>
                     <div className={ClassNames.DATAGRID_TABLE} role="grid">
                         {this.buildDataGridHeader()}
-                        {allRows.length !== 0 ? (
-                            allRows.map((row: DataGridRow, index: number) => {
-                                return this.buildDataGridRow(row, index);
-                            })
-                        ) : (
-                            <div className={ClassNames.DATAGRID_PLACEHOLDER_CONTAINER}>
-                                <div
-                                    className={classNames([ClassNames.DATAGRID_PLACEHOLDER, ClassNames.DATAGRID_EMPTY])}
-                                >
-                                    <div
-                                        className={classNames([
-                                            ClassNames.DATAGRID_PLACEHOLDER_IMG,
-                                            ClassNames.DATAGRID_NG_STAR_INSERTED,
-                                        ])}
-                                    />
-                                    {`${"We couldn't find any"} ${itemText} ${"!"}`}
-                                </div>
-                            </div>
-                        )}
+                        {allRows.map((row: DataGridRow, index: number) => {
+                            return this.buildDataGridRow(row, index);
+                        })}
+                        {this.buildPlaceHolderContainer()}
                     </div>
                 </div>
             </div>
+        );
+    }
+
+    // Function to build placeholder container
+    private buildPlaceHolderContainer(): React.ReactElement {
+        const {allRows} = this.state;
+
+        return (
+            <div
+                className={classNames([
+                    ClassNames.DATAGRID_PLACEHOLDER_CONTAINER,
+                    ClassNames.DATAGRID_NG_STAR_INSERTED,
+                ])}
+            >
+                <div
+                    className={classNames([
+                        ClassNames.DATAGRID_PLACEHOLDER,
+                        allRows.length === 0 && ClassNames.DATAGRID_EMPTY,
+                    ])}
+                >
+                    {allRows.length === 0 && this.buildEmptyPlaceholder()}
+                </div>
+            </div>
+        );
+    }
+
+    // Function to create placeholder for empty datagrid
+    private buildEmptyPlaceholder(): React.ReactElement {
+        const {itemText} = this.state;
+        const placeholderText = "We couldn't find any " + itemText + " !";
+        return (
+            <React.Fragment>
+                <div
+                    className={classNames([ClassNames.DATAGRID_PLACEHOLDER_IMG, ClassNames.DATAGRID_NG_STAR_INSERTED])}
+                />
+                {placeholderText}
+            </React.Fragment>
         );
     }
 
@@ -847,7 +911,11 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                 style={rowStyle}
                 key={"row-" + index}
             >
-                <div className={ClassNames.DATAGRID_ROW_MASTER} role="row" id="clr-dg-row1">
+                <div
+                    className={classNames([ClassNames.DATAGRID_ROW_MASTER, ClassNames.DATAGRID_NG_STAR_INSERTED])}
+                    role="row"
+                    id="clr-dg-row1"
+                >
                     <div className={ClassNames.DATAGRID_ROW_STICKY} />
                     <div className={ClassNames.DATAGRID_ROW_SCROLLABLE}>
                         <div className={ClassNames.DATAGRID_SCROLLING_CELLS}>
@@ -1044,7 +1112,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                     <div className={classNames([ClassNames.PAGINATION_DESC])}>{paginationLabel}</div>
                 )}
 
-                {totalItems >= pageSize && compactFooter ? this.buildCompactPageButtons() : this.buildPageButtons()}
+                {compactFooter ? this.buildCompactPageButtons() : this.buildPageButtons()}
             </div>
         );
     }
@@ -1071,16 +1139,37 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     // function to build datagrid footer
     private buildDataGridFooter(): React.ReactElement {
         // Need to take this from state in future
-        const {footer, pagination} = this.props;
+        const {footer} = this.props;
+        const {pagination} = this.state;
+        let renderPaginationFooter = false;
+        if (pagination) {
+            const {totalItems, pageSize} = pagination;
+            if (totalItems && pageSize && totalItems >= pageSize) {
+                renderPaginationFooter = true;
+            }
+        }
+
         return (
             <div
                 className={`${ClassNames.DATAGRID_FOOTER} ${footer && footer.className && footer.className}`}
                 style={footer && footer.style && footer.style}
             >
-                {footer && footer.hideShowColBtn && this.buildHideShowColumnsBtn()}
+                {footer &&
+                    footer.hideShowColumns &&
+                    footer.hideShowColumns.hideShowColBtn &&
+                    this.buildHideShowColumnsBtn()}
+
                 <div className={ClassNames.DATAGRID_FOOTER_DESC}>
-                    {pagination !== undefined ? this.buildDataGridPagination() : this.buildFooterContent()}
+                    {renderPaginationFooter ? this.buildDataGridPagination() : this.buildFooterContent()}
                 </div>
+            </div>
+        );
+    }
+
+    buildDataGridSpinner(): React.ReactElement {
+        return (
+            <div className={classNames([ClassNames.DATAGRID_SPINNER, ClassNames.DATAGRID_NG_STAR_INSERTED])}>
+                <Spinner size={SpinnerSize.MEDIUM} />
             </div>
         );
     }
@@ -1088,6 +1177,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     // render datagrid
     render() {
         const {className, style, rowType, footer, dataqa} = this.props;
+        const {isLoading} = this.state;
         return (
             <div
                 className={classNames([
@@ -1098,10 +1188,15 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                 style={style}
                 data-qa={dataqa}
             >
-                {this.buildDataGridBody()}
-                {footer && footer.showFooter && this.buildDataGridFooter()}
-                <div className={ClassNames.DATAGRID_CAL_TABLE}>
-                    <div className={ClassNames.DATAGRID_CAL_HEADER} />
+                <div className={ClassNames.DATAGRID_OUTER_WRAPPER}>
+                    <div className={ClassNames.DATAGRID_INNER_WRAPPER}>
+                        {this.buildDataGridBody()}
+                        {footer && footer.showFooter && this.buildDataGridFooter()}
+                        <div className={ClassNames.DATAGRID_CAL_TABLE}>
+                            <div className={ClassNames.DATAGRID_CAL_HEADER} />
+                        </div>
+                        {isLoading && this.buildDataGridSpinner()}
+                    </div>
                 </div>
             </div>
         );

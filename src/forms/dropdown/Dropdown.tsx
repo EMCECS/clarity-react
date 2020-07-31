@@ -129,7 +129,7 @@ export class Dropdown extends React.PureComponent<DropdownProps> {
         return undefined;
     };
 
-    private renderChildren(): React.ReactNode[] {
+    private renderChildren(): React.ReactNode[] | undefined | null {
         const {children, itemsPath, isNested, _level} = this.props;
         if (typeof children === "undefined" || children === null) {
             return [];

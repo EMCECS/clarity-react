@@ -16,7 +16,8 @@ import {classNames} from "../../utils";
  * @param {className} css stylke
  * @param {children} childern UI
  * @param {style} css style
- * @param {defaultValue} default value to be passed
+ * @param {defaultValue} default value for button group
+ * @param {selectedValue} selected value for button group
  * @param {label} name for group
  * @param {disabled} enable disable property
  * @param {isRadio} radio group property
@@ -28,6 +29,7 @@ type ButtonGroupProps = {
     children?: React.ReactNode[];
     style?: any;
     defaultValue?: any;
+    selectedValue?: any;
     label?: string;
     disabled?: boolean;
     isRadio?: boolean;
@@ -45,14 +47,14 @@ export class ButtonGroup extends React.PureComponent<ButtonGroupProps> {
 
     constructor(props: ButtonGroupProps) {
         super(props);
-        const {defaultValue} = props;
-        if (defaultValue) this.state = {value: defaultValue};
+        const {defaultValue, selectedValue} = props;
+        this.state = {value: selectedValue ? selectedValue : defaultValue};
     }
 
     componentDidUpdate(prevProps: ButtonGroupProps) {
-        const {defaultValue} = this.props;
-        if (!(defaultValue === prevProps.defaultValue)) {
-            this.setState({value: defaultValue});
+        const {selectedValue, defaultValue} = this.props;
+        if (selectedValue !== prevProps.selectedValue || defaultValue !== prevProps.defaultValue) {
+            this.setState({value: selectedValue ? selectedValue : defaultValue});
         }
     }
 
@@ -62,7 +64,7 @@ export class ButtonGroup extends React.PureComponent<ButtonGroupProps> {
         if (onChange) onChange(evt);
     };
 
-    private renderChildren(): React.ReactNode[] {
+    private renderChildren(): React.ReactNode[] | undefined | null {
         const {value} = this.state;
         const {children, name} = this.props;
         if (typeof children === "undefined" || children === null) {

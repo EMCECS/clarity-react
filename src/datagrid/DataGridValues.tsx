@@ -74,6 +74,13 @@ export const noFooter = {
     showFooter: false,
 };
 
+export const hideShowColFooter = {
+    hideShowColumns: {
+        hideShowColBtn: true,
+    },
+    showFooter: true,
+};
+
 /**
  * Data for Custom content rendering
  */
@@ -199,7 +206,11 @@ export const sortFunction = (rows: DataGridRow[], sortOrder: SortOrder, columnNa
                 return result;
             },
         );
-        resolve(rows);
+
+        // Purposefully added dealy here to see loading spinner
+        setTimeout(function() {
+            resolve(rows);
+        }, 2000);
     });
 };
 
@@ -369,7 +380,10 @@ export const getPageData = (pageIndex: number, pageSize: number): Promise<DataGr
         } else if (pageSize == 10) {
             rows = paginationRows;
         }
-        resolve(rows);
+        // Purposefully added dealy here to see loading spinner
+        setTimeout(function() {
+            resolve(rows);
+        }, 2000);
     });
 };
 
@@ -410,7 +424,11 @@ export const pageFilterFunction = (
                 totalItems: newRows.length,
             };
         }
-        resolve(result);
+
+        // Purposefully added dealy here to see loading spinner
+        setTimeout(function() {
+            resolve(result);
+        }, 2000);
     });
 };
 

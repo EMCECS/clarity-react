@@ -12,6 +12,7 @@ import * as React from "react";
 import {ReactNode} from "react";
 import {classNames} from "../../utils";
 import {Icon, IconProps} from "../../icon";
+import {findAllInRenderedTree} from "react-dom/test-utils";
 
 export type ButtonProps = {
     block?: boolean;
@@ -29,7 +30,7 @@ export type ButtonProps = {
     icon?: IconProps;
     defaultBtn?: boolean;
     show?: boolean;
-    type?: string;
+    type?: "button" | "reset" | "submit";
     value?: string;
     dataqa?: string;
 };
@@ -57,7 +58,6 @@ export class Button extends React.PureComponent<ButtonProps> {
         return [
             props.defaultBtn && "btn",
             props.defaultBtn && props.icon && "btn-icon",
-            props.className,
             ...["block", "flat", "inverse", "link", "primary"].map(field => {
                 const value = (props as any)[field];
                 if (typeof value === "boolean" && value) return `btn-${field}`;
@@ -68,6 +68,7 @@ export class Button extends React.PureComponent<ButtonProps> {
                 if (typeof value !== "undefined" && value !== null) return `btn-${value}`;
                 return undefined;
             }),
+            props.className,
         ];
     }
 

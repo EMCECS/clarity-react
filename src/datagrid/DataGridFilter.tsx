@@ -128,6 +128,7 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
 
     updateFilter = (value: any) => {
         const {columnName, datagridRef, onFilter} = this.props;
+        datagridRef.current!.showLoader();
 
         // get latest data from grid
         const rows = datagridRef.current!.getAllRows();
@@ -139,6 +140,7 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
                 // Update datagrid rows
                 const {rows, totalItems} = data;
                 datagridRef.current!.updateRows(rows, totalItems);
+                datagridRef.current!.hideLoader();
             });
         }
     };
@@ -185,7 +187,7 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
     private openFilter(): React.ReactElement {
         const {filterValue} = this;
         const {transformVal} = this.state;
-        const {style, className, filterType, customFilter, placeholder} = this.props;
+        const {style, className, filterType, customFilter, placeholder, columnName} = this.props;
 
         return (
             <div>
@@ -219,8 +221,8 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
                     {filterType === FilterType.STR ? (
                         <input
                             className={ClassNames.CLR_INPUT}
-                            name="search"
-                            type="text"
+                            type="search"
+                            name={`name-${columnName}`}
                             placeholder={placeholder}
                             defaultValue={filterValue}
                             onChange={evt => {

@@ -16,6 +16,7 @@ import {ReactElement, ReactNode} from "react";
 /**
  * RadioButtonGroup Props
  * @param {defaultValue} default value of radio group
+ * @param {selectedValue} selected value for radio group
  * @param {children} nested radio button or group
  * @param {className} css property
  * @param {disabled} property to enable disable radio button group
@@ -28,6 +29,7 @@ import {ReactElement, ReactNode} from "react";
  */
 type RadioButtonGroupProps = {
     defaultValue?: any;
+    selectedValue?: any;
     children?: React.ReactNode[];
     className?: string;
     disabled?: boolean;
@@ -48,8 +50,15 @@ export class RadioButtonGroup extends React.PureComponent<RadioButtonGroupProps>
 
     constructor(props: RadioButtonGroupProps) {
         super(props);
-        const {defaultValue} = props;
-        if (defaultValue) this.state = {value: defaultValue};
+        const {defaultValue, selectedValue} = props;
+        this.state = {value: selectedValue ? selectedValue : defaultValue};
+    }
+
+    componentDidUpdate(prevProps: RadioButtonGroupProps) {
+        const {selectedValue, defaultValue} = this.props;
+        if (selectedValue !== prevProps.selectedValue || defaultValue !== prevProps.defaultValue) {
+            this.setState({value: selectedValue ? selectedValue : defaultValue});
+        }
     }
 
     private handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,7 +67,7 @@ export class RadioButtonGroup extends React.PureComponent<RadioButtonGroupProps>
         if (onChange) onChange(evt);
     };
 
-    private renderChildren(): React.ReactNode[] {
+    private renderChildren(): React.ReactElement<RadioButton>[] | undefined | null {
         const {value} = this.state;
         const {children, className, disabled, name} = this.props;
         if (typeof children === "undefined" || children === null) {
@@ -67,18 +76,18 @@ export class RadioButtonGroup extends React.PureComponent<RadioButtonGroupProps>
         return React.Children.map(children, (child: ReactNode, index: number) => {
             const childEl = child as ReactElement;
             if (childEl.type === RadioButton) {
-                return React.cloneElement(childEl as React.ReactElement<any>, {
+                return React.cloneElement(childEl as React.ReactElement<RadioButton>, {
+                    // @ts-ignore // childEl is of type RadioButton
                     checked: value === childEl.props.value,
                     className: className,
-                    disabled: disabled,
+                    disabled: disabled ? disabled : childEl.props.disabled,
                     id: name + "-" + index,
                     name: name,
                     onChange: this.handleChange,
                 });
             }
-            console.log(child);
             return child;
-        });
+        }) as React.ReactElement<RadioButton>[];
     }
 
     private static renderHelperText(helperText: ReactNode): ReactNode {

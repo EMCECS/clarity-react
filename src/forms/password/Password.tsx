@@ -69,7 +69,7 @@ export class Password extends React.PureComponent<PasswordProps, PasswordState> 
     };
 
     private static renderHelperText(helperText: ReactNode): ReactNode {
-        return <span className="clr-subtext">{helperText}</span>;
+        return <span className="clr-subtext ng-star-inserted">{helperText}</span>;
     }
 
     private static renderLabel(label: string) {
@@ -109,10 +109,7 @@ export class Password extends React.PureComponent<PasswordProps, PasswordState> 
                     {label && Password.renderLabel(label)}
                     <div className={utils.classNames(classNames)} style={{width: "100%"}}>
                         <div className="clr-input-wrapper">
-                            <div
-                                className={utils.classNames(["clr-input-group", "clr-row", className])}
-                                style={{...style, paddingRight: "1rem"}}
-                            >
+                            <div className={utils.classNames(["clr-input-group", className])} style={style}>
                                 <input
                                     maxLength={maxPasswordLength}
                                     minLength={minPasswordLength}
@@ -124,7 +121,7 @@ export class Password extends React.PureComponent<PasswordProps, PasswordState> 
                                     type={type}
                                     disabled={disabled}
                                     style={{width: "95%"}}
-                                    className="clr-input ng-pristine ng-invalid ng-touched clr-col-md-10 clr-col-12"
+                                    className="clr-input ng-pristine ng-invalid ng-touched"
                                     id={id}
                                     data-qa={dataqa}
                                     onChange={this.handleChange}
@@ -133,14 +130,14 @@ export class Password extends React.PureComponent<PasswordProps, PasswordState> 
                                 {unmask && (
                                     <Button
                                         defaultBtn={false}
-                                        className="clr-input-group-icon-action clr-col-md-2 clr-col-12"
+                                        className="clr-input-group-icon-action ng-star-inserted"
                                         onClick={this.showHidePassword}
                                         icon={{shape: show ? "eye" : "eye-hide"}}
                                     >
                                         <span className="is-off-screen">Show</span>
                                     </Button>
                                 )}
-                                <Icon className="clr-validate-icon" shape="exclamation-circle" />
+                                <Icon className="clr-validate-icon ng-star-inserted" shape="exclamation-circle" />
                             </div>
                             {error
                                 ? errorHelperText && Password.renderHelperText(errorHelperText)

@@ -28,6 +28,7 @@ import {
     paginationRows,
     pageFilterFunction,
     hideableColumns,
+    hideShowColFooter,
 } from "./DataGridValues";
 import {CustomFilter} from "./CustomFilter";
 
@@ -257,14 +258,7 @@ storiesOf("DataGrid", module)
     ))
     .add("Grid with HIde and Show Column", () => (
         <div style={{width: "80%", paddingTop: "5%"}}>
-            <DataGrid
-                columns={hideableColumns}
-                rows={normalRows}
-                footer={{
-                    hideShowColBtn: true,
-                    showFooter: true,
-                }}
-            />
+            <DataGrid columns={hideableColumns} rows={normalRows} footer={hideShowColFooter} />
         </div>
     ))
     .add("Grid full demo", () => (
@@ -276,6 +270,7 @@ storiesOf("DataGrid", module)
                     {
                         columnName: "User ID",
                         style: {width: "20%"},
+                        isVisible: false,
                         sort: {defaultSortOrder: SortOrder.ASC, sortFunction: sortFunction},
                         filter: (
                             <DataGridFilter
@@ -303,10 +298,7 @@ storiesOf("DataGrid", module)
                 rows={paginationRows.slice(0, 5)}
                 pagination={paginationDetails}
                 selectionType={GridSelectionType.MULTI}
-                footer={{
-                    hideShowColBtn: true,
-                    showFooter: true,
-                }}
+                footer={hideShowColFooter}
             />
         </div>
     ));

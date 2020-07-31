@@ -13,7 +13,7 @@ import {UID} from "react-uid";
 import {ClassNames} from "./ClassNames";
 
 /**
- * @param {id } id for toggle;
+ * @param { id } id for toggle;
  * @param { label } label for toggle;
  * @param { name } name for toggle;
  * @param { ariaLabelledby } aria label;
@@ -44,12 +44,26 @@ export class Toggle extends React.PureComponent<ToggleProps, ToggleState> {
         super(props);
         this.state = {checked: this.getValue()};
     }
+
+    componentDidUpdate(prevProps: ToggleProps) {
+        const {checked, defaultChecked} = this.props;
+
+        if (checked !== prevProps.checked || defaultChecked !== prevProps.defaultChecked) {
+            this.setState({checked: this.getValue()});
+        }
+    }
+
     getValue(): boolean {
         const {checked, defaultChecked} = this.props;
-        const value = this.state ? this.state.checked : undefined;
-        if (value !== undefined) return value;
-        return checked ? checked : defaultChecked ? defaultChecked : false;
+        let value: boolean = false;
+        if (checked) {
+            value = checked;
+        } else if (defaultChecked) {
+            value = defaultChecked;
+        }
+        return value;
     }
+
     handleChange(evt: React.ChangeEvent<HTMLInputElement>) {
         const hardValue = this.props.checked !== undefined;
         const newValue = evt.target.checked;
@@ -60,6 +74,7 @@ export class Toggle extends React.PureComponent<ToggleProps, ToggleState> {
             this.setState({checked: newValue});
         }
     }
+
     render() {
         const {label, name, ariaLabelledby, disabled, onClick} = this.props;
         const {checked} = this.state;
