@@ -17,6 +17,7 @@ import {Button} from "../forms/button";
 import {Icon, Direction} from "../icon";
 import {Spinner, SpinnerSize} from "../spinner/Spinner";
 import {HideShowColumns} from "./HideShowColumns";
+import {DataGridColumnResize} from "./DataGridColumnResize";
 
 /**
  * General component description :
@@ -66,7 +67,7 @@ type DataGridProps = {
  * @param {style} CSS style
  * @param {filter} Filter component
  * @param {isVisible} if true column will be visible else hide it
- * @param {width} Width of datagrid column the default width will be 100px
+ * @param {width} Width of datagrid column the default width will be 96px
  */
 export type DataGridColumn = {
     columnName: string;
@@ -76,7 +77,7 @@ export type DataGridColumn = {
     style?: any;
     filter?: React.ReactNode;
     isVisible?: boolean;
-    width?: string;
+    width?: number;
 };
 
 /**
@@ -230,8 +231,8 @@ type DataGridPaginationState = {
     compactFooter?: boolean;
 };
 
-// Default width to datagrid column
-const DEFAULT_COLUMN_WIDTH = "100px";
+// Default width of datagrid column in px
+export const DEFAULT_COLUMN_WIDTH = 96;
 
 /**
  * DataGrid Componnet :
@@ -239,6 +240,7 @@ const DEFAULT_COLUMN_WIDTH = "100px";
  */
 export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> {
     private pageIndexRef = React.createRef<HTMLInputElement>();
+    private datagridTableRef = React.createRef<HTMLDivElement>();
 
     // Initial state of datagrid
     state: DataGridState = {
@@ -355,6 +357,17 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         );
     };
 
+    // Function to update datagrid column width
+    updateColumnWidth = (col: DataGridColumn) => {
+        const {allColumns} = this.state;
+        if (col && col.columnID !== undefined) {
+            allColumns[col.columnID].width = col.width;
+            this.setState({
+                allColumns: [...allColumns],
+            });
+        }
+    };
+
     // Function to get all rows
     getAllRows = () => {
         return this.state.allRows;
@@ -377,6 +390,11 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         const {allRows, allColumns} = this.state;
         let rows = this.updateRowIDs(allRows);
         const columns = this.updateColumnIDs(this.setColumnVisibility(allColumns));
+        columns.forEach(function(col) {
+            if (col.width === undefined) {
+                col["width"] = DEFAULT_COLUMN_WIDTH;
+            }
+        });
 
         rows.forEach(function(row) {
             row["isSelected"] = false;
@@ -641,7 +659,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         return columns;
     }
 
-    // Get width of column
+    // Get object of column
     private getColObject(columnName: string) {
         const {allColumns} = this.state;
         const column = allColumns.find(col => col.columnName === columnName);
@@ -652,7 +670,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     // Get width of column
     private getColWidth(columnName: string) {
         const column = this.getColObject(columnName);
-        return column && column.width ? column.width : DEFAULT_COLUMN_WIDTH;
+        return column && column.width;
     }
 
     // Check if column is visible
@@ -770,7 +788,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         return (
             <div className={ClassNames.DATAGRID}>
                 <div className={ClassNames.DATAGRID_TABLE_WRAPPER}>
-                    <div className={ClassNames.DATAGRID_TABLE} role="grid">
+                    <div ref={this.datagridTableRef} className={ClassNames.DATAGRID_TABLE} role="grid">
                         {this.buildDataGridHeader()}
                         {allRows.map((row: DataGridRow, index: number) => {
                             return this.buildDataGridRow(row, index);
@@ -845,12 +863,16 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     // Function to build datagrid colums
     private buildDataGridColumn(column: DataGridColumn, index: number): React.ReactElement {
         const {columnName, columnID, className, style, sort, filter, width} = column;
+        const transformVal = 0;
+        const columnHeight =
+            this.datagridTableRef && this.datagridTableRef.current && this.datagridTableRef.current.clientHeight;
+
         return (
             <div
                 role="columnheader"
                 className={classNames([ClassNames.DATAGRID_COLUMN, className])}
                 aria-sort="none"
-                style={{...style, width: width ? width : DEFAULT_COLUMN_WIDTH}}
+                style={{...style, width: width + "px", transform: transformVal}}
                 key={"col-" + index}
             >
                 <div className={ClassNames.DATAGRID_COLUMN_FLEX}>
@@ -881,10 +903,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                         <span className={ClassNames.DATAGRID_COLUMN_TITLE}>{columnName}</span>
                     )}
                     {filter && filter}
-                    <div className={ClassNames.DATAGRID_COLUMN_SEPARATOR}>
-                        <div aria-hidden="true" className={ClassNames.DATAGRID_COLUMN_HANDLE} />
-                        <div className={ClassNames.DATAGRID_COLUMN_RESIZE} />
-                    </div>
+                    <DataGridColumnResize height={columnHeight} column={column} updateColumn={this.updateColumnWidth} />
                 </div>
             </div>
         );
@@ -977,7 +996,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                     isColVisible !== undefined && !isColVisible && ClassNames.DATAGRID_HIDDEN_COLUMN,
                     className,
                 ])}
-                style={{...style, width: width}}
+                style={{...style, width: width + "px"}}
             >
                 {cellData}
             </div>
