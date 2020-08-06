@@ -12,6 +12,7 @@ import * as React from "react";
 import {classNames} from "../utils";
 import {ClassNames} from "./ClassNames";
 
+// Enum for wizard step type
 export enum WizardStepType {
     SUB_STEP = "subStep",
 }

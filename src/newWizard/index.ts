@@ -8,6 +8,6 @@
  *     http://www.apache.org/licenses/LICENSE-2.0
  */
 
-export {default as Wizard, WizardSize, WizardProps, WizardState} from "./Wizard";
-export {default as WizardStep, WizardStepProps} from "./WizardStep";
-export {WizardFooterProps} from "./WizardFooter";
+export * from "./Wizard";
+export * from "./WizardStep";
+export * from "./WizardFooter";

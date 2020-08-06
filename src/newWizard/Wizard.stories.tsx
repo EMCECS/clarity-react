@@ -10,8 +10,8 @@
 
 import React from "react";
 import {storiesOf} from "@storybook/react";
-import {Wizard, WizardSize, WizardStep} from ".";
-import {WizardStepType} from "./WizardStep";
+import Wizard, {WizardSize} from "./Wizard";
+import WizardStep, {WizardStepType} from "./WizardStep";
 import {State, Store} from "@sambego/storybook-state";
 import {Button} from "../forms/button";
 import {Input} from "../forms/input/Input";
@@ -20,15 +20,16 @@ import {WizardFooterProps} from "./WizardFooter";
 import {action} from "@storybook/addon-actions";
 
 let steps: any[] = [];
+
 // Function to create array of step data
-export function buildStepData(numberOfSteps: number = 1) {
+function buildStepData(numberOfSteps: number = 1) {
     for (let i = 0; i < numberOfSteps; i++) {
         steps.push({name: "page " + i, type: null});
     }
 }
 
 // Function to create steps UI
-export function buildStepsUI() {
+function buildStepsUI() {
     const StepUI = steps.map((step, index) => {
         return (
             <WizardStep
@@ -44,14 +45,14 @@ export function buildStepsUI() {
     return StepUI;
 }
 
-// Function to build steps
-export function buildSteps(numberOfSteps: number = 1) {
+// Function to build steps for story
+function buildSteps(numberOfSteps: number = 1) {
     buildStepData(numberOfSteps);
     return buildStepsUI();
 }
 
-// Function to update steps array
-export function updateSteps(index: number, action: string) {
+// Function to update steps array for story
+function updateSteps(index: number, action: string) {
     if (action === "insert") {
         // Insert new step
         steps.splice(index, 0, {index: index, name: "page new", type: WizardStepType.SUB_STEP});
