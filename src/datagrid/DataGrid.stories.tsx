@@ -297,7 +297,6 @@ storiesOf("DataGrid", module)
             {state => (
                 <div style={{width: "80%", paddingTop: "5%"}}>
                     <DataGrid
-                        ref={datagridFullDemoRef}
                         itemText={"Users"}
                         columns={normalColumns}
                         rows={paginationRows.slice(0, 5)}
