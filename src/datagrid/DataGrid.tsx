@@ -706,25 +706,36 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         const {selectionType} = this.props;
         const {selectAll} = this.state;
         return (
-            <div
-                role="columnheader"
-                className={classNames([
-                    ClassNames.DATAGRID_COLUMN, //prettier
-                    ClassNames.DATAGRID_SELECT,
-                    ClassNames.DATAGRID_FIXED_COLUMN,
-                ])}
-            >
-                <span className={ClassNames.DATAGRID_COLUMN_TITLE}>
-                    {selectionType === GridSelectionType.MULTI && (
-                        <CheckBox
-                            id="select_all"
-                            onChange={evt => this.handleSelectAll(evt)}
-                            ariaLabel="Select All"
-                            checked={selectAll !== undefined ? selectAll : undefined}
-                        />
-                    )}
-                </span>
-                <div className={ClassNames.DATAGRID_COLUMN_SEPARATOR} />
+            <div className={ClassNames.DATAGRID_ROW_STICKY}>
+                <div
+                    role="columnheader"
+                    className={classNames([
+                        ClassNames.DATAGRID_COLUMN, //prettier
+                        ClassNames.DATAGRID_SELECT,
+                        ClassNames.DATAGRID_FIXED_COLUMN,
+                        ClassNames.DATAGRID_NG_STAR_INSERTED,
+                    ])}
+                >
+                    <span className={ClassNames.DATAGRID_COLUMN_TITLE}>
+                        {selectionType === GridSelectionType.MULTI && (
+                            <div
+                                className={classNames([
+                                    ClassNames.CLR_CHECKBOX_WRAPPER,
+                                    ClassNames.DATAGRID_NG_STAR_INSERTED,
+                                ])}
+                            >
+                                <CheckBox
+                                    id="select_all"
+                                    onChange={evt => this.handleSelectAll(evt)}
+                                    ariaLabel="Select All"
+                                    className={ClassNames.CLR_SELECT}
+                                    checked={selectAll !== undefined ? selectAll : undefined}
+                                />
+                            </div>
+                        )}
+                    </span>
+                    <div className={ClassNames.DATAGRID_COLUMN_SEPARATOR} />
+                </div>
             </div>
         );
     }
@@ -856,9 +867,8 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
             <div className={ClassNames.DATAGRID_HEADER} role="rowgroup">
                 <div className={ClassNames.DATAGRID_ROW} role="row">
                     <div className={ClassNames.DATAGRID_ROW_MASTER}>
-                        <div className={ClassNames.DATAGRID_ROW_STICKY} />
+                        {selectionType && this.buildSelectColumn()}
                         <div className={ClassNames.DATAGRID_ROW_SCROLLABLE}>
-                            {selectionType && this.buildSelectColumn()}
                             {rowType && rowType === GridRowType.EXPANDABLE && this.buildEmptyColumn()}
                             {allColumns &&
                                 allColumns.map((column: DataGridColumn, index: number) => {
