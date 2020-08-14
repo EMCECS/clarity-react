@@ -81,6 +81,10 @@ export class ClassNames {
     public static DATAGRID_SPINNER: string = "datagrid-spinner";
     public static DATAGRID_OUTER_WRAPPER: string = "datagrid-outer-wrapper";
     public static DATAGRID_INNER_WRAPPER: string = "datagrid-inner-wrapper";
+    public static DATAGRID_FOOTER_CHECKBOX: string = "datagrid-footer-select clr-checkbox-wrapper";
+    public static DATAGRID_FORM_CONTROL: string = "clr-form-control-disabled";
+    public static CLR_SELECT: string = "ng-untouched ng-pristine ng-valid";
+    public static CLR_RADIO_WRAPPER: string = "clr-radio-wrapper";
 }
 
 export class Styles {

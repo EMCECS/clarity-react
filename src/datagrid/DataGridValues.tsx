@@ -173,39 +173,37 @@ export const filterFunction = (
 // Custom sorting function for number and string type
 export const sortFunction = (rows: DataGridRow[], sortOrder: SortOrder, columnName: string): Promise<DataGridRow[]> => {
     return new Promise((resolve, reject) => {
-        rows.sort(
-            (first: DataGridRow, second: DataGridRow): number => {
-                let result = 0;
-                let firstRecord = first.rowData.find(function(element: any) {
-                    if (element.columnName === columnName) return element;
-                });
+        rows.sort((first: DataGridRow, second: DataGridRow): number => {
+            let result = 0;
+            let firstRecord = first.rowData.find(function(element: any) {
+                if (element.columnName === columnName) return element;
+            });
 
-                let secondRecord = second.rowData.find(function(element: any) {
-                    if (element.columnName === columnName) return element;
-                });
+            let secondRecord = second.rowData.find(function(element: any) {
+                if (element.columnName === columnName) return element;
+            });
 
-                if (firstRecord && secondRecord) {
-                    const contentType = typeof firstRecord.cellData;
+            if (firstRecord && secondRecord) {
+                const contentType = typeof firstRecord.cellData;
 
-                    if (sortOrder === SortOrder.ASC) {
-                        if (contentType === "number") {
-                            result = firstRecord.cellData - secondRecord.cellData;
-                        } else if (contentType === "string") {
-                            if (firstRecord.cellData > secondRecord.cellData) result = -1;
-                            else if (firstRecord.cellData < secondRecord.cellData) result = 1;
-                        }
-                    } else if (sortOrder == SortOrder.DESC) {
-                        if (contentType === "number") {
-                            result = secondRecord.cellData - firstRecord.cellData;
-                        } else if (contentType === "string") {
-                            if (secondRecord.cellData > firstRecord.cellData) result = -1;
-                            else if (secondRecord.cellData < firstRecord.cellData) result = 1;
-                        }
+                if (sortOrder === SortOrder.ASC) {
+                    if (contentType === "number") {
+                        result = firstRecord.cellData - secondRecord.cellData;
+                    } else if (contentType === "string") {
+                        if (firstRecord.cellData > secondRecord.cellData) result = -1;
+                        else if (firstRecord.cellData < secondRecord.cellData) result = 1;
+                    }
+                } else if (sortOrder == SortOrder.DESC) {
+                    if (contentType === "number") {
+                        result = secondRecord.cellData - firstRecord.cellData;
+                    } else if (contentType === "string") {
+                        if (secondRecord.cellData > firstRecord.cellData) result = -1;
+                        else if (secondRecord.cellData < firstRecord.cellData) result = 1;
                     }
                 }
-                return result;
-            },
-        );
+            }
+            return result;
+        });
 
         // Purposefully added dealy here to see loading spinner
         setTimeout(function() {
@@ -319,6 +317,8 @@ export const expandableRows = [
     },
 ];
 
+export let selectedRows = [41512, 2459, 83942];
+
 /**
  * Data for Pagination
  */
@@ -331,14 +331,15 @@ export function getRowData() {
         [14262, "Johnson", "Jun 23, 2019", "Blue"],
         [59729, "Sibyl", "Feb 27, 2016", "Red"],
         [92422, "Roslyn", "Apr 26, 2016", "Blue"],
-        [83943, "Lottie", "Mar 2, 2019", "Yellow"],
-        [83943, "Lottie", "Mar 2, 2019", "Yellow"],
+        [83941, "Lottie", "Mar 2, 2019", "Yellow"],
+        [83942, "Lottie", "Mar 2, 2019", "Yellow"],
         [83943, "Lottie", "Mar 2, 2019", "Yellow"],
     ];
 
     let rowValues: DataGridRow[] = [];
-    data.forEach(function(element) {
+    data.forEach(function(element: any) {
         const row: DataGridRow = {
+            isSelected: selectedRows.includes(element[0]),
             rowData: [
                 {
                     columnName: "User ID",
@@ -427,6 +428,7 @@ export const pageFilterFunction = (
 
         // Purposefully added dealy here to see loading spinner
         setTimeout(function() {
+            console.log("rows", rows);
             resolve(result);
         }, 2000);
     });
