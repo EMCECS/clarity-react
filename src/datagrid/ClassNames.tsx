@@ -92,6 +92,7 @@ export class ClassNames {
     public static DATAGRID_FORM_CONTROL: string = "clr-form-control-disabled";
     public static CLR_SELECT: string = "ng-untouched ng-pristine ng-valid";
     public static CLR_RADIO_WRAPPER: string = "clr-radio-wrapper";
+    public static STRICT_WIDTH_CLASS = "datagrid-fixed-width";
 }
 
 export class Styles {

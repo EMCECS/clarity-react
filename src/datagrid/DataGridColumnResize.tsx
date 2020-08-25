@@ -20,7 +20,7 @@ import {DataGridColumn} from "./DataGrid";
  */
 
 // Min column width in px
-const MIN_COLUMN_WIDTH = 1;
+const MIN_COLUMN_WIDTH = 96;
 
 /**
  * Props for DataGridColumnResize :
@@ -73,7 +73,8 @@ export class DataGridColumnResize extends React.PureComponent<DataGridColumnResi
             if (column && column.width) {
                 const minWidth = column.width - MIN_COLUMN_WIDTH;
                 let newWidth = column.width + resizedBy;
-                if (minWidth !== undefined && newWidth < -minWidth) {
+
+                if (minWidth !== undefined && resizedBy < -minWidth) {
                     resizedBy = -minWidth;
                     isLessThanMinWidth = true;
                 }
@@ -108,6 +109,7 @@ export class DataGridColumnResize extends React.PureComponent<DataGridColumnResi
         if (column) {
             this.calculateResizedBy(event.clientX).then(result => {
                 column.width = Math.abs(result.newWidth);
+                column.className = ClassNames.STRICT_WIDTH_CLASS;
                 this.setState(
                     {
                         showTracker: false,

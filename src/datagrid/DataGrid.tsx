@@ -908,7 +908,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         return (
             <div
                 role="columnheader"
-                className={classNames([ClassNames.DATAGRID_COLUMN, className])}
+                className={classNames([ClassNames.DATAGRID_COLUMN, ClassNames.DATAGRID_NG_STAR_INSERTED, className])}
                 aria-sort="none"
                 style={{...style, width: width + "px"}}
                 key={"col-" + index}
@@ -1010,6 +1010,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         className?: string,
         style?: any,
     ): React.ReactElement {
+        const columnObj = this.getColObject(columnName);
         const width = this.getColWidth(columnName);
         const isColVisible = this.isColVisible(columnName);
 
@@ -1021,6 +1022,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                     ClassNames.DATAGRID_CELL,
                     ClassNames.DATAGRID_NG_STAR_INSERTED,
                     isColVisible !== undefined && !isColVisible && ClassNames.DATAGRID_HIDDEN_COLUMN,
+                    columnObj && columnObj.className,
                     className,
                 ])}
                 style={{...style, width: width + "px"}}
