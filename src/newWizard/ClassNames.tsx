@@ -53,4 +53,5 @@ export class Styles {
     public static WIZARD_TITLE_STYLE = {marginTop: "-0.3rem"};
     public static MODAL_TITLE_STYLE = {marginTop: "-0.17rem"};
     public static WIZARD_OUTER_WRAPPER = {height: "100%", width: "100%"};
+    public static WIZARD_SUB_STEP_NAV = {padding: "0 0 0 1.8rem"};
 }

@@ -17,7 +17,6 @@ import {
     dataqa_wizard_btn_next,
     dataqa_wizard_btn_previous,
 } from "./qualityFields";
-import {WizardState} from "./Wizard";
 
 export type InheritedWizardFooterProps = {
     cancelText?: string;
