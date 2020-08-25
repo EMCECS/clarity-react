@@ -69,7 +69,7 @@ type DataGridProps = {
  * @param {style} CSS style
  * @param {filter} Filter component
  * @param {isVisible} if true column will be visible else hide it
- * @param {width} Width of datagrid column the default width will be 96px
+ * @param {width} Width of datagrid column the default width will be 100px
  */
 export type DataGridColumn = {
     columnName: string;
@@ -234,7 +234,7 @@ type DataGridPaginationState = {
 };
 
 // Default width of datagrid column in px
-export const DEFAULT_COLUMN_WIDTH = 96;
+export const DEFAULT_COLUMN_WIDTH = 100;
 
 /**
  * DataGrid Componnet :
@@ -902,7 +902,6 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     // Function to build datagrid colums
     private buildDataGridColumn(column: DataGridColumn, index: number): React.ReactElement {
         const {columnName, columnID, className, style, sort, filter, width} = column;
-        const transformVal = 0;
         const columnHeight =
             this.datagridTableRef && this.datagridTableRef.current && this.datagridTableRef.current.clientHeight;
 
@@ -911,7 +910,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                 role="columnheader"
                 className={classNames([ClassNames.DATAGRID_COLUMN, className])}
                 aria-sort="none"
-                style={{...style, width: width + "px", transform: transformVal}}
+                style={{...style, width: width + "px"}}
                 key={"col-" + index}
             >
                 <div className={ClassNames.DATAGRID_COLUMN_FLEX}>
