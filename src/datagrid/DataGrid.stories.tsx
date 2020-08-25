@@ -10,6 +10,7 @@
 
 import * as React from "react";
 import {storiesOf} from "@storybook/react";
+import {State, Store} from "@sambego/storybook-state";
 import {DataGrid, GridSelectionType, GridRowType, SortOrder, DataGridFilter, FilterType} from ".";
 import {
     normalColumns,
@@ -29,9 +30,39 @@ import {
     pageFilterFunction,
     hideableColumns,
     hideShowColFooter,
+    selectedRows,
+    getRowData,
 } from "./DataGridValues";
 import {CustomFilter} from "./CustomFilter";
+import {DataGridRow} from "./DataGrid";
 
+const store = new Store({
+    selectedRows: selectedRows,
+    rows: paginationRows.slice(0, 5),
+    selectRowCallback: (row?: DataGridRow) => {
+        const rowID = row && row.rowData[0].cellData;
+        const index = selectedRows.indexOf(rowID);
+        if (row && row.isSelected) {
+            // add element
+            selectedRows.push(rowID);
+        } else {
+            //remove element
+            selectedRows.splice(index, 1);
+        }
+        store.set({
+            selectedRows: selectedRows,
+        });
+    },
+    selectAllCallback: (allSelected?: boolean) => {
+        let selectedRows;
+        if (allSelected) {
+            selectedRows = [41512, 16166, 30574, 2459, 14262];
+        }
+        store.set({
+            selectedRows: allSelected ? selectedRows : [],
+        });
+    },
+});
 // Refrence to call dataGrid methods
 const datagridRef = React.createRef<DataGrid>();
 const datagridActionsRef = React.createRef<GridActions>();
@@ -260,6 +291,25 @@ storiesOf("DataGrid", module)
         <div style={{width: "80%", paddingTop: "5%"}}>
             <DataGrid columns={hideableColumns} rows={normalRows} footer={hideShowColFooter} />
         </div>
+    ))
+    .add("Grid show selected row count", () => (
+        <State store={store}>
+            {state => (
+                <div style={{width: "80%", paddingTop: "5%"}}>
+                    <DataGrid
+                        itemText={"Users"}
+                        columns={normalColumns}
+                        rows={paginationRows.slice(0, 5)}
+                        pagination={paginationDetails}
+                        selectionType={GridSelectionType.MULTI}
+                        selectedRowCount={state.selectedRows.length}
+                        onRowSelect={state.selectRowCallback}
+                        onSelectAll={state.selectAllCallback}
+                        footer={{showFooter: true}}
+                    />
+                </div>
+            )}
+        </State>
     ))
     .add("Grid full demo", () => (
         <div style={{width: "80%", paddingTop: "5%"}}>
