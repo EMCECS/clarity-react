@@ -10,7 +10,8 @@
 
 import React from "react";
 import {storiesOf} from "@storybook/react";
-import {Wizard, WizardSize, WizardStep} from ".";
+import Wizard, {WizardSize} from "./Wizard";
+import WizardStep, {WizardStepType} from "./WizardStep";
 import {State, Store} from "@sambego/storybook-state";
 import {Button} from "../forms/button";
 import {Input} from "../forms/input/Input";
@@ -18,12 +19,66 @@ import {Select, SelectOption} from "../forms/select";
 import {WizardFooterProps} from "./WizardFooter";
 import {action} from "@storybook/addon-actions";
 
+let steps: any[] = [];
+
+// Function to create array of step data
+function buildStepData(numberOfSteps: number = 1) {
+    for (let i = 0; i < numberOfSteps; i++) {
+        steps.push({name: "page " + i, type: null});
+    }
+}
+
+// Function to create steps UI
+function buildStepsUI() {
+    const StepUI = steps.map((step, index) => {
+        return (
+            <WizardStep
+                id={index}
+                key={index}
+                name={step.name}
+                type={step.type}
+                valid={true}
+                complete={true}
+            ></WizardStep>
+        );
+    });
+    return StepUI;
+}
+
+// Function to build steps for story
+function buildSteps(numberOfSteps: number = 1) {
+    buildStepData(numberOfSteps);
+    return buildStepsUI();
+}
+
+// Function to update steps array for story
+function updateSteps(index: number, action: string) {
+    if (action === "insert") {
+        // Insert new step
+        steps.splice(index, 0, {index: index, name: "page new", type: WizardStepType.SUB_STEP});
+    } else if (action === "remove") {
+        steps.splice(index, 1);
+    }
+    return buildStepsUI();
+}
+
 const store = new Store({
     open: false,
     activeWizard: "",
     basicInfoValid: true,
     basicInfoComplete: false,
     currentWizardStepID: 0,
+    steps: buildSteps(2),
+    addStep: (index: number, numberOfSteps: number = 1) =>
+        store.set({
+            open: true,
+            steps: updateSteps(index, "insert"),
+        }),
+    removeStep: (index: number, numberOfSteps: number = 1) =>
+        store.set({
+            open: true,
+            steps: updateSteps(index, "remove"),
+        }),
     handleToggleWizard: (size: string) =>
         store.set({
             open: true,
@@ -227,6 +282,36 @@ storiesOf("New Wizard", module)
                         >
                             <Input name="some-input" label="Some Input" onChange={state.handleValidate} />
                         </WizardStep>
+                    </Wizard>
+                </React.Fragment>
+            )}
+        </State>
+    ))
+    .add("wizard with add or remove steps", _props => (
+        <State store={store}>
+            {state => (
+                <React.Fragment>
+                    <Button key={0} primary link onClick={() => state.handleToggleWizard(WizardSize.LARGE)}>
+                        OPEN WIZARD
+                    </Button>
+                    <Wizard
+                        currentStepID={state.currentWizardStepID}
+                        key={1}
+                        size={WizardSize.LARGE}
+                        show={state.open}
+                        title="Wizard with dynamic step"
+                        onClose={() => state.handleClose()}
+                        onNext={() => state.addStep(1)}
+                        onPrevious={() => state.handlePrevious()}
+                        onComplete={() => state.handleComplete()}
+                        onNavigateTo={state.handleSelectStep}
+                        customFooter={(props: WizardFooterProps) => (
+                            <Button primary link onClick={() => state.removeStep(state.currentWizardStepID)}>
+                                Delete Step
+                            </Button>
+                        )}
+                    >
+                        {state.steps}
                     </Wizard>
                 </React.Fragment>
             )}

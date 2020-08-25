@@ -12,6 +12,11 @@ import * as React from "react";
 import {classNames} from "../utils";
 import {ClassNames} from "./ClassNames";
 
+// Enum for wizard step type
+export enum WizardStepType {
+    SUB_STEP = "subStep",
+}
+
 export type WizardStepProps = {
     name: string;
     id: number;
@@ -25,6 +30,7 @@ export type WizardStepProps = {
     navigationChildren?: ReadonlyArray<React.ReactNode>;
     navigationClasses?: ReadonlyArray<string>;
     navigable?: boolean;
+    type?: WizardStepType;
 };
 
 export default class WizardStep extends React.PureComponent<WizardStepProps> {
