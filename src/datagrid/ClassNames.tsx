@@ -88,6 +88,10 @@ export class ClassNames {
     public static NG_TRIGGER: string = "ng-trigger";
     public static NG_TRIGGER_LEAVE_ANIMATION: string = "ng-trigger-leaveAnimation";
     public static BEING_DRAGGED: string = "being-dragged";
+    public static DATAGRID_FOOTER_CHECKBOX: string = "datagrid-footer-select clr-checkbox-wrapper";
+    public static DATAGRID_FORM_CONTROL: string = "clr-form-control-disabled";
+    public static CLR_SELECT: string = "ng-untouched ng-pristine ng-valid";
+    public static CLR_RADIO_WRAPPER: string = "clr-radio-wrapper";
 }
 
 export class Styles {
