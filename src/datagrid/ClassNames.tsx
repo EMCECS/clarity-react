@@ -81,10 +81,18 @@ export class ClassNames {
     public static DATAGRID_SPINNER: string = "datagrid-spinner";
     public static DATAGRID_OUTER_WRAPPER: string = "datagrid-outer-wrapper";
     public static DATAGRID_INNER_WRAPPER: string = "datagrid-inner-wrapper";
+    public static DATAGRID_COL_WIDTH_EXCEEDED_MAX: string = "exceeded-max";
+    public static CLR_SR_ONLY: string = "clr-sr-only";
+    public static NG_TNS_C81_13: string = "ng-tns-c81-13";
+    public static DRAGGABLE_GHOST: string = "draggable-ghost";
+    public static NG_TRIGGER: string = "ng-trigger";
+    public static NG_TRIGGER_LEAVE_ANIMATION: string = "ng-trigger-leaveAnimation";
+    public static BEING_DRAGGED: string = "being-dragged";
     public static DATAGRID_FOOTER_CHECKBOX: string = "datagrid-footer-select clr-checkbox-wrapper";
     public static DATAGRID_FORM_CONTROL: string = "clr-form-control-disabled";
     public static CLR_SELECT: string = "ng-untouched ng-pristine ng-valid";
     public static CLR_RADIO_WRAPPER: string = "clr-radio-wrapper";
+    public static STRICT_WIDTH_CLASS = "datagrid-fixed-width";
 }
 
 export class Styles {
@@ -92,5 +100,12 @@ export class Styles {
         textAlign: "left" as "left",
         webkitBoxFlex: 1,
         flex: 1,
+    };
+    public static DRAGGABLE_GHOST = {
+        visibility: "visible" as "visible",
+        width: "13px",
+        height: "40px",
+        top: "458px",
+        left: "270px",
     };
 }
