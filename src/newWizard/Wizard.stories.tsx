@@ -316,4 +316,52 @@ storiesOf("New Wizard", module)
                 </React.Fragment>
             )}
         </State>
+    ))
+    .add("wizard with single apply button", _props => (
+        <State store={store}>
+            {state => (
+                <React.Fragment>
+                    <Button key={0} primary link onClick={() => state.handleToggleWizard(WizardSize.LARGE)}>
+                        OPEN WIZARD
+                    </Button>
+                    <Wizard
+                        currentStepID={state.currentWizardStepID}
+                        key={1}
+                        size={WizardSize.LARGE}
+                        show={state.open}
+                        showPrevious={false}
+                        showNext={false}
+                        showComplete={true}
+                        showCancel={true}
+                        completeText={"Apply"}
+                        title="Wizard with single apply button"
+                        onClose={() => state.handleClose()}
+                        onComplete={() => state.handleComplete()}
+                        onNavigateTo={state.handleSelectStep}
+                    >
+                        <WizardStep
+                            id={0}
+                            key={0}
+                            name={"Page 1"}
+                            valid={state.basicInfoValid}
+                            complete={state.basicInfoValid}
+                        />
+                        <WizardStep
+                            id={1}
+                            key={1}
+                            name={"Page 2"}
+                            valid={state.basicInfoValid}
+                            complete={state.basicInfoValid}
+                        />
+                        <WizardStep
+                            id={2}
+                            key={2}
+                            name={"Page 3"}
+                            valid={state.basicInfoValid}
+                            complete={state.basicInfoValid}
+                        />
+                    </Wizard>
+                </React.Fragment>
+            )}
+        </State>
     ));
