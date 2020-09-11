@@ -15,6 +15,7 @@ import {Icon, IconProps} from "../../icon";
 import {findAllInRenderedTree} from "react-dom/test-utils";
 
 export type ButtonProps = {
+    id?: string;
     block?: boolean;
     className?: string;
     disabled?: boolean;
