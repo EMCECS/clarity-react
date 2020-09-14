@@ -21,13 +21,15 @@ import {Dropdown, DropdownMenu, DropdownItem, MenuItemType} from "../forms/dropd
  * @param {onTabClick} callback function from parent to call on tab click
  * @param {overflowTabsFrom} name of tab from which tabs added to overflow menu.
  *         optional prop, if set activates overflow tabs
+ * @param {dataqa} quality engineering tag
  */
 type TabsProp = {
     tabs: TabDetails[];
     id: string;
     tabOrientation: TabOrientation;
-    onTabClick: (evt: React.MouseEvent<HTMLElement>, tabDetails: TabDetails[]) => void;
+    onTabClick: (evt: React.MouseEvent<HTMLElement>, clickedTab: TabDetails, updatedTabDetails: TabDetails[]) => void;
     overflowTabsFrom?: number;
+    dataqa?: string;
 };
 
 /**
@@ -40,13 +42,15 @@ type TabsState = {
 
 /**
  * props for tabs
- * @param {name} name or title of tab
+ * @param {name} name or title of tab to uniquely identify tab
+ * @param {id} id to uniquely identify single tab
  * @param {component} React element loaded on tab selection
  * @param {isSelected} true if tab is selected by default
  * @param {isDisabled} true if tab is disabled
  */
 export type TabDetails = {
     name: any;
+    id: string;
     component: React.ReactElement;
     isSelected?: boolean;
     isDisabled?: boolean;
@@ -77,32 +81,46 @@ export enum TabType {
  * Tabs Component : Use to divide content into separate views which users navigate between.
  */
 export class Tabs extends React.PureComponent<TabsProp, TabsState> {
-    state: TabsState = {
-        isOverflowTabSelected: false,
-    };
-
     constructor(props: TabsProp) {
         super(props);
+        this.state = {
+            isOverflowTabSelected: false,
+        };
     }
 
     //Function handelling normal tab click
     tabClicked = (evt: React.MouseEvent<HTMLElement>, clickedTab: TabDetails, isOverflowTab: boolean = false) => {
         const {tabs, onTabClick} = this.props;
-        tabs.map((tab: TabDetails) => {
-            tab.isSelected = false;
-            if (clickedTab.name === tab.name) {
-                // If tabType is not present or if tabType is not STATIC then active selected tab
-                if (!clickedTab.tabType || (clickedTab.tabType && clickedTab.tabType !== TabType.STATIC)) {
+        let lastActiveTabIndex: number | undefined;
+        let activeLastTab: boolean = false;
+        tabs.map((tab: TabDetails, index: number) => {
+            if (tab.isSelected) {
+                lastActiveTabIndex = index;
+            }
+
+            if (clickedTab.id === tab.id) {
+                // If tabType is present and if tabType is STATIC then active last selected tab
+                if (clickedTab.tabType && clickedTab.tabType === TabType.STATIC) {
+                    tab.isSelected = false;
+                    activeLastTab = true;
+                } else {
                     tab.isSelected = true;
                 }
+            } else {
+                tab.isSelected = false;
             }
         });
+
+        // Active last tab if user clicks on static tab
+        if (activeLastTab && lastActiveTabIndex !== undefined) {
+            tabs[lastActiveTabIndex].isSelected = true;
+        }
 
         this.setState(
             {
                 isOverflowTabSelected: isOverflowTab,
             },
-            () => onTabClick && onTabClick(evt, tabs),
+            () => onTabClick && onTabClick(evt, clickedTab, tabs),
         );
     };
 
@@ -112,8 +130,8 @@ export class Tabs extends React.PureComponent<TabsProp, TabsState> {
         return (
             <li key={index} role="presentation" className={ClassNames.TABITEM}>
                 <Button
-                    id={`tab-${tab.name}`}
-                    aria-controls={`panel-${tab.name}`}
+                    id={`tab-${tab.id}`}
+                    aria-controls={`panel-${tab.id}`}
                     aria-selected={tab.isSelected}
                     className={className}
                     disabled={tab.isDisabled}
@@ -157,10 +175,10 @@ export class Tabs extends React.PureComponent<TabsProp, TabsState> {
                     return (
                         <section
                             key={index}
-                            id={`panel-${tab.name}`}
+                            id={`panel-${tab.id}`}
                             role="tabpanel"
                             className={ClassNames.TAB_PANEL}
-                            aria-labelledby={`tab-${tab.name}`}
+                            aria-labelledby={`tab-${tab.id}`}
                             aria-hidden={tab.isSelected ? "false" : "true"}
                         >
                             {tab.component}

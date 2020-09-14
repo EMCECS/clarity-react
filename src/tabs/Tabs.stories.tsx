@@ -16,19 +16,23 @@ import {Tabs, TabOrientation, TabType, TabDetails} from ".";
 const tabsData: TabDetails[] = [
     {
         name: "Dashboard",
+        id: "dashboard",
         isSelected: true,
         component: <p>Content for Dashboard tab.</p>,
     },
     {
         name: "Management",
+        id: "mgmt",
         component: <p>Content for Management tab.</p>,
     },
     {
         name: "Cloud",
+        id: "cloud",
         component: <p>Content for Cloud tab.</p>,
     },
     {
         name: "Infrastructure",
+        id: "infra",
         isDisabled: true,
         component: <p>Content for Infrastructure tab.</p>,
     },
@@ -37,22 +41,25 @@ const tabsData: TabDetails[] = [
 const staticTabsData: TabDetails[] = [
     {
         name: "Dashboard",
+        id: "dashboard",
         isSelected: true,
         component: <p>Content for Dashboard tab.</p>,
     },
     {
         name: "Management",
+        id: "mgmt",
         isDisabled: false,
         component: <p>Content for Management tab.</p>,
         tabType: TabType.STATIC,
     },
     {
         name: "Cloud",
+        id: "cloud",
         component: <p>Content for Cloud tab.</p>,
-        tabType: TabType.STATIC,
     },
     {
         name: "Infrastructure",
+        id: "infra",
         isDisabled: true,
         component: <p>Content for Infrastructure tab.</p>,
     },
@@ -61,9 +68,9 @@ const staticTabsData: TabDetails[] = [
 const store = new Store({
     simpleTabs: tabsData,
     staticTabs: staticTabsData,
-    onTabClick: (evt: React.MouseEvent<HTMLElement>, tabs: TabDetails[]): void => {
+    onTabClick: (evt: React.MouseEvent<HTMLElement>, clickedTab: TabDetails, updatedTabs: TabDetails[]): void => {
         store.set({
-            simpleTabs: [...tabs],
+            simpleTabs: [...updatedTabs],
         });
     },
 });

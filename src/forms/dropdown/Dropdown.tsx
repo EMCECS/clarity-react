@@ -96,7 +96,6 @@ export class Dropdown extends React.PureComponent<DropdownProps> {
         const target = (evt.target as any) as HTMLElement;
         const el = this.ddRef.current;
         if (!el || typeof el === "string") {
-            console.warn("wrong element type");
             return;
         }
         if (!el.contains(target)) {

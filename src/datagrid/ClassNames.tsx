@@ -98,7 +98,7 @@ export class ClassNames {
 export class Styles {
     public static PAGINATION_DESCRIPTION_COMPACT = {
         textAlign: "left" as "left",
-        webkitBoxFlex: 1,
+        WebkitBoxFlex: 1,
         flex: 1,
     };
     public static DRAGGABLE_GHOST = {
