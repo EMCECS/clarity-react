@@ -9,29 +9,28 @@
  */
 
 import * as React from "react";
-import {storiesOf, forceReRender} from "@storybook/react";
+import {storiesOf} from "@storybook/react";
 import {State, Store} from "@sambego/storybook-state";
-import {action} from "@storybook/addon-actions";
 import {Tabs, TabOrientation, TabType, TabPDetails} from ".";
 
 const tabsData: TabPDetails[] = [
     {
         name: "Dashboard",
         isSelected: true,
-        component: <div>Content for Dashboard tab.</div>,
+        component: <p>Content for Dashboard tab.</p>,
     },
     {
         name: "Management",
-        component: <div>Content for Management tab.</div>,
+        component: <p>Content for Management tab.</p>,
     },
     {
         name: "Cloud",
-        component: <div>Content for Cloud tab.</div>,
+        component: <p>Content for Cloud tab.</p>,
     },
     {
         name: "Infrastructure",
         isDisabled: true,
-        component: <div>Content for Infrastructure tab.</div>,
+        component: <p>Content for Infrastructure tab.</p>,
     },
 ];
 
@@ -39,24 +38,23 @@ const staticTabsData: TabPDetails[] = [
     {
         name: "Dashboard",
         isSelected: true,
-        component: <div>Content for Dashboard tab.</div>,
+        component: <p>Content for Dashboard tab.</p>,
     },
     {
         name: "Management",
         isDisabled: false,
-        component: <div>Content for Management tab.</div>,
+        component: <p>Content for Management tab.</p>,
         tabType: TabType.STATIC,
     },
     {
         name: "Cloud",
-        isDisabled: true,
-        component: <div>Content for Cloud tab.</div>,
+        component: <p>Content for Cloud tab.</p>,
         tabType: TabType.STATIC,
     },
     {
         name: "Infrastructure",
         isDisabled: true,
-        component: <div>Content for Infrastructure tab.</div>,
+        component: <p>Content for Infrastructure tab.</p>,
     },
 ];
 
@@ -64,7 +62,6 @@ const store = new Store({
     simpleTabs: tabsData,
     staticTabs: staticTabsData,
     onTabClick: (evt: React.MouseEvent<HTMLElement>, tabs: TabPDetails[]): void => {
-        console.log("tabs in state", tabs);
         store.set({
             simpleTabs: [...tabs],
         });

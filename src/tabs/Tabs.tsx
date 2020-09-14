@@ -16,10 +16,11 @@ import {Dropdown, DropdownMenu, DropdownItem, MenuItemType} from "../forms/dropd
 /**
  * props for tabs
  * @param {tabs} List of all Tabs
- * @param {tabOrientation} orientation of tabs
- * @param {tabType} type of tabs
- * @param {selectedTabName} which tab is selected to show first.optional prop, if set shows given tab explicitly selected
- * @param {overflowTabsFrom} name of tab from which tabs added to overflow menu. optional prop, if set activates overflow tabs
+ * @param {id} string to identify tab group uniquely
+ * @param {tabOrientation} orientation of tab either vertical or horizontal
+ * @param {onTabClick} callback function from parent to call on tab click
+ * @param {overflowTabsFrom} name of tab from which tabs added to overflow menu.
+ *         optional prop, if set activates overflow tabs
  */
 type TabsProp = {
     tabs: TabPDetails[];
@@ -31,7 +32,7 @@ type TabsProp = {
 
 /**
  * state for tabs
- * @param {overflowTab} overflow tab button. optional param activates only when overflow prop set.
+ * @param {isOverflowTabSelected} if true inticate overflow tab button as active
  */
 type TabsState = {
     isOverflowTabSelected: boolean;
@@ -41,7 +42,7 @@ type TabsState = {
  * props for tabs
  * @param {name} name or title of tab
  * @param {component} React element loaded on tab selection
- * @param {isSelected} true if tab is selected
+ * @param {isSelected} true if tab is selected by default
  * @param {isDisabled} true if tab is disabled
  */
 export type TabPDetails = {
@@ -73,11 +74,10 @@ export enum TabType {
 }
 
 /**
- * Tab Component of clarity divide content into separate views which users navigate between.
+ * Tabs Component : Use to divide content into separate views which users navigate between.
  */
 export class Tabs extends React.PureComponent<TabsProp, TabsState> {
     state: TabsState = {
-        // tabPanel: <React.Fragment/>,
         isOverflowTabSelected: false,
     };
 
@@ -137,6 +137,7 @@ export class Tabs extends React.PureComponent<TabsProp, TabsState> {
                         isOverflowRendered = true;
                         return this.renderOverflowTab(tabs.slice(index, tabs.length), index);
                     }
+
                     //Render normal tab unless overflow tab rendered
                     if (!isOverflowRendered) {
                         return this.renderTabLink(tab, index);
@@ -146,10 +147,10 @@ export class Tabs extends React.PureComponent<TabsProp, TabsState> {
         );
     };
 
-    //Render Tab bar
+    //Render Tab panels
     private renderTabPanels = () => {
         const {tabs} = this.props;
-        console.log(tabs);
+
         return (
             <React.Fragment>
                 {tabs.map((tab: TabPDetails, index: number) => {
@@ -158,6 +159,7 @@ export class Tabs extends React.PureComponent<TabsProp, TabsState> {
                             key={index}
                             id={`panel-${tab.name}`}
                             role="tabpanel"
+                            className={ClassNames.TAB_PANEL}
                             aria-labelledby={`tab-${tab.name}`}
                             aria-hidden={tab.isSelected ? "false" : "true"}
                         >
@@ -168,6 +170,7 @@ export class Tabs extends React.PureComponent<TabsProp, TabsState> {
             </React.Fragment>
         );
     };
+
     //Render Overflow Tab
     private renderOverflowTab = (overflowTabs: TabPDetails[], index: number) => {
         const {isOverflowTabSelected} = this.state;
@@ -203,7 +206,6 @@ export class Tabs extends React.PureComponent<TabsProp, TabsState> {
 
     render() {
         const {tabOrientation} = this.props;
-        console.log("in render", this.props);
         return (
             <div className={tabOrientation === TabOrientation.VERTICAL ? ClassNames.VERTICALTAB : undefined}>
                 {this.renderTabLinks()}
