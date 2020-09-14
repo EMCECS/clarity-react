@@ -11,9 +11,9 @@
 import * as React from "react";
 import {storiesOf} from "@storybook/react";
 import {State, Store} from "@sambego/storybook-state";
-import {Tabs, TabOrientation, TabType, TabPDetails} from ".";
+import {Tabs, TabOrientation, TabType, TabDetails} from ".";
 
-const tabsData: TabPDetails[] = [
+const tabsData: TabDetails[] = [
     {
         name: "Dashboard",
         isSelected: true,
@@ -34,7 +34,7 @@ const tabsData: TabPDetails[] = [
     },
 ];
 
-const staticTabsData: TabPDetails[] = [
+const staticTabsData: TabDetails[] = [
     {
         name: "Dashboard",
         isSelected: true,
@@ -61,7 +61,7 @@ const staticTabsData: TabPDetails[] = [
 const store = new Store({
     simpleTabs: tabsData,
     staticTabs: staticTabsData,
-    onTabClick: (evt: React.MouseEvent<HTMLElement>, tabs: TabPDetails[]): void => {
+    onTabClick: (evt: React.MouseEvent<HTMLElement>, tabs: TabDetails[]): void => {
         store.set({
             simpleTabs: [...tabs],
         });

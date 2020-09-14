@@ -23,10 +23,10 @@ import {Dropdown, DropdownMenu, DropdownItem, MenuItemType} from "../forms/dropd
  *         optional prop, if set activates overflow tabs
  */
 type TabsProp = {
-    tabs: TabPDetails[];
+    tabs: TabDetails[];
     id: string;
     tabOrientation: TabOrientation;
-    onTabClick: (evt: React.MouseEvent<HTMLElement>, tabDetails: TabPDetails[]) => void;
+    onTabClick: (evt: React.MouseEvent<HTMLElement>, tabDetails: TabDetails[]) => void;
     overflowTabsFrom?: number;
 };
 
@@ -45,7 +45,7 @@ type TabsState = {
  * @param {isSelected} true if tab is selected by default
  * @param {isDisabled} true if tab is disabled
  */
-export type TabPDetails = {
+export type TabDetails = {
     name: any;
     component: React.ReactElement;
     isSelected?: boolean;
@@ -86,9 +86,9 @@ export class Tabs extends React.PureComponent<TabsProp, TabsState> {
     }
 
     //Function handelling normal tab click
-    tabClicked = (evt: React.MouseEvent<HTMLElement>, clickedTab: TabPDetails, isOverflowTab: boolean = false) => {
+    tabClicked = (evt: React.MouseEvent<HTMLElement>, clickedTab: TabDetails, isOverflowTab: boolean = false) => {
         const {tabs, onTabClick} = this.props;
-        tabs.map((tab: TabPDetails) => {
+        tabs.map((tab: TabDetails) => {
             tab.isSelected = false;
             if (clickedTab.name === tab.name) {
                 // If tabType is not present or if tabType is not STATIC then active selected tab
@@ -107,7 +107,7 @@ export class Tabs extends React.PureComponent<TabsProp, TabsState> {
     };
 
     //Render Tab Button
-    private renderTabLink = (tab: TabPDetails, index: number) => {
+    private renderTabLink = (tab: TabDetails, index: number) => {
         const className = tab.isSelected ? ClassNames.TABACTIVE : ClassNames.TABINACTIVE;
         return (
             <li key={index} role="presentation" className={ClassNames.TABITEM}>
@@ -131,7 +131,7 @@ export class Tabs extends React.PureComponent<TabsProp, TabsState> {
         let isOverflowRendered = false;
         return (
             <ul className={ClassNames.TABMAIN} role="tablist" id={id}>
-                {tabs.map((tab: TabPDetails, index: number) => {
+                {tabs.map((tab: TabDetails, index: number) => {
                     //once overflow tab rendered push all tabs in overflow list
                     if (tabOrientation === TabOrientation.HORIZONTAL && index === overflowTabsFrom) {
                         isOverflowRendered = true;
@@ -153,7 +153,7 @@ export class Tabs extends React.PureComponent<TabsProp, TabsState> {
 
         return (
             <React.Fragment>
-                {tabs.map((tab: TabPDetails, index: number) => {
+                {tabs.map((tab: TabDetails, index: number) => {
                     return (
                         <section
                             key={index}
@@ -172,7 +172,7 @@ export class Tabs extends React.PureComponent<TabsProp, TabsState> {
     };
 
     //Render Overflow Tab
-    private renderOverflowTab = (overflowTabs: TabPDetails[], index: number) => {
+    private renderOverflowTab = (overflowTabs: TabDetails[], index: number) => {
         const {isOverflowTabSelected} = this.state;
         const className = isOverflowTabSelected ? ClassNames.TABACTIVE : ClassNames.TABINACTIVE;
         return (
@@ -186,7 +186,7 @@ export class Tabs extends React.PureComponent<TabsProp, TabsState> {
                     }}
                 >
                     <DropdownMenu>
-                        {overflowTabs.map((tab: TabPDetails, index: number) => {
+                        {overflowTabs.map((tab: TabDetails, index: number) => {
                             return (
                                 <DropdownItem
                                     key={index.toString()}
