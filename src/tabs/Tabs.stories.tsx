@@ -10,68 +10,118 @@
 
 import * as React from "react";
 import {storiesOf} from "@storybook/react";
-import {Tab, TabOrientation, TabType} from ".";
+import {State, Store} from "@sambego/storybook-state";
+import {Tabs, TabOrientation, TabType, TabDetails} from ".";
 
-const tabsData = [
+const tabsData: TabDetails[] = [
     {
         name: "Dashboard",
-        isDisabled: false,
-        component: <div>Content for Dashboard tab.</div>,
+        id: "dashboard",
+        isSelected: true,
+        component: <p>Content for Dashboard tab.</p>,
     },
     {
         name: "Management",
-        isDisabled: false,
-        component: <div>Content for Management tab.</div>,
+        id: "mgmt",
+        component: <p>Content for Management tab.</p>,
     },
     {
         name: "Cloud",
-        isDisabled: false,
-        component: <div>Content for Cloud tab.</div>,
+        id: "cloud",
+        component: <p>Content for Cloud tab.</p>,
     },
     {
         name: "Infrastructure",
-        isDisabled: false,
-        component: <div>Content for Infrastructure tab.</div>,
-    },
-];
-const staticTabsData = [
-    {
-        name: "Dashboard",
-        isDisabled: false,
-        component: <div>Content for Dashboard tab.</div>,
-    },
-    {
-        name: "Management",
-        isDisabled: false,
-        component: <div>Content for Management tab.</div>,
-    },
-    {
-        name: "Cloud",
+        id: "infra",
         isDisabled: true,
-        component: <div>Content for Cloud tab.</div>,
-    },
-    {
-        name: "Infrastructure",
-        isDisabled: true,
-        component: <div>Content for Infrastructure tab.</div>,
+        component: <p>Content for Infrastructure tab.</p>,
     },
 ];
 
-storiesOf("Tab", module)
+const staticTabsData: TabDetails[] = [
+    {
+        name: "Dashboard",
+        id: "dashboard",
+        isSelected: true,
+        component: <p>Content for Dashboard tab.</p>,
+    },
+    {
+        name: "Management",
+        id: "mgmt",
+        isDisabled: false,
+        component: <p>Content for Management tab.</p>,
+        tabType: TabType.STATIC,
+    },
+    {
+        name: "Cloud",
+        id: "cloud",
+        component: <p>Content for Cloud tab.</p>,
+    },
+    {
+        name: "Infrastructure",
+        id: "infra",
+        isDisabled: true,
+        component: <p>Content for Infrastructure tab.</p>,
+    },
+];
+
+const store = new Store({
+    simpleTabs: tabsData,
+    staticTabs: staticTabsData,
+    onTabClick: (evt: React.MouseEvent<HTMLElement>, clickedTab: TabDetails, updatedTabs: TabDetails[]): void => {
+        store.set({
+            simpleTabs: [...updatedTabs],
+        });
+    },
+});
+
+storiesOf("Tabs", module)
     .add("Tab Vertical", () => (
-        <Tab tabs={tabsData} tabOrientation={TabOrientation.VERTICAL} tabType={TabType.SIMPLE} />
+        <State store={store}>
+            {state => (
+                <Tabs
+                    id="verticalTabs"
+                    tabs={state.simpleTabs}
+                    tabOrientation={TabOrientation.VERTICAL}
+                    onTabClick={state.onTabClick}
+                />
+            )}
+        </State>
     ))
     .add("Tab Horizontal", () => (
-        <Tab tabs={tabsData} tabOrientation={TabOrientation.HORIZONTAL} tabType={TabType.SIMPLE} />
+        <State store={store}>
+            {state => (
+                <Tabs
+                    id="horizontalTabs"
+                    tabs={state.simpleTabs}
+                    tabOrientation={TabOrientation.HORIZONTAL}
+                    onTabClick={state.onTabClick}
+                />
+            )}
+        </State>
     ))
     .add("Tab Static", () => (
-        <Tab tabs={staticTabsData} tabOrientation={TabOrientation.HORIZONTAL} tabType={TabType.STATIC} />
+        <State store={store}>
+            {state => (
+                <Tabs
+                    id="staticTabs"
+                    tabs={state.staticTabs}
+                    tabOrientation={TabOrientation.HORIZONTAL}
+                    onTabClick={state.onTabClick}
+                />
+            )}
+        </State>
     ))
     .add("Tab Overflow", () => (
-        <Tab
-            tabs={tabsData}
-            tabOrientation={TabOrientation.HORIZONTAL}
-            tabType={TabType.SIMPLE}
-            overflowTabsFrom={"Cloud"}
-        />
+        <State store={store}>
+            {state => (
+                <Tabs
+                    id="overflowTabs"
+                    tabs={state.simpleTabs}
+                    tabOrientation={TabOrientation.HORIZONTAL}
+                    onTabClick={state.onTabClick}
+                    overflowTabsFrom={2}
+                />
+            )}
+        </State>
     ));
