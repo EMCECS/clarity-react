@@ -45,6 +45,6 @@ storiesOf("Textarea", module)
     ))
     .add("Textarea with rows and cols", () => (
         <div>
-            <TextArea name="basic-textarea" label="TextArea with error" rows={5} cols={50} />
+            <TextArea name="basic-textarea" label="TextArea with rows as 5 and cols as 50" rows={5} cols={50} />
         </div>
     ));
