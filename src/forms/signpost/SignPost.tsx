@@ -156,7 +156,7 @@ export class SignPost extends React.PureComponent<SignPostProps> {
                             transform: transformVal,
                         }}
                     >
-                        <div className="signpost-flex-wrap">
+                        <div className="signpost-wrap">
                             <div className="popover-pointer" />
                             {showCloseButton && (
                                 <div className="signpost-content-header">
