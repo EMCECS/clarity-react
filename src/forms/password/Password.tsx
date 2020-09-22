@@ -34,6 +34,7 @@ type PasswordProps = {
     required?: boolean; // auto-check on blur if there's a value
     error?: boolean; // force error state of component
     unmask?: boolean; // if true renders eye icon to hide/show or mask/unmask password
+    pattern?: string; // specifies a regular expression that element's value is checked against
     dataqa?: string; //quality engineering testing field
 };
 
@@ -94,6 +95,7 @@ export class Password extends React.PureComponent<PasswordProps, PasswordState> 
             minPasswordLength,
             placeholder,
             unmask,
+            pattern,
             dataqa,
         } = this.props;
 
@@ -123,6 +125,7 @@ export class Password extends React.PureComponent<PasswordProps, PasswordState> 
                                     style={{width: "95%"}}
                                     className="clr-input ng-pristine ng-invalid ng-touched"
                                     id={id}
+                                    pattern={pattern}
                                     data-qa={dataqa}
                                     onChange={this.handleChange}
                                 />
