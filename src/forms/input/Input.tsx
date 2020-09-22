@@ -36,6 +36,8 @@ type InputProps = {
     min?: number;
     max?: number;
     step?: any;
+    spellCheck?: boolean; // specifies whether the element is to have its spelling and grammar checked or not
+    pattern?: string; //specifies a regular expression that element's value is checked against
     required?: boolean; // auto-check on blur if there's a value
     error?: boolean; // force error state of component
     dataqa?: string; //quality engineering testing field
@@ -93,6 +95,8 @@ export class Input extends React.PureComponent<InputProps> {
             error,
             errorHelperText,
             helperText,
+            spellCheck,
+            pattern,
         } = this.props;
         return (
             <React.Fragment>
@@ -116,6 +120,8 @@ export class Input extends React.PureComponent<InputProps> {
                     min={min}
                     max={max}
                     step={step}
+                    spellCheck={spellCheck}
+                    pattern={pattern}
                 />
                 {children}
                 <Icon className="clr-validate-icon" shape="exclamation-circle" />

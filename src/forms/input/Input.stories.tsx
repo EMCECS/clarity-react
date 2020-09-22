@@ -42,6 +42,7 @@ storiesOf("Input", module)
     .add("input with number", () => (
         <Input name="somevalue" type={"number"} min={1} max={10} onChange={action("changed")} defaultValue={1} />
     ))
+    .add("input with spell check off", () => <Input name="somevalue" onChange={action("changed")} spellCheck={false} />)
     .add("input box with custom width", () => (
         <div>
             <Input name="somevalue" placeholder="stuff goes here" onChange={action("changed")} style={{width: "40%"}} />
