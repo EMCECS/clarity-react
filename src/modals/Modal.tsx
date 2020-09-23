@@ -24,6 +24,7 @@ import {ReactNode} from "react";
  * @param {dataqa} Quality Engineering field
  * @param {width} if Size is custom, then width need to be provided in props
  * @param {height} if Size is custom, then height need to be provided in props
+ * @param {className} if className is provided, the add custom class with existing classes
  */
 type ModalProps = {
     isOpen?: boolean;
@@ -34,6 +35,7 @@ type ModalProps = {
     dataqa?: string;
     width?: number;
     height?: number;
+    className?: string;
 };
 
 type ModalState = {
@@ -96,7 +98,7 @@ export class Modal extends React.PureComponent<ModalProps> {
     }
 
     buildModal(): React.ReactElement {
-        const {size, closable, title, children, dataqa, width, height} = this.props;
+        const {size, closable, title, children, dataqa, width, height, className} = this.props;
         return (
             <React.Fragment>
                 <div className={ClassNames.MODAL} data-qa={dataqa}>
@@ -104,6 +106,7 @@ export class Modal extends React.PureComponent<ModalProps> {
                         className={classNames([
                             ClassNames.MODAL_DIALOG, //prettier
                             size && size,
+                            className && className,
                         ])}
                         style={size === ModalSize.CUSTOM ? {width: `${width}px`, height: `${height}px`} : {}}
                         role="dialog"

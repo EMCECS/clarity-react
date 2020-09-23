@@ -109,6 +109,7 @@ storiesOf("Modals", module).add("Modal Sizes", () => (
                     title="Custom modal"
                     width={500}
                     height={300}
+                    className="custom-class"
                 >
                     <ModalBody>
                         <p>I'm a Custom sized modal with 500 X 300</p>
