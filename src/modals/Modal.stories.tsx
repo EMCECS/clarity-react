@@ -34,6 +34,11 @@ const storeExtraLarge = new Store({
     closable: true,
 });
 
+const storeCustom = new Store({
+    isOpen: false,
+    closable: true,
+});
+
 storiesOf("Modals", module).add("Modal Sizes", () => (
     <div className="clr-row">
         <div className="clr-col-12">
@@ -96,6 +101,27 @@ storiesOf("Modals", module).add("Modal Sizes", () => (
                     </ModalFooter>
                 </Modal>
                 <Button onClick={() => storeExtraLarge.set({isOpen: !storeExtraLarge.get("isOpen")})}>x-large</Button>
+            </State>
+            <State store={storeCustom}>
+                <Modal
+                    size={ModalSize.CUSTOM}
+                    onClose={() => storeCustom.set({isOpen: false})}
+                    title="Custom modal"
+                    width={500}
+                    height={300}
+                    className="custom-class"
+                >
+                    <ModalBody>
+                        <p>I'm a Custom sized modal with 500 X 300</p>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button onClick={() => storeCustom.set({isOpen: false})}>cancel</Button>
+                        <Button onClick={() => storeCustom.set({isOpen: false})} primary={true}>
+                            ok
+                        </Button>
+                    </ModalFooter>
+                </Modal>
+                <Button onClick={() => storeCustom.set({isOpen: !storeCustom.get("isOpen")})}>Custom</Button>
             </State>
         </div>
     </div>
