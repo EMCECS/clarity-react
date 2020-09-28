@@ -61,7 +61,7 @@ storiesOf("Button", module)
     .add("Link buttons", () => (
         <div>
             <Button key="link" link onClick={action("link click")}>
-                PRIMARY
+                primary
             </Button>
             <Button key="link-disabled" link disabled={true} onClick={action("link-disabled click")}>
                 DISABLED
