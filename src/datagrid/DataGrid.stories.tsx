@@ -11,6 +11,7 @@
 import * as React from "react";
 import {storiesOf} from "@storybook/react";
 import {State, Store} from "@sambego/storybook-state";
+import {Icon} from "../icon";
 import {DataGrid, GridSelectionType, GridRowType, SortOrder, DataGridFilter, FilterType} from ".";
 import {
     normalColumns,
@@ -319,7 +320,12 @@ storiesOf("DataGrid", module)
                 columns={[
                     {
                         columnName: "User ID",
-                        style: {width: "20%"},
+                        displayName: (
+                            <div>
+                                {" "}
+                                <Icon shape="user" className="is-solid" /> {"User ID"}{" "}
+                            </div>
+                        ),
                         isVisible: false,
                         sort: {defaultSortOrder: SortOrder.ASC, sortFunction: sortFunction},
                         filter: (
@@ -332,7 +338,12 @@ storiesOf("DataGrid", module)
                     },
                     {
                         columnName: "Name",
-                        style: {width: "20%"},
+                        displayName: (
+                            <div>
+                                {" "}
+                                <Icon shape="administrator" className="is-solid" /> {"Name"}{" "}
+                            </div>
+                        ),
                         sort: {defaultSortOrder: SortOrder.NONE, sortFunction: sortFunction},
                         filter: (
                             <DataGridFilter
@@ -343,7 +354,15 @@ storiesOf("DataGrid", module)
                         ),
                     },
                     {columnName: "Creation Date", style: {width: "20%"}},
-                    {columnName: "Favorite color", style: {width: "20%"}},
+                    {
+                        columnName: "Favorite color",
+                        displayName: (
+                            <div>
+                                {" "}
+                                <Icon shape="color-palette" className="is-solid" /> {"Favorite color"}{" "}
+                            </div>
+                        ),
+                    },
                 ]}
                 rows={paginationRows.slice(0, 5)}
                 pagination={paginationDetails}

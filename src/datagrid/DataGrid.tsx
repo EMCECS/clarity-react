@@ -65,6 +65,7 @@ type DataGridProps = {
 /**
  * type for DataGridColumn :
  * @param {columnName} column data
+ * @param {displayName} display name for column
  * @param {sort} does colum support sorting
  * @param {className} CSS class name
  * @param {columns} column details
@@ -75,6 +76,7 @@ type DataGridProps = {
  */
 export type DataGridColumn = {
     columnName: string;
+    displayName?: any;
     columnID?: number; // For internal use
     sort?: DataGridSort;
     className?: string;
@@ -92,7 +94,7 @@ export type DataGridColumn = {
  * @param {className} CSS class name
  * @param {style} CSS style
  * @param {expandableContent} Expandable data content
- * @param {enableRowSelection} If true then show checkbox or radio button to select row. By default true
+ * @param {disableRowSelection} If true then hide checkbox or radio button to select row.
  */
 export type DataGridRow = {
     rowData: DataGridCell[];
@@ -102,7 +104,7 @@ export type DataGridRow = {
     isSelected?: boolean;
     expandableContent?: any;
     isExpanded?: boolean;
-    enableRowSelection?: boolean;
+    disableRowSelection?: boolean;
 };
 
 /**
@@ -295,12 +297,12 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     // Function to return all selected rows
     getSelectedRows = (): DataGridRow[] => {
         const {allRows} = this.state;
-        return allRows.filter(row => row.enableRowSelection && row.isSelected === true);
+        return allRows.filter(row => row.isSelected === true);
     };
 
     // Function to return all selection enabled rows
     getSelectionEnabledRows = (allRows: DataGridRow[]): DataGridRow[] => {
-        return allRows.filter(row => row.enableRowSelection === true);
+        return allRows.filter(row => row.disableRowSelection === (false || undefined));
     };
 
     // Function to check if all selectable rows are selected or not
@@ -406,8 +408,8 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         });
 
         rows.forEach(function(row) {
-            row.enableRowSelection = row.enableRowSelection !== undefined ? row.enableRowSelection : true;
-            row.isSelected = row.enableRowSelection && row.isSelected !== undefined ? row.isSelected : false;
+            const rowSelectionIsDisabled = row.disableRowSelection !== undefined ? row.disableRowSelection : false;
+            row.isSelected = !rowSelectionIsDisabled && row.isSelected !== undefined ? row.isSelected : false;
             row.isExpanded = row.isExpanded !== undefined ? row.isExpanded : false;
         });
 
@@ -575,7 +577,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         let {allRows, selectAll} = this.state;
         const {onSelectAll} = this.props;
         allRows.forEach(row => {
-            if (row.enableRowSelection) {
+            if (!row.disableRowSelection) {
                 row.isSelected = !selectAll;
             }
         });
@@ -595,7 +597,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         const {onRowSelect, selectionType} = this.props;
         let selectedRow: DataGridRow;
         allRows.forEach(row => {
-            if (row.rowID === rowID && row.enableRowSelection) {
+            if (row.rowID === rowID) {
                 row.isSelected = !row.isSelected;
                 selectedRow = row;
             } else if (selectionType === GridSelectionType.SINGLE) {
@@ -655,7 +657,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         // set rowID = index in array
         if (rows && rows.length) {
             rows.map((row: DataGridRow, index: number) => {
-                row["rowID"] = index;
+                row.rowID = index;
             });
         }
 
@@ -810,7 +812,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                                 ClassNames.DATAGRID_NG_STAR_INSERTED,
                             ])}
                         >
-                            {row.enableRowSelection && (
+                            {!row.disableRowSelection && (
                                 <CheckBox
                                     id={`${row.rowID}-select-checkbox`}
                                     ariaLabel="Select"
@@ -824,7 +826,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                         <div
                             className={classNames([ClassNames.CLR_RADIO_WRAPPER, ClassNames.DATAGRID_NG_STAR_INSERTED])}
                         >
-                            {row.enableRowSelection && (
+                            {!row.disableRowSelection && (
                                 <RadioButton
                                     value={row.rowID}
                                     id={`${row.rowID}-select-radio`}
@@ -919,7 +921,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // Function to build datagrid colums
     private buildDataGridColumn(column: DataGridColumn, index: number): React.ReactElement {
-        const {columnName, columnID, className, style, sort, filter, width} = column;
+        const {columnName, displayName, columnID, className, style, sort, filter, width} = column;
         const columnHeight =
             this.datagridTableRef && this.datagridTableRef.current && this.datagridTableRef.current.clientHeight;
 
@@ -944,7 +946,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                                 this.handleSort(evt, columnName, columnID, sort.sortFunction, sort.defaultSortOrder)
                             }
                         >
-                            {columnName}
+                            {displayName ? displayName : columnName}
                             {sort.isSorted && sort.defaultSortOrder !== SortOrder.NONE && (
                                 <Icon
                                     shape={sort.defaultSortOrder == SortOrder.DESC ? "arrow down" : "arrow up"}
@@ -956,7 +958,9 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                             )}
                         </Button>
                     ) : (
-                        <span className={ClassNames.DATAGRID_COLUMN_TITLE}>{columnName}</span>
+                        <span className={ClassNames.DATAGRID_COLUMN_TITLE}>
+                            {displayName ? displayName : columnName}
+                        </span>
                     )}
                     {filter && filter}
                     <DataGridColumnResize height={columnHeight} column={column} updateColumn={this.updateColumnWidth} />
@@ -968,7 +972,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     // function to build datagrid rows
     private buildDataGridRow(row: DataGridRow, index: number): React.ReactElement {
         const {selectionType, rowType} = this.props;
-        const {rowID, rowData, className, style, isSelected, enableRowSelection, isExpanded, expandableContent} = row;
+        const {rowID, rowData, className, style, isSelected, disableRowSelection, isExpanded, expandableContent} = row;
         let rowStyle = style;
         if (index === 0) {
             rowStyle = {...style, borderTop: "none"};
@@ -979,7 +983,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                 className={classNames([
                     ClassNames.DATAGRID_ROW,
                     ClassNames.DATAGRID_NG_STAR_INSERTED,
-                    enableRowSelection && isSelected && ClassNames.DATAGRID_SELECTED,
+                    !disableRowSelection && isSelected && ClassNames.DATAGRID_SELECTED,
                     className,
                 ])}
                 aria-owns={"clr-dg-row" + index}

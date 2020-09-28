@@ -11,7 +11,7 @@
 import * as React from "react";
 import {Icon} from "../icon";
 import {Button} from "../forms/button";
-import {SortOrder, DataGridRow, DataGridFilterResult} from ".";
+import {SortOrder, DataGridRow, DataGridFilterResult, DataGridColumn, DataGridCell} from ".";
 
 /**
  * General file description :
@@ -21,11 +21,19 @@ import {SortOrder, DataGridRow, DataGridFilterResult} from ".";
 /**
  * Data for Columns
  */
-export const normalColumns = [
+export const normalColumns: DataGridColumn[] = [
     {columnName: "User ID"},
     {columnName: "Name"},
     {columnName: "Creation Date"},
     {columnName: "Favorite color"},
+];
+
+// Data for Hide/show columns
+export const hideableColumns: DataGridColumn[] = [
+    {columnName: "User ID"},
+    {columnName: "Name"},
+    {columnName: "Creation Date", isVisible: false},
+    {columnName: "Favorite color", isVisible: false},
 ];
 
 /**
@@ -57,29 +65,6 @@ export const normalRows = [
         ],
     },
 ];
-
-/**
- * Data for Footer
- */
-export const customFooter = {
-    footerData: "Total 2 users",
-    showFooter: true,
-};
-
-export const defaultFooter = {
-    showFooter: true,
-};
-
-export const noFooter = {
-    showFooter: false,
-};
-
-export const hideShowColFooter = {
-    hideShowColumns: {
-        hideShowColBtn: true,
-    },
-    showFooter: true,
-};
 
 /**
  * Data for Custom content rendering
@@ -118,6 +103,76 @@ export const customRows = [
         ],
     },
 ];
+
+/**
+ * Data for Expandable Rows
+ */
+const expandableContent =
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin in neque in ante placerat mattis id sed quam. Proin rhoncus lacus et tempor dignissim. Vivamus sem quam, pellentesque aliquet suscipit eget, pellentesque sed arcu. Vivamus in dui lectus. Suspendisse cursus est ac nisl imperdiet viverra. Aenean sagittis nibh lacus, in eleifend urna ultrices et. Mauris porttitor nisi nec velit pharetra porttitor. Vestibulum vulputate sollicitudin dolor ut tincidunt. Phasellus vitae blandit felis. Nullam posuere ipsum tincidunt velit pellentesque rhoncus. Morbi faucibus ut ipsum at malesuada. Nam vestibulum felis sit amet metus finibus hendrerit. Fusce faucibus odio eget ex vulputate rhoncus. Fusce nec aliquam leo, at suscipit diam.";
+
+export const expandableRows = [
+    {
+        rowData: [
+            {columnName: "User ID", cellData: 41512},
+            {columnName: "Name", cellData: "Georgia"},
+            {columnName: "Creation Date", cellData: "Sep 11, 2008"},
+            {columnName: "Favorite color", cellData: "Blue"},
+        ],
+        expandableContent: expandableContent,
+    },
+    {
+        rowData: [
+            {columnName: "User ID", cellData: 16166},
+            {columnName: "Name", cellData: "Brynn"},
+            {columnName: "Creation Date", cellData: "Aug 2, 2014"},
+            {columnName: "Favorite color", cellData: "Orange"},
+        ],
+        expandableContent: expandableContent,
+    },
+    {
+        rowData: [
+            {columnName: "User ID", cellData: 30574},
+            {columnName: "Name", cellData: "Brad"},
+            {columnName: "Creation Date", cellData: "Jan 4, 2019"},
+            {columnName: "Favorite color", cellData: "Yellow"},
+        ],
+        expandableContent: expandableContent,
+    },
+    {
+        rowData: [
+            {columnName: "User ID", cellData: 345574},
+            {columnName: "Name", cellData: "Harry"},
+            {columnName: "Creation Date", cellData: "Jan 8, 2009"},
+            {columnName: "Favorite color", cellData: "Pink"},
+        ],
+        expandableContent: null,
+    },
+];
+
+export let selectedRows = [41512, 2459, 83942];
+
+/**
+ * Data for Footer
+ */
+export const customFooter = {
+    footerData: "Total 2 users",
+    showFooter: true,
+};
+
+export const defaultFooter = {
+    showFooter: true,
+};
+
+export const noFooter = {
+    showFooter: false,
+};
+
+export const hideShowColFooter = {
+    hideShowColumns: {
+        hideShowColBtn: true,
+    },
+    showFooter: true,
+};
 
 /**
  * Data for Filtering
@@ -228,96 +283,6 @@ export const sortColumns = [
         sort: {defaultSortOrder: SortOrder.ASC, sortFunction: sortFunction, isSorted: true},
     },
 ];
-
-/**
- * Data for Batch Actions
- */
-// Grid Action component
-type GridActionsState = {
-    selectedRows: any[];
-    showEdit: boolean;
-};
-
-export class GridActions extends React.PureComponent<any, GridActionsState> {
-    state = {
-        selectedRows: [],
-        showEdit: false,
-    };
-
-    updateActions(rows: any) {
-        this.setState({
-            selectedRows: rows,
-            showEdit: rows.length === 1 ? true : false,
-        });
-    }
-
-    render() {
-        const {selectedRows, showEdit} = this.state;
-        return (
-            <div>
-                <Button key="new">NEW</Button>
-                <Button key="edit" show={showEdit}>
-                    EDIT
-                </Button>
-                <Button
-                    key="delete"
-                    onClick={() => {
-                        alert("Deleted" + selectedRows.length);
-                    }}
-                >
-                    DELETE
-                </Button>
-            </div>
-        );
-    }
-}
-
-/**
- * Data for Expandable Rows
- */
-const expandableContent =
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin in neque in ante placerat mattis id sed quam. Proin rhoncus lacus et tempor dignissim. Vivamus sem quam, pellentesque aliquet suscipit eget, pellentesque sed arcu. Vivamus in dui lectus. Suspendisse cursus est ac nisl imperdiet viverra. Aenean sagittis nibh lacus, in eleifend urna ultrices et. Mauris porttitor nisi nec velit pharetra porttitor. Vestibulum vulputate sollicitudin dolor ut tincidunt. Phasellus vitae blandit felis. Nullam posuere ipsum tincidunt velit pellentesque rhoncus. Morbi faucibus ut ipsum at malesuada. Nam vestibulum felis sit amet metus finibus hendrerit. Fusce faucibus odio eget ex vulputate rhoncus. Fusce nec aliquam leo, at suscipit diam.";
-
-export const expandableRows = [
-    {
-        rowData: [
-            {columnName: "User ID", cellData: 41512},
-            {columnName: "Name", cellData: "Georgia"},
-            {columnName: "Creation Date", cellData: "Sep 11, 2008"},
-            {columnName: "Favorite color", cellData: "Blue"},
-        ],
-        expandableContent: expandableContent,
-    },
-    {
-        rowData: [
-            {columnName: "User ID", cellData: 16166},
-            {columnName: "Name", cellData: "Brynn"},
-            {columnName: "Creation Date", cellData: "Aug 2, 2014"},
-            {columnName: "Favorite color", cellData: "Orange"},
-        ],
-        expandableContent: expandableContent,
-    },
-    {
-        rowData: [
-            {columnName: "User ID", cellData: 30574},
-            {columnName: "Name", cellData: "Brad"},
-            {columnName: "Creation Date", cellData: "Jan 4, 2019"},
-            {columnName: "Favorite color", cellData: "Yellow"},
-        ],
-        expandableContent: expandableContent,
-    },
-    {
-        rowData: [
-            {columnName: "User ID", cellData: 345574},
-            {columnName: "Name", cellData: "Harry"},
-            {columnName: "Creation Date", cellData: "Jan 8, 2009"},
-            {columnName: "Favorite color", cellData: "Pink"},
-        ],
-        expandableContent: null,
-    },
-];
-
-export let selectedRows = [41512, 2459, 83942];
 
 /**
  * Data for Pagination
@@ -434,10 +399,45 @@ export const pageFilterFunction = (
     });
 };
 
-// Data for Hide/show columns
-export const hideableColumns = [
-    {columnName: "User ID"},
-    {columnName: "Name"},
-    {columnName: "Creation Date", isVisible: false},
-    {columnName: "Favorite color", isVisible: false},
-];
+/**
+ * Data for Batch Actions
+ */
+// Grid Action component
+type GridActionsState = {
+    selectedRows: any[];
+    showEdit: boolean;
+};
+
+export class GridActions extends React.PureComponent<any, GridActionsState> {
+    state = {
+        selectedRows: [],
+        showEdit: false,
+    };
+
+    updateActions(rows: any) {
+        this.setState({
+            selectedRows: rows,
+            showEdit: rows.length === 1 ? true : false,
+        });
+    }
+
+    render() {
+        const {selectedRows, showEdit} = this.state;
+        return (
+            <div>
+                <Button key="new">NEW</Button>
+                <Button key="edit" show={showEdit}>
+                    EDIT
+                </Button>
+                <Button
+                    key="delete"
+                    onClick={() => {
+                        alert("Deleted" + selectedRows.length);
+                    }}
+                >
+                    DELETE
+                </Button>
+            </div>
+        );
+    }
+}
