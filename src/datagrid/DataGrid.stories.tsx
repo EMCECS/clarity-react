@@ -32,14 +32,16 @@ import {
     hideableColumns,
     hideShowColFooter,
     selectedRows,
-    getRowData,
+    alreadySelectedRows,
+    getSelectableRowsData,
+    paginationDetailsForAlreadySelectedRows,
 } from "./DataGridValues";
 import {CustomFilter} from "./CustomFilter";
 import {DataGridRow} from "./DataGrid";
 
 const store = new Store({
     selectedRows: selectedRows,
-    rows: paginationRows.slice(0, 5),
+    rows: alreadySelectedRows.slice(0, 5),
     selectRowCallback: (row?: DataGridRow) => {
         const rowID = row && row.rowData[0].cellData;
         const index = selectedRows.indexOf(rowID);
@@ -63,6 +65,7 @@ const store = new Store({
             selectedRows: allSelected ? selectedRows : [],
         });
     },
+    paginationDetails: paginationDetailsForAlreadySelectedRows,
 });
 // Refrence to call dataGrid methods
 const datagridRef = React.createRef<DataGrid>();
@@ -85,26 +88,47 @@ storiesOf("DataGrid", module)
         </div>
     ))
     .add("Grid with multi select option and no footer", () => (
-        <div style={{width: "80%"}}>
+        <div style={{width: "80%", paddingLeft: "1rem"}}>
+            <br />
+            <span> {"Grid with all rows are selectable :"} </span>
             <DataGrid
                 columns={normalColumns}
                 rows={normalRows}
                 selectionType={GridSelectionType.MULTI}
                 footer={noFooter}
             />
+            <br /> <br />
+            <span> {"Grid with some rows are selectable :"} </span>
+            <DataGrid
+                columns={normalColumns}
+                rows={getSelectableRowsData()}
+                selectionType={GridSelectionType.MULTI}
+                footer={defaultFooter}
+                id="multi-select-datagrid"
+            />
         </div>
     ))
     .add("Grid with single select option", () => (
-        <div style={{width: "80%"}}>
+        <div style={{width: "80%", paddingLeft: "1rem"}}>
+            <br />
+            <span> {"Grid with all rows are selectable :"} </span>
             <DataGrid
                 columns={normalColumns}
                 rows={normalRows}
                 selectionType={GridSelectionType.SINGLE}
                 footer={defaultFooter}
             />
+            <br /> <br />
+            <span> {"Grid with some rows are selectable :"} </span>
+            <DataGrid
+                columns={normalColumns}
+                rows={getSelectableRowsData()}
+                selectionType={GridSelectionType.SINGLE}
+                footer={defaultFooter}
+                id="single-select-datagrid"
+            />
         </div>
     ))
-
     .add("Grid with batch action", () => (
         <div style={{width: "80%"}}>
             <GridActions ref={datagridActionsRef} />
@@ -288,7 +312,7 @@ storiesOf("DataGrid", module)
             />
         </div>
     ))
-    .add("Grid with HIde and Show Column", () => (
+    .add("Grid with Hide and Show Column", () => (
         <div style={{width: "80%", paddingTop: "5%"}}>
             <DataGrid columns={hideableColumns} rows={normalRows} footer={hideShowColFooter} />
         </div>
@@ -300,8 +324,8 @@ storiesOf("DataGrid", module)
                     <DataGrid
                         itemText={"Users"}
                         columns={normalColumns}
-                        rows={paginationRows.slice(0, 5)}
-                        pagination={paginationDetails}
+                        rows={state.rows.slice(0, 5)}
+                        pagination={state.paginationDetails}
                         selectionType={GridSelectionType.MULTI}
                         selectedRowCount={state.selectedRows.length}
                         onRowSelect={state.selectRowCallback}
@@ -322,8 +346,7 @@ storiesOf("DataGrid", module)
                         columnName: "User ID",
                         displayName: (
                             <div>
-                                {" "}
-                                <Icon shape="user" className="is-solid" /> {"User ID"}{" "}
+                                <Icon shape="user" className="is-solid" /> {"User ID"}
                             </div>
                         ),
                         isVisible: false,
@@ -340,8 +363,7 @@ storiesOf("DataGrid", module)
                         columnName: "Name",
                         displayName: (
                             <div>
-                                {" "}
-                                <Icon shape="administrator" className="is-solid" /> {"Name"}{" "}
+                                <Icon shape="administrator" className="is-solid" /> {"Name"}
                             </div>
                         ),
                         sort: {defaultSortOrder: SortOrder.NONE, sortFunction: sortFunction},
@@ -358,7 +380,6 @@ storiesOf("DataGrid", module)
                         columnName: "Favorite color",
                         displayName: (
                             <div>
-                                {" "}
                                 <Icon shape="color-palette" className="is-solid" /> {"Favorite color"}{" "}
                             </div>
                         ),

@@ -302,7 +302,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // Function to return all selection enabled rows
     getSelectionEnabledRows = (allRows: DataGridRow[]): DataGridRow[] => {
-        return allRows.filter(row => row.disableRowSelection === (false || undefined));
+        return allRows.filter(row => !row.disableRowSelection);
     };
 
     // Function to check if all selectable rows are selected or not
@@ -793,7 +793,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // function to render select cell
     private buildSelectCell(row: DataGridRow): React.ReactElement {
-        const {selectionType} = this.props;
+        const {selectionType, id} = this.props;
         return (
             <div className={ClassNames.DATAGRID_ROW_STICKY}>
                 <div
@@ -814,7 +814,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                         >
                             {!row.disableRowSelection && (
                                 <CheckBox
-                                    id={`${row.rowID}-select-checkbox`}
+                                    id={`${id}-${row.rowID}-select-checkbox`}
                                     ariaLabel="Select"
                                     className={ClassNames.CLR_SELECT}
                                     onChange={evt => this.handleSelectSingle(evt, row.rowID)}
@@ -829,7 +829,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                             {!row.disableRowSelection && (
                                 <RadioButton
                                     value={row.rowID}
-                                    id={`${row.rowID}-select-radio`}
+                                    id={`${id}-${row.rowID}-select-radio`}
                                     className={ClassNames.CLR_SELECT}
                                     onChange={evt => this.handleSelectSingle(evt, row.rowID)}
                                     checked={row.isSelected !== undefined ? row.isSelected : undefined}

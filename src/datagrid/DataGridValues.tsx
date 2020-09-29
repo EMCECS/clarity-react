@@ -37,6 +37,22 @@ export const hideableColumns: DataGridColumn[] = [
 ];
 
 /**
+ * Data for datagrid cell
+ */
+const cellData = [
+    [41512, "Georgia", "Sep 11, 2008", "Blue"],
+    [16166, "Brynn", "Aug 2, 2014", "Orange"],
+    [30574, "Brad", "Jan 4, 2019", "Yellow"],
+    [2459, "Beverly", "Mar 2, 2019", "Pink"],
+    [14262, "Johnson", "Jun 23, 2019", "Blue"],
+    [59729, "Sibyl", "Feb 27, 2016", "Red"],
+    [92422, "Roslyn", "Apr 26, 2016", "Blue"],
+    [83941, "Lottie", "Mar 2, 2019", "Yellow"],
+    [83942, "Lottie", "Mar 2, 2019", "Yellow"],
+    [83943, "Lottie", "Mar 2, 2019", "Yellow"],
+];
+
+/**
  * Data for Rows
  */
 export const normalRows = [
@@ -149,7 +165,62 @@ export const expandableRows = [
     },
 ];
 
+export function getRowData() {
+    let rowValues: DataGridRow[] = [];
+    cellData.forEach(function(element: any) {
+        const row: DataGridRow = {
+            rowData: [
+                {
+                    columnName: "User ID",
+                    cellData: element[0],
+                },
+                {
+                    columnName: "Name",
+                    cellData: element[1],
+                },
+                {
+                    columnName: "Creation Date",
+                    cellData: element[2],
+                },
+                {
+                    columnName: "Favorite color",
+                    cellData: element[3],
+                },
+            ],
+        };
+
+        rowValues.push(row);
+    });
+    return rowValues;
+}
+
+// Function to get some selection enabled rows
+export const getSelectableRowsData = (): DataGridRow[] => {
+    let disableRowSelection: boolean = true;
+    let updatedRows: DataGridRow[] = getRowData();
+    updatedRows.forEach((row: DataGridRow) => {
+        disableRowSelection = !disableRowSelection;
+        row.disableRowSelection = disableRowSelection;
+    });
+    return updatedRows;
+};
+
+// Function to get some already selected rows
 export let selectedRows = [41512, 2459, 83942];
+
+export const getSelectedRowsData = (): DataGridRow[] => {
+    let updatedRows: DataGridRow[] = getRowData();
+    updatedRows.forEach((row: DataGridRow) => {
+        row.isSelected = selectedRows.includes(row.rowData[0].cellData);
+    });
+    return updatedRows;
+};
+
+// Data for pagination rows
+export const paginationRows = getRowData();
+
+// Data for pre-selected rows
+export const alreadySelectedRows = getSelectedRowsData();
 
 /**
  * Data for Footer
@@ -287,50 +358,6 @@ export const sortColumns = [
 /**
  * Data for Pagination
  */
-export function getRowData() {
-    const data = [
-        [41512, "Georgia", "Sep 11, 2008", "Blue"],
-        [16166, "Brynn", "Aug 2, 2014", "Orange"],
-        [30574, "Brad", "Jan 4, 2019", "Yellow"],
-        [2459, "Beverly", "Mar 2, 2019", "Pink"],
-        [14262, "Johnson", "Jun 23, 2019", "Blue"],
-        [59729, "Sibyl", "Feb 27, 2016", "Red"],
-        [92422, "Roslyn", "Apr 26, 2016", "Blue"],
-        [83941, "Lottie", "Mar 2, 2019", "Yellow"],
-        [83942, "Lottie", "Mar 2, 2019", "Yellow"],
-        [83943, "Lottie", "Mar 2, 2019", "Yellow"],
-    ];
-
-    let rowValues: DataGridRow[] = [];
-    data.forEach(function(element: any) {
-        const row: DataGridRow = {
-            isSelected: selectedRows.includes(element[0]),
-            rowData: [
-                {
-                    columnName: "User ID",
-                    cellData: element[0],
-                },
-                {
-                    columnName: "Name",
-                    cellData: element[1],
-                },
-                {
-                    columnName: "Creation Date",
-                    cellData: element[2],
-                },
-                {
-                    columnName: "Favorite color",
-                    cellData: element[3],
-                },
-            ],
-        };
-
-        rowValues.push(row);
-    });
-    return rowValues;
-}
-
-export const paginationRows = getRowData();
 
 // Function to get data for page based on pagenumber
 export const getPageData = (pageIndex: number, pageSize: number): Promise<DataGridRow[]> => {
@@ -352,7 +379,26 @@ export const getPageData = (pageIndex: number, pageSize: number): Promise<DataGr
         }, 2000);
     });
 };
-
+// Function to get data for page based on pagenumber
+export const getPageDataForSelectedRows = (pageIndex: number, pageSize: number): Promise<DataGridRow[]> => {
+    return new Promise((resolve, reject) => {
+        let rows: DataGridRow[] = [];
+        if (pageSize == 5) {
+            if (pageIndex == 2) {
+                rows = alreadySelectedRows.slice(5, 10);
+            }
+            if (pageIndex == 1) {
+                rows = alreadySelectedRows.slice(0, 5);
+            }
+        } else if (pageSize == 10) {
+            rows = paginationRows;
+        }
+        // Purposefully added dealy here to see loading spinner
+        setTimeout(function() {
+            resolve(rows);
+        }, 2000);
+    });
+};
 export const paginationDetails = {
     totalItems: paginationRows.length,
     getPageData: getPageData,
@@ -366,6 +412,13 @@ export const paginationDetailsWithCompactFooter = {
     pageSize: 5,
     pageSizes: [5, 10],
     compactFooter: true,
+};
+
+export const paginationDetailsForAlreadySelectedRows = {
+    totalItems: alreadySelectedRows.length,
+    getPageData: getPageDataForSelectedRows,
+    pageSize: 5,
+    pageSizes: [5, 10],
 };
 
 export const pageFilterFunction = (
@@ -393,7 +446,6 @@ export const pageFilterFunction = (
 
         // Purposefully added dealy here to see loading spinner
         setTimeout(function() {
-            console.log("rows", rows);
             resolve(result);
         }, 2000);
     });
