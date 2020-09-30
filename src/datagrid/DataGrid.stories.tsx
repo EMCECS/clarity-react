@@ -56,13 +56,20 @@ const store = new Store({
             selectedRows: selectedRows,
         });
     },
-    selectAllCallback: (allSelected?: boolean) => {
-        let selectedRows;
-        if (allSelected) {
-            selectedRows = [41512, 16166, 30574, 2459, 14262];
-        }
+    selectAllCallback: (allSelected?: boolean, rows?: DataGridRow[]) => {
+        rows!.forEach(row => {
+            const rowID = row.rowData[0].cellData;
+            const index = selectedRows.indexOf(rowID);
+
+            if (allSelected) {
+                index === -1 && selectedRows.push(rowID);
+            } else {
+                selectedRows.splice(index, 1);
+            }
+        });
+
         store.set({
-            selectedRows: allSelected ? selectedRows : [],
+            selectedRows: selectedRows,
         });
     },
     paginationDetails: paginationDetailsForAlreadySelectedRows,
@@ -324,7 +331,7 @@ storiesOf("DataGrid", module)
                     <DataGrid
                         itemText={"Users"}
                         columns={normalColumns}
-                        rows={state.rows.slice(0, 5)}
+                        rows={state.rows}
                         pagination={state.paginationDetails}
                         selectionType={GridSelectionType.MULTI}
                         selectedRowCount={state.selectedRows.length}

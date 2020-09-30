@@ -383,6 +383,7 @@ export const getPageData = (pageIndex: number, pageSize: number): Promise<DataGr
 export const getPageDataForSelectedRows = (pageIndex: number, pageSize: number): Promise<DataGridRow[]> => {
     return new Promise((resolve, reject) => {
         let rows: DataGridRow[] = [];
+
         if (pageSize == 5) {
             if (pageIndex == 2) {
                 rows = alreadySelectedRows.slice(5, 10);
