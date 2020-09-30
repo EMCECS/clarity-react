@@ -14,25 +14,44 @@ import {Button} from "../button";
 import {Icon, IconProps} from "../../icon";
 import {calculateAxisPosition} from "./AxisPosition";
 
-type SignPostState = {
-    isOpen: boolean;
-    transformVal: string;
-};
 /**
- *@param {direction} for SignPostDirection;
- *@param {style} for css style;
- *@param {icon} for IconProps;
- *@param {showCloseButton} for close button;
+ * General component description :
+ * The signpost is a convenient way to show contextual help to user.
+ */
+
+/**
+ * Props for SignPost
+ *@param {direction} for SignPostDirection
+ *@param {style} for css style
+ *@param {className} for css class name
+ *@param {openAt} element or text to open signPost on its click
+ *@param {showCloseButton} for close button
+ *@param {onClick} callback function to call on open of signPost
+ *@param {onClose} callback function to call on close of signPost
  *@param {dataqa} for Quality Engineering
  */
 type SignPostProps = {
     direction?: SignPostDirection;
     style?: any;
-    icon?: IconProps;
+    className?: string;
+    openAt?: any;
     showCloseButton?: boolean;
+    onClick?: Function;
+    onClose?: Function;
     dataqa?: string;
 };
 
+/**
+ * State for SignPost
+ *@param {isOpen} If true signPost is open else close
+ *@param {transformVal} CSS transformX and transformY values for signPost positions
+ */
+type SignPostState = {
+    isOpen: boolean;
+    transformVal: string;
+};
+
+// Enum for signPost directions
 export enum SignPostDirection {
     TOP_LEFT = "top-left",
     TOP_MIDDLE = "top-middle",
@@ -48,13 +67,13 @@ export enum SignPostDirection {
     LEFT_BOTTOM = "left-bottom",
 }
 
+// SignPost component
 export class SignPost extends React.PureComponent<SignPostProps> {
     static defaultProps = {
         direction: SignPostDirection.TOP_LEFT,
-        style: {},
-        icon: {shape: "dell-alert-info", size: 26},
         showCloseButton: true,
     };
+
     private refParent = React.createRef<HTMLDivElement>();
     private refChild = React.createRef<HTMLDivElement>();
 
@@ -63,8 +82,29 @@ export class SignPost extends React.PureComponent<SignPostProps> {
         transformVal: "translateX(0px) translateY(0px)",
     };
 
-    handleButtonClick = () => {
+    componentWillUnmount() {
+        this.unsubscribeDocumentClick();
+    }
+
+    handleOnClick = () => {
+        const {onClick} = this.props;
+
         this.toggle();
+        onClick && onClick();
+    };
+
+    handleClose = () => {
+        const {onClose} = this.props;
+
+        this.setState(
+            {
+                isOpen: false,
+            },
+            () => {
+                onClose && onClose();
+                this.afterToggle();
+            },
+        );
     };
 
     toggle(isOpen = !this.state.isOpen) {
@@ -93,7 +133,6 @@ export class SignPost extends React.PureComponent<SignPostProps> {
 
         const el = this.refChild.current;
         if (!el || typeof el === "string") {
-            console.warn("wrong element type");
             return;
         }
         if (!el.contains(target)) {
@@ -104,10 +143,11 @@ export class SignPost extends React.PureComponent<SignPostProps> {
     componentDidUpdate() {
         const {isOpen} = this.state;
         if (!isOpen) return;
-        const childWidth = (this.refChild.current as HTMLDivElement).clientWidth;
-        const childHeight = (this.refChild.current as HTMLDivElement).clientHeight;
-        const parentWidth = (this.refParent.current as HTMLDivElement).clientWidth;
-        const parentHeight = (this.refParent.current as HTMLDivElement).clientHeight;
+        const childElement = this.refChild && (this.refChild.current as HTMLDivElement);
+        const childWidth = childElement.clientWidth;
+        const childHeight = childElement.clientHeight;
+        const parentWidth = childElement.clientWidth;
+        const parentHeight = childElement.clientHeight;
 
         const {direction} = this.props;
         let transformVal =
@@ -115,64 +155,70 @@ export class SignPost extends React.PureComponent<SignPostProps> {
         this.setState({transformVal: transformVal});
     }
 
-    render() {
-        const {isOpen, transformVal} = this.state;
+    buildSignPostTriggerButton = () => {
+        const {isOpen} = this.state;
+        const {openAt} = this.props;
+        return (
+            <Button
+                className={classNames([
+                    "signpost-action", //prettier
+                    "btn-small",
+                    "btn-link",
+                    "signpost-trigger",
+                    isOpen && "active",
+                ])}
+                onClick={this.handleOnClick}
+            >
+                {openAt ? openAt : <Icon shape="dell-alert-info" size={26} />}
+            </Button>
+        );
+    };
+
+    buildSignPost = () => {
+        const {transformVal} = this.state;
         const {
             direction, //prettier
             style,
+            className,
             children,
-            icon,
             showCloseButton,
-            dataqa,
         } = this.props;
         return (
-            <div ref={this.refParent} className="signpost" style={{position: "relative"}} data-qa={dataqa}>
-                <Button
-                    className={classNames([
-                        "signpost-action", //prettier
-                        "btn-small",
-                        "btn-link",
-                        "signpost-trigger",
-                        isOpen && "active",
-                    ])}
-                    onClick={this.handleButtonClick}
-                >
-                    {icon && <Icon {...icon} />}
-                </Button>
-                {isOpen && (
-                    <div
-                        ref={this.refChild}
-                        className={classNames([
-                            "signpost-content",
-                            direction, //prettier
-                        ])}
-                        style={{
-                            ...style,
-                            position: "absolute",
-                            top: "0px",
-                            bottom: "auto",
-                            left: "0px",
-                            right: "auto",
-                            transform: transformVal,
-                        }}
-                    >
-                        <div className="signpost-wrap">
-                            <div className="popover-pointer" />
-                            {showCloseButton && (
-                                <div className="signpost-content-header">
-                                    <Button
-                                        className="signpost-action close"
-                                        defaultBtn={false}
-                                        onClick={this.handleButtonClick}
-                                    >
-                                        <Icon shape="close" />
-                                    </Button>
-                                </div>
-                            )}
-                            <div className="signpost-content-body">{children}</div>
+            <div
+                ref={this.refChild}
+                className={classNames([direction, "signpost-content", "ng-star-inserted", className])}
+                style={{
+                    ...style,
+                    position: "absolute",
+                    top: "0px",
+                    bottom: "auto",
+                    left: "0px",
+                    right: "auto",
+                    transform: transformVal,
+                }}
+            >
+                <div className="signpost-wrap">
+                    <div className="popover-pointer" />
+                    {showCloseButton && (
+                        <div className="signpost-content-header">
+                            <Button className="signpost-action close" defaultBtn={false} onClick={this.handleClose}>
+                                <Icon shape="close" />
+                            </Button>
                         </div>
-                    </div>
-                )}
+                    )}
+                    <div className="signpost-content-body">{children}</div>
+                </div>
+            </div>
+        );
+    };
+
+    render() {
+        const {isOpen} = this.state;
+        const {dataqa} = this.props;
+        return (
+            <div ref={this.refParent} className="signpost" style={{position: "relative"}} data-qa={dataqa}>
+                {this.buildSignPostTriggerButton()}
+                {isOpen && this.buildSignPost()}
             </div>
         );
     }
