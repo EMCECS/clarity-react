@@ -155,8 +155,8 @@ storiesOf("Signposts", module)
     .add("SingPost with custom link", () => (
         <div style={{paddingTop: "250px", paddingLeft: "300px"}}>
             <div style={{float: "left"}}>
-                <SignPost direction={SignPostDirection.LEFT_BOTTOM} openAt={<span> Open SignPost </span>}>
-                    <h3 style={{marginTop: "0px"}}>No close button</h3>
+                <SignPost direction={SignPostDirection.TOP_MIDDLE} openAt={<span> Open SignPost </span>}>
+                    <h3 style={{marginTop: "0px"}}>Title</h3>
                     <p>sample data here ...</p>
                 </SignPost>
             </div>
