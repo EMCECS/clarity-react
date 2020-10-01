@@ -357,6 +357,7 @@ storiesOf("New Wizard", module)
                             id={2}
                             key={2}
                             name={"Page 3"}
+                            navigationTitle={"Click for page 3"}
                             valid={state.basicInfoValid}
                             complete={state.basicInfoValid}
                         />
