@@ -143,11 +143,10 @@ export class SignPost extends React.PureComponent<SignPostProps> {
     componentDidUpdate() {
         const {isOpen} = this.state;
         if (!isOpen) return;
-        const childElement = this.refChild && (this.refChild.current as HTMLDivElement);
-        const childWidth = childElement.clientWidth;
-        const childHeight = childElement.clientHeight;
-        const parentWidth = childElement.clientWidth;
-        const parentHeight = childElement.clientHeight;
+        const childWidth = (this.refChild.current as HTMLDivElement).clientWidth;
+        const childHeight = (this.refChild.current as HTMLDivElement).clientHeight;
+        const parentWidth = (this.refParent.current as HTMLDivElement).clientWidth;
+        const parentHeight = (this.refParent.current as HTMLDivElement).clientHeight;
 
         const {direction} = this.props;
         let transformVal =
