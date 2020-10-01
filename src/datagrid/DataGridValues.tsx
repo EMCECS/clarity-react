@@ -11,7 +11,7 @@
 import * as React from "react";
 import {Icon} from "../icon";
 import {Button} from "../forms/button";
-import {SortOrder, DataGridRow, DataGridFilterResult} from ".";
+import {SortOrder, DataGridRow, DataGridFilterResult, DataGridColumn, DataGridCell} from ".";
 
 /**
  * General file description :
@@ -21,11 +21,35 @@ import {SortOrder, DataGridRow, DataGridFilterResult} from ".";
 /**
  * Data for Columns
  */
-export const normalColumns = [
+export const normalColumns: DataGridColumn[] = [
     {columnName: "User ID"},
     {columnName: "Name"},
     {columnName: "Creation Date"},
     {columnName: "Favorite color"},
+];
+
+// Data for Hide/show columns
+export const hideableColumns: DataGridColumn[] = [
+    {columnName: "User ID"},
+    {columnName: "Name"},
+    {columnName: "Creation Date", isVisible: false},
+    {columnName: "Favorite color", isVisible: false},
+];
+
+/**
+ * Data for datagrid cell
+ */
+const cellData = [
+    [41512, "Georgia", "Sep 11, 2008", "Blue"],
+    [16166, "Brynn", "Aug 2, 2014", "Orange"],
+    [30574, "Brad", "Jan 4, 2019", "Yellow"],
+    [2459, "Beverly", "Mar 2, 2019", "Pink"],
+    [14262, "Johnson", "Jun 23, 2019", "Blue"],
+    [59729, "Sibyl", "Feb 27, 2016", "Red"],
+    [92422, "Roslyn", "Apr 26, 2016", "Blue"],
+    [83941, "Lottie", "Mar 2, 2019", "Yellow"],
+    [83942, "Lottie", "Mar 2, 2019", "Yellow"],
+    [83943, "Lottie", "Mar 2, 2019", "Yellow"],
 ];
 
 /**
@@ -57,29 +81,6 @@ export const normalRows = [
         ],
     },
 ];
-
-/**
- * Data for Footer
- */
-export const customFooter = {
-    footerData: "Total 2 users",
-    showFooter: true,
-};
-
-export const defaultFooter = {
-    showFooter: true,
-};
-
-export const noFooter = {
-    showFooter: false,
-};
-
-export const hideShowColFooter = {
-    hideShowColumns: {
-        hideShowColBtn: true,
-    },
-    showFooter: true,
-};
 
 /**
  * Data for Custom content rendering
@@ -118,6 +119,131 @@ export const customRows = [
         ],
     },
 ];
+
+/**
+ * Data for Expandable Rows
+ */
+const expandableContent =
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin in neque in ante placerat mattis id sed quam. Proin rhoncus lacus et tempor dignissim. Vivamus sem quam, pellentesque aliquet suscipit eget, pellentesque sed arcu. Vivamus in dui lectus. Suspendisse cursus est ac nisl imperdiet viverra. Aenean sagittis nibh lacus, in eleifend urna ultrices et. Mauris porttitor nisi nec velit pharetra porttitor. Vestibulum vulputate sollicitudin dolor ut tincidunt. Phasellus vitae blandit felis. Nullam posuere ipsum tincidunt velit pellentesque rhoncus. Morbi faucibus ut ipsum at malesuada. Nam vestibulum felis sit amet metus finibus hendrerit. Fusce faucibus odio eget ex vulputate rhoncus. Fusce nec aliquam leo, at suscipit diam.";
+
+export const expandableRows = [
+    {
+        rowData: [
+            {columnName: "User ID", cellData: 41512},
+            {columnName: "Name", cellData: "Georgia"},
+            {columnName: "Creation Date", cellData: "Sep 11, 2008"},
+            {columnName: "Favorite color", cellData: "Blue"},
+        ],
+        expandableContent: expandableContent,
+    },
+    {
+        rowData: [
+            {columnName: "User ID", cellData: 16166},
+            {columnName: "Name", cellData: "Brynn"},
+            {columnName: "Creation Date", cellData: "Aug 2, 2014"},
+            {columnName: "Favorite color", cellData: "Orange"},
+        ],
+        expandableContent: expandableContent,
+    },
+    {
+        rowData: [
+            {columnName: "User ID", cellData: 30574},
+            {columnName: "Name", cellData: "Brad"},
+            {columnName: "Creation Date", cellData: "Jan 4, 2019"},
+            {columnName: "Favorite color", cellData: "Yellow"},
+        ],
+        expandableContent: expandableContent,
+    },
+    {
+        rowData: [
+            {columnName: "User ID", cellData: 345574},
+            {columnName: "Name", cellData: "Harry"},
+            {columnName: "Creation Date", cellData: "Jan 8, 2009"},
+            {columnName: "Favorite color", cellData: "Pink"},
+        ],
+        expandableContent: null,
+    },
+];
+
+export function getRowData() {
+    let rowValues: DataGridRow[] = [];
+    cellData.forEach(function(element: any) {
+        const row: DataGridRow = {
+            rowData: [
+                {
+                    columnName: "User ID",
+                    cellData: element[0],
+                },
+                {
+                    columnName: "Name",
+                    cellData: element[1],
+                },
+                {
+                    columnName: "Creation Date",
+                    cellData: element[2],
+                },
+                {
+                    columnName: "Favorite color",
+                    cellData: element[3],
+                },
+            ],
+        };
+
+        rowValues.push(row);
+    });
+    return rowValues;
+}
+
+// Function to get some selection enabled rows
+export const getSelectableRowsData = (): DataGridRow[] => {
+    let disableRowSelection: boolean = true;
+    let updatedRows: DataGridRow[] = getRowData();
+    updatedRows.forEach((row: DataGridRow) => {
+        disableRowSelection = !disableRowSelection;
+        row.disableRowSelection = disableRowSelection;
+    });
+    return updatedRows;
+};
+
+// Function to get some already selected rows
+export let selectedRows = [41512, 2459, 83942];
+
+export const getSelectedRowsData = (): DataGridRow[] => {
+    let updatedRows: DataGridRow[] = getRowData();
+    updatedRows.forEach((row: DataGridRow) => {
+        row.isSelected = selectedRows.includes(row.rowData[0].cellData);
+    });
+    return updatedRows;
+};
+
+// Data for pagination rows
+export const paginationRows = getRowData();
+
+// Data for pre-selected rows
+export const alreadySelectedRows = getSelectedRowsData();
+
+/**
+ * Data for Footer
+ */
+export const customFooter = {
+    footerData: "Total 2 users",
+    showFooter: true,
+};
+
+export const defaultFooter = {
+    showFooter: true,
+};
+
+export const noFooter = {
+    showFooter: false,
+};
+
+export const hideShowColFooter = {
+    hideShowColumns: {
+        hideShowColBtn: true,
+    },
+    showFooter: true,
+};
 
 /**
  * Data for Filtering
@@ -230,6 +356,103 @@ export const sortColumns = [
 ];
 
 /**
+ * Data for Pagination
+ */
+
+// Function to get data for page based on pagenumber
+export const getPageData = (pageIndex: number, pageSize: number): Promise<DataGridRow[]> => {
+    return new Promise((resolve, reject) => {
+        let rows: DataGridRow[] = [];
+        if (pageSize === 5) {
+            if (pageIndex === 2) {
+                rows = paginationRows.slice(5, 10);
+            }
+            if (pageIndex === 1) {
+                rows = paginationRows.slice(0, 5);
+            }
+        } else if (pageSize === 10) {
+            rows = paginationRows;
+        }
+        // Purposefully added dealy here to see loading spinner
+        setTimeout(function() {
+            resolve(rows);
+        }, 2000);
+    });
+};
+// Function to get data for page based on pagenumber
+export const getPageDataForSelectedRows = (pageIndex: number, pageSize: number): Promise<DataGridRow[]> => {
+    return new Promise((resolve, reject) => {
+        let rows: DataGridRow[] = [];
+
+        if (pageSize === 5) {
+            if (pageIndex === 2) {
+                rows = alreadySelectedRows.slice(5, 10);
+            }
+            if (pageIndex === 1) {
+                rows = alreadySelectedRows.slice(0, 5);
+            }
+        } else if (pageSize === 10) {
+            rows = paginationRows;
+        }
+        // Purposefully added dealy here to see loading spinner
+        setTimeout(function() {
+            resolve(rows);
+        }, 2000);
+    });
+};
+export const paginationDetails = {
+    totalItems: paginationRows.length,
+    getPageData: getPageData,
+    pageSize: 5,
+    pageSizes: [5, 10],
+};
+
+export const paginationDetailsWithCompactFooter = {
+    totalItems: paginationRows.length,
+    getPageData: getPageData,
+    pageSize: 5,
+    pageSizes: [5, 10],
+    compactFooter: true,
+};
+
+export const paginationDetailsForAlreadySelectedRows = {
+    totalItems: alreadySelectedRows.length,
+    getPageData: getPageDataForSelectedRows,
+    pageSize: 5,
+    pageSizes: [5, 10],
+};
+
+export const pageFilterFunction = (
+    rows: DataGridRow[],
+    columnValue: string,
+    columnName: string,
+): Promise<DataGridFilterResult> => {
+    return new Promise((resolve, reject) => {
+        let result: DataGridFilterResult = {
+            rows: [],
+            totalItems: 0,
+        };
+        if (columnValue === "" || columnValue === undefined) {
+            result = {
+                rows: paginationRows.slice(0, 5),
+                totalItems: paginationRows.length,
+            };
+        } else {
+            const newRows = filterRows(rows, columnValue);
+            result = {
+                rows: newRows,
+                totalItems: newRows.length,
+            };
+        }
+
+        // Purposefully added dealy here to see loading spinner
+        setTimeout(function() {
+            resolve(result);
+        }, 2000);
+    });
+};
+
+/**
  * Data for Batch Actions
  */
 // Grid Action component
@@ -271,173 +494,3 @@ export class GridActions extends React.PureComponent<any, GridActionsState> {
         );
     }
 }
-
-/**
- * Data for Expandable Rows
- */
-const expandableContent =
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin in neque in ante placerat mattis id sed quam. Proin rhoncus lacus et tempor dignissim. Vivamus sem quam, pellentesque aliquet suscipit eget, pellentesque sed arcu. Vivamus in dui lectus. Suspendisse cursus est ac nisl imperdiet viverra. Aenean sagittis nibh lacus, in eleifend urna ultrices et. Mauris porttitor nisi nec velit pharetra porttitor. Vestibulum vulputate sollicitudin dolor ut tincidunt. Phasellus vitae blandit felis. Nullam posuere ipsum tincidunt velit pellentesque rhoncus. Morbi faucibus ut ipsum at malesuada. Nam vestibulum felis sit amet metus finibus hendrerit. Fusce faucibus odio eget ex vulputate rhoncus. Fusce nec aliquam leo, at suscipit diam.";
-
-export const expandableRows = [
-    {
-        rowData: [
-            {columnName: "User ID", cellData: 41512},
-            {columnName: "Name", cellData: "Georgia"},
-            {columnName: "Creation Date", cellData: "Sep 11, 2008"},
-            {columnName: "Favorite color", cellData: "Blue"},
-        ],
-        expandableContent: expandableContent,
-    },
-    {
-        rowData: [
-            {columnName: "User ID", cellData: 16166},
-            {columnName: "Name", cellData: "Brynn"},
-            {columnName: "Creation Date", cellData: "Aug 2, 2014"},
-            {columnName: "Favorite color", cellData: "Orange"},
-        ],
-        expandableContent: expandableContent,
-    },
-    {
-        rowData: [
-            {columnName: "User ID", cellData: 30574},
-            {columnName: "Name", cellData: "Brad"},
-            {columnName: "Creation Date", cellData: "Jan 4, 2019"},
-            {columnName: "Favorite color", cellData: "Yellow"},
-        ],
-        expandableContent: expandableContent,
-    },
-    {
-        rowData: [
-            {columnName: "User ID", cellData: 345574},
-            {columnName: "Name", cellData: "Harry"},
-            {columnName: "Creation Date", cellData: "Jan 8, 2009"},
-            {columnName: "Favorite color", cellData: "Pink"},
-        ],
-        expandableContent: null,
-    },
-];
-
-export let selectedRows = [41512, 2459, 83942];
-
-/**
- * Data for Pagination
- */
-export function getRowData() {
-    const data = [
-        [41512, "Georgia", "Sep 11, 2008", "Blue"],
-        [16166, "Brynn", "Aug 2, 2014", "Orange"],
-        [30574, "Brad", "Jan 4, 2019", "Yellow"],
-        [2459, "Beverly", "Mar 2, 2019", "Pink"],
-        [14262, "Johnson", "Jun 23, 2019", "Blue"],
-        [59729, "Sibyl", "Feb 27, 2016", "Red"],
-        [92422, "Roslyn", "Apr 26, 2016", "Blue"],
-        [83941, "Lottie", "Mar 2, 2019", "Yellow"],
-        [83942, "Lottie", "Mar 2, 2019", "Yellow"],
-        [83943, "Lottie", "Mar 2, 2019", "Yellow"],
-    ];
-
-    let rowValues: DataGridRow[] = [];
-    data.forEach(function(element: any) {
-        const row: DataGridRow = {
-            isSelected: selectedRows.includes(element[0]),
-            rowData: [
-                {
-                    columnName: "User ID",
-                    cellData: element[0],
-                },
-                {
-                    columnName: "Name",
-                    cellData: element[1],
-                },
-                {
-                    columnName: "Creation Date",
-                    cellData: element[2],
-                },
-                {
-                    columnName: "Favorite color",
-                    cellData: element[3],
-                },
-            ],
-        };
-
-        rowValues.push(row);
-    });
-    return rowValues;
-}
-
-export const paginationRows = getRowData();
-
-// Function to get data for page based on pagenumber
-export const getPageData = (pageIndex: number, pageSize: number): Promise<DataGridRow[]> => {
-    return new Promise((resolve, reject) => {
-        let rows: DataGridRow[] = [];
-        if (pageSize == 5) {
-            if (pageIndex == 2) {
-                rows = paginationRows.slice(5, 10);
-            }
-            if (pageIndex == 1) {
-                rows = paginationRows.slice(0, 5);
-            }
-        } else if (pageSize == 10) {
-            rows = paginationRows;
-        }
-        // Purposefully added dealy here to see loading spinner
-        setTimeout(function() {
-            resolve(rows);
-        }, 2000);
-    });
-};
-
-export const paginationDetails = {
-    totalItems: paginationRows.length,
-    getPageData: getPageData,
-    pageSize: 5,
-    pageSizes: [5, 10],
-};
-
-export const paginationDetailsWithCompactFooter = {
-    totalItems: paginationRows.length,
-    getPageData: getPageData,
-    pageSize: 5,
-    pageSizes: [5, 10],
-    compactFooter: true,
-};
-
-export const pageFilterFunction = (
-    rows: DataGridRow[],
-    columnValue: string,
-    columnName: string,
-): Promise<DataGridFilterResult> => {
-    return new Promise((resolve, reject) => {
-        let result: DataGridFilterResult = {
-            rows: [],
-            totalItems: 0,
-        };
-        if (columnValue === "" || columnValue === undefined) {
-            result = {
-                rows: paginationRows.slice(0, 5),
-                totalItems: paginationRows.length,
-            };
-        } else {
-            const newRows = filterRows(rows, columnValue);
-            result = {
-                rows: newRows,
-                totalItems: newRows.length,
-            };
-        }
-
-        // Purposefully added dealy here to see loading spinner
-        setTimeout(function() {
-            console.log("rows", rows);
-            resolve(result);
-        }, 2000);
-    });
-};
-
-// Data for Hide/show columns
-export const hideableColumns = [
-    {columnName: "User ID"},
-    {columnName: "Name"},
-    {columnName: "Creation Date", isVisible: false},
-    {columnName: "Favorite color", isVisible: false},
-];

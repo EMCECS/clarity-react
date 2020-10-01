@@ -80,6 +80,7 @@ export enum DataListAutoComplete {
  * @param {style} CSS styles
  * @param {className} CSS classname
  * @param {autoComplete} if "off" disable browser autocomplete
+ * @param {spellCheck} specifies whether the element is to have its spelling and grammar checked or not
  * @param {defaultValue} if it will be used to set default value of input element, useful in case of edit workflows
  **/
 type DataListProps = {
@@ -97,6 +98,7 @@ type DataListProps = {
     className?: string;
     style?: any;
     defaultValue?: string;
+    spellCheck?: boolean;
 };
 
 /**
@@ -159,6 +161,7 @@ export class DataList extends React.PureComponent<DataListProps, DataListState> 
             onChange,
             autoComplete,
             defaultValue,
+            spellCheck,
         } = this.props;
 
         const {hasFocus} = this.state;
@@ -192,6 +195,7 @@ export class DataList extends React.PureComponent<DataListProps, DataListState> 
                                 ])}
                                 aria-describedby="clr-form-control-3-helper"
                                 type="text"
+                                spellCheck={spellCheck}
                                 autoComplete={autoComplete ? autoComplete : DataListAutoComplete.OFF}
                                 defaultValue={defaultValue ? defaultValue : ""}
                             />

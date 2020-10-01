@@ -60,7 +60,7 @@ type TextAreaProps = {
     wrap?: TextWrapType;
     required?: boolean;
     error?: boolean; // force error state of component
-    spellcheck?: boolean;
+    spellCheck?: boolean;
     draggable?: boolean;
     maxLength?: number;
     onChange?: (evt: React.ChangeEvent<HTMLTextAreaElement>) => void;
@@ -118,7 +118,7 @@ export class TextArea extends React.PureComponent<TextAreaProps> {
             rows,
             cols,
             wrap,
-            spellcheck,
+            spellCheck,
             maxLength,
             draggable,
         } = this.props;
@@ -149,7 +149,7 @@ export class TextArea extends React.PureComponent<TextAreaProps> {
                     rows={rows}
                     cols={cols}
                     wrap={wrap}
-                    spellCheck={spellcheck}
+                    spellCheck={spellCheck}
                     maxLength={maxLength}
                     draggable={draggable}
                 />
