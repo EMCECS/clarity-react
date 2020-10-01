@@ -210,6 +210,7 @@ export enum GridRowType {
     COMPACT = "compact",
 }
 
+const isSelectedKey = "isSelected";
 /**
  * State for DataGrid :
  * @param {selectAll} set to true if all rows got selected else false
@@ -309,7 +310,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     isAllRowsSelected = (allRows: DataGridRow[]): boolean => {
         const rows = this.getSelectionEnabledRows(allRows);
         if (rows && rows.length) {
-            return allTrueOnKey(rows, "isSelected");
+            return allTrueOnKey(rows, isSelectedKey);
         }
         return false;
     };
@@ -403,7 +404,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         const {allRows, allColumns} = this.state;
         let rows = this.updateRowIDs(allRows);
         const columns = this.updateColumnIDs(this.setColumnVisibility(allColumns));
-        columns.forEach(function(col) {
+        columns.forEach(col => {
             col.width = col.width ? col.width : DEFAULT_COLUMN_WIDTH;
         });
 

@@ -363,14 +363,14 @@ export const sortColumns = [
 export const getPageData = (pageIndex: number, pageSize: number): Promise<DataGridRow[]> => {
     return new Promise((resolve, reject) => {
         let rows: DataGridRow[] = [];
-        if (pageSize == 5) {
-            if (pageIndex == 2) {
+        if (pageSize === 5) {
+            if (pageIndex === 2) {
                 rows = paginationRows.slice(5, 10);
             }
-            if (pageIndex == 1) {
+            if (pageIndex === 1) {
                 rows = paginationRows.slice(0, 5);
             }
-        } else if (pageSize == 10) {
+        } else if (pageSize === 10) {
             rows = paginationRows;
         }
         // Purposefully added dealy here to see loading spinner
@@ -384,14 +384,14 @@ export const getPageDataForSelectedRows = (pageIndex: number, pageSize: number):
     return new Promise((resolve, reject) => {
         let rows: DataGridRow[] = [];
 
-        if (pageSize == 5) {
-            if (pageIndex == 2) {
+        if (pageSize === 5) {
+            if (pageIndex === 2) {
                 rows = alreadySelectedRows.slice(5, 10);
             }
-            if (pageIndex == 1) {
+            if (pageIndex === 1) {
                 rows = alreadySelectedRows.slice(0, 5);
             }
-        } else if (pageSize == 10) {
+        } else if (pageSize === 10) {
             rows = paginationRows;
         }
         // Purposefully added dealy here to see loading spinner
