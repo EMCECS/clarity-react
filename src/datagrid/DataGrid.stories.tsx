@@ -138,6 +138,7 @@ storiesOf("DataGrid", module)
                 ref={datagridRef}
                 columns={normalColumns}
                 rows={normalRows}
+                selectionType={GridSelectionType.MULTI}
                 onRowSelect={() => {
                     const rows = datagridRef.current!.getSelectedRows();
                     datagridActionsRef.current!.updateActions(rows);

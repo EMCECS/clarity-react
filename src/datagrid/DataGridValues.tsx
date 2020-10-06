@@ -126,6 +126,16 @@ export const customRows = [
 const expandableContent =
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin in neque in ante placerat mattis id sed quam. Proin rhoncus lacus et tempor dignissim. Vivamus sem quam, pellentesque aliquet suscipit eget, pellentesque sed arcu. Vivamus in dui lectus. Suspendisse cursus est ac nisl imperdiet viverra. Aenean sagittis nibh lacus, in eleifend urna ultrices et. Mauris porttitor nisi nec velit pharetra porttitor. Vestibulum vulputate sollicitudin dolor ut tincidunt. Phasellus vitae blandit felis. Nullam posuere ipsum tincidunt velit pellentesque rhoncus. Morbi faucibus ut ipsum at malesuada. Nam vestibulum felis sit amet metus finibus hendrerit. Fusce faucibus odio eget ex vulputate rhoncus. Fusce nec aliquam leo, at suscipit diam.";
 
+//Custom function to filter data
+export const loadExpandableContent = (rows: DataGridRow): Promise<any> => {
+    return new Promise((resolve, reject) => {
+        // Purposefully added dealy here to see loading spinner
+        setTimeout(function() {
+            resolve(<div>{"expandable Row data"}</div>);
+        }, 2000);
+    });
+};
+
 export const expandableRows: DataGridRow[] = [
     {
         rowData: [
@@ -157,8 +167,7 @@ export const expandableRows: DataGridRow[] = [
             {columnName: "Favorite color", cellData: "Yellow"},
         ],
         expandableRowData: {
-            expandableContent: expandableContent,
-            isLoading: true,
+            onRowExpand: loadExpandableContent,
         },
     },
     {
@@ -170,6 +179,7 @@ export const expandableRows: DataGridRow[] = [
         ],
         expandableRowData: {
             expandableContent: null,
+            hideRowExpandIcon: true,
         },
     },
 ];
