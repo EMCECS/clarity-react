@@ -126,7 +126,17 @@ export const customRows = [
 const expandableContent =
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin in neque in ante placerat mattis id sed quam. Proin rhoncus lacus et tempor dignissim. Vivamus sem quam, pellentesque aliquet suscipit eget, pellentesque sed arcu. Vivamus in dui lectus. Suspendisse cursus est ac nisl imperdiet viverra. Aenean sagittis nibh lacus, in eleifend urna ultrices et. Mauris porttitor nisi nec velit pharetra porttitor. Vestibulum vulputate sollicitudin dolor ut tincidunt. Phasellus vitae blandit felis. Nullam posuere ipsum tincidunt velit pellentesque rhoncus. Morbi faucibus ut ipsum at malesuada. Nam vestibulum felis sit amet metus finibus hendrerit. Fusce faucibus odio eget ex vulputate rhoncus. Fusce nec aliquam leo, at suscipit diam.";
 
-export const expandableRows = [
+//Custom function to filter data
+export const loadExpandableContent = (rows: DataGridRow): Promise<any> => {
+    return new Promise((resolve, reject) => {
+        // Purposefully added dealy here to see loading spinner
+        setTimeout(function() {
+            resolve(<div>{"expandable Row data"}</div>);
+        }, 2000);
+    });
+};
+
+export const expandableRows: DataGridRow[] = [
     {
         rowData: [
             {columnName: "User ID", cellData: 41512},
@@ -134,7 +144,9 @@ export const expandableRows = [
             {columnName: "Creation Date", cellData: "Sep 11, 2008"},
             {columnName: "Favorite color", cellData: "Blue"},
         ],
-        expandableContent: expandableContent,
+        expandableRowData: {
+            expandableContent: expandableContent,
+        },
     },
     {
         rowData: [
@@ -143,7 +155,9 @@ export const expandableRows = [
             {columnName: "Creation Date", cellData: "Aug 2, 2014"},
             {columnName: "Favorite color", cellData: "Orange"},
         ],
-        expandableContent: expandableContent,
+        expandableRowData: {
+            expandableContent: expandableContent,
+        },
     },
     {
         rowData: [
@@ -152,7 +166,9 @@ export const expandableRows = [
             {columnName: "Creation Date", cellData: "Jan 4, 2019"},
             {columnName: "Favorite color", cellData: "Yellow"},
         ],
-        expandableContent: expandableContent,
+        expandableRowData: {
+            onRowExpand: loadExpandableContent,
+        },
     },
     {
         rowData: [
@@ -161,7 +177,10 @@ export const expandableRows = [
             {columnName: "Creation Date", cellData: "Jan 8, 2009"},
             {columnName: "Favorite color", cellData: "Pink"},
         ],
-        expandableContent: null,
+        expandableRowData: {
+            expandableContent: null,
+            hideRowExpandIcon: true,
+        },
     },
 ];
 
@@ -299,37 +318,39 @@ export const filterFunction = (
 // Custom sorting function for number and string type
 export const sortFunction = (rows: DataGridRow[], sortOrder: SortOrder, columnName: string): Promise<DataGridRow[]> => {
     return new Promise((resolve, reject) => {
-        rows.sort((first: DataGridRow, second: DataGridRow): number => {
-            let result = 0;
-            let firstRecord = first.rowData.find(function(element: any) {
-                if (element.columnName === columnName) return element;
-            });
+        rows.sort(
+            (first: DataGridRow, second: DataGridRow): number => {
+                let result = 0;
+                let firstRecord = first.rowData.find(function(element: any) {
+                    if (element.columnName === columnName) return element;
+                });
 
-            let secondRecord = second.rowData.find(function(element: any) {
-                if (element.columnName === columnName) return element;
-            });
+                let secondRecord = second.rowData.find(function(element: any) {
+                    if (element.columnName === columnName) return element;
+                });
 
-            if (firstRecord && secondRecord) {
-                const contentType = typeof firstRecord.cellData;
+                if (firstRecord && secondRecord) {
+                    const contentType = typeof firstRecord.cellData;
 
-                if (sortOrder === SortOrder.ASC) {
-                    if (contentType === "number") {
-                        result = firstRecord.cellData - secondRecord.cellData;
-                    } else if (contentType === "string") {
-                        if (firstRecord.cellData > secondRecord.cellData) result = -1;
-                        else if (firstRecord.cellData < secondRecord.cellData) result = 1;
-                    }
-                } else if (sortOrder == SortOrder.DESC) {
-                    if (contentType === "number") {
-                        result = secondRecord.cellData - firstRecord.cellData;
-                    } else if (contentType === "string") {
-                        if (secondRecord.cellData > firstRecord.cellData) result = -1;
-                        else if (secondRecord.cellData < firstRecord.cellData) result = 1;
+                    if (sortOrder === SortOrder.ASC) {
+                        if (contentType === "number") {
+                            result = firstRecord.cellData - secondRecord.cellData;
+                        } else if (contentType === "string") {
+                            if (firstRecord.cellData > secondRecord.cellData) result = -1;
+                            else if (firstRecord.cellData < secondRecord.cellData) result = 1;
+                        }
+                    } else if (sortOrder == SortOrder.DESC) {
+                        if (contentType === "number") {
+                            result = secondRecord.cellData - firstRecord.cellData;
+                        } else if (contentType === "string") {
+                            if (secondRecord.cellData > firstRecord.cellData) result = -1;
+                            else if (secondRecord.cellData < firstRecord.cellData) result = 1;
+                        }
                     }
                 }
-            }
-            return result;
-        });
+                return result;
+            },
+        );
 
         // Purposefully added dealy here to see loading spinner
         setTimeout(function() {
