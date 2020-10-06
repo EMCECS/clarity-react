@@ -131,7 +131,7 @@ export const loadExpandableContent = (rows: DataGridRow): Promise<any> => {
     return new Promise((resolve, reject) => {
         // Purposefully added dealy here to see loading spinner
         setTimeout(function() {
-            resolve(<div>{"expandable Row data"}</div>);
+            resolve(<div>{expandableContent}</div>);
         }, 2000);
     });
 };

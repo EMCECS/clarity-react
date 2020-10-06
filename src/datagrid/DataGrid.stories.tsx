@@ -17,7 +17,6 @@ import {
     normalColumns,
     normalRows,
     customRows,
-    noFooter,
     customFooter,
     defaultFooter,
     GridActions,

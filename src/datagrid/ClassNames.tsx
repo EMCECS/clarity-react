@@ -51,6 +51,7 @@ export class ClassNames {
         "datagrid-expandable-caret datagrid-fixed-column datagrid-cell ng-star-inserted";
     public static DATAGRID_EXPANDABLE_CARET_BUTTON: string = "datagrid-expandable-caret-button ng-star-inserted";
     public static DATAGRID_EXPANDABLE_CARET_ICON: string = "datagrid-expandable-caret-icon";
+    public static DATAGRID_EXPAND_ANIMATION: string = "ng-trigger ng-trigger-expandAnimation ng-star-inserted";
     public static DATAGRID_EMPTY: string = "datagrid-empty";
     public static DATAGRID_PLACEHOLDER_IMG: string = "datagrid-placeholder-image";
     public static ICON_SOLID: string = "is-solid";

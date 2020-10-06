@@ -43,6 +43,7 @@ import {DataGridColumnResize} from "./DataGridColumnResize";
  * @param {selectedRowCount} number of selected rows across all pages
  * @param {dataqa} quality engineering tag
  * @param {id} unique ID for datagrid
+ * @param {isLoading} if true shows loading spinner else shows datagrid
  */
 type DataGridProps = {
     className?: string;
@@ -60,6 +61,7 @@ type DataGridProps = {
     selectedRowCount?: number;
     dataqa?: string;
     id?: string;
+    isLoading?: boolean;
 };
 
 /**
@@ -268,7 +270,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // Initial state of datagrid
     state: DataGridState = {
-        isLoading: false,
+        isLoading: this.props.isLoading || false,
         selectAll: false,
         allColumns: this.props.columns,
         allRows: this.props.rows !== undefined ? this.props.rows : [],
@@ -1026,8 +1028,8 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
             >
                 <div
                     className={classNames([
-                        isExpandableRow &&
-                            `"ng-tns-c96-${index} ng-trigger ng-trigger-expandAnimation ng-star-inserted"`,
+                        `ng-tns-c96-${index}`,
+                        isExpandableRow && ClassNames.DATAGRID_EXPAND_ANIMATION,
                     ])}
                 >
                     <div
@@ -1061,25 +1063,21 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     }
 
     private buildExpandableRow({expandableRowData}: DataGridRow) {
-        const {expandableContent, isExpanded} = expandableRowData
+        const {expandableContent, isExpanded, isLoading} = expandableRowData
             ? expandableRowData
             : {
                   expandableContent: undefined,
                   isExpanded: false,
+                  isLoading: false,
               };
-        const showExpandableContent = expandableContent && isExpanded;
+        const showExpandableContent = expandableContent && isExpanded && !isLoading;
         return (
             <React.Fragment>
                 {showExpandableContent && (
-                    <div
-                        className={classNames([
-                            ClassNames.DATAGRID_ROW_FLEX,
-                            "datagrid-row-detail datagrid-container ng-star-inserted",
-                        ])}
-                    >
-                        <div className={"clr-sr-only"} />
+                    <div className={classNames([ClassNames.DATAGRID_ROW_FLEX])}>
+                        <div className={ClassNames.CLR_SR_ONLY} />
                         {expandableContent}
-                        <div className={"clr-sr-only"} />
+                        <div className={ClassNames.CLR_SR_ONLY} />
                     </div>
                 )}
             </React.Fragment>
@@ -1326,7 +1324,8 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     // render datagrid
     render() {
         const {className, style, rowType, footer, dataqa} = this.props;
-        const {isLoading} = this.state;
+        const isLoading = this.props.isLoading || this.state.isLoading;
+
         return (
             <div
                 className={classNames([
