@@ -126,7 +126,7 @@ export const customRows = [
 const expandableContent =
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin in neque in ante placerat mattis id sed quam. Proin rhoncus lacus et tempor dignissim. Vivamus sem quam, pellentesque aliquet suscipit eget, pellentesque sed arcu. Vivamus in dui lectus. Suspendisse cursus est ac nisl imperdiet viverra. Aenean sagittis nibh lacus, in eleifend urna ultrices et. Mauris porttitor nisi nec velit pharetra porttitor. Vestibulum vulputate sollicitudin dolor ut tincidunt. Phasellus vitae blandit felis. Nullam posuere ipsum tincidunt velit pellentesque rhoncus. Morbi faucibus ut ipsum at malesuada. Nam vestibulum felis sit amet metus finibus hendrerit. Fusce faucibus odio eget ex vulputate rhoncus. Fusce nec aliquam leo, at suscipit diam.";
 
-export const expandableRows = [
+export const expandableRows: DataGridRow[] = [
     {
         rowData: [
             {columnName: "User ID", cellData: 41512},
@@ -134,7 +134,9 @@ export const expandableRows = [
             {columnName: "Creation Date", cellData: "Sep 11, 2008"},
             {columnName: "Favorite color", cellData: "Blue"},
         ],
-        expandableContent: expandableContent,
+        expandableRowData: {
+            expandableContent: expandableContent,
+        },
     },
     {
         rowData: [
@@ -143,7 +145,9 @@ export const expandableRows = [
             {columnName: "Creation Date", cellData: "Aug 2, 2014"},
             {columnName: "Favorite color", cellData: "Orange"},
         ],
-        expandableContent: expandableContent,
+        expandableRowData: {
+            expandableContent: expandableContent,
+        },
     },
     {
         rowData: [
@@ -152,7 +156,10 @@ export const expandableRows = [
             {columnName: "Creation Date", cellData: "Jan 4, 2019"},
             {columnName: "Favorite color", cellData: "Yellow"},
         ],
-        expandableContent: expandableContent,
+        expandableRowData: {
+            expandableContent: expandableContent,
+            isLoading: true,
+        },
     },
     {
         rowData: [
@@ -161,7 +168,9 @@ export const expandableRows = [
             {columnName: "Creation Date", cellData: "Jan 8, 2009"},
             {columnName: "Favorite color", cellData: "Pink"},
         ],
-        expandableContent: null,
+        expandableRowData: {
+            expandableContent: null,
+        },
     },
 ];
 
