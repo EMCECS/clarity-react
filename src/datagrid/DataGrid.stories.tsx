@@ -17,7 +17,6 @@ import {
     normalColumns,
     normalRows,
     customRows,
-    noFooter,
     customFooter,
     defaultFooter,
     GridActions,
@@ -98,12 +97,7 @@ storiesOf("DataGrid", module)
         <div style={{width: "80%", paddingLeft: "1rem"}}>
             <br />
             <span> {"Grid with all rows are selectable :"} </span>
-            <DataGrid
-                columns={normalColumns}
-                rows={normalRows}
-                selectionType={GridSelectionType.MULTI}
-                footer={noFooter}
-            />
+            <DataGrid columns={normalColumns} rows={normalRows} selectionType={GridSelectionType.MULTI} />
             <br /> <br />
             <span> {"Grid with some rows are selectable :"} </span>
             <DataGrid
