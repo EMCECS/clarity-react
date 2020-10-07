@@ -129,7 +129,7 @@ const expandableContent =
 //Custom function to filter data
 export const loadExpandableContent = (rows: DataGridRow): Promise<any> => {
     return new Promise((resolve, reject) => {
-        // Purposefully added dealy here to see loading spinner
+        // Purposefully added delay here to see loading spinner
         setTimeout(function() {
             resolve(<div>{expandableContent}</div>);
         }, 2000);
@@ -318,39 +318,41 @@ export const filterFunction = (
 // Custom sorting function for number and string type
 export const sortFunction = (rows: DataGridRow[], sortOrder: SortOrder, columnName: string): Promise<DataGridRow[]> => {
     return new Promise((resolve, reject) => {
-        rows.sort((first: DataGridRow, second: DataGridRow): number => {
-            let result = 0;
-            let firstRecord = first.rowData.find(function(element: any) {
-                if (element.columnName === columnName) return element;
-            });
+        rows.sort(
+            (first: DataGridRow, second: DataGridRow): number => {
+                let result = 0;
+                let firstRecord = first.rowData.find(function(element: any) {
+                    if (element.columnName === columnName) return element;
+                });
 
-            let secondRecord = second.rowData.find(function(element: any) {
-                if (element.columnName === columnName) return element;
-            });
+                let secondRecord = second.rowData.find(function(element: any) {
+                    if (element.columnName === columnName) return element;
+                });
 
-            if (firstRecord && secondRecord) {
-                const contentType = typeof firstRecord.cellData;
+                if (firstRecord && secondRecord) {
+                    const contentType = typeof firstRecord.cellData;
 
-                if (sortOrder === SortOrder.ASC) {
-                    if (contentType === "number") {
-                        result = firstRecord.cellData - secondRecord.cellData;
-                    } else if (contentType === "string") {
-                        if (firstRecord.cellData > secondRecord.cellData) result = -1;
-                        else if (firstRecord.cellData < secondRecord.cellData) result = 1;
-                    }
-                } else if (sortOrder == SortOrder.DESC) {
-                    if (contentType === "number") {
-                        result = secondRecord.cellData - firstRecord.cellData;
-                    } else if (contentType === "string") {
-                        if (secondRecord.cellData > firstRecord.cellData) result = -1;
-                        else if (secondRecord.cellData < firstRecord.cellData) result = 1;
+                    if (sortOrder === SortOrder.ASC) {
+                        if (contentType === "number") {
+                            result = firstRecord.cellData - secondRecord.cellData;
+                        } else if (contentType === "string") {
+                            if (firstRecord.cellData > secondRecord.cellData) result = -1;
+                            else if (firstRecord.cellData < secondRecord.cellData) result = 1;
+                        }
+                    } else if (sortOrder == SortOrder.DESC) {
+                        if (contentType === "number") {
+                            result = secondRecord.cellData - firstRecord.cellData;
+                        } else if (contentType === "string") {
+                            if (secondRecord.cellData > firstRecord.cellData) result = -1;
+                            else if (secondRecord.cellData < firstRecord.cellData) result = 1;
+                        }
                     }
                 }
-            }
-            return result;
-        });
+                return result;
+            },
+        );
 
-        // Purposefully added dealy here to see loading spinner
+        // Purposefully added delay here to see loading spinner
         setTimeout(function() {
             resolve(rows);
         }, 2000);
@@ -413,7 +415,7 @@ export const getPageDataForSelectedRows = (pageIndex: number, pageSize: number):
         } else if (pageSize === 10) {
             rows = paginationRows;
         }
-        // Purposefully added dealy here to see loading spinner
+        // Purposefully added delay here to see loading spinner
         setTimeout(function() {
             resolve(rows);
         }, 2000);
@@ -464,7 +466,7 @@ export const pageFilterFunction = (
             };
         }
 
-        // Purposefully added dealy here to see loading spinner
+        // Purposefully added delay here to see loading spinner
         setTimeout(function() {
             resolve(result);
         }, 2000);
