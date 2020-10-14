@@ -123,7 +123,7 @@ const store = new Store({
             store.set({
                 open: false,
             });
-        }, 7000);
+        }, 5000);
     },
     handleSelectStep: (selectedStepID: number): void => {
         action("selected step ", selectedStepID) &&
