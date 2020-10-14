@@ -11,6 +11,7 @@
 import React from "react";
 import {ClassNames} from "./ClassNames";
 import {Button, ButtonState} from "../forms/button";
+import {Spinner, SpinnerSize, SpinnerType} from "../spinner/Spinner";
 import {
     dataqa_wizard_btn_cancel,
     dataqa_wizard_btn_finish,
@@ -30,6 +31,7 @@ export type InheritedWizardFooterProps = {
     previousText?: string;
     showCancel?: boolean;
     dataqa?: string;
+    isApplying?: boolean;
 };
 
 export interface WizardFooterProps extends InheritedWizardFooterProps {
@@ -70,7 +72,9 @@ export default class WizardFooter extends React.PureComponent<WizardFooterProps>
             showComplete,
             showNext,
             showPrevious,
+            isApplying,
         } = this.props;
+
         return (
             <div className={ClassNames.WIZARD_FOOTER}>
                 <div className={ClassNames.WIZARD_FOOTER_BUTTON}>
@@ -84,6 +88,7 @@ export default class WizardFooter extends React.PureComponent<WizardFooterProps>
                             className={cancelClassName}
                             dataqa={dataqa + dataqa_wizard_btn_cancel}
                             onClick={onClose}
+                            disabled={isApplying}
                         >
                             {cancelText + " "}
                         </Button>
@@ -94,6 +99,7 @@ export default class WizardFooter extends React.PureComponent<WizardFooterProps>
                             className={previousClassName}
                             dataqa={dataqa + dataqa_wizard_btn_previous}
                             onClick={onPrevious}
+                            disabled={isApplying}
                         >
                             {previousText + " "}
                         </Button>
@@ -115,11 +121,17 @@ export default class WizardFooter extends React.PureComponent<WizardFooterProps>
                             key={completeText}
                             className={completeClassName}
                             state={ButtonState.SUCCESS}
-                            disabled={disableComplete}
+                            disabled={isApplying || disableComplete}
                             dataqa={dataqa + dataqa_wizard_btn_finish}
                             onClick={onComplete}
                         >
-                            {completeText}
+                            {isApplying ? (
+                                <Spinner type={SpinnerType.INLINE} size={SpinnerSize.SMALL}>
+                                    {completeText}
+                                </Spinner>
+                            ) : (
+                                completeText
+                            )}
                         </Button>
                     )}
                 </div>
