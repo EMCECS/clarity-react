@@ -64,7 +64,7 @@ function updateSteps(index: number, action: string) {
 
 const store = new Store({
     open: false,
-    isApplying: false,
+    isLoading: false,
     activeWizard: "",
     basicInfoValid: true,
     basicInfoComplete: false,
@@ -108,13 +108,13 @@ const store = new Store({
     handleSyncComplete: (): void => {
         action("complete with loading spinner") &&
             store.set({
-                isApplying: true,
+                isLoading: true,
             });
 
         // enable wizard navigation and footer after 3 sec
         setTimeout(function() {
             store.set({
-                isApplying: false,
+                isLoading: false,
             });
         }, 3000);
 
@@ -407,7 +407,7 @@ storiesOf("New Wizard", module)
                         onClose={() => state.handleClose()}
                         onComplete={() => state.handleSyncComplete()}
                         onNavigateTo={state.handleSelectStep}
-                        isApplying={state.isApplying}
+                        isLoading={state.isLoading}
                     >
                         <WizardStep
                             id={0}
