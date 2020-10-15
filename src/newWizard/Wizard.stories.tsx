@@ -64,6 +64,7 @@ function updateSteps(index: number, action: string) {
 
 const store = new Store({
     open: false,
+    isApplying: false,
     activeWizard: "",
     basicInfoValid: true,
     basicInfoComplete: false,
@@ -104,6 +105,26 @@ const store = new Store({
         store.set({
             open: false,
         }),
+    handleSyncComplete: (): void => {
+        action("complete with loading spinner") &&
+            store.set({
+                isApplying: true,
+            });
+
+        // enable wizard navigation and footer after 3 sec
+        setTimeout(function() {
+            store.set({
+                isApplying: false,
+            });
+        }, 3000);
+
+        // Add delay for story only
+        setTimeout(function() {
+            store.set({
+                open: false,
+            });
+        }, 5000);
+    },
     handleSelectStep: (selectedStepID: number): void => {
         action("selected step ", selectedStepID) &&
             store.set({
@@ -358,6 +379,54 @@ storiesOf("New Wizard", module)
                             key={2}
                             name={"Page 3"}
                             navigationTitle={"Click for page 3"}
+                            valid={state.basicInfoValid}
+                            complete={state.basicInfoValid}
+                        />
+                    </Wizard>
+                </React.Fragment>
+            )}
+        </State>
+    ))
+    .add("wizard with loading spinner", _props => (
+        <State store={store}>
+            {state => (
+                <React.Fragment>
+                    <Button key={0} primary link onClick={() => state.handleToggleWizard(WizardSize.LARGE)}>
+                        OPEN WIZARD
+                    </Button>
+                    <Wizard
+                        currentStepID={state.currentWizardStepID}
+                        key={1}
+                        size={WizardSize.LARGE}
+                        show={state.open}
+                        showCancel={true}
+                        completeText={"Apply"}
+                        title="Wizard with loading spinner on Apply"
+                        onNext={() => state.handleNext()}
+                        onPrevious={() => state.handlePrevious()}
+                        onClose={() => state.handleClose()}
+                        onComplete={() => state.handleSyncComplete()}
+                        onNavigateTo={state.handleSelectStep}
+                        isApplying={state.isApplying}
+                    >
+                        <WizardStep
+                            id={0}
+                            key={0}
+                            name={"Page 1"}
+                            valid={state.basicInfoValid}
+                            complete={state.basicInfoValid}
+                        />
+                        <WizardStep
+                            id={1}
+                            key={1}
+                            name={"Page 2"}
+                            valid={state.basicInfoValid}
+                            complete={state.basicInfoValid}
+                        />
+                        <WizardStep
+                            id={2}
+                            key={2}
+                            name={"Page 3"}
                             valid={state.basicInfoValid}
                             complete={state.basicInfoValid}
                         />

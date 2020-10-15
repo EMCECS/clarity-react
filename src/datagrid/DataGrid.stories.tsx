@@ -41,7 +41,7 @@ import {DataGridRow} from "./DataGrid";
 const store = new Store({
     selectedRows: selectedRows,
     rows: alreadySelectedRows.slice(0, 5),
-    selectRowCallback: (row?: DataGridRow) => {
+    selectRowCallback: (row: DataGridRow) => {
         const rowID = row && row.rowData[0].cellData;
         const index = selectedRows.indexOf(rowID);
         if (row && row.isSelected) {
@@ -55,7 +55,7 @@ const store = new Store({
             selectedRows: selectedRows,
         });
     },
-    selectAllCallback: (allSelected?: boolean, rows?: DataGridRow[]) => {
+    selectAllCallback: (allSelected: boolean, rows: DataGridRow[]) => {
         rows!.forEach(row => {
             const rowID = row.rowData[0].cellData;
             const index = selectedRows.indexOf(rowID);

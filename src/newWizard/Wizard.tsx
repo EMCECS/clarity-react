@@ -87,7 +87,7 @@ import WizardFooter, {InheritedWizardFooterProps, WizardFooterProps} from "./Wiz
  * @param {size} indicates the size of the wizard component
  * @param {style} custom inline CSS styles for the wizard component
  * @param {title} title React component to use for the wizard
- *
+ * @param {isApplying} if true then disable navigation and footer and show loading spinner on complete button
  *
  */
 export type WizardProps = {
@@ -123,6 +123,7 @@ export type WizardProps = {
     size: WizardSize;
     style?: Object;
     title?: ReactNode;
+    isApplying?: boolean;
 };
 
 /**
@@ -164,6 +165,7 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
         showNavigation: true,
         showStepTitle: true,
         showTitle: true,
+        isApplying: false,
         onComplete: () => {
             // by default do nothing in addition the the default handler
         },
@@ -225,6 +227,7 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
             title,
             size,
             style,
+            isApplying,
         } = this.props;
 
         // initialize a bunch of class names
@@ -273,6 +276,7 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
                 key={step.key || index}
                 currentStepID={currentStepID}
                 onSelectStep={onNavigateTo}
+                isApplying={isApplying}
                 {...step.props}
             />
         ));
@@ -354,6 +358,7 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
             previousText,
             dataqa,
             showCancel,
+            isApplying,
         } = this.props;
         return {
             cancelText,
@@ -367,6 +372,7 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
             previousText,
             dataqa,
             showCancel,
+            isApplying,
         };
     }
 }

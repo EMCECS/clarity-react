@@ -52,8 +52,8 @@ type DataGridProps = {
     columns: DataGridColumn[];
     rows?: DataGridRow[];
     footer?: DataGridFooter;
-    onRowSelect?: (selectedRow?: DataGridRow) => any;
-    onSelectAll?: (areAllSelected?: boolean, selectedRow?: DataGridRow[]) => any;
+    onRowSelect?: (selectedRow: DataGridRow) => void;
+    onSelectAll?: (areAllSelected: boolean, selectedRows: DataGridRow[]) => void;
     keyfield?: string;
     rowType?: GridRowType;
     itemText?: string;
