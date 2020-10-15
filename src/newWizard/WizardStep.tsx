@@ -31,7 +31,7 @@ export type WizardStepProps = {
     navigationClasses?: ReadonlyArray<string>;
     navigable?: boolean;
     type?: WizardStepType;
-    isApplying?: boolean;
+    isLoading?: boolean;
 };
 
 export default class WizardStep extends React.PureComponent<WizardStepProps> {

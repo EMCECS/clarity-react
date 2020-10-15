@@ -31,7 +31,7 @@ export type InheritedWizardFooterProps = {
     previousText?: string;
     showCancel?: boolean;
     dataqa?: string;
-    isApplying?: boolean;
+    isLoading?: boolean;
 };
 
 export interface WizardFooterProps extends InheritedWizardFooterProps {
@@ -72,7 +72,7 @@ export default class WizardFooter extends React.PureComponent<WizardFooterProps>
             showComplete,
             showNext,
             showPrevious,
-            isApplying,
+            isLoading,
         } = this.props;
 
         return (
@@ -88,7 +88,7 @@ export default class WizardFooter extends React.PureComponent<WizardFooterProps>
                             className={cancelClassName}
                             dataqa={dataqa + dataqa_wizard_btn_cancel}
                             onClick={onClose}
-                            disabled={isApplying}
+                            disabled={isLoading}
                         >
                             {cancelText + " "}
                         </Button>
@@ -99,7 +99,7 @@ export default class WizardFooter extends React.PureComponent<WizardFooterProps>
                             className={previousClassName}
                             dataqa={dataqa + dataqa_wizard_btn_previous}
                             onClick={onPrevious}
-                            disabled={isApplying}
+                            disabled={isLoading}
                         >
                             {previousText + " "}
                         </Button>
@@ -121,11 +121,11 @@ export default class WizardFooter extends React.PureComponent<WizardFooterProps>
                             key={completeText}
                             className={completeClassName}
                             state={ButtonState.SUCCESS}
-                            disabled={isApplying || disableComplete}
+                            disabled={isLoading || disableComplete}
                             dataqa={dataqa + dataqa_wizard_btn_finish}
                             onClick={onComplete}
                         >
-                            {isApplying ? (
+                            {isLoading ? (
                                 <Spinner type={SpinnerType.INLINE} size={SpinnerSize.SMALL}>
                                     {completeText}
                                 </Spinner>

@@ -47,7 +47,7 @@ export class WizardNavigationStep extends React.PureComponent<WizardStepProps> {
     };
 
     render() {
-        const {name, navigationChildren, navigationIcon, navigationTitle, navigable, type, isApplying} = this.props;
+        const {name, navigationChildren, navigationIcon, navigationTitle, navigable, type, isLoading} = this.props;
 
         return (
             <div
@@ -55,7 +55,7 @@ export class WizardNavigationStep extends React.PureComponent<WizardStepProps> {
                 style={type && type === WizardStepType.SUB_STEP ? Styles.WIZARD_SUB_STEP_NAV : undefined}
             >
                 <Button
-                    disabled={isApplying || !navigable}
+                    disabled={isLoading || !navigable}
                     link={true}
                     className="clr-wizard-stepnav-link"
                     onClick={this.handleNavigationClick}
