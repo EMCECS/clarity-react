@@ -252,6 +252,7 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
                     Object.assign({}, child.props, {
                         currentStepID,
                         navigable,
+                        isLoading,
                     }),
                 );
                 // subsequent iterations are navigable if all previous iterations are valid

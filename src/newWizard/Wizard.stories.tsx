@@ -429,7 +429,9 @@ storiesOf("New Wizard", module)
                             name={"Page 3"}
                             valid={state.basicInfoValid}
                             complete={state.basicInfoValid}
-                        />
+                        >
+                            <Input name="some-input" label="Some Input" onChange={state.handleValidate} />
+                        </WizardStep>
                     </Wizard>
                 </React.Fragment>
             )}

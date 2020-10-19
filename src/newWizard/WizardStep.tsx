@@ -11,6 +11,7 @@
 import * as React from "react";
 import {classNames} from "../utils";
 import {ClassNames} from "./ClassNames";
+import {Spinner, SpinnerSize} from "../spinner/Spinner";
 
 // Enum for wizard step type
 export enum WizardStepType {
@@ -42,7 +43,7 @@ export default class WizardStep extends React.PureComponent<WizardStepProps> {
     };
 
     render() {
-        const {children, currentStepID, id} = this.props;
+        const {children, currentStepID, id, isLoading} = this.props;
         const classNameList = classNames([ClassNames.ACTIVE, ClassNames.WIZARD_PAGE]);
         return (
             <div
@@ -52,6 +53,7 @@ export default class WizardStep extends React.PureComponent<WizardStepProps> {
                 aria-hidden={id !== currentStepID}
                 className={classNameList}
             >
+                {isLoading && <Spinner size={SpinnerSize.MEDIUM} />}
                 {children}
             </div>
         );

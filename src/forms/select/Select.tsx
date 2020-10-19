@@ -14,7 +14,7 @@ import {Icon} from "../../icon";
 import {classNames} from "../../utils";
 
 type SelectOption = {
-    value?: string;
+    value?: any;
     selected?: boolean;
     disabled?: boolean;
     hidden?: boolean;
@@ -32,6 +32,7 @@ type SelectProps = {
     label?: string;
     id?: string;
     value?: any;
+    defaultValue?: any;
     isBoxed?: boolean;
     required?: boolean; // auto-check on blur if there's a value
     error?: boolean; // force error state of component
@@ -42,7 +43,6 @@ type SelectProps = {
     className?: string;
     style?: any;
     width?: string;
-    showDefaultSelect?: boolean;
     name?: string;
     dataqa?: string;
     disabled?: boolean;
@@ -56,10 +56,10 @@ export class Select extends React.PureComponent<SelectProps> {
     private buildSelect(className: any, setId: string) {
         const {
             value, // prettier
+            defaultValue,
             onBlur,
             onChange,
             children,
-            showDefaultSelect,
             name,
             required,
             id,
@@ -69,6 +69,7 @@ export class Select extends React.PureComponent<SelectProps> {
         return (
             <select
                 value={value} // prettier
+                defaultValue={defaultValue}
                 id={setId || id}
                 name={name}
                 required={required}
@@ -78,9 +79,6 @@ export class Select extends React.PureComponent<SelectProps> {
                 style={{width: this.getSelectWidth()}}
                 disabled={disabled}
             >
-                {!showDefaultSelect && (
-                    <option selected disabled hidden className="hideOption" value="" style={{display: "none"}} />
-                )}
                 {children}
             </select>
         );

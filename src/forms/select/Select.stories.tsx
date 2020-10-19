@@ -23,6 +23,16 @@ storiesOf("Select", module)
             </Select>
         </div>
     ))
+    .add("Basic select with select option", () => (
+        <div>
+            <Select onChange={action("basic change")}>
+                <SelectOption value="select">select</SelectOption>
+                <SelectOption value="1">One</SelectOption>
+                <SelectOption value="2">Two</SelectOption>
+                <SelectOption value="3">Three</SelectOption>
+            </Select>
+        </div>
+    ))
     .add("Select with custom width", () => (
         <div>
             <Select onChange={action("basic change")} width="30%" label="Basic Select">
@@ -55,6 +65,7 @@ storiesOf("Select", module)
                 defaultHelperText="You have these choices"
                 errorHelperText="This field is required!"
                 label="I've got some options"
+                defaultValue={"2"}
             >
                 <SelectOption value="1">One</SelectOption>
                 <SelectOption value="2">Two</SelectOption>

@@ -109,7 +109,7 @@ export default class WizardFooter extends React.PureComponent<WizardFooterProps>
                             key={nextText}
                             className={nextClassName}
                             primary
-                            disabled={disableNext}
+                            disabled={isLoading || disableNext}
                             dataqa={dataqa + dataqa_wizard_btn_next}
                             onClick={onNext}
                         >
