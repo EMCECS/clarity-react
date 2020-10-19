@@ -18,6 +18,7 @@ import {Input} from "../forms/input/Input";
 import {Select, SelectOption} from "../forms/select";
 import {WizardFooterProps} from "./WizardFooter";
 import {action} from "@storybook/addon-actions";
+import {SpinnerSize} from "../spinner/Spinner";
 
 let steps: any[] = [];
 
@@ -408,6 +409,7 @@ storiesOf("New Wizard", module)
                         onComplete={() => state.handleSyncComplete()}
                         onNavigateTo={state.handleSelectStep}
                         isLoading={state.isLoading}
+                        loadingSpinnerSize={SpinnerSize.LARGE}
                     >
                         <WizardStep
                             id={0}
@@ -429,7 +431,9 @@ storiesOf("New Wizard", module)
                             name={"Page 3"}
                             valid={state.basicInfoValid}
                             complete={state.basicInfoValid}
-                        />
+                        >
+                            <Input name="some-input" label="Some Input" onChange={state.handleValidate} />
+                        </WizardStep>
                     </Wizard>
                 </React.Fragment>
             )}

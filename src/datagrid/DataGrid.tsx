@@ -228,6 +228,18 @@ export enum GridRowType {
 }
 
 const isSelectedKey = "isSelected";
+
+// Default label for datagrid items
+const DEFAULT_ITEM_TEXT: string = "items";
+
+// Default width of datagrid column in px
+export const DEFAULT_COLUMN_WIDTH: number = 100;
+
+// Default pagination constants
+export const DEFAULT_CURRENT_PAGE_NUMBER: number = 1;
+export const DEFAULT_PAGE_SIZE: number = 10;
+export const DEFAULT_TOTAL_ITEMS: number = 0;
+
 /**
  * State for DataGrid :
  * @param {selectAll} set to true if all rows got selected else false
@@ -257,9 +269,6 @@ type DataGridPaginationState = {
     compactFooter?: boolean;
 };
 
-// Default width of datagrid column in px
-export const DEFAULT_COLUMN_WIDTH = 100;
-
 /**
  * DataGrid Componnet :
  * Displays data in grid format
@@ -268,37 +277,9 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     private pageIndexRef = React.createRef<HTMLInputElement>();
     private datagridTableRef = React.createRef<HTMLDivElement>();
 
-    // Initial state of datagrid
-    state: DataGridState = {
-        isLoading: this.props.isLoading || false,
-        selectAll: false,
-        allColumns: this.props.columns,
-        allRows: this.props.rows !== undefined ? this.props.rows : [],
-        itemText: this.props.itemText !== undefined ? this.props.itemText : "items",
-        pagination:
-            this.props.pagination !== undefined
-                ? {
-                      currentPage:
-                          this.props.pagination.currentPage !== undefined ? this.props.pagination.currentPage : 1,
-                      pageSize: this.props.pagination.pageSize !== undefined ? this.props.pagination.pageSize : 10,
-                      totalItems: this.props.pagination.totalItems !== undefined ? this.props.pagination.totalItems : 0,
-                      pageSizes:
-                          this.props.pagination.pageSizes !== undefined ? this.props.pagination.pageSizes : undefined,
-                      firstItem: 0,
-                      lastItem: 0,
-                      totalPages: 1,
-                      compactFooter:
-                          this.props.pagination.compactFooter !== undefined
-                              ? this.props.pagination.compactFooter
-                              : false,
-                  }
-                : undefined,
-    };
-
     constructor(props: DataGridProps) {
         super(props);
-        this.setInitalState();
-        if (this.props.pagination !== undefined) this.setInitalStateForPagination();
+        this.state = this.initializeDataGridState();
     }
 
     componentDidUpdate(prevProps: DataGridProps) {
@@ -309,6 +290,76 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
         if (columns && columns !== prevProps.columns) {
             this.updateColumns(columns);
+        }
+    }
+
+    // Function to initialize datagrid state
+    initializeDataGridState = (): DataGridState => {
+        const {isLoading, itemText} = this.props;
+        const rows = this.initializeRowData();
+        const columns = this.initializeColumnData();
+        const dataGridState: DataGridState = {
+            isLoading: isLoading || false,
+            selectAll: this.isAllRowsSelected(rows),
+            allColumns: [...columns],
+            allRows: [...rows],
+            itemText: itemText || DEFAULT_ITEM_TEXT,
+            pagination: this.initializePaginationData(),
+        };
+        return dataGridState;
+    };
+
+    // Function to initialize rows data in state
+    initializeRowData = (): DataGridRow[] => {
+        const {rows} = this.props;
+        let updatedRows: DataGridRow[] = [];
+        if (rows && rows.length) {
+            updatedRows = this.updateRowIDs(rows);
+            updatedRows.forEach(function(row) {
+                const rowSelectionIsDisabled = row.disableRowSelection !== undefined ? row.disableRowSelection : false;
+                row.isSelected = !rowSelectionIsDisabled && row.isSelected !== undefined ? row.isSelected : false;
+            });
+        }
+        return updatedRows;
+    };
+
+    // Function to initialize columns data in state
+    initializeColumnData = (): DataGridColumn[] => {
+        const {columns} = this.props;
+        let updatedColumns: DataGridColumn[] = [];
+        if (columns && columns.length) {
+            updatedColumns = this.updateColumnIDs(this.setColumnVisibility(columns));
+            updatedColumns.forEach(col => {
+                col.width = col.width ? col.width : DEFAULT_COLUMN_WIDTH;
+            });
+        }
+        return updatedColumns;
+    };
+
+    // Initialize state of grid with pagination
+    private initializePaginationData() {
+        const {pagination} = this.props;
+        if (pagination) {
+            const {currentPage, pageSize, totalItems, compactFooter, pageSizes} = pagination;
+            const currentPageNumber: number = currentPage || DEFAULT_CURRENT_PAGE_NUMBER;
+            const datagridPageSize: number = pageSize || DEFAULT_PAGE_SIZE;
+            const totalItemsInDatagrid: number = totalItems || DEFAULT_TOTAL_ITEMS;
+
+            const firstItem: number = this.getFirstItemIndex(currentPageNumber, datagridPageSize);
+            const lastItem: number = this.getLastItemIndex(datagridPageSize, totalItemsInDatagrid, firstItem);
+
+            const paginationState: DataGridPaginationState = {
+                currentPage: currentPageNumber,
+                pageSize: datagridPageSize,
+                totalItems: totalItemsInDatagrid,
+                pageSizes: pageSizes,
+                compactFooter: compactFooter || false,
+                firstItem: firstItem,
+                lastItem: lastItem,
+                totalPages: this.getTotalPages(totalItemsInDatagrid, datagridPageSize),
+            };
+
+            return paginationState;
         }
     }
 
@@ -412,45 +463,6 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     // Function to show loading spinner on datagrid
     showLoader() {
         this.setState({isLoading: true});
-    }
-
-    /* ##########  DataGrid private methods start  ############ */
-
-    // Initialize state of grid
-    private setInitalState() {
-        const {allRows, allColumns} = this.state;
-        let rows = this.updateRowIDs(allRows);
-        const columns = this.updateColumnIDs(this.setColumnVisibility(allColumns));
-        columns.forEach(col => {
-            col.width = col.width ? col.width : DEFAULT_COLUMN_WIDTH;
-        });
-
-        rows.forEach(function(row) {
-            const rowSelectionIsDisabled = row.disableRowSelection !== undefined ? row.disableRowSelection : false;
-            row.isSelected = !rowSelectionIsDisabled && row.isSelected !== undefined ? row.isSelected : false;
-        });
-
-        this.setState({
-            allRows: [...rows],
-            allColumns: [...columns],
-            selectAll: this.isAllRowsSelected(rows),
-        });
-    }
-
-    // Initialize state of grid with pagination
-    private setInitalStateForPagination() {
-        let {pagination} = this.state;
-        if (pagination) {
-            const {currentPage, pageSize, totalItems, compactFooter} = pagination;
-            const firstItem = this.getFirstItemIndex(currentPage, pageSize);
-            const lastItem = this.getLastItemIndex(pageSize, totalItems, firstItem);
-
-            pagination.totalPages = this.getTotalPages(totalItems, pageSize);
-            pagination.firstItem = firstItem;
-            pagination.lastItem = lastItem;
-            pagination.compactFooter = compactFooter !== undefined ? compactFooter : false;
-            this.setState({pagination: pagination});
-        }
     }
 
     /* ############################# Pagination methods start ####################################*/
@@ -1127,11 +1139,11 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                         <select
                             className={classNames([ClassNames.CLR_PAGE_SIZE_SELECT])}
                             onChange={evt => this.handleSelectPageSize(evt)}
+                            defaultValue={pageSize}
                         >
                             {pageSizes!.map((size: number, index: number) => {
-                                const selected = size === pageSize ? true : false;
                                 return (
-                                    <option key={index} value={size} selected={selected}>
+                                    <option key={index} value={size}>
                                         {size}
                                     </option>
                                 );
