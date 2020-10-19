@@ -293,12 +293,12 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         }
     }
 
-    // funtion to initialize datagrid state
+    // Function to initialize datagrid state
     initializeDataGridState = (): DataGridState => {
         const {isLoading, itemText} = this.props;
         const rows = this.initializeRowData();
         const columns = this.initializeColumnData();
-        const state: DataGridState = {
+        const dataGridState: DataGridState = {
             isLoading: isLoading || false,
             selectAll: this.isAllRowsSelected(rows),
             allColumns: [...columns],
@@ -306,7 +306,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
             itemText: itemText || DEFAULT_ITEM_TEXT,
             pagination: this.initializePaginationData(),
         };
-        return state;
+        return dataGridState;
     };
 
     // Function to initialize rows data in state
