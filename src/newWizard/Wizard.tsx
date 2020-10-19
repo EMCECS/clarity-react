@@ -16,6 +16,7 @@ import WizardNavigation, {WizardNavigationStep} from "./WizardNavigation";
 import WizardHeader from "./WizardHeader";
 import WizardStep from "./WizardStep";
 import WizardFooter, {InheritedWizardFooterProps, WizardFooterProps} from "./WizardFooter";
+import {SpinnerSize} from "../spinner/Spinner";
 
 /**
  * General component description :
@@ -88,7 +89,7 @@ import WizardFooter, {InheritedWizardFooterProps, WizardFooterProps} from "./Wiz
  * @param {style} custom inline CSS styles for the wizard component
  * @param {title} title React component to use for the wizard
  * @param {isLoading} if true then disable navigation and footer and show loading spinner on complete button
- *
+ * @param {loadingSpinnerSize} size of loading spinner
  */
 export type WizardProps = {
     className?: string;
@@ -124,6 +125,7 @@ export type WizardProps = {
     style?: Object;
     title?: ReactNode;
     isLoading?: boolean;
+    loadingSpinnerSize?: SpinnerSize;
 };
 
 /**
@@ -228,6 +230,7 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
             size,
             style,
             isLoading,
+            loadingSpinnerSize,
         } = this.props;
 
         // initialize a bunch of class names
@@ -253,6 +256,7 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
                         currentStepID,
                         navigable,
                         isLoading,
+                        loadingSpinnerSize,
                     }),
                 );
                 // subsequent iterations are navigable if all previous iterations are valid
