@@ -42,7 +42,7 @@ export class CustomFilter extends React.PureComponent<CustomFilterProps, CustomF
         customFilterValue: undefined,
     };
 
-    private handleFilterChnage = (evt: React.ChangeEvent<any>) => {
+    private handleFilterChange = (evt: React.ChangeEvent<any>) => {
         const {datagridFilterRef} = this.props;
         const value = evt.target.value;
         if (datagridFilterRef) {
@@ -54,7 +54,7 @@ export class CustomFilter extends React.PureComponent<CustomFilterProps, CustomF
         const {customFilterValue} = this.state;
         return (
             <div style={{width: "166px"}}>
-                <Select onChange={evt => this.handleFilterChnage(evt)} value={customFilterValue}>
+                <Select onChange={evt => this.handleFilterChange(evt)} value={customFilterValue}>
                     <SelectOption value="" />
                     <SelectOption value="Brad">Brad</SelectOption>
                     <SelectOption value="Georgia">Georgia</SelectOption>
