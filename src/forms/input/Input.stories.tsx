@@ -96,4 +96,7 @@ storiesOf("Input", module)
                 <Icon shape="search" style={{marginLeft: "-20px", width: "16px", height: "16px"}} />
             </Input>
         </div>
+    ))
+    .add("input with title", () => (
+        <Input name="somevalue" onChange={action("changed")} placeholder="input with title" title={"Title for input"} />
     ));
