@@ -27,6 +27,7 @@ type InputProps = {
     onBlur?: (evt: React.FocusEvent<HTMLInputElement>) => void;
     onKeyDown?: (evt: React.KeyboardEvent<HTMLInputElement>) => void;
     onKeyPress?: (evt: React.KeyboardEvent<HTMLInputElement>) => void;
+    title?: string;
     placeholder?: string;
     name: string;
     id?: string;
@@ -88,6 +89,7 @@ export class Input extends React.PureComponent<InputProps> {
             required,
             onBlur,
             onKeyPress,
+            title,
             dataqa,
             min,
             max,
@@ -114,6 +116,7 @@ export class Input extends React.PureComponent<InputProps> {
                     onChange={this.handleChange}
                     onKeyDown={this.handleKeyDown}
                     onKeyPress={onKeyPress}
+                    title={title}
                     onBlur={onBlur}
                     style={style}
                     required={required}
