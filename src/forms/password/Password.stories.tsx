@@ -56,5 +56,10 @@ storiesOf("Password", module)
     ))
     .add("Password box without show password icon", () => <Password name="Password" unmask={false} />)
     .add("Password box which accepts only numbers", () => (
-        <Password name="Password" onKeyPress={allowOnlyIntegers} placeholder="Numeric password" />
+        <Password
+            name="Password"
+            onKeyPress={allowOnlyIntegers}
+            placeholder="Numeric password"
+            title={"Numeric password"}
+        />
     ));
