@@ -25,6 +25,7 @@ type PasswordProps = {
     label?: string;
     onChange?: (evt: React.ChangeEvent<HTMLInputElement>) => void;
     onBlur?: (evt: React.FocusEvent<HTMLInputElement>) => void;
+    onKeyPress?: (evt: React.KeyboardEvent<HTMLInputElement>) => void;
     name: string;
     id?: string;
     value?: string;
@@ -85,6 +86,7 @@ export class Password extends React.PureComponent<PasswordProps, PasswordState> 
             label,
             value,
             defaultValue,
+            onKeyPress,
             errorHelperText,
             error,
             style,
@@ -120,6 +122,7 @@ export class Password extends React.PureComponent<PasswordProps, PasswordState> 
                                     value={value}
                                     placeholder={placeholder}
                                     required={required}
+                                    onKeyPress={onKeyPress}
                                     type={type}
                                     disabled={disabled}
                                     style={{width: "95%"}}

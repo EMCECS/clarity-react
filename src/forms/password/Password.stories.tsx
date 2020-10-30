@@ -13,6 +13,17 @@ import {storiesOf} from "@storybook/react";
 import {action} from "@storybook/addon-actions";
 import {Password} from "./Password";
 
+//Constants for ASCII of numbers
+const ASCII_FOR_ZERO = 48;
+const ASCII_FOR_NINE = 57;
+
+// Function to allow only integers [0-9]
+export const allowOnlyIntegers = (evt: any) => {
+    const charCode = evt.which ? evt.which : evt.keyCode;
+
+    if (charCode < ASCII_FOR_ZERO || charCode > ASCII_FOR_NINE) evt.preventDefault();
+};
+
 storiesOf("Password", module)
     .add("a simple password input", () => <Password name="password" onChange={action("changed")} />)
     .add("a simple password box with defaultValue", () => (
@@ -43,4 +54,7 @@ storiesOf("Password", module)
             errorHelperText="This field is reuired"
         />
     ))
-    .add("Password box without show password icon", () => <Password name="Password" unmask={false} />);
+    .add("Password box without show password icon", () => <Password name="Password" unmask={false} />)
+    .add("Password box which accepts only numbers", () => (
+        <Password name="Password" onKeyPress={allowOnlyIntegers} placeholder="Numeric password" />
+    ));
