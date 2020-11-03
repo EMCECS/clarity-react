@@ -29,6 +29,7 @@ import {calculateAxisPosition} from "./AxisPosition";
  *@param {onClick} callback function to call on open of signPost
  *@param {onClose} callback function to call on close of signPost
  *@param {dataqa} for Quality Engineering
+ *@param {showCustomOpenAt} flag to show custom openAt or default
  */
 type SignPostProps = {
     direction?: SignPostDirection;
@@ -39,6 +40,7 @@ type SignPostProps = {
     onClick?: Function;
     onClose?: Function;
     dataqa?: string;
+    showCustomOpenAt?: boolean;
 };
 
 /**
@@ -156,8 +158,13 @@ export class SignPost extends React.PureComponent<SignPostProps> {
 
     buildSignPostTriggerButton = () => {
         const {isOpen} = this.state;
-        const {openAt} = this.props;
-        return (
+        const {openAt, showCustomOpenAt} = this.props;
+        const className = isOpen ? "signpost-action signpost-trigger active" : "signpost-action signpost-trigger";
+        return showCustomOpenAt ? (
+            <div onClick={this.handleOnClick} className={className}>
+                {openAt}
+            </div>
+        ) : (
             <Button
                 className={classNames([
                     "signpost-action", //prettier
