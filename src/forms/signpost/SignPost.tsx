@@ -10,13 +10,14 @@
 
 import * as React from "react";
 import {classNames} from "../../utils";
-import {Button} from "../button";
+import {Button, ButtonSize} from "../button";
 import {Icon, IconProps} from "../../icon";
 import {calculateAxisPosition} from "./AxisPosition";
 
 //className constants
-const signPostActive = "signpost-action signpost-trigger active";
-const signPostInActive = "signpost-action signpost-trigger";
+const signPostAction = "signpost-action";
+const signPostTrigger = "signpost-trigger";
+const signPostActive = "active";
 
 /**
  * General component description :
@@ -163,13 +164,21 @@ export class SignPost extends React.PureComponent<SignPostProps> {
     buildSignPostTriggerButton = () => {
         const {isOpen} = this.state;
         const {openAt, customSignPost} = this.props;
-        const signPostClassName = isOpen ? signPostActive : signPostInActive;
+
         return customSignPost ? (
-            <div onClick={this.handleOnClick} className={signPostClassName}>
+            <div
+                onClick={this.handleOnClick}
+                className={classNames([signPostAction, signPostTrigger, isOpen && signPostActive])}
+            >
                 {openAt}
             </div>
         ) : (
-            <Button className={classNames([signPostClassName, "btn-small", "btn-link"])} onClick={this.handleOnClick}>
+            <Button
+                className={classNames([signPostAction, signPostTrigger, isOpen && signPostActive])}
+                link
+                size={ButtonSize.SMALL}
+                onClick={this.handleOnClick}
+            >
                 {openAt ? openAt : <Icon shape="dell-alert-info" size={26} />}
             </Button>
         );
