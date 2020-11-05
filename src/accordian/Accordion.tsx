@@ -31,6 +31,7 @@ type AccordionProps = {
 type accordionContent = {
     title: React.ReactNode;
     itemComponent: React.ReactNode;
+    isOpen?: boolean;
 };
 
 type AccordionState = {
@@ -172,7 +173,7 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
                         </div>
                     </div>
                 ),
-                isOpen: false,
+                isOpen: content.isOpen ? true : false,
                 title: content.title,
                 component: content.itemComponent,
             };
