@@ -14,6 +14,10 @@ import {Button} from "../button";
 import {Icon, IconProps} from "../../icon";
 import {calculateAxisPosition} from "./AxisPosition";
 
+//className constants
+const signPostActive = "signpost-action signpost-trigger active";
+const signPostInActive = "signpost-action signpost-trigger";
+
 /**
  * General component description :
  * The signpost is a convenient way to show contextual help to user.
@@ -29,7 +33,7 @@ import {calculateAxisPosition} from "./AxisPosition";
  *@param {onClick} callback function to call on open of signPost
  *@param {onClose} callback function to call on close of signPost
  *@param {dataqa} for Quality Engineering
- *@param {showCustomOpenAt} flag to show custom openAt or default
+ *@param {customSignPost} flag to show custom signpost
  */
 type SignPostProps = {
     direction?: SignPostDirection;
@@ -40,7 +44,7 @@ type SignPostProps = {
     onClick?: Function;
     onClose?: Function;
     dataqa?: string;
-    showCustomOpenAt?: boolean;
+    customSignPost?: boolean;
 };
 
 /**
@@ -158,23 +162,14 @@ export class SignPost extends React.PureComponent<SignPostProps> {
 
     buildSignPostTriggerButton = () => {
         const {isOpen} = this.state;
-        const {openAt, showCustomOpenAt} = this.props;
-        const className = isOpen ? "signpost-action signpost-trigger active" : "signpost-action signpost-trigger";
-        return showCustomOpenAt ? (
-            <div onClick={this.handleOnClick} className={className}>
+        const {openAt, customSignPost} = this.props;
+        const signPostClassName = isOpen ? signPostActive : signPostInActive;
+        return customSignPost ? (
+            <div onClick={this.handleOnClick} className={signPostClassName}>
                 {openAt}
             </div>
         ) : (
-            <Button
-                className={classNames([
-                    "signpost-action", //prettier
-                    "btn-small",
-                    "btn-link",
-                    "signpost-trigger",
-                    isOpen && "active",
-                ])}
-                onClick={this.handleOnClick}
-            >
+            <Button className={classNames([signPostClassName, "btn-small", "btn-link"])} onClick={this.handleOnClick}>
                 {openAt ? openAt : <Icon shape="dell-alert-info" size={26} />}
             </Button>
         );

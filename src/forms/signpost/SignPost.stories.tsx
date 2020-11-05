@@ -162,13 +162,13 @@ storiesOf("Signposts", module)
             </div>
         </div>
     ))
-    .add("SingPost with custom view", () => (
+    .add("SingPost with custom SignPost", () => (
         <div style={{paddingTop: "250px", paddingLeft: "300px"}}>
             <div style={{float: "left"}}>
                 <SignPost
                     direction={SignPostDirection.RIGHT_MIDDLE}
-                    showCustomOpenAt
                     openAt={<a href="javascript://">Hello</a>}
+                    customSignPost
                 >
                     <h3 style={{marginTop: "0px"}}>Title</h3>
                     <p>sample data here ...</p>
