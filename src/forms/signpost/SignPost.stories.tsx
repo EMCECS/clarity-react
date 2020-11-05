@@ -168,7 +168,7 @@ storiesOf("Signposts", module)
                 <SignPost
                     direction={SignPostDirection.RIGHT_MIDDLE}
                     openAt={<a href="javascript://">Hello</a>}
-                    customSignPost
+                    customSignPostTrigger
                 >
                     <h3 style={{marginTop: "0px"}}>Title</h3>
                     <p>sample data here ...</p>

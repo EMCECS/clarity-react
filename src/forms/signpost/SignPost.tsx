@@ -34,7 +34,8 @@ const signPostActive = "active";
  *@param {onClick} callback function to call on open of signPost
  *@param {onClose} callback function to call on close of signPost
  *@param {dataqa} for Quality Engineering
- *@param {customSignPost} flag to show custom signpost
+ *@param {customSignPostTrigger} flag to show custom signpost trigger
+ *@param {signPostClassNames} css classNames for signPost
  */
 type SignPostProps = {
     direction?: SignPostDirection;
@@ -45,7 +46,8 @@ type SignPostProps = {
     onClick?: Function;
     onClose?: Function;
     dataqa?: string;
-    customSignPost?: boolean;
+    customSignPostTrigger?: boolean;
+    triggerClassNames?: string;
 };
 
 /**
@@ -163,22 +165,19 @@ export class SignPost extends React.PureComponent<SignPostProps> {
 
     buildSignPostTriggerButton = () => {
         const {isOpen} = this.state;
-        const {openAt, customSignPost} = this.props;
-
-        return customSignPost ? (
-            <div
-                onClick={this.handleOnClick}
-                className={classNames([signPostAction, signPostTrigger, isOpen && signPostActive])}
-            >
+        const {openAt, customSignPostTrigger, triggerClassNames} = this.props;
+        const signPostTriggerClassNames = classNames([
+            signPostAction,
+            signPostTrigger,
+            isOpen && signPostActive,
+            triggerClassNames,
+        ]);
+        return customSignPostTrigger ? (
+            <div onClick={this.handleOnClick} className={signPostTriggerClassNames}>
                 {openAt}
             </div>
         ) : (
-            <Button
-                className={classNames([signPostAction, signPostTrigger, isOpen && signPostActive])}
-                link
-                size={ButtonSize.SMALL}
-                onClick={this.handleOnClick}
-            >
+            <Button className={signPostTriggerClassNames} link size={ButtonSize.SMALL} onClick={this.handleOnClick}>
                 {openAt ? openAt : <Icon shape="dell-alert-info" size={26} />}
             </Button>
         );
