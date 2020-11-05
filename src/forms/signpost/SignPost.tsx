@@ -35,7 +35,7 @@ const signPostActive = "active";
  *@param {onClose} callback function to call on close of signPost
  *@param {dataqa} for Quality Engineering
  *@param {customSignPostTrigger} flag to show custom signpost trigger
- *@param {signPostClassNames} css classNames for signPost
+ *@param {triggerClassNames} css classNames for signPost
  */
 type SignPostProps = {
     direction?: SignPostDirection;
