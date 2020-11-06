@@ -148,13 +148,18 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
         const {content, accordionMultiPanel} = this.props;
         let prevItemIndex = this.state.prevItemIndex;
         const panelContent = content.map((content, index) => {
-            if (!accordionMultiPanel && content.isOpen && prevItemIndex === this.state.prevItemIndex)
+            if (!accordionMultiPanel && content.isOpen && prevItemIndex === this.state.prevItemIndex) {
                 prevItemIndex = index;
+            }
             return {
                 content: (
                     <div
                         role="group"
-                        className={ClassNames.ACCORDION_PANEL_INNER}
+                        className={
+                            index === prevItemIndex || (accordionMultiPanel && content.isOpen)
+                                ? classNames([ClassNames.ACCORDION_PANEL_INNER, ClassNames.ACCORDION_PANEL_OPEN])
+                                : ClassNames.ACCORDION_PANEL_INNER
+                        }
                         key={index}
                         onClick={() => this.handleButtonClick(index, accordionMultiPanel)}
                     >
@@ -164,7 +169,7 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
                                 type="button"
                                 aria-disabled="false"
                                 aria-controls="clr-accordion-content"
-                                aria-expanded="false"
+                                aria-expanded={index === prevItemIndex || (accordionMultiPanel && content.isOpen)}
                             >
                                 <span className={ClassNames.ACCORDION_SR} />
                                 <span className={ClassNames.ACCORDION_STATUS}>
