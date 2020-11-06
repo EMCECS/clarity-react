@@ -59,7 +59,6 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
     handleButtonClick = (index: any, accordionMultiPanel: any) => {
         let items = this.state.panelItems;
         const {prevItemIndex} = this.state;
-        console.log(prevItemIndex);
         if (prevItemIndex != -1 && prevItemIndex === index) {
             items[index].isOpen = false;
             this.setState({prevItemIndex: -1});
