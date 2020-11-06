@@ -59,6 +59,7 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
     handleButtonClick = (index: any, accordionMultiPanel: any) => {
         let items = this.state.panelItems;
         const {prevItemIndex} = this.state;
+        console.log(prevItemIndex);
         if (prevItemIndex != -1 && prevItemIndex === index) {
             items[index].isOpen = false;
             this.setState({prevItemIndex: -1});
@@ -146,7 +147,10 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
 
     getAccordionContent = () => {
         const {content, accordionMultiPanel} = this.props;
+        let prevItemIndex = this.state.prevItemIndex;
         const panelContent = content.map((content, index) => {
+            if (!accordionMultiPanel && content.isOpen && prevItemIndex === this.state.prevItemIndex)
+                prevItemIndex = index;
             return {
                 content: (
                     <div
@@ -173,13 +177,13 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
                         </div>
                     </div>
                 ),
-                isOpen: content.isOpen ? true : false,
+                isOpen: index === prevItemIndex || (accordionMultiPanel && content.isOpen),
                 title: content.title,
                 component: content.itemComponent,
             };
         });
 
-        this.setState({panelItems: panelContent});
+        this.setState({panelItems: panelContent, prevItemIndex});
     };
     render() {
         const {className, style, dataqa} = this.props;
