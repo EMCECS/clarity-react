@@ -36,6 +36,7 @@ type SelectProps = {
     isBoxed?: boolean;
     required?: boolean; // auto-check on blur if there's a value
     error?: boolean; // force error state of component
+    errorTitle?: string;
     defaultHelperText?: string; // shown when state isError is false
     errorHelperText?: string; // shown when state isError is true
     onBlur?: (evt: React.FocusEvent<HTMLSelectElement>) => void;
@@ -105,6 +106,7 @@ export class Select extends React.PureComponent<SelectProps> {
             errorHelperText,
             isBoxed,
             error,
+            errorTitle,
             className,
             style,
             width,
@@ -142,7 +144,7 @@ export class Select extends React.PureComponent<SelectProps> {
                                 >
                                     {this.buildSelect(classNames(["clr-select", className]), setId)}
 
-                                    <Icon className="clr-validate-icon" shape="exclamation-circle" />
+                                    <Icon className="clr-validate-icon" shape="exclamation-circle" title={errorTitle} />
                                 </div>
                                 {error ? (
                                     <span className="clr-subtext">{errorHelperText}</span>

@@ -27,6 +27,7 @@ type PasswordProps = {
     onBlur?: (evt: React.FocusEvent<HTMLInputElement>) => void;
     onKeyPress?: (evt: React.KeyboardEvent<HTMLInputElement>) => void;
     title?: string;
+    errorTitle?: string;
     name: string;
     id?: string;
     value?: string;
@@ -89,6 +90,7 @@ export class Password extends React.PureComponent<PasswordProps, PasswordState> 
             defaultValue,
             onKeyPress,
             title,
+            errorTitle,
             errorHelperText,
             error,
             style,
@@ -146,7 +148,11 @@ export class Password extends React.PureComponent<PasswordProps, PasswordState> 
                                         <span className="is-off-screen">Show</span>
                                     </Button>
                                 )}
-                                <Icon className="clr-validate-icon ng-star-inserted" shape="exclamation-circle" />
+                                <Icon
+                                    className="clr-validate-icon ng-star-inserted"
+                                    shape="exclamation-circle"
+                                    title={errorTitle}
+                                />
                             </div>
                             {error
                                 ? errorHelperText && Password.renderHelperText(errorHelperText)

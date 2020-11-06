@@ -19,6 +19,7 @@ export interface IconProps {
     className?: string;
     style?: any;
     dir?: Direction;
+    title?: string;
 }
 
 export class Icon extends React.PureComponent<IconProps> {
