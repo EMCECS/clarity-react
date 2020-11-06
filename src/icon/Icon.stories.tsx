@@ -14,4 +14,5 @@ import {Icon, Direction} from ".";
 
 storiesOf("Icon", module)
     .add("a simple icon", () => <Icon shape="home" />)
+    .add("a simple icon with title", () => <Icon shape="home" title="Home" />)
     .add('with direction "right"', () => <Icon shape="home" dir={Direction.RIGHT} />);

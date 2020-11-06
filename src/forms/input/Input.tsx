@@ -28,6 +28,7 @@ type InputProps = {
     onKeyDown?: (evt: React.KeyboardEvent<HTMLInputElement>) => void;
     onKeyPress?: (evt: React.KeyboardEvent<HTMLInputElement>) => void;
     title?: string;
+    errorTitle?: string;
     placeholder?: string;
     name: string;
     id?: string;
@@ -90,6 +91,7 @@ export class Input extends React.PureComponent<InputProps> {
             onBlur,
             onKeyPress,
             title,
+            errorTitle,
             dataqa,
             min,
             max,
@@ -127,7 +129,7 @@ export class Input extends React.PureComponent<InputProps> {
                     pattern={pattern}
                 />
                 {children}
-                <Icon className="clr-validate-icon" shape="exclamation-circle" />
+                <Icon className="clr-validate-icon" shape="exclamation-circle" title={errorTitle} />
                 {error
                     ? errorHelperText && Input.renderHelperText(errorHelperText)
                     : helperText && Input.renderHelperText(helperText)}

@@ -60,6 +60,7 @@ type TextAreaProps = {
     wrap?: TextWrapType;
     required?: boolean;
     error?: boolean; // force error state of component
+    errorTitle?: string;
     spellCheck?: boolean;
     draggable?: boolean;
     maxLength?: number;
@@ -121,6 +122,7 @@ export class TextArea extends React.PureComponent<TextAreaProps> {
             spellCheck,
             maxLength,
             draggable,
+            errorTitle,
         } = this.props;
         return (
             <React.Fragment>
@@ -154,7 +156,7 @@ export class TextArea extends React.PureComponent<TextAreaProps> {
                     draggable={draggable}
                 />
                 {children}
-                <Icon className={ClassNames.CLR_VALIDATE_ICON} shape="exclamation-circle" />
+                <Icon className={ClassNames.CLR_VALIDATE_ICON} shape="exclamation-circle" title={errorTitle} />
             </React.Fragment>
         );
     }
