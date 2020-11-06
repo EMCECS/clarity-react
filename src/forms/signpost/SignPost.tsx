@@ -10,9 +10,14 @@
 
 import * as React from "react";
 import {classNames} from "../../utils";
-import {Button} from "../button";
+import {Button, ButtonSize} from "../button";
 import {Icon, IconProps} from "../../icon";
 import {calculateAxisPosition} from "./AxisPosition";
+
+//className constants
+const signPostAction = "signpost-action";
+const signPostTrigger = "signpost-trigger";
+const signPostActive = "active";
 
 /**
  * General component description :
@@ -29,6 +34,8 @@ import {calculateAxisPosition} from "./AxisPosition";
  *@param {onClick} callback function to call on open of signPost
  *@param {onClose} callback function to call on close of signPost
  *@param {dataqa} for Quality Engineering
+ *@param {customSignPostTrigger} flag to show custom signpost trigger
+ *@param {triggerClassNames} css classNames for signPost
  */
 type SignPostProps = {
     direction?: SignPostDirection;
@@ -39,6 +46,8 @@ type SignPostProps = {
     onClick?: Function;
     onClose?: Function;
     dataqa?: string;
+    customSignPostTrigger?: boolean;
+    triggerClassNames?: string;
 };
 
 /**
@@ -156,18 +165,19 @@ export class SignPost extends React.PureComponent<SignPostProps> {
 
     buildSignPostTriggerButton = () => {
         const {isOpen} = this.state;
-        const {openAt} = this.props;
-        return (
-            <Button
-                className={classNames([
-                    "signpost-action", //prettier
-                    "btn-small",
-                    "btn-link",
-                    "signpost-trigger",
-                    isOpen && "active",
-                ])}
-                onClick={this.handleOnClick}
-            >
+        const {openAt, customSignPostTrigger, triggerClassNames} = this.props;
+        const signPostTriggerClassNames = classNames([
+            signPostAction,
+            signPostTrigger,
+            isOpen && signPostActive,
+            triggerClassNames,
+        ]);
+        return customSignPostTrigger ? (
+            <div onClick={this.handleOnClick} className={signPostTriggerClassNames}>
+                {openAt}
+            </div>
+        ) : (
+            <Button className={signPostTriggerClassNames} link size={ButtonSize.SMALL} onClick={this.handleOnClick}>
                 {openAt ? openAt : <Icon shape="dell-alert-info" size={26} />}
             </Button>
         );

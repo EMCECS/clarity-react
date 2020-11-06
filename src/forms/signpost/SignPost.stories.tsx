@@ -152,10 +152,24 @@ storiesOf("Signposts", module)
             </div>
         </div>
     ))
-    .add("SingPost with custom link", () => (
+    .add("SingPost with custom link Button", () => (
         <div style={{paddingTop: "250px", paddingLeft: "300px"}}>
             <div style={{float: "left"}}>
                 <SignPost direction={SignPostDirection.TOP_MIDDLE} openAt={<span> Open SignPost </span>}>
+                    <h3 style={{marginTop: "0px"}}>Title</h3>
+                    <p>sample data here ...</p>
+                </SignPost>
+            </div>
+        </div>
+    ))
+    .add("SingPost with custom SignPost", () => (
+        <div style={{paddingTop: "250px", paddingLeft: "300px"}}>
+            <div style={{float: "left"}}>
+                <SignPost
+                    direction={SignPostDirection.RIGHT_MIDDLE}
+                    openAt={<a href="javascript://">Hello</a>}
+                    customSignPostTrigger
+                >
                     <h3 style={{marginTop: "0px"}}>Title</h3>
                     <p>sample data here ...</p>
                 </SignPost>
