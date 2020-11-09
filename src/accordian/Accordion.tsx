@@ -121,7 +121,6 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
     getItemContent = (index: any, title: any, isOpen: boolean | undefined) => {
         const {accordionMultiPanel} = this.props;
         const panelClass = classNames([ClassNames.ACCORDION_PANEL_INNER, isOpen && ClassNames.ACCORDION_PANEL_OPEN]);
-        const expanded = isOpen;
         return (
             <div role="group" className={panelClass} key={index}>
                 <div className={ClassNames.ACCORDION_HEADER}>
@@ -130,7 +129,7 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
                         type="button"
                         aria-disabled="false"
                         aria-controls="clr-accordion-content"
-                        aria-expanded={expanded}
+                        aria-expanded={isOpen}
                         onClick={() => this.handleButtonClick(index, accordionMultiPanel)}
                     >
                         <span className={ClassNames.ACCORDION_SR} />
