@@ -17,7 +17,7 @@ import {Icon, Direction} from "../icon";
  * Accordian Props
  * @param {style} css style
  * @param {className} css property
- * @param {accordianMultiPanel} if yes multipanel enebled else not
+ * @param {accordionMultiPanel} if yes multipanel enebled else not
  * @param {dataqa} quality engineering testing field
  */
 type AccordionProps = {
@@ -31,16 +31,15 @@ type AccordionProps = {
 type accordionContent = {
     title: React.ReactNode;
     itemComponent: React.ReactNode;
+    isOpen?: boolean;
 };
 
 type AccordionState = {
     panelItems: any;
-    prevItemIndex: number;
 };
 
 export class Accordion extends React.Component<AccordionProps, AccordionState> {
     state: AccordionState = {
-        prevItemIndex: -1,
         panelItems: [],
     };
 
@@ -55,31 +54,34 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
         }
     }
 
-    handleButtonClick = (index: any, accordionMultiPanel: any) => {
-        let items = this.state.panelItems;
-        const {prevItemIndex} = this.state;
-        if (prevItemIndex != -1 && prevItemIndex === index) {
-            items[index].isOpen = false;
-            this.setState({prevItemIndex: -1});
-            items[prevItemIndex].content = this.getItemContent(prevItemIndex, items[prevItemIndex].title, true);
-            this.setState({panelItems: items});
-        } else if (items[index].isOpen === true) {
-            items[index].isOpen = false;
-            items[index].content = this.getItemContent(index, items[index].title, true);
-            this.setState({panelItems: items});
-        } else {
-            if (!accordionMultiPanel && prevItemIndex != -1) {
-                items[prevItemIndex].isOpen = false;
-                items[prevItemIndex].content = this.getItemContent(prevItemIndex, items[prevItemIndex].title, true);
+    //Handle click on individual panel
+    handleButtonClick = (clickedItemIndex: number, accordionMultiPanel?: boolean) => {
+        let {panelItems} = this.state;
+
+        panelItems.forEach((item: any, index: number) => {
+            if (accordionMultiPanel) {
+                //allow all to set isOpen
+                if (index === clickedItemIndex) {
+                    item.isOpen = !item.isOpen;
+                    item.content = this.getItemContent(index, item.title, item.isOpen);
+                }
+            } else {
+                //allow only first isOpen to set to panel if multiple isOpen are passed
+                if (index === clickedItemIndex) {
+                    item.isOpen = !item.isOpen;
+                    item.content = this.getItemContent(index, item.title, item.isOpen);
+                } else {
+                    item.isOpen = false;
+                    item.content = this.getItemContent(index, item.title, item.isOpen);
+                }
             }
-            items[index].isOpen = true;
-            items[index].content = this.getItemContent(index, items[index].title, false);
-            this.setState({prevItemIndex: index});
-            this.setState({panelItems: items});
-        }
-        this.accordionPanel();
+        });
+        this.setState({
+            panelItems,
+        });
     };
 
+    //render accordion panels
     private accordionPanel(): React.ReactElement {
         return (
             <div>
@@ -102,6 +104,7 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
         );
     }
 
+    //render expandable accordion content
     private accordionContent(content: any): React.ReactElement {
         return (
             <div className={ClassNames.ACCORDION_COLLAPSED_CONTENT} aria-hidden="false">
@@ -114,12 +117,10 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
         );
     }
 
-    getItemContent = (index: any, title: any, isPrevious: boolean) => {
+    //get content for each accordion panel
+    getItemContent = (index: any, title: any, isOpen: boolean | undefined) => {
         const {accordionMultiPanel} = this.props;
-        const panelClass = isPrevious
-            ? ClassNames.ACCORDION_PANEL_INNER
-            : classNames([ClassNames.ACCORDION_PANEL_INNER, ClassNames.ACCORDION_PANEL_OPEN]);
-        const expanded = !isPrevious;
+        const panelClass = classNames([ClassNames.ACCORDION_PANEL_INNER, isOpen && ClassNames.ACCORDION_PANEL_OPEN]);
         return (
             <div role="group" className={panelClass} key={index}>
                 <div className={ClassNames.ACCORDION_HEADER}>
@@ -128,7 +129,7 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
                         type="button"
                         aria-disabled="false"
                         aria-controls="clr-accordion-content"
-                        aria-expanded={expanded}
+                        aria-expanded={isOpen}
                         onClick={() => this.handleButtonClick(index, accordionMultiPanel)}
                     >
                         <span className={ClassNames.ACCORDION_SR} />
@@ -143,43 +144,42 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
         );
     };
 
+    //get each panel data to pass it to accordion content
+    getPanelContent = (index: number, contentItem: accordionContent, isOpen?: boolean) => {
+        return {
+            content: this.getItemContent(index, contentItem.title, contentItem.isOpen),
+            isOpen: isOpen,
+            title: contentItem.title,
+            component: contentItem.itemComponent,
+        };
+    };
+
+    //get initial accordion content
     getAccordionContent = () => {
         const {content, accordionMultiPanel} = this.props;
-        const panelContent = content.map((content, index) => {
-            return {
-                content: (
-                    <div
-                        role="group"
-                        className={ClassNames.ACCORDION_PANEL_INNER}
-                        key={index}
-                        onClick={() => this.handleButtonClick(index, accordionMultiPanel)}
-                    >
-                        <div className={ClassNames.ACCORDION_HEADER}>
-                            <button
-                                className={ClassNames.ACCORDION_HEADER_BUTTON}
-                                type="button"
-                                aria-disabled="false"
-                                aria-controls="clr-accordion-content"
-                                aria-expanded="false"
-                            >
-                                <span className={ClassNames.ACCORDION_SR} />
-                                <span className={ClassNames.ACCORDION_STATUS}>
-                                    <Icon className={ClassNames.ACCORDION_ANGLE} dir={Direction.RIGHT} shape="angle" />
-                                    <span className={ClassNames.ACCORDION_NUMBER} />
-                                </span>
-                                <div className={ClassNames.ACCORDION_TITLE}>{content.title}</div>
-                            </button>
-                        </div>
-                    </div>
-                ),
-                isOpen: false,
-                title: content.title,
-                component: content.itemComponent,
-            };
+        let isAnyPanelOpened = false;
+        const panelContent = content.map((contentItem, index) => {
+            if (accordionMultiPanel) {
+                //allow all panels to open
+                return this.getPanelContent(index, contentItem, contentItem.isOpen);
+            } else {
+                //allow only single panel to open
+                if (!isAnyPanelOpened) {
+                    if (contentItem.isOpen) {
+                        isAnyPanelOpened = true;
+                        return this.getPanelContent(index, contentItem, contentItem.isOpen);
+                    } else {
+                        return this.getPanelContent(index, contentItem, false);
+                    }
+                } else {
+                    return this.getPanelContent(index, contentItem, false);
+                }
+            }
         });
 
         this.setState({panelItems: panelContent});
     };
+
     render() {
         const {className, style, dataqa} = this.props;
         return (
