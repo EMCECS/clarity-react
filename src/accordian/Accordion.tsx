@@ -54,7 +54,7 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
         }
     }
 
-    handleButtonCLick = (clickedItemIndex: number, accordionMultiPanel: boolean | undefined) => {
+    handleButtonClick = (clickedItemIndex: number, accordionMultiPanel: boolean | undefined) => {
         let {panelItems} = this.state;
 
         panelItems.forEach((item: any, index: number) => {
@@ -65,7 +65,7 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
                     item.content = this.getItemContent(index, item.title, item.isOpen);
                 }
             } else {
-                //allow only first to set isOpen
+                //allow only first isOpen to set to panel if multiple isOpen are passed
                 if (index === clickedItemIndex) {
                     item.isOpen = !item.isOpen;
                     item.content = this.getItemContent(index, item.title, item.isOpen);
@@ -129,7 +129,7 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
                         aria-disabled="false"
                         aria-controls="clr-accordion-content"
                         aria-expanded={expanded}
-                        onClick={() => this.handleButtonCLick(index, accordionMultiPanel)}
+                        onClick={() => this.handleButtonClick(index, accordionMultiPanel)}
                     >
                         <span className={ClassNames.ACCORDION_SR} />
                         <span className={ClassNames.ACCORDION_STATUS}>
@@ -155,7 +155,7 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
                     component: contentItem.itemComponent,
                 };
             } else {
-                //allow only first to isOpen to set to panel is multiple isOpen are passed
+                //allow only first isOpen to set to panel if multiple isOpen are passed
                 let isAnyPanelOpened = false;
                 if (!isAnyPanelOpened) {
                     if (contentItem.isOpen) {
