@@ -17,7 +17,7 @@ import {Icon, Direction} from "../icon";
  * Accordian Props
  * @param {style} css style
  * @param {className} css property
- * @param {accordianMultiPanel} if yes multipanel enebled else not
+ * @param {accordionMultiPanel} if yes multipanel enebled else not
  * @param {dataqa} quality engineering testing field
  */
 type AccordionProps = {
@@ -54,7 +54,8 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
         }
     }
 
-    handleButtonClick = (clickedItemIndex: number, accordionMultiPanel: boolean | undefined) => {
+    //Handle click on individual panel
+    handleButtonClick = (clickedItemIndex: number, accordionMultiPanel?: boolean) => {
         let {panelItems} = this.state;
 
         panelItems.forEach((item: any, index: number) => {
@@ -80,6 +81,7 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
         });
     };
 
+    //render accordion panels
     private accordionPanel(): React.ReactElement {
         return (
             <div>
@@ -102,6 +104,7 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
         );
     }
 
+    //render expandable accordion content
     private accordionContent(content: any): React.ReactElement {
         return (
             <div className={ClassNames.ACCORDION_COLLAPSED_CONTENT} aria-hidden="false">
@@ -114,11 +117,10 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
         );
     }
 
+    //get content for each accordion panel
     getItemContent = (index: any, title: any, isOpen: boolean | undefined) => {
         const {accordionMultiPanel} = this.props;
-        const panelClass = isOpen
-            ? classNames([ClassNames.ACCORDION_PANEL_INNER, ClassNames.ACCORDION_PANEL_OPEN])
-            : ClassNames.ACCORDION_PANEL_INNER;
+        const panelClass = classNames([ClassNames.ACCORDION_PANEL_INNER, isOpen && ClassNames.ACCORDION_PANEL_OPEN]);
         const expanded = isOpen;
         return (
             <div role="group" className={panelClass} key={index}>
@@ -143,44 +145,35 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
         );
     };
 
+    //get each panel data to pass it to accordion content
+    getPanelContent = (index: number, contentItem: accordionContent, isOpen?: boolean) => {
+        return {
+            content: this.getItemContent(index, contentItem.title, contentItem.isOpen),
+            isOpen: isOpen,
+            title: contentItem.title,
+            component: contentItem.itemComponent,
+        };
+    };
+
+    //get initial accordion content
     getAccordionContent = () => {
         const {content, accordionMultiPanel} = this.props;
+        let isAnyPanelOpened = false;
         const panelContent = content.map((contentItem, index) => {
             if (accordionMultiPanel) {
-                //allow all to set isOpen
-                return {
-                    content: this.getItemContent(index, contentItem.title, contentItem.isOpen),
-                    isOpen: contentItem.isOpen,
-                    title: contentItem.title,
-                    component: contentItem.itemComponent,
-                };
+                //allow all panels to open
+                return this.getPanelContent(index, contentItem, contentItem.isOpen);
             } else {
-                //allow only first isOpen to set to panel if multiple isOpen are passed
-                let isAnyPanelOpened = false;
+                //allow only single panel to open
                 if (!isAnyPanelOpened) {
                     if (contentItem.isOpen) {
                         isAnyPanelOpened = true;
-                        return {
-                            content: this.getItemContent(index, contentItem.title, true),
-                            isOpen: true,
-                            title: contentItem.title,
-                            component: contentItem.itemComponent,
-                        };
+                        return this.getPanelContent(index, contentItem, contentItem.isOpen);
                     } else {
-                        return {
-                            content: this.getItemContent(index, contentItem.title, false),
-                            isOpen: false,
-                            title: contentItem.title,
-                            component: contentItem.itemComponent,
-                        };
+                        return this.getPanelContent(index, contentItem, false);
                     }
                 } else {
-                    return {
-                        content: this.getItemContent(index, contentItem.title, false),
-                        isOpen: false,
-                        title: contentItem.title,
-                        component: contentItem.itemComponent,
-                    };
+                    return this.getPanelContent(index, contentItem, false);
                 }
             }
         });

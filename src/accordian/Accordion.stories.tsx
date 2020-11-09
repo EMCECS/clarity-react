@@ -39,7 +39,7 @@ storiesOf("Accordion", module)
     .add("Accordion", () => <Accordion content={accordionContent} />)
     .add("Accordion Multi Panel", () => <Accordion content={accordionContent} accordionMultiPanel={true} />)
     .add("Nested accordion", () => <Accordion content={nesteAccordionContent} />)
-    .add("Open accordion", () => <Accordion content={openAccordialContent} />)
-    .add("Open accordion Multi Panel", () => (
+    .add("Already opened accordion", () => <Accordion content={openAccordialContent} />)
+    .add("Already opened Multi Panel accordion", () => (
         <Accordion content={openAccordialContentMultiPanel} accordionMultiPanel />
     ));
