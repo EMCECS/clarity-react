@@ -39,6 +39,7 @@ storiesOf("Textarea", module)
                 name="basic-textarea"
                 label="TextArea with error"
                 errorHelperText="This field is required"
+                errorTitle="This field is required"
                 error={true}
             />
         </div>

@@ -41,7 +41,7 @@ storiesOf("Checkboxes", module)
                 <CheckBox label="option 1" />
                 <CheckBox label="option 2" />
                 <CheckBox label="option 3" />
-                <SubTextWrapper shape="exclamation-circle" text="Error message" />
+                <SubTextWrapper shape="exclamation-circle" text="Error message" errorTitle="This field is required" />
             </FormControl>
         </div>
     ))

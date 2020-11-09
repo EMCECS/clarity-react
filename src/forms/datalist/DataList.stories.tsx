@@ -34,7 +34,13 @@ storiesOf("DataList", module)
     ))
     .add("With Error", () => (
         <div>
-            <DataList placeHolder="No label" required={true} isError={true} errorText="This field is reuired">
+            <DataList
+                placeHolder="No label"
+                required={true}
+                isError={true}
+                errorText="This field is reuired"
+                errorTitle="This field is required"
+            >
                 <DataListOption value="Item1" />
                 <DataListOption value="Item2" />
                 <DataListOption value="Item3" />

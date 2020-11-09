@@ -52,12 +52,13 @@ export class FormControl extends React.PureComponent<FormControlProps> {
 type SubTextWrapperProps = {
     shape?: string;
     text?: string;
+    errorTitle?: string;
 };
 
-export const SubTextWrapper: React.FunctionComponent<SubTextWrapperProps> = ({shape, text, children}) => {
+export const SubTextWrapper: React.FunctionComponent<SubTextWrapperProps> = ({shape, text, errorTitle, children}) => {
     return (
         <div className={ClassNames.CLR_SUBTEXT_WRAPPER}>
-            {shape && <Icon className={ClassNames.CLR_VALIDATE_ICON} shape={shape} />}
+            {shape && <Icon className={ClassNames.CLR_VALIDATE_ICON} shape={shape} title={errorTitle} />}
             <span className={ClassNames.CLR_SUBTEXT}>{text}</span>
         </div>
     );

@@ -81,6 +81,7 @@ storiesOf("Input", module)
                 name="somevalue"
                 isBoxed
                 error={true}
+                errorTitle={"This field is required"}
                 errorHelperText="This field is required"
                 onBlur={action("select with error - blur")}
                 onChange={action("select with error - change")}

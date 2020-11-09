@@ -72,6 +72,7 @@ export enum DataListAutoComplete {
  * @param {name} name for datalist
  * @param {required} true if datalist is mandatory field
  * @param {isError} true if there is error in datalist
+ * @param {errorTitle} error message to show on hover of error icon
  * @param {errorText} error message for datalist
  * @param {helperText} helper message for datalist
  * @param {onChange} function to handle onChange event
@@ -87,9 +88,11 @@ type DataListProps = {
     placeHolder?: string;
     label?: string;
     name?: string;
+    title?: string;
     required?: boolean;
     isError?: boolean;
     errorText?: string;
+    errorTitle?: string;
     helperText?: string;
     onChange?: (evt: React.ChangeEvent<HTMLInputElement>) => void;
     onBlur?: (evt: React.FocusEvent<HTMLInputElement>) => void;
@@ -151,6 +154,8 @@ export class DataList extends React.PureComponent<DataListProps, DataListState> 
         const {
             placeHolder,
             name,
+            title,
+            errorTitle,
             isError,
             errorText,
             helperText,
@@ -198,12 +203,13 @@ export class DataList extends React.PureComponent<DataListProps, DataListState> 
                                 spellCheck={spellCheck}
                                 autoComplete={autoComplete ? autoComplete : DataListAutoComplete.OFF}
                                 defaultValue={defaultValue ? defaultValue : ""}
+                                title={title}
                             />
                             <datalist id={listId}>{children}</datalist>
                         </div>
                     )}
                 </UID>
-                <Icon className={ClassNames.CLR_VALIDATE_ICON} shape="exclamation-circle" />
+                <Icon className={ClassNames.CLR_VALIDATE_ICON} shape="exclamation-circle" title={errorTitle} />
                 {isError
                     ? errorText && this.renderHelperText(errorText)
                     : helperText && this.renderHelperText(helperText)}

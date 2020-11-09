@@ -77,6 +77,7 @@ storiesOf("Select", module)
         <div>
             <Select
                 error={true}
+                errorTitle={"This field is required"}
                 width="30%"
                 onBlur={action("select with error and custom width - blur")}
                 onChange={action("select with error - change")}

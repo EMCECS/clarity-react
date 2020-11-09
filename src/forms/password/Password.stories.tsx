@@ -49,9 +49,10 @@ storiesOf("Password", module)
             name="Password"
             placeholder="Enter Password"
             error={true}
+            errorTitle={"This field is required"}
             onBlur={action("select with error - blur")}
             onChange={action("select with error - change")}
-            errorHelperText="This field is reuired"
+            errorHelperText="This field is required"
         />
     ))
     .add("Password box without show password icon", () => <Password name="Password" unmask={false} />)
