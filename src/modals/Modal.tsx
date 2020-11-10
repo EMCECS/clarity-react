@@ -22,6 +22,9 @@ import {ReactNode} from "react";
  * @param {closable} property stating if modal is closable
  * @param {onClose} function onClose
  * @param {dataqa} Quality Engineering field
+ * @param {width} if Size is custom, then width need to be provided in props
+ * @param {height} if Size is custom, then height need to be provided in props
+ * @param {className} if className is provided, the add custom class with existing classes
  */
 type ModalProps = {
     isOpen?: boolean;
@@ -30,6 +33,9 @@ type ModalProps = {
     closable?: boolean;
     onClose?: Function;
     dataqa?: string;
+    width?: number;
+    height?: number;
+    className?: string;
 };
 
 type ModalState = {
@@ -40,6 +46,7 @@ export enum ModalSize {
     SMALL = "modal-sm",
     LARGE = "modal-lg",
     XLARGE = "modal-xl",
+    CUSTOM = "custom",
 }
 
 export const ModalBody: React.FunctionComponent = ({children}) => {
@@ -91,7 +98,7 @@ export class Modal extends React.PureComponent<ModalProps> {
     }
 
     buildModal(): React.ReactElement {
-        const {size, closable, title, children, dataqa} = this.props;
+        const {size, closable, title, children, dataqa, width, height, className} = this.props;
         return (
             <React.Fragment>
                 <div className={ClassNames.MODAL} data-qa={dataqa}>
@@ -99,7 +106,9 @@ export class Modal extends React.PureComponent<ModalProps> {
                         className={classNames([
                             ClassNames.MODAL_DIALOG, //prettier
                             size && size,
+                            className && className,
                         ])}
+                        style={size === ModalSize.CUSTOM ? {width: `${width}px`, height: `${height}px`} : {}}
                         role="dialog"
                         aria-hidden="true"
                     >

@@ -16,6 +16,7 @@ import WizardNavigation, {WizardNavigationStep} from "./WizardNavigation";
 import WizardHeader from "./WizardHeader";
 import WizardStep from "./WizardStep";
 import WizardFooter, {InheritedWizardFooterProps, WizardFooterProps} from "./WizardFooter";
+import {SpinnerSize} from "../spinner/Spinner";
 
 /**
  * General component description :
@@ -38,13 +39,14 @@ import WizardFooter, {InheritedWizardFooterProps, WizardFooterProps} from "./Wiz
  * @param {closable} if true user can close the wizard
  * @param {onClose} callback function to call on close of wizard
  * @param {previousText} custom text for previous button
- * @param {showPreviousButton} if true show previous button on wizard else hide
+ * @param {showNext} if true show next button on wizard else hide
  * @param {onPrevious} callback function to call on click of previous button
  * @param {previousClassName} external CSS for previous button
  * @param {nextButtonText} custom text for next button
  * @param {onNext} callback function to call on click of next button
  * @param {nextClassName} external CSS for next button
  * @param {completeText} custom text for finish button
+ * @param {showComplete} if true show finish button on wizard else hide
  * @param {onComplete} callback function to call on click of finish button
  * @param {completeClassName} external CSS for finish button
  * @param {cancelText} custom text for cancel button
@@ -86,8 +88,8 @@ import WizardFooter, {InheritedWizardFooterProps, WizardFooterProps} from "./Wiz
  * @param {size} indicates the size of the wizard component
  * @param {style} custom inline CSS styles for the wizard component
  * @param {title} title React component to use for the wizard
- *
- *
+ * @param {isLoading} if true then disable navigation and footer and show loading spinner on complete button
+ * @param {loadingSpinnerSize} size of loading spinner
  */
 export type WizardProps = {
     className?: string;
@@ -96,18 +98,20 @@ export type WizardProps = {
     dataqa?: string;
     showNavigation?: boolean;
     closable?: boolean;
-    completeText?: string;
     isInline?: boolean;
     showPrevious?: boolean;
     previousClassName?: string;
+    previousText?: string;
     nextText?: string;
+    showNext?: boolean;
     nextClassName?: string;
     onClose?: (evt: React.MouseEvent<HTMLElement, MouseEvent>) => void;
     onComplete?: (evt: React.MouseEvent<HTMLElement, MouseEvent>) => void;
     onNext?: (evt: React.MouseEvent<HTMLElement, MouseEvent>) => void;
     onPrevious?: (evt: React.MouseEvent<HTMLElement, MouseEvent>) => void;
     onNavigateTo?: (stepID: number, evt: React.MouseEvent<HTMLElement, MouseEvent>) => void;
-    previousText?: string;
+    completeText?: string;
+    showComplete?: boolean;
     completeClassName?: string;
     cancelText?: string;
     showCancel?: boolean;
@@ -120,6 +124,8 @@ export type WizardProps = {
     size: WizardSize;
     style?: Object;
     title?: ReactNode;
+    isLoading?: boolean;
+    loadingSpinnerSize?: SpinnerSize;
 };
 
 /**
@@ -161,6 +167,7 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
         showNavigation: true,
         showStepTitle: true,
         showTitle: true,
+        isLoading: false,
         onComplete: () => {
             // by default do nothing in addition the the default handler
         },
@@ -177,12 +184,13 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
 
     // and this step's position in the list
     // progressionStatus determines the status of the wizard based on the current step properties
-    private static progressionStatus(currentStepID: number, steps: ReadonlyArray<WizardStep>): ProgressionStatus {
+    private progressionStatus(currentStepID: number, steps: ReadonlyArray<WizardStep>): ProgressionStatus {
+        const {showNext, showPrevious, showStepTitle} = this.props;
         if (steps.length > 0 && steps[currentStepID]) {
             const currentStep = steps[currentStepID];
             return {
-                previousStepExists: currentStepID !== steps[0].props.id,
-                nextStepExists: currentStepID !== steps[steps.length - 1].props.id,
+                previousStepExists: showPrevious !== undefined ? showPrevious : currentStepID !== steps[0].props.id,
+                nextStepExists: showNext !== undefined ? showNext : currentStepID !== steps[steps.length - 1].props.id,
                 currentStepIsCompleteAndValid: (currentStep.props.valid && currentStep.props.complete) || false,
                 currentStepTitle: currentStep.props.name,
             };
@@ -221,6 +229,8 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
             title,
             size,
             style,
+            isLoading,
+            loadingSpinnerSize,
         } = this.props;
 
         // initialize a bunch of class names
@@ -245,6 +255,8 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
                     Object.assign({}, child.props, {
                         currentStepID,
                         navigable,
+                        isLoading,
+                        loadingSpinnerSize,
                     }),
                 );
                 // subsequent iterations are navigable if all previous iterations are valid
@@ -261,7 +273,7 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
             nextStepExists,
             previousStepExists,
             // @ts-ignore // steps is actually of type ReadonlyArray<WizardStep> not ReadonlyArray<ReactElement<WizardStep>>
-        } = Wizard.progressionStatus(currentStepID, steps);
+        } = this.progressionStatus(currentStepID, steps);
 
         const navigationSteps = steps.map((step, index) => (
             // @ts-ignore // since step is of type WizardStep, name and id are ensured on WizardNavigationStep
@@ -269,6 +281,7 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
                 key={step.key || index}
                 currentStepID={currentStepID}
                 onSelectStep={onNavigateTo}
+                isLoading={isLoading}
                 {...step.props}
             />
         ));
@@ -350,6 +363,7 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
             previousText,
             dataqa,
             showCancel,
+            isLoading,
         } = this.props;
         return {
             cancelText,
@@ -363,6 +377,7 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
             previousText,
             dataqa,
             showCancel,
+            isLoading,
         };
     }
 }

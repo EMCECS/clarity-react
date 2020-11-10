@@ -10,20 +10,68 @@
 
 import React from "react";
 import {storiesOf} from "@storybook/react";
-import {Wizard, WizardSize, WizardStep} from ".";
+import Wizard, {WizardSize} from "./Wizard";
+import WizardStep, {WizardStepType} from "./WizardStep";
 import {State, Store} from "@sambego/storybook-state";
 import {Button} from "../forms/button";
 import {Input} from "../forms/input/Input";
 import {Select, SelectOption} from "../forms/select";
 import {WizardFooterProps} from "./WizardFooter";
 import {action} from "@storybook/addon-actions";
+import {SpinnerSize} from "../spinner/Spinner";
+
+let steps: any[] = [];
+
+// Function to create array of step data
+function buildStepData(numberOfSteps: number = 1) {
+    for (let i = 0; i < numberOfSteps; i++) {
+        steps.push({name: "page " + i, type: null});
+    }
+}
+
+// Function to create steps UI
+function buildStepsUI() {
+    const StepUI = steps.map((step, index) => {
+        return <WizardStep id={index} key={index} name={step.name} type={step.type} valid={true} complete={true} />;
+    });
+    return StepUI;
+}
+
+// Function to build steps for story
+function buildSteps(numberOfSteps: number = 1) {
+    buildStepData(numberOfSteps);
+    return buildStepsUI();
+}
+
+// Function to update steps array for story
+function updateSteps(index: number, action: string) {
+    if (action === "insert") {
+        // Insert new step
+        steps.splice(index, 0, {index: index, name: "page new", type: WizardStepType.SUB_STEP});
+    } else if (action === "remove") {
+        steps.splice(index, 1);
+    }
+    return buildStepsUI();
+}
 
 const store = new Store({
     open: false,
+    isLoading: false,
     activeWizard: "",
     basicInfoValid: true,
     basicInfoComplete: false,
     currentWizardStepID: 0,
+    steps: buildSteps(2),
+    addStep: (index: number, numberOfSteps: number = 1) =>
+        store.set({
+            open: true,
+            steps: updateSteps(index, "insert"),
+        }),
+    removeStep: (index: number, numberOfSteps: number = 1) =>
+        store.set({
+            open: true,
+            steps: updateSteps(index, "remove"),
+        }),
     handleToggleWizard: (size: string) =>
         store.set({
             open: true,
@@ -49,6 +97,26 @@ const store = new Store({
         store.set({
             open: false,
         }),
+    handleSyncComplete: (): void => {
+        action("complete with loading spinner") &&
+            store.set({
+                isLoading: true,
+            });
+
+        // enable wizard navigation and footer after 3 sec
+        setTimeout(function() {
+            store.set({
+                isLoading: false,
+            });
+        }, 3000);
+
+        // Add delay for story only
+        setTimeout(function() {
+            store.set({
+                open: false,
+            });
+        }, 5000);
+    },
     handleSelectStep: (selectedStepID: number): void => {
         action("selected step ", selectedStepID) &&
             store.set({
@@ -222,6 +290,136 @@ storiesOf("New Wizard", module)
                             id={0}
                             key={0}
                             name={"Page 1"}
+                            valid={state.basicInfoValid}
+                            complete={state.basicInfoValid}
+                        >
+                            <Input name="some-input" label="Some Input" onChange={state.handleValidate} />
+                        </WizardStep>
+                    </Wizard>
+                </React.Fragment>
+            )}
+        </State>
+    ))
+    .add("wizard with add or remove steps", _props => (
+        <State store={store}>
+            {state => (
+                <React.Fragment>
+                    <Button key={0} primary link onClick={() => state.handleToggleWizard(WizardSize.LARGE)}>
+                        OPEN WIZARD
+                    </Button>
+                    <Wizard
+                        currentStepID={state.currentWizardStepID}
+                        key={1}
+                        size={WizardSize.LARGE}
+                        show={state.open}
+                        title="Wizard with dynamic step"
+                        onClose={() => state.handleClose()}
+                        onNext={() => state.addStep(1)}
+                        onPrevious={() => state.handlePrevious()}
+                        onComplete={() => state.handleComplete()}
+                        onNavigateTo={state.handleSelectStep}
+                        customFooter={(props: WizardFooterProps) => (
+                            <Button primary link onClick={() => state.removeStep(state.currentWizardStepID)}>
+                                Delete Step
+                            </Button>
+                        )}
+                    >
+                        {state.steps}
+                    </Wizard>
+                </React.Fragment>
+            )}
+        </State>
+    ))
+    .add("wizard with single apply button", _props => (
+        <State store={store}>
+            {state => (
+                <React.Fragment>
+                    <Button key={0} primary link onClick={() => state.handleToggleWizard(WizardSize.LARGE)}>
+                        OPEN WIZARD
+                    </Button>
+                    <Wizard
+                        currentStepID={state.currentWizardStepID}
+                        key={1}
+                        size={WizardSize.LARGE}
+                        show={state.open}
+                        showPrevious={false}
+                        showNext={false}
+                        showComplete={true}
+                        showCancel={true}
+                        completeText={"Apply"}
+                        title="Wizard with single apply button"
+                        onClose={() => state.handleClose()}
+                        onComplete={() => state.handleComplete()}
+                        onNavigateTo={state.handleSelectStep}
+                    >
+                        <WizardStep
+                            id={0}
+                            key={0}
+                            name={"Page 1"}
+                            valid={state.basicInfoValid}
+                            complete={state.basicInfoValid}
+                        />
+                        <WizardStep
+                            id={1}
+                            key={1}
+                            name={"Page 2"}
+                            valid={state.basicInfoValid}
+                            complete={state.basicInfoValid}
+                        />
+                        <WizardStep
+                            id={2}
+                            key={2}
+                            name={"Page 3"}
+                            navigationTitle={"Click for page 3"}
+                            valid={state.basicInfoValid}
+                            complete={state.basicInfoValid}
+                        />
+                    </Wizard>
+                </React.Fragment>
+            )}
+        </State>
+    ))
+    .add("wizard with loading spinner", _props => (
+        <State store={store}>
+            {state => (
+                <React.Fragment>
+                    <Button key={0} primary link onClick={() => state.handleToggleWizard(WizardSize.LARGE)}>
+                        OPEN WIZARD
+                    </Button>
+                    <Wizard
+                        currentStepID={state.currentWizardStepID}
+                        key={1}
+                        size={WizardSize.LARGE}
+                        show={state.open}
+                        showCancel={true}
+                        completeText={"Apply"}
+                        title="Wizard with loading spinner on Apply"
+                        onNext={() => state.handleNext()}
+                        onPrevious={() => state.handlePrevious()}
+                        onClose={() => state.handleClose()}
+                        onComplete={() => state.handleSyncComplete()}
+                        onNavigateTo={state.handleSelectStep}
+                        isLoading={state.isLoading}
+                        loadingSpinnerSize={SpinnerSize.LARGE}
+                    >
+                        <WizardStep
+                            id={0}
+                            key={0}
+                            name={"Page 1"}
+                            valid={state.basicInfoValid}
+                            complete={state.basicInfoValid}
+                        />
+                        <WizardStep
+                            id={1}
+                            key={1}
+                            name={"Page 2"}
+                            valid={state.basicInfoValid}
+                            complete={state.basicInfoValid}
+                        />
+                        <WizardStep
+                            id={2}
+                            key={2}
+                            name={"Page 3"}
                             valid={state.basicInfoValid}
                             complete={state.basicInfoValid}
                         >

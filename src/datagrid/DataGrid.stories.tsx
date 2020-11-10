@@ -11,12 +11,12 @@
 import * as React from "react";
 import {storiesOf} from "@storybook/react";
 import {State, Store} from "@sambego/storybook-state";
+import {Icon} from "../icon";
 import {DataGrid, GridSelectionType, GridRowType, SortOrder, DataGridFilter, FilterType} from ".";
 import {
     normalColumns,
     normalRows,
     customRows,
-    noFooter,
     customFooter,
     defaultFooter,
     GridActions,
@@ -31,15 +31,17 @@ import {
     hideableColumns,
     hideShowColFooter,
     selectedRows,
-    getRowData,
+    alreadySelectedRows,
+    getSelectableRowsData,
+    paginationDetailsForAlreadySelectedRows,
 } from "./DataGridValues";
 import {CustomFilter} from "./CustomFilter";
 import {DataGridRow} from "./DataGrid";
 
 const store = new Store({
     selectedRows: selectedRows,
-    rows: paginationRows.slice(0, 5),
-    selectRowCallback: (row?: DataGridRow) => {
+    rows: alreadySelectedRows.slice(0, 5),
+    selectRowCallback: (row: DataGridRow) => {
         const rowID = row && row.rowData[0].cellData;
         const index = selectedRows.indexOf(rowID);
         if (row && row.isSelected) {
@@ -53,15 +55,23 @@ const store = new Store({
             selectedRows: selectedRows,
         });
     },
-    selectAllCallback: (allSelected?: boolean) => {
-        let selectedRows;
-        if (allSelected) {
-            selectedRows = [41512, 16166, 30574, 2459, 14262];
-        }
+    selectAllCallback: (allSelected: boolean, rows: DataGridRow[]) => {
+        rows!.forEach(row => {
+            const rowID = row.rowData[0].cellData;
+            const index = selectedRows.indexOf(rowID);
+
+            if (allSelected) {
+                index === -1 && selectedRows.push(rowID);
+            } else {
+                selectedRows.splice(index, 1);
+            }
+        });
+
         store.set({
-            selectedRows: allSelected ? selectedRows : [],
+            selectedRows: selectedRows,
         });
     },
+    paginationDetails: paginationDetailsForAlreadySelectedRows,
 });
 // Refrence to call dataGrid methods
 const datagridRef = React.createRef<DataGrid>();
@@ -84,26 +94,42 @@ storiesOf("DataGrid", module)
         </div>
     ))
     .add("Grid with multi select option and no footer", () => (
-        <div style={{width: "80%"}}>
+        <div style={{width: "80%", paddingLeft: "1rem"}}>
+            <br />
+            <span> {"Grid with all rows are selectable :"} </span>
+            <DataGrid columns={normalColumns} rows={normalRows} selectionType={GridSelectionType.MULTI} />
+            <br /> <br />
+            <span> {"Grid with some rows are selectable :"} </span>
             <DataGrid
                 columns={normalColumns}
-                rows={normalRows}
+                rows={getSelectableRowsData()}
                 selectionType={GridSelectionType.MULTI}
-                footer={noFooter}
+                footer={defaultFooter}
+                id="multi-select-datagrid"
             />
         </div>
     ))
     .add("Grid with single select option", () => (
-        <div style={{width: "80%"}}>
+        <div style={{width: "80%", paddingLeft: "1rem"}}>
+            <br />
+            <span> {"Grid with all rows are selectable :"} </span>
             <DataGrid
                 columns={normalColumns}
                 rows={normalRows}
                 selectionType={GridSelectionType.SINGLE}
                 footer={defaultFooter}
             />
+            <br /> <br />
+            <span> {"Grid with some rows are selectable :"} </span>
+            <DataGrid
+                columns={normalColumns}
+                rows={getSelectableRowsData()}
+                selectionType={GridSelectionType.SINGLE}
+                footer={defaultFooter}
+                id="single-select-datagrid"
+            />
         </div>
     ))
-
     .add("Grid with batch action", () => (
         <div style={{width: "80%"}}>
             <GridActions ref={datagridActionsRef} />
@@ -287,7 +313,7 @@ storiesOf("DataGrid", module)
             />
         </div>
     ))
-    .add("Grid with HIde and Show Column", () => (
+    .add("Grid with Hide and Show Column", () => (
         <div style={{width: "80%", paddingTop: "5%"}}>
             <DataGrid columns={hideableColumns} rows={normalRows} footer={hideShowColFooter} />
         </div>
@@ -299,8 +325,8 @@ storiesOf("DataGrid", module)
                     <DataGrid
                         itemText={"Users"}
                         columns={normalColumns}
-                        rows={paginationRows.slice(0, 5)}
-                        pagination={paginationDetails}
+                        rows={state.rows}
+                        pagination={state.paginationDetails}
                         selectionType={GridSelectionType.MULTI}
                         selectedRowCount={state.selectedRows.length}
                         onRowSelect={state.selectRowCallback}
@@ -319,7 +345,11 @@ storiesOf("DataGrid", module)
                 columns={[
                     {
                         columnName: "User ID",
-                        style: {width: "20%"},
+                        displayName: (
+                            <div>
+                                <Icon shape="user" className="is-solid" /> {"User ID"}
+                            </div>
+                        ),
                         isVisible: false,
                         sort: {defaultSortOrder: SortOrder.ASC, sortFunction: sortFunction},
                         filter: (
@@ -332,7 +362,11 @@ storiesOf("DataGrid", module)
                     },
                     {
                         columnName: "Name",
-                        style: {width: "20%"},
+                        displayName: (
+                            <div>
+                                <Icon shape="administrator" className="is-solid" /> {"Name"}
+                            </div>
+                        ),
                         sort: {defaultSortOrder: SortOrder.NONE, sortFunction: sortFunction},
                         filter: (
                             <DataGridFilter
@@ -343,7 +377,14 @@ storiesOf("DataGrid", module)
                         ),
                     },
                     {columnName: "Creation Date", style: {width: "20%"}},
-                    {columnName: "Favorite color", style: {width: "20%"}},
+                    {
+                        columnName: "Favorite color",
+                        displayName: (
+                            <div>
+                                <Icon shape="color-palette" className="is-solid" /> {"Favorite color"}{" "}
+                            </div>
+                        ),
+                    },
                 ]}
                 rows={paginationRows.slice(0, 5)}
                 pagination={paginationDetails}

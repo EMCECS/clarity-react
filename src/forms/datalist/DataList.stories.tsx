@@ -63,4 +63,18 @@ storiesOf("DataList", module)
                 <DataListOption value="Item3" />
             </DataList>
         </div>
+    ))
+    .add("With defaultSelected Value", () => (
+        <div>
+            <DataList
+                placeHolder="No label"
+                helperText="Select any option or create one"
+                label="Select Item"
+                defaultValue="Item1"
+            >
+                <DataListOption value="Item1" />
+                <DataListOption value="Item2" />
+                <DataListOption value="Item3" />
+            </DataList>
+        </div>
     ));

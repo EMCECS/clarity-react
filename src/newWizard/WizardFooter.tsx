@@ -11,13 +11,13 @@
 import React from "react";
 import {ClassNames} from "./ClassNames";
 import {Button, ButtonState} from "../forms/button";
+import {Spinner, SpinnerSize, SpinnerType} from "../spinner/Spinner";
 import {
     dataqa_wizard_btn_cancel,
     dataqa_wizard_btn_finish,
     dataqa_wizard_btn_next,
     dataqa_wizard_btn_previous,
 } from "./qualityFields";
-import {WizardState} from "./Wizard";
 
 export type InheritedWizardFooterProps = {
     cancelText?: string;
@@ -31,6 +31,7 @@ export type InheritedWizardFooterProps = {
     previousText?: string;
     showCancel?: boolean;
     dataqa?: string;
+    isLoading?: boolean;
 };
 
 export interface WizardFooterProps extends InheritedWizardFooterProps {
@@ -71,7 +72,9 @@ export default class WizardFooter extends React.PureComponent<WizardFooterProps>
             showComplete,
             showNext,
             showPrevious,
+            isLoading,
         } = this.props;
+
         return (
             <div className={ClassNames.WIZARD_FOOTER}>
                 <div className={ClassNames.WIZARD_FOOTER_BUTTON}>
@@ -85,6 +88,7 @@ export default class WizardFooter extends React.PureComponent<WizardFooterProps>
                             className={cancelClassName}
                             dataqa={dataqa + dataqa_wizard_btn_cancel}
                             onClick={onClose}
+                            disabled={isLoading}
                         >
                             {cancelText + " "}
                         </Button>
@@ -95,6 +99,7 @@ export default class WizardFooter extends React.PureComponent<WizardFooterProps>
                             className={previousClassName}
                             dataqa={dataqa + dataqa_wizard_btn_previous}
                             onClick={onPrevious}
+                            disabled={isLoading}
                         >
                             {previousText + " "}
                         </Button>
@@ -104,7 +109,7 @@ export default class WizardFooter extends React.PureComponent<WizardFooterProps>
                             key={nextText}
                             className={nextClassName}
                             primary
-                            disabled={disableNext}
+                            disabled={isLoading || disableNext}
                             dataqa={dataqa + dataqa_wizard_btn_next}
                             onClick={onNext}
                         >
@@ -116,11 +121,17 @@ export default class WizardFooter extends React.PureComponent<WizardFooterProps>
                             key={completeText}
                             className={completeClassName}
                             state={ButtonState.SUCCESS}
-                            disabled={disableComplete}
+                            disabled={isLoading || disableComplete}
                             dataqa={dataqa + dataqa_wizard_btn_finish}
                             onClick={onComplete}
                         >
-                            {completeText}
+                            {isLoading ? (
+                                <Spinner type={SpinnerType.INLINE} size={SpinnerSize.SMALL}>
+                                    {completeText}
+                                </Spinner>
+                            ) : (
+                                completeText
+                            )}
                         </Button>
                     )}
                 </div>

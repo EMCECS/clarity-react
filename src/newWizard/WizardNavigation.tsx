@@ -12,7 +12,7 @@ import React, {ReactNode} from "react";
 import {classNames} from "../utils";
 import {ClassNames, Styles} from "./ClassNames";
 import {VerticalNav} from "../layout/vertical-nav";
-import {WizardStepProps} from "./WizardStep";
+import {WizardStepProps, WizardStepType} from "./WizardStep";
 import {Button} from "../forms/button";
 
 type WizardNavigationProps = {
@@ -47,11 +47,15 @@ export class WizardNavigationStep extends React.PureComponent<WizardStepProps> {
     };
 
     render() {
-        const {name, navigationChildren, navigationIcon, navigationTitle, navigable} = this.props;
+        const {name, navigationChildren, navigationIcon, navigationTitle, navigable, type, isLoading} = this.props;
+
         return (
-            <div className={this.navigationClasses()}>
+            <div
+                className={this.navigationClasses()}
+                style={type && type === WizardStepType.SUB_STEP ? Styles.WIZARD_SUB_STEP_NAV : undefined}
+            >
                 <Button
-                    disabled={!navigable}
+                    disabled={isLoading || !navigable}
                     link={true}
                     className="clr-wizard-stepnav-link"
                     onClick={this.handleNavigationClick}

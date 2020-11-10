@@ -27,6 +27,7 @@ type InputProps = {
     onBlur?: (evt: React.FocusEvent<HTMLInputElement>) => void;
     onKeyDown?: (evt: React.KeyboardEvent<HTMLInputElement>) => void;
     onKeyPress?: (evt: React.KeyboardEvent<HTMLInputElement>) => void;
+    title?: string;
     placeholder?: string;
     name: string;
     id?: string;
@@ -36,6 +37,8 @@ type InputProps = {
     min?: number;
     max?: number;
     step?: any;
+    spellCheck?: boolean; // specifies whether the element is to have its spelling and grammar checked or not
+    pattern?: string; //specifies a regular expression that element's value is checked against
     required?: boolean; // auto-check on blur if there's a value
     error?: boolean; // force error state of component
     dataqa?: string; //quality engineering testing field
@@ -86,6 +89,7 @@ export class Input extends React.PureComponent<InputProps> {
             required,
             onBlur,
             onKeyPress,
+            title,
             dataqa,
             min,
             max,
@@ -93,6 +97,8 @@ export class Input extends React.PureComponent<InputProps> {
             error,
             errorHelperText,
             helperText,
+            spellCheck,
+            pattern,
         } = this.props;
         return (
             <React.Fragment>
@@ -110,12 +116,15 @@ export class Input extends React.PureComponent<InputProps> {
                     onChange={this.handleChange}
                     onKeyDown={this.handleKeyDown}
                     onKeyPress={onKeyPress}
+                    title={title}
                     onBlur={onBlur}
                     style={style}
                     required={required}
                     min={min}
                     max={max}
                     step={step}
+                    spellCheck={spellCheck}
+                    pattern={pattern}
                 />
                 {children}
                 <Icon className="clr-validate-icon" shape="exclamation-circle" />

@@ -25,6 +25,8 @@ type PasswordProps = {
     label?: string;
     onChange?: (evt: React.ChangeEvent<HTMLInputElement>) => void;
     onBlur?: (evt: React.FocusEvent<HTMLInputElement>) => void;
+    onKeyPress?: (evt: React.KeyboardEvent<HTMLInputElement>) => void;
+    title?: string;
     name: string;
     id?: string;
     value?: string;
@@ -34,6 +36,7 @@ type PasswordProps = {
     required?: boolean; // auto-check on blur if there's a value
     error?: boolean; // force error state of component
     unmask?: boolean; // if true renders eye icon to hide/show or mask/unmask password
+    pattern?: string; // specifies a regular expression that element's value is checked against
     dataqa?: string; //quality engineering testing field
 };
 
@@ -84,6 +87,8 @@ export class Password extends React.PureComponent<PasswordProps, PasswordState> 
             label,
             value,
             defaultValue,
+            onKeyPress,
+            title,
             errorHelperText,
             error,
             style,
@@ -94,6 +99,7 @@ export class Password extends React.PureComponent<PasswordProps, PasswordState> 
             minPasswordLength,
             placeholder,
             unmask,
+            pattern,
             dataqa,
         } = this.props;
 
@@ -118,11 +124,14 @@ export class Password extends React.PureComponent<PasswordProps, PasswordState> 
                                     value={value}
                                     placeholder={placeholder}
                                     required={required}
+                                    onKeyPress={onKeyPress}
+                                    title={title}
                                     type={type}
                                     disabled={disabled}
                                     style={{width: "95%"}}
                                     className="clr-input ng-pristine ng-invalid ng-touched"
                                     id={id}
+                                    pattern={pattern}
                                     data-qa={dataqa}
                                     onChange={this.handleChange}
                                 />
