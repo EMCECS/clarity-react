@@ -952,9 +952,11 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
             <div className={ClassNames.DATAGRID_HEADER} role="rowgroup">
                 <div className={ClassNames.DATAGRID_ROW} role="row">
                     <div className={ClassNames.DATAGRID_ROW_MASTER}>
-                        {selectionType && this.buildSelectColumn()}
-                        <div className={ClassNames.DATAGRID_ROW_SCROLLABLE}>
+                        <div className={ClassNames.DATAGRID_ROW_STICKY}>
+                            {selectionType && this.buildSelectColumn()}
                             {rowType && rowType === GridRowType.EXPANDABLE && this.buildEmptyColumn()}
+                        </div>
+                        <div className={ClassNames.DATAGRID_ROW_SCROLLABLE}>
                             {allColumns &&
                                 allColumns.map((column: DataGridColumn, index: number) => {
                                     return column.isVisible ? this.buildDataGridColumn(column, index) : undefined;
@@ -1335,8 +1337,8 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // render datagrid
     render() {
-        const {className, style, rowType, footer, dataqa} = this.props;
-        const isLoading = this.props.isLoading || this.state.isLoading;
+        const {className, style, rowType, footer, dataqa, isLoading} = this.props;
+        const isDataLoading: boolean = isLoading !== undefined ? isLoading : this.state.isLoading;
 
         return (
             <div
@@ -1355,7 +1357,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                         <div className={ClassNames.DATAGRID_CAL_TABLE}>
                             <div className={ClassNames.DATAGRID_CAL_HEADER} />
                         </div>
-                        {isLoading && this.buildDataGridSpinner()}
+                        {isDataLoading && this.buildDataGridSpinner()}
                     </div>
                 </div>
             </div>
