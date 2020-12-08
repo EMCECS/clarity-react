@@ -154,7 +154,7 @@ export class HideShowColumns extends React.PureComponent<HideShowColumnsProps, H
     // function to build column list
     private buildColumnList(column: DataGridColumn, index: number): React.ReactElement {
         return (
-            <li>
+            <li key={index}>
                 <div className={ClassNames.CLR_CHECKBOX_WRAPPER} key={"selectCol_" + index}>
                     <CheckBox
                         id={column.columnName}
