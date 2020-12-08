@@ -94,6 +94,19 @@ export class ClassNames {
     public static CLR_SELECT: string = "ng-untouched ng-pristine ng-valid";
     public static CLR_RADIO_WRAPPER: string = "clr-radio-wrapper";
     public static STRICT_WIDTH_CLASS = "datagrid-fixed-width";
+    public static DATAGRID_DETAIL_OPEN = "datagrid-detail-open";
+    public static DATAGRID_DETAIL_PANE = "datagrid-detail-pane";
+    public static DATAGRID_DETAIL_PANE_CONTENT = "datagrid-detail-pane-content";
+    public static DATAGRID_DETAIL_HEADER = "datagrid-detail-header";
+    public static DATAGRID_DETAIL_HEADER_TITLE = "datagrid-detail-header-title";
+    public static DATAGRID_DETAIL_PANE_CLOSE = "datagrid-detail-pane-close";
+    public static DATAGRID_DETAIL_BODY = "datagrid-detail-body";
+    public static CLR_DG_DETAIL_BODY_WRAPPER = "clr-dg-detail-body-wrapper";
+    public static DATAGRID_ROW_DETAIL_OPEN = "datagrid-row-detail-open";
+    public static DATAGRID_DETAIL_CARET = "datagrid-detail-caret";
+    public static DATAGRID_DETAIL_CARET_BUTTON = "datagrid-detail-caret-button";
+    public static DATAGRID_DETAIL_CARET_ICON = "datagrid-detail-caret-icon";
+    public static IS_OPEN = "is-open";
 }
 
 export class Styles {
