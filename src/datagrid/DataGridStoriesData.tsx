@@ -230,6 +230,69 @@ export const expandableRows: DataGridRow[] = [
     },
 ];
 
+const DetailPane: React.ReactElement = (
+    <React.Fragment>
+        <b>Additional Details</b>
+        <table className="table">
+            <thead>
+                <tr>
+                    <th>Property</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>ID</td>
+                    <td>38808</td>
+                </tr>
+                <tr>
+                    <td>Wins</td>
+                    <td>69</td>
+                </tr>
+            </tbody>
+        </table>
+    </React.Fragment>
+);
+
+// Rows with detail pane
+export function getRowsWithDetailPane() {
+    let rowValues: DataGridRow[] = [];
+    cellData.forEach(function(element: any) {
+        const row: DataGridRow = {
+            rowData: [
+                {
+                    columnName: "User ID",
+                    cellData: element[0],
+                },
+                {
+                    columnName: "Name",
+                    cellData: element[1],
+                },
+                {
+                    columnName: "Creation Date",
+                    cellData: element[2],
+                },
+                {
+                    columnName: "Favorite color",
+                    cellData: element[3],
+                },
+            ],
+            detailPaneData: {
+                detailPaneContent: DetailPane,
+                title: element[1],
+            },
+            expandableRowData: {
+                expandableContent: expandableContent,
+            },
+        };
+        rowValues.push(row);
+    });
+    return rowValues;
+}
+
+export const rowsWithDetailPane = getRowsWithDetailPane();
+
+// Function to get row data
 export function getRowData() {
     let rowValues: DataGridRow[] = [];
     cellData.forEach(function(element: any) {
@@ -453,6 +516,7 @@ export const getPageData = (pageIndex: number, pageSize: number): Promise<DataGr
         }, 2000);
     });
 };
+
 // Function to get data for page based on pagenumber
 export const getPageDataForSelectedRows = (pageIndex: number, pageSize: number): Promise<DataGridRow[]> => {
     return new Promise((resolve, reject) => {
@@ -474,6 +538,29 @@ export const getPageDataForSelectedRows = (pageIndex: number, pageSize: number):
         }, 2000);
     });
 };
+
+// Function to get data for page based on pagenumber
+export const getPageDataForDetailPane = (pageIndex: number, pageSize: number): Promise<DataGridRow[]> => {
+    return new Promise((resolve, reject) => {
+        let rows: DataGridRow[] = [];
+        if (pageSize === 5) {
+            if (pageIndex === 2) {
+                rows = rowsWithDetailPane.slice(5, 10);
+            }
+            if (pageIndex === 1) {
+                rows = rowsWithDetailPane.slice(0, 5);
+            }
+        } else if (pageSize === 10) {
+            rows = rowsWithDetailPane;
+        }
+
+        // Purposefully added dealy here to see loading spinner
+        setTimeout(function() {
+            resolve(rows);
+        }, 2000);
+    });
+};
+
 export const paginationDetails = {
     totalItems: paginationRows.length,
     getPageData: getPageData,
@@ -492,6 +579,13 @@ export const paginationDetailsWithCompactFooter = {
 export const paginationDetailsForAlreadySelectedRows = {
     totalItems: alreadySelectedRows.length,
     getPageData: getPageDataForSelectedRows,
+    pageSize: 5,
+    pageSizes: [5, 10],
+};
+
+export const paginationDetailsForDetailsPane = {
+    totalItems: rowsWithDetailPane.length,
+    getPageData: getPageDataForDetailPane,
     pageSize: 5,
     pageSizes: [5, 10],
 };
