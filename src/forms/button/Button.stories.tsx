@@ -12,6 +12,7 @@ import * as React from "react";
 import {storiesOf} from "@storybook/react";
 import {action} from "@storybook/addon-actions";
 import {Button, ButtonSize, ButtonState} from ".";
+import {Badge, BadgeColor} from "../../emphasis/badges";
 
 storiesOf("Button", module)
     .add("Simple buttons", () => (
@@ -139,6 +140,34 @@ storiesOf("Button", module)
             </Button>
             <Button key="basic" defaultBtn={false} onClick={action("basic click")}>
                 BASIC
+            </Button>
+        </div>
+    ))
+    .add("Buttons with badge", () => (
+        <div>
+            <Button key="basic" onClick={action("basic click")}>
+                BASIC
+                <Badge color={BadgeColor.BLUE}> 1 </Badge>
+            </Button>
+            <Button key="basic-info" state={ButtonState.INFO} onClick={action("basic-info click")}>
+                INFO
+                <Badge color={BadgeColor.BLUE}> 2 </Badge>
+            </Button>
+            <Button key="basic-warning" state={ButtonState.WARNING} onClick={action("basic-warning click")}>
+                WARNING
+                <Badge> 3 </Badge>
+            </Button>
+            <Button key="basic-success" state={ButtonState.SUCCESS} onClick={action("basic-success click")}>
+                SUCCESS
+                <Badge> 4 </Badge>
+            </Button>
+            <Button key="basic-danger" state={ButtonState.DANGER} onClick={action("basic-danger click")}>
+                DANGER
+                <Badge> 5 </Badge>
+            </Button>
+            <Button key="basic-disabled" disabled={true} onClick={action("basic-disabled click")}>
+                DISABLED
+                <Badge> 6 </Badge>
             </Button>
         </div>
     ));
