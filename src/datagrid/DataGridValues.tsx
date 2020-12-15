@@ -137,7 +137,6 @@ export const customRowsWithPassword = [
                             minPasswordLength={8}
                             readOnly={true}
                             style={{border: "none"}}
-                            formStyle={{marginTop: "0rem"}}
                         />
                     </div>
                 ),
