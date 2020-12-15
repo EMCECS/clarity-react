@@ -40,7 +40,6 @@ type PasswordProps = {
     pattern?: string; // specifies a regular expression that element's value is checked against
     dataqa?: string; //quality engineering testing field
     readOnly?: boolean; //specifies if password is readonly
-    formStyle?: any; //styling for form
 };
 
 type PasswordState = {
@@ -106,7 +105,6 @@ export class Password extends React.PureComponent<PasswordProps, PasswordState> 
             pattern,
             dataqa,
             readOnly,
-            formStyle,
         } = this.props;
 
         const {show, type} = this.state;
@@ -117,7 +115,7 @@ export class Password extends React.PureComponent<PasswordProps, PasswordState> 
 
         return (
             <div className="clr-form clr-form-horizontal ng-pristine ng-valid ng-touched">
-                <div className={utils.classNames(["clr-form-control", label && "clr-row"])} style={formStyle}>
+                <div className={utils.classNames(["clr-form-control", label && "clr-row"])}>
                     {label && Password.renderLabel(label)}
                     <div className={utils.classNames(classNames)} style={{width: "100%"}}>
                         <div className="clr-input-wrapper">
