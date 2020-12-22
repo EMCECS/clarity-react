@@ -466,7 +466,7 @@ export const pageFilterFunction = (
                 totalItems: paginationRows.length,
             };
         } else {
-            const newRows = filterRows(rows, columnValue);
+            const newRows = filterRows(rows, [columnValue]);
             result = {
                 rows: newRows,
                 totalItems: newRows.length,
