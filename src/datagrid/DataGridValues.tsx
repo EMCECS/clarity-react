@@ -268,14 +268,16 @@ export const hideShowColFooter = {
  * Data for Filtering
  */
 
-function filterRows(rows: DataGridRow[], columnValue: string) {
+function filterRows(rows: DataGridRow[], columnValues: string[]) {
     const newRows = rows.filter(row => {
         let matchFound = false;
         for (const index in row.rowData) {
             const content = String(row.rowData[index].cellData);
-            if (content.indexOf(columnValue) !== -1) {
-                matchFound = true;
-            }
+            columnValues.forEach(columnValue => {
+                if (content.indexOf(columnValue) !== -1) {
+                    matchFound = true;
+                }
+            });
         }
         if (matchFound) {
             return row;
@@ -295,13 +297,18 @@ export const filterFunction = (
             rows: [],
             totalItems: 0,
         };
-        if (columnValue === "" || columnValue === undefined) {
+
+        if (
+            columnValue === "" ||
+            columnValue === undefined ||
+            (Array.isArray(columnValue) && columnValue.length === 0)
+        ) {
             result = {
                 rows: normalRows,
                 totalItems: normalRows.length,
             };
         } else {
-            const newRows = filterRows(rows, columnValue);
+            const newRows = filterRows(normalRows, Array.isArray(columnValue) ? columnValue : [columnValue]);
             result = {
                 rows: newRows,
                 totalItems: newRows.length,
@@ -459,7 +466,7 @@ export const pageFilterFunction = (
                 totalItems: paginationRows.length,
             };
         } else {
-            const newRows = filterRows(rows, columnValue);
+            const newRows = filterRows(rows, [columnValue]);
             result = {
                 rows: newRows,
                 totalItems: newRows.length,
