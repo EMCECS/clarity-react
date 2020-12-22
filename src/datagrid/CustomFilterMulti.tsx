@@ -20,6 +20,9 @@ type CustomFilterMultiState = {
     values: string[];
 };
 
+// constant for color options
+const COLOR_OPTIONS: string[] = ["Orange", "Blue"];
+
 /**
  * General component description :
  * CustomFilterMulti :
@@ -60,16 +63,15 @@ export class CustomFilterMulti extends React.PureComponent<DataGridCustomFilterP
 
         return (
             <div style={{width: "130px", padding: "1em"}}>
-                <CheckBox
-                    label="Orange"
-                    onClick={evt => this.handleFilterChange(evt, "Orange")}
-                    checked={values.includes("Orange")}
-                />
-                <CheckBox
-                    label="Blue"
-                    onClick={evt => this.handleFilterChange(evt, "Blue")}
-                    checked={values.includes("Blue")}
-                />
+                {COLOR_OPTIONS.map((color: string) => {
+                    return (
+                        <CheckBox
+                            label={color}
+                            onClick={evt => this.handleFilterChange(evt, color)}
+                            checked={values.includes(color)}
+                        />
+                    );
+                })}
             </div>
         );
     }
