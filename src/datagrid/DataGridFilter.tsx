@@ -260,7 +260,7 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
                 ref={this.refParent}
                 className={classNames([ClassNames.CLR_FILTER])}
                 style={{position: "relative"}}
-                onBlur={() => isOpen && this.toggle}
+                onBlur={() => isOpen && this.toggle()}
             >
                 <Button
                     defaultBtn={false}
