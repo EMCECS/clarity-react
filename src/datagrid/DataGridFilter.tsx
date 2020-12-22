@@ -256,12 +256,7 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
         ]);
 
         return (
-            <div
-                ref={this.refParent}
-                className={classNames([ClassNames.CLR_FILTER])}
-                style={{position: "relative"}}
-                onBlur={() => isOpen && this.toggle()}
-            >
+            <div ref={this.refParent} className={classNames([ClassNames.CLR_FILTER])} style={{position: "relative"}}>
                 <Button
                     defaultBtn={false}
                     className={FilterBtnClasses}
