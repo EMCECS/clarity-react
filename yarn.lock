@@ -1806,15 +1806,15 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@clr/icons@4.0.7":
-  version "4.0.7"
-  resolved "https://registry.yarnpkg.com/@clr/icons/-/icons-4.0.7.tgz#03690adb5faf9dfe034b69b126b6d3295e95ef29"
-  integrity sha512-FCrPk3OWSSgCtYcGKpNAlseimr9dZjJzJ9Bq28y/we3G4Tz05ckodBSpLx9OLr8K3veA6hm8pYGljahqqjXd1Q==
+"@clr/icons@4.0.8":
+  version "4.0.8"
+  resolved "https://registry.yarnpkg.com/@clr/icons/-/icons-4.0.8.tgz#3ca645ff7eaeb25db6f5cd35ccf55f06f92c4c28"
+  integrity sha512-zrr47GgmK+AhM6yHG1GwXn8rsqpdnJVtr6NaJP8CMDfpwq+GvJY0JB8XNPE/d/Ujg8/RQeKwVYzsqmUltBSzoQ==
 
-"@clr/ui@4.0.7":
-  version "4.0.7"
-  resolved "https://registry.yarnpkg.com/@clr/ui/-/ui-4.0.7.tgz#695002bea47badc949c42f77790f9e323a81ae50"
-  integrity sha512-YbwtuMr//Ep3pqnJAVuVRX7frP8aIVyLXWO+U+plSCCuLcvxwBXeafBG80jkU7+asCjEd3hdvfzJy/TQuLcE8g==
+"@clr/ui@4.0.8":
+  version "4.0.8"
+  resolved "https://registry.yarnpkg.com/@clr/ui/-/ui-4.0.8.tgz#1d0963090ce3389fda6483f33ec9cf3c68c1506d"
+  integrity sha512-0nAQ+x4ozG7ErW7Oa2OLrS9AkSyc9fZG6PWxpJoyVRTuB38fF3nORWvAeabHq9OLus3VhRO+yzbJCjxIPFHjRg==
 
 "@cnakazawa/watch@^1.0.3":
   version "1.0.3"
