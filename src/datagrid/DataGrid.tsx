@@ -1225,6 +1225,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         );
     }
 
+    // Function to build cells of single row
     private buildRowCells(row: DataGridRow, isExpandableRow: boolean, isRowWithDetailPane: boolean) {
         const {rowData} = row;
         const {selectionType} = this.props;
@@ -1282,6 +1283,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         );
     }
 
+    // Function to build detail pane DOM for row
     private buildDetailPaneForRow() {
         const row: DataGridRow | undefined = this.getRowDataWithOpenDetailPane();
         if (row) {
@@ -1299,7 +1301,6 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                 <React.Fragment>
                     {showDetailPane && (
                         <div
-                            _ngcontent-byx-c249=""
                             className={classNames([
                                 ClassNames.DATAGRID_DETAIL_PANE,
                                 ClassNames.DATAGRID_NG_STAR_INSERTED,
@@ -1324,7 +1325,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                                 tabIndex={-1}
                             >
                                 <div className={ClassNames.CLR_SR_ONLY} />
-                                <div _ngcontent-byx-c249="" className={ClassNames.DATAGRID_DETAIL_HEADER}>
+                                <div className={ClassNames.DATAGRID_DETAIL_HEADER}>
                                     <div
                                         className={ClassNames.DATAGRID_DETAIL_HEADER_TITLE}
                                         id={`clr-id-${rowID}-title`}
@@ -1341,7 +1342,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                                     </div>
                                 </div>
                                 {/* close header*/}
-                                <div ngcontent-byx-c249="" className={ClassNames.DATAGRID_DETAIL_BODY}>
+                                <div className={ClassNames.DATAGRID_DETAIL_BODY}>
                                     <div className={ClassNames.CLR_DG_DETAIL_BODY_WRAPPER}> {detailPaneContent} </div>
                                 </div>
                                 {/* close body */}
