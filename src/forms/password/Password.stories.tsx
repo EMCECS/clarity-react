@@ -65,5 +65,5 @@ storiesOf("Password", module)
         />
     ))
     .add("Password box with read-only value", () => (
-        <Password name="Password" value="Georgia-pass" readOnly={true} style={{border: "none", width: "6%"}} />
+        <Password name="Password" value="Georgia-pass" readOnly={true} style={{border: "none"}} />
     ));
