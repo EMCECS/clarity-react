@@ -15,12 +15,6 @@ import {Button} from "../forms/button";
 import {DataGridRow} from "./DataGrid";
 
 /**
- * General component description :
- * DataGridFilter :
- * Render filter box for datagrid
- */
-
-/**
  * Props for DataGridFilter :
  * @param {style} CSS style
  * @param {className} CSS classnames
@@ -29,11 +23,6 @@ import {DataGridRow} from "./DataGrid";
  * @param {placeholder} placeholder for string filter input
  * @param {onFilter} Custom filter logic
  * @param {filterType} Type of filter string or custom
- * @param {customFilter} custom Filter component
- * In case of Custom filter component: the custom filter component owner needs to take care of following things.
- * 1. Custom filter component should preseve filter value inside state of component and pass it to DataGridFilter
- * 2. Custom filter component should implement its onChange event handler.
- * 3. Custom filter's onChange event handler should call 'updateFilter' method of DataGridFilter.
  */
 export type DataGridFilterProps = {
     style?: any;
@@ -43,7 +32,6 @@ export type DataGridFilterProps = {
     placeholder?: string;
     onFilter: (rows: DataGridRow[], columnValue: any, columnName: string) => Promise<DataGridFilterResult>;
     filterType?: FilterType;
-    customFilter?: React.ReactNode;
 };
 
 /**
@@ -76,10 +64,26 @@ type DataGridFilterState = {
     transformVal: string;
 };
 
+/**
+ * Props for CustomFilter :
+ * @param {OnChange} function to call on change of filter value
+ * @param {filterValue} value to be filter
+ */
+export type DataGridCustomFilterProps = {
+    onChange?: Function;
+    filterValue?: any;
+};
+
+/**
+ * General component description :
+ * DataGridFilter :
+ * Render filter box for datagrid
+ */
 export class DataGridFilter extends React.PureComponent<DataGridFilterProps, DataGridFilterState> {
     private refParent = React.createRef<HTMLDivElement>();
     private refChild = React.createRef<HTMLDivElement>();
     private filterValue: any;
+    private isFiltered: boolean;
 
     static defaultProps = {
         filterType: FilterType.STR,
@@ -97,6 +101,7 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
     constructor(props: DataGridFilterProps) {
         super(props);
         this.filterValue = undefined;
+        this.isFiltered = false;
     }
 
     componentWillMount() {
@@ -122,19 +127,18 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
         }
     }
 
-    getFilterValue = () => {
-        return this.filterValue;
-    };
-
     updateFilter = (value: any) => {
         const {columnName, datagridRef, onFilter} = this.props;
         datagridRef.current!.showLoader();
 
         // get latest data from grid
+        // TODO: unsued code keeping this for backword compatibility
+        // Remove rows parameter from onFilter() in future
         const rows = datagridRef.current!.getAllRows();
 
         if (onFilter && datagridRef) {
             this.filterValue = value;
+            this.isFiltered = String(value).length !== 0;
 
             onFilter(rows, value, columnName).then(data => {
                 // Update datagrid rows
@@ -173,7 +177,7 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
         }
     };
 
-    private handleDocumentClick = (evt: Event) => {
+    private handleDocumentClick = (evt: React.MouseEvent<HTMLElement>) => {
         if (this.state.isOpen) {
             const target = (evt.target as any) as HTMLElement;
             const el = this.refChild.current;
@@ -188,13 +192,18 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
     private openFilter(): React.ReactElement {
         const {filterValue} = this;
         const {transformVal} = this.state;
-        const {style, className, filterType, customFilter, placeholder, columnName} = this.props;
+        const {style, className, filterType, placeholder, columnName, children} = this.props;
+
+        const childrenWithProps = React.Children.map(children, child => {
+            // checking isValidElement is the safe way and avoids a typescript error too
+            if (React.isValidElement(child)) {
+                return React.cloneElement(child, {onChange: this.updateFilter, filterValue: filterValue});
+            }
+            return child;
+        });
 
         return (
             <div>
-                <span className={ClassNames.OFFSCREEN_FOCUS_REBOUNDER} />
-                <span className={ClassNames.OFFSCREEN_FOCUS_REBOUNDER} />
-                <span className={ClassNames.OFFSCREEN_FOCUS_REBOUNDER} />
                 <span className={ClassNames.OFFSCREEN_FOCUS_REBOUNDER} />
                 <div
                     ref={this.refChild}
@@ -231,7 +240,7 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
                             }}
                         />
                     ) : (
-                        filterType === FilterType.CUSTOM && customFilter && customFilter
+                        filterType === FilterType.CUSTOM && childrenWithProps
                     )}
                 </div>
                 <span className={ClassNames.OFFSCREEN_FOCUS_REBOUNDER} />
@@ -241,21 +250,20 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
 
     render() {
         const {isOpen} = this.state;
-        const {filterValue} = this;
+        const {isFiltered} = this;
         const FilterBtnClasses = classNames([
             ClassNames.DATAGRID_FILTER_BUTTON,
-            filterValue && ClassNames.DATAGRID_FILTERED,
+            isFiltered && ClassNames.DATAGRID_FILTERED,
         ]);
 
         return (
             <div ref={this.refParent} className={classNames([ClassNames.CLR_FILTER])} style={{position: "relative"}}>
                 <Button
                     defaultBtn={false}
-                    key="filterBtn"
                     className={FilterBtnClasses}
                     onClick={this.handleButtonClick}
                     icon={{
-                        shape: filterValue ? "filter-grid-circle" : "filter-grid",
+                        shape: isFiltered ? "filter-grid-circle" : "filter-grid",
                         className: ClassNames.ICON_SOLID,
                     }}
                 />
