@@ -132,7 +132,7 @@ export class Password extends React.PureComponent<PasswordProps, PasswordState> 
                                     title={title}
                                     type={type}
                                     disabled={disabled}
-                                    style={{width: value ? (value.length + 1) * 8 + "px" : "95%"}}
+                                    style={{width: "95%"}}
                                     className="clr-input ng-pristine ng-invalid ng-touched"
                                     id={id}
                                     pattern={pattern}
