@@ -140,6 +140,7 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
                 // Update datagrid rows
                 const {rows, totalItems} = data;
                 datagridRef.current!.updateRows(rows, totalItems);
+                datagridRef.current!.closeDetailPane();
                 datagridRef.current!.hideLoader();
             });
         }
