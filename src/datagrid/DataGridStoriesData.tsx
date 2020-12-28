@@ -130,7 +130,7 @@ export const customRowsWithPassword = [
             {
                 columnName: "Favorite color",
                 cellData: (
-                    <div>
+                    <div style={{marginTop: "-35px"}}>
                         <Password
                             name="Password"
                             value="Georgia-pass"
@@ -151,10 +151,10 @@ export const customRowsWithPassword = [
             {
                 columnName: "Favorite color",
                 cellData: (
-                    <div>
+                    <div style={{marginTop: "-35px"}}>
                         <Password
                             name="Password"
-                            value="Brynn-abcdefghijklmnopqr"
+                            value="Brynn-pass"
                             minPasswordLength={8}
                             readOnly={true}
                             style={{border: "none"}}
