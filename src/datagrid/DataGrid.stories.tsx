@@ -12,7 +12,7 @@ import * as React from "react";
 import {storiesOf} from "@storybook/react";
 import {State, Store} from "@sambego/storybook-state";
 import {Icon} from "../icon";
-import {DataGrid, GridSelectionType, GridRowType, SortOrder, DataGridFilter, FilterType} from ".";
+import {DataGrid, GridSelectionType, GridRowType, SortOrder, DataGridFilter, FilterType, DataGridRow} from ".";
 import {
     normalColumns,
     normalRows,
@@ -37,7 +37,7 @@ import {
     paginationDetailsForAlreadySelectedRows,
 } from "./DataGridValues";
 import {CustomFilter} from "./CustomFilter";
-import {DataGridRow} from "./DataGrid";
+import {CustomFilterMulti} from "./CustomFilterMulti";
 
 const store = new Store({
     selectedRows: selectedRows,
@@ -80,8 +80,8 @@ const datagridActionsRef = React.createRef<GridActions>();
 const datagridFilterRef = React.createRef<DataGrid>();
 const datagridFilterSortRef = React.createRef<DataGrid>();
 const datagridCustomFilterRef = React.createRef<DataGrid>();
+const datagridCustomFilterMultiRef = React.createRef<DataGrid>();
 const datagridFullDemoRef = React.createRef<DataGrid>();
-const filterRef = React.createRef<DataGridFilter>();
 
 storiesOf("DataGrid", module)
     .add("Basic grid", () => (
@@ -231,35 +231,61 @@ storiesOf("DataGrid", module)
         </div>
     ))
     .add("Grid with Custom filter", () => (
-        <div style={{width: "80%"}}>
-            <DataGrid
-                ref={datagridCustomFilterRef}
-                columns={[
-                    {
-                        columnName: "User ID",
-                        style: {width: "96px"},
-                    },
-                    {
-                        columnName: "Name",
-                        style: {width: "96px"},
-                        filter: (
-                            <DataGridFilter
-                                ref={filterRef}
-                                onFilter={filterFunction}
-                                columnName={"Name"}
-                                datagridRef={datagridCustomFilterRef}
-                                filterType={FilterType.CUSTOM}
-                                customFilter={<CustomFilter datagridFilterRef={filterRef} />}
-                            />
-                        ),
-                    },
-                    {columnName: "Creation Date", style: {width: "96px"}},
-                    {columnName: "Favorite color", style: {width: "96px"}},
-                ]}
-                rows={normalRows}
-                footer={defaultFooter}
-            />
-        </div>
+        <React.Fragment>
+            <div style={{width: "80%"}}>
+                <label> {"Datagrid with Custom filter for single value filter"} </label>
+                <DataGrid
+                    ref={datagridCustomFilterRef}
+                    columns={[
+                        {columnName: "User ID"},
+                        {
+                            columnName: "Name",
+                            filter: (
+                                <DataGridFilter
+                                    onFilter={filterFunction}
+                                    columnName={"Name"}
+                                    datagridRef={datagridCustomFilterRef}
+                                    filterType={FilterType.CUSTOM}
+                                >
+                                    <CustomFilter />
+                                </DataGridFilter>
+                            ),
+                        },
+                        {columnName: "Creation Date"},
+                        {columnName: "Favorite color"},
+                    ]}
+                    rows={normalRows}
+                    footer={defaultFooter}
+                />
+            </div>
+            <br /> <br />
+            <div style={{width: "80%"}}>
+                <label> {"Datagrid with Custom filter for multiple values filter"} </label>
+                <DataGrid
+                    ref={datagridCustomFilterMultiRef}
+                    columns={[
+                        {columnName: "User ID"},
+                        {columnName: "Name"},
+                        {columnName: "Creation Date"},
+                        {
+                            columnName: "Favorite color",
+                            filter: (
+                                <DataGridFilter
+                                    onFilter={filterFunction}
+                                    columnName={"Favorite color"}
+                                    datagridRef={datagridCustomFilterMultiRef}
+                                    filterType={FilterType.CUSTOM}
+                                >
+                                    <CustomFilterMulti />
+                                </DataGridFilter>
+                            ),
+                        },
+                    ]}
+                    rows={normalRows}
+                    footer={defaultFooter}
+                />
+            </div>
+        </React.Fragment>
     ))
     .add("Grid with expandable row", () => (
         <div style={{width: "80%"}}>

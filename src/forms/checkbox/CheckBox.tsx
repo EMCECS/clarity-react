@@ -71,6 +71,7 @@ export class CheckBox extends React.PureComponent<CheckBoxProps, CheckBoxState> 
             onChange,
             className,
             dataqa,
+            defaultChecked,
         } = this.props;
         const setId = this.props.id;
         const {value} = this.state;
@@ -84,6 +85,7 @@ export class CheckBox extends React.PureComponent<CheckBoxProps, CheckBoxState> 
                             name={name}
                             ref={this.myRef}
                             checked={checked !== undefined ? checked : value}
+                            defaultChecked={defaultChecked}
                             onChange={onChange !== undefined ? onChange : this.handleChange.bind(this)}
                             className={ClassNames.CLR_CHECKBOX}
                             aria-labelledby={ariaLabelledby}
