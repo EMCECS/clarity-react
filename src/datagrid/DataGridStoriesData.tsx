@@ -12,6 +12,7 @@ import * as React from "react";
 import {Icon} from "../icon";
 import {Button} from "../forms/button";
 import {SortOrder, DataGridRow, DataGridFilterResult, DataGridColumn, DataGridCell} from ".";
+import {Password} from "../forms/password/Password";
 
 /**
  * General file description :
@@ -113,6 +114,51 @@ export const customRows = [
                     <div>
                         <Icon shape="time" />
                         {"Critical"}
+                    </div>
+                ),
+            },
+        ],
+    },
+];
+
+export const customRowsWithPassword = [
+    {
+        rowData: [
+            {columnName: "User ID", cellData: 41512},
+            {columnName: "Name", cellData: "Georgia"},
+            {columnName: "Creation Date", cellData: "Sep 11, 2008"},
+            {
+                columnName: "Favorite color",
+                cellData: (
+                    <div style={{marginTop: "-35px"}}>
+                        <Password
+                            name="Password"
+                            value="Georgia-pass"
+                            minPasswordLength={8}
+                            readOnly={true}
+                            style={{border: "none"}}
+                        />
+                    </div>
+                ),
+            },
+        ],
+    },
+    {
+        rowData: [
+            {columnName: "User ID", cellData: 16166},
+            {columnName: "Name", cellData: "Brynn"},
+            {columnName: "Creation Date", cellData: "Aug 2, 2014"},
+            {
+                columnName: "Favorite color",
+                cellData: (
+                    <div style={{marginTop: "-35px"}}>
+                        <Password
+                            name="Password"
+                            value="Brynn-pass"
+                            minPasswordLength={8}
+                            readOnly={true}
+                            style={{border: "none"}}
+                        />
                     </div>
                 ),
             },

@@ -17,6 +17,7 @@ import {
     normalColumns,
     normalRows,
     customRows,
+    customRowsWithPassword,
     customFooter,
     defaultFooter,
     GridActions,
@@ -375,6 +376,11 @@ storiesOf("DataGrid", module)
                 rowType={GridRowType.EXPANDABLE_ROWS_WITH_DETAIL_PANE}
                 selectionType={GridSelectionType.MULTI}
             />
+        </div>
+    ))
+    .add("Grid with read-only password", () => (
+        <div style={{width: "80%"}}>
+            <DataGrid columns={normalColumns} rows={customRowsWithPassword} footer={customFooter} />
         </div>
     ))
     .add("Grid full demo", () => (
