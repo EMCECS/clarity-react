@@ -30,7 +30,7 @@ type RadioButtonProps = {
     checked?: boolean;
     className?: string;
     disabled?: boolean;
-    label?: string;
+    label?: any;
     labelClass?: string;
     onChange?: (evt: React.ChangeEvent<HTMLInputElement>) => void;
     name?: string;
