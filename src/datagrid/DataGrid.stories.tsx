@@ -17,6 +17,7 @@ import {
     normalColumns,
     normalRows,
     customRows,
+    customRowsWithPassword,
     customFooter,
     defaultFooter,
     GridActions,
@@ -34,7 +35,9 @@ import {
     alreadySelectedRows,
     getSelectableRowsData,
     paginationDetailsForAlreadySelectedRows,
-} from "./DataGridValues";
+    rowsWithDetailPane,
+    paginationDetailsForDetailsPane,
+} from "./DataGridStoriesData";
 import {CustomFilter} from "./CustomFilter";
 import {CustomFilterMulti} from "./CustomFilterMulti";
 
@@ -363,6 +366,23 @@ storiesOf("DataGrid", module)
             )}
         </State>
     ))
+    .add("Grid with detail pane", () => (
+        <div style={{width: "80%", paddingTop: "5%"}}>
+            <DataGrid
+                columns={sortColumns}
+                rows={rowsWithDetailPane.slice(0, 5)}
+                footer={hideShowColFooter}
+                pagination={paginationDetailsForDetailsPane}
+                rowType={GridRowType.EXPANDABLE_ROWS_WITH_DETAIL_PANE}
+                selectionType={GridSelectionType.MULTI}
+            />
+        </div>
+    ))
+    .add("Grid with read-only password", () => (
+        <div style={{width: "80%"}}>
+            <DataGrid columns={normalColumns} rows={customRowsWithPassword} footer={customFooter} />
+        </div>
+    ))
     .add("Grid full demo", () => (
         <div style={{width: "80%", paddingTop: "5%"}}>
             <DataGrid
@@ -376,7 +396,6 @@ storiesOf("DataGrid", module)
                                 <Icon shape="user" className="is-solid" /> {"User ID"}
                             </div>
                         ),
-                        isVisible: false,
                         sort: {defaultSortOrder: SortOrder.ASC, sortFunction: sortFunction},
                         filter: (
                             <DataGridFilter
@@ -405,6 +424,7 @@ storiesOf("DataGrid", module)
                     {columnName: "Creation Date", style: {width: "20%"}},
                     {
                         columnName: "Favorite color",
+                        isVisible: false,
                         displayName: (
                             <div>
                                 <Icon shape="color-palette" className="is-solid" /> {"Favorite color"}{" "}
