@@ -657,7 +657,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     }
 
     // Handler for detail pane toggle
-    private handleDetailPaneToggle = (rowID: number) => {
+    public handleDetailPaneToggle = (rowID: number) => {
         let {allRows} = this.state;
         let {detailPaneData} = allRows[rowID];
 

@@ -35,3 +35,6 @@ yarn-error.log*
 *.log
 *.iml
 dist
+
+# storybook static content
+/storybook-static
