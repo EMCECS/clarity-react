@@ -122,16 +122,4 @@ storiesOf("New Tabs", module)
                 </NewTabs>
             )}
         </State>
-    ))
-    .add("Tab New", () => (
-        <State store={store}>
-            {state => (
-                <NewTabs id="overflowTabs" tabs={state.simpleTabs} tabOrientation={TabOrientation.HORIZONTAL}>
-                    <TabPane id={"dashboard"}>DASH</TabPane>
-                    <TabPane id={"mgmt"}>MGMT</TabPane>
-                    <TabPane id={"cloud"}>CLD</TabPane>
-                    <TabPane id={"infra"}>INF</TabPane>
-                </NewTabs>
-            )}
-        </State>
     ));
