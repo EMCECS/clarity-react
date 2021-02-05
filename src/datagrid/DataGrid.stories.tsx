@@ -463,14 +463,6 @@ storiesOf("DataGrid", module)
                                 </div>
                             ),
                             isVisible: false,
-                            sort: {defaultSortOrder: SortOrder.ASC, sortFunction: sortFunction},
-                            filter: (
-                                <DataGridFilter
-                                    onFilter={pageFilterFunction}
-                                    columnName={"User ID"}
-                                    datagridRef={datagridFullDemoRef}
-                                />
-                            ),
                         },
                         {
                             columnName: "Name",
@@ -478,14 +470,6 @@ storiesOf("DataGrid", module)
                                 <div>
                                     <Icon shape="administrator" className="is-solid" /> {"Name"}
                                 </div>
-                            ),
-                            sort: {defaultSortOrder: SortOrder.NONE, sortFunction: sortFunction},
-                            filter: (
-                                <DataGridFilter
-                                    onFilter={pageFilterFunction}
-                                    columnName={"Name"}
-                                    datagridRef={datagridFullDemoRef}
-                                />
                             ),
                         },
                         {columnName: "Creation Date", style: {width: "20%"}},
@@ -500,7 +484,6 @@ storiesOf("DataGrid", module)
                     ]}
                     rows={paginationRowsWithLinks(handleLinkClick).slice(0, 5)}
                     rowType={GridRowType.ROWS_WITH_DETAIL_PANE}
-                    pagination={paginationDetails}
                     selectionType={GridSelectionType.MULTI}
                     footer={hideShowColFooter}
                 />
