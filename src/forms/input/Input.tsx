@@ -43,6 +43,7 @@ type InputProps = {
     required?: boolean; // auto-check on blur if there's a value
     error?: boolean; // force error state of component
     dataqa?: string; //quality engineering testing field
+    debounce?: number; // apply debounce behaviour and value provided is miliseconds of delay to be added
 };
 
 const initialState = {value: null};
@@ -52,7 +53,21 @@ type InputState = Readonly<typeof initialState>;
 export class Input extends React.PureComponent<InputProps> {
     readonly state: InputState = initialState;
 
+    // handle debounce
+    private handleDebounce = (func: Function, waitTime: number) => {
+        console.log("handleBounce: ", new Date().toLocaleDateString());
+        let debounceTimer: any = null;
+        const that = this;
+        return function() {
+            console.log("handleBounce: setting debounce timer", new Date().toLocaleDateString());
+            const args = arguments;
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => func.apply(that, args), waitTime);
+        };
+    };
+
     private handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+        console.log("handleChange: ", new Date().toLocaleDateString());
         this.setState({value: evt.target.value});
         const {onChange} = this.props;
         if (onChange) onChange(evt);
@@ -101,6 +116,7 @@ export class Input extends React.PureComponent<InputProps> {
             helperText,
             spellCheck,
             pattern,
+            debounce,
         } = this.props;
         return (
             <React.Fragment>
@@ -115,7 +131,7 @@ export class Input extends React.PureComponent<InputProps> {
                     className={className}
                     placeholder={placeholder}
                     data-qa={dataqa}
-                    onChange={this.handleChange}
+                    onChange={debounce ? this.handleDebounce(this.handleChange, debounce) : this.handleChange}
                     onKeyDown={this.handleKeyDown}
                     onKeyPress={onKeyPress}
                     title={title}
