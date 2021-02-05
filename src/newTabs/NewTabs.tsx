@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2020 Dell Inc., or its subsidiaries. All Rights Reserved.
+ * Copyright (c) 2021 Dell Inc., or its subsidiaries. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import {TabPane} from "./TabPane";
  * @param {tabs} List of all Tabs
  * @param {id} string to identify tab group uniquely
  * @param {tabOrientation} orientation of tab either vertical or horizontal
- * @param {onTabClick} callback function from parent to call on tab click
+ * @param {tabClickCallback} callback function from parent to call on tab click
  * @param {overflowTabsFrom} name of tab from which tabs added to overflow menu.
  *         optional prop, if set activates overflow tabs
  * @param {dataqa} quality engineering tag
@@ -37,6 +37,8 @@ type TabsProp = {
 /**
  * state for tabs
  * @param {isOverflowTabSelected} if true inticate overflow tab button as active
+ * @param {selectedTabId} Id of selected tab
+ * @param {tabsData} array of data for tabs
  */
 type TabsState = {
     isOverflowTabSelected: boolean;
@@ -48,9 +50,9 @@ type TabsState = {
  * props for tabs
  * @param {name} name or title of tab to uniquely identify tab
  * @param {id} id to uniquely identify single tab
- * @param {component} React element loaded on tab selection
  * @param {isSelected} true if tab is selected by default
  * @param {isDisabled} true if tab is disabled
+ * @param {tabType} Type of tab static or simple
  */
 export type TabDetails = {
     name: any;

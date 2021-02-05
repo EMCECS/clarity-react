@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2020 Dell Inc., or its subsidiaries. All Rights Reserved.
+ * Copyright (c) 2021 Dell Inc., or its subsidiaries. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,27 +16,6 @@ import {TabPane} from "./TabPane";
 import {Tabs} from "../tabs";
 
 const tabsData: TabDetails[] = [
-    {
-        name: "Dashboard",
-        id: "dashboard",
-        isSelected: true,
-    },
-    {
-        name: "Management",
-        id: "mgmt",
-    },
-    {
-        name: "Cloud",
-        id: "cloud",
-    },
-    {
-        name: "Infrastructure",
-        id: "infra",
-        isDisabled: true,
-    },
-];
-
-const otabsData: TabDetails[] = [
     {
         name: "Dashboard",
         id: "dashboard",
@@ -89,9 +68,6 @@ const store = new Store({
         });
     },
 });
-
-const seeB = false;
-const seeC = true;
 
 storiesOf("New Tabs", module)
     .add("Tab Vertical", () => (
