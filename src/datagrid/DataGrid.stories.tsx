@@ -37,7 +37,8 @@ import {
     paginationDetailsForAlreadySelectedRows,
     rowsWithDetailPane,
     paginationDetailsForDetailsPane,
-} from "./DataGridStoriesData";
+    paginationRowsWithLinks,
+} from "./DataGridValues";
 import {CustomFilter} from "./CustomFilter";
 import {CustomFilterMulti} from "./CustomFilterMulti";
 
@@ -84,6 +85,7 @@ const datagridFilterSortRef = React.createRef<DataGrid>();
 const datagridCustomFilterRef = React.createRef<DataGrid>();
 const datagridCustomFilterMultiRef = React.createRef<DataGrid>();
 const datagridFullDemoRef = React.createRef<DataGrid>();
+const datagridDetailsDemoRef = React.createRef<DataGrid>();
 
 storiesOf("DataGrid", module)
     .add("Basic grid", () => (
@@ -438,4 +440,70 @@ storiesOf("DataGrid", module)
                 footer={hideShowColFooter}
             />
         </div>
-    ));
+    ))
+    .add("Grid Demo with support to open/close details pane", () => {
+        // function to handle
+        const handleLinkClick = (rowIndex: number) => {
+            datagridDetailsDemoRef &&
+                datagridDetailsDemoRef.current &&
+                datagridDetailsDemoRef.current.handleDetailPaneToggle(rowIndex);
+        };
+
+        return (
+            <div style={{width: "80%", paddingTop: "5%"}}>
+                <DataGrid
+                    ref={datagridDetailsDemoRef}
+                    itemText={"Users"}
+                    columns={[
+                        {
+                            columnName: "User ID",
+                            displayName: (
+                                <div>
+                                    <Icon shape="user" className="is-solid" /> {"User ID"}
+                                </div>
+                            ),
+                            isVisible: false,
+                            sort: {defaultSortOrder: SortOrder.ASC, sortFunction: sortFunction},
+                            filter: (
+                                <DataGridFilter
+                                    onFilter={pageFilterFunction}
+                                    columnName={"User ID"}
+                                    datagridRef={datagridFullDemoRef}
+                                />
+                            ),
+                        },
+                        {
+                            columnName: "Name",
+                            displayName: (
+                                <div>
+                                    <Icon shape="administrator" className="is-solid" /> {"Name"}
+                                </div>
+                            ),
+                            sort: {defaultSortOrder: SortOrder.NONE, sortFunction: sortFunction},
+                            filter: (
+                                <DataGridFilter
+                                    onFilter={pageFilterFunction}
+                                    columnName={"Name"}
+                                    datagridRef={datagridFullDemoRef}
+                                />
+                            ),
+                        },
+                        {columnName: "Creation Date", style: {width: "20%"}},
+                        {
+                            columnName: "Favorite color",
+                            displayName: (
+                                <div>
+                                    <Icon shape="color-palette" className="is-solid" /> {"Favorite color"}{" "}
+                                </div>
+                            ),
+                        },
+                    ]}
+                    rows={paginationRowsWithLinks(handleLinkClick).slice(0, 5)}
+                    rowType={GridRowType.ROWS_WITH_DETAIL_PANE}
+                    pagination={paginationDetails}
+                    selectionType={GridSelectionType.MULTI}
+                    footer={hideShowColFooter}
+                />
+            </div>
+        );
+    });
