@@ -36,6 +36,27 @@ const tabsData: TabDetails[] = [
     },
 ];
 
+const otabsData: TabDetails[] = [
+    {
+        name: "Dashboard",
+        id: "dashboard",
+        isSelected: true,
+    },
+    {
+        name: "Management",
+        id: "mgmt",
+    },
+    {
+        name: "Cloud",
+        id: "cloud",
+    },
+    {
+        name: "Infrastructure",
+        id: "infra",
+        isDisabled: true,
+    },
+];
+
 const staticTabsData: TabDetails[] = [
     {
         name: "Dashboard",
@@ -76,12 +97,7 @@ storiesOf("New Tabs", module)
     .add("Tab Vertical", () => (
         <State store={store}>
             {state => (
-                <NewTabs
-                    id="verticalTabs"
-                    tabs={state.simpleTabs}
-                    tabOrientation={TabOrientation.VERTICAL}
-                    // onTabClick={state.onTabClick}
-                >
+                <NewTabs id="verticalTabs" tabs={state.simpleTabs} tabOrientation={TabOrientation.VERTICAL}>
                     <TabPane id={"dashboard"}>DASH</TabPane>
                     <TabPane id={"mgmt"}>MGMT</TabPane>
                     <TabPane id={"cloud"}>CLD</TabPane>
@@ -93,12 +109,7 @@ storiesOf("New Tabs", module)
     .add("Tab Horizontal", () => (
         <State store={store}>
             {state => (
-                <NewTabs
-                    id="horizontalTabs"
-                    tabs={state.simpleTabs}
-                    tabOrientation={TabOrientation.HORIZONTAL}
-                    // onTabClick={state.onTabClick}
-                >
+                <NewTabs id="horizontalTabs" tabs={state.simpleTabs} tabOrientation={TabOrientation.HORIZONTAL}>
                     <TabPane id={"dashboard"}>DASH</TabPane>
                     <TabPane id={"mgmt"}>MGMT</TabPane>
                     <TabPane id={"cloud"}>CLD</TabPane>
@@ -110,12 +121,7 @@ storiesOf("New Tabs", module)
     .add("Tab Static", () => (
         <State store={store}>
             {state => (
-                <NewTabs
-                    id="staticTabs"
-                    tabs={state.staticTabs}
-                    tabOrientation={TabOrientation.HORIZONTAL}
-                    // onTabClick={state.onTabClick}
-                >
+                <NewTabs id="staticTabs" tabs={state.staticTabs} tabOrientation={TabOrientation.HORIZONTAL}>
                     <TabPane id={"dashboard"}>DASH</TabPane>
                     <TabPane id={"mgmt"}>MGMT</TabPane>
                     <TabPane id={"cloud"}>CLD</TabPane>
@@ -131,7 +137,6 @@ storiesOf("New Tabs", module)
                     id="overflowTabs"
                     tabs={state.simpleTabs}
                     tabOrientation={TabOrientation.HORIZONTAL}
-                    // onTabClick={state.onTabClick}
                     overflowTabsFrom={2}
                 >
                     <TabPane id={"dashboard"}>DASH</TabPane>
@@ -145,12 +150,7 @@ storiesOf("New Tabs", module)
     .add("Tab New", () => (
         <State store={store}>
             {state => (
-                <NewTabs
-                    id="overflowTabs"
-                    tabs={state.simpleTabs}
-                    tabOrientation={TabOrientation.HORIZONTAL}
-                    // onTabClick={state.onTabClick}
-                >
+                <NewTabs id="overflowTabs" tabs={state.simpleTabs} tabOrientation={TabOrientation.HORIZONTAL}>
                     <TabPane id={"dashboard"}>DASH</TabPane>
                     <TabPane id={"mgmt"}>MGMT</TabPane>
                     <TabPane id={"cloud"}>CLD</TabPane>
