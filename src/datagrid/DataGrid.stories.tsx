@@ -38,7 +38,7 @@ import {
     rowsWithDetailPane,
     paginationDetailsForDetailsPane,
     paginationRowsWithLinks,
-} from "./DataGridValues";
+} from "./DataGridStoriesData";
 import {CustomFilter} from "./CustomFilter";
 import {CustomFilterMulti} from "./CustomFilterMulti";
 

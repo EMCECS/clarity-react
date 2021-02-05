@@ -354,11 +354,7 @@ export function getRowDataWithLink(functionToAttach: Function) {
                 },
             ],
             detailPaneData: {
-                detailPaneContent: (
-                    <div style={{border: "1px solid grey", width: "500px", height: "300px"}}>
-                        Details Panel for : {element[1]}
-                    </div>
-                ),
+                detailPaneContent: <React.Fragment>Details Panel for : {element[1]}</React.Fragment>,
             },
         };
 
