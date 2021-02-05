@@ -94,11 +94,7 @@ export class NewTabs extends React.PureComponent<TabsProp, TabsState> {
     }
 
     //handle overflowed tab click
-    overflowTabClicked = (
-        evt: React.MouseEvent<HTMLElement>,
-        clickedTab: TabDetails,
-        isOverflowTab: boolean = false,
-    ) => {
+    overflowTabClicked = (evt: React.MouseEvent<HTMLElement>, clickedTab: TabDetails) => {
         const {tabs, overflowTabsFrom, tabClickCallback} = this.props;
         let lastActiveTabIndex: number | undefined;
         let activeLastTab: boolean = false;
@@ -135,7 +131,7 @@ export class NewTabs extends React.PureComponent<TabsProp, TabsState> {
 
         this.setState(
             {
-                isOverflowTabSelected: isOverflowTab,
+                isOverflowTabSelected: true,
                 selectedTabId: clickedTab.id,
                 tabsData: tabs,
             },
@@ -144,7 +140,7 @@ export class NewTabs extends React.PureComponent<TabsProp, TabsState> {
     };
 
     //handle normal tab click
-    normalTabClick = (evt: React.MouseEvent<HTMLElement>, clickedTab: TabDetails, isOverflowTab: boolean = false) => {
+    normalTabClick = (evt: React.MouseEvent<HTMLElement>, clickedTab: TabDetails) => {
         const {tabClickCallback} = this.props;
         this.setState(
             {
@@ -218,7 +214,7 @@ export class NewTabs extends React.PureComponent<TabsProp, TabsState> {
                                     menuItemType={MenuItemType.ITEM}
                                     isHeaderChild={true}
                                     label={tab.name}
-                                    onClick={evt => this.overflowTabClicked(evt, tab, true)}
+                                    onClick={evt => this.overflowTabClicked(evt, tab)}
                                     isDisabled={tab.isDisabled}
                                 />
                             );
@@ -229,7 +225,7 @@ export class NewTabs extends React.PureComponent<TabsProp, TabsState> {
         );
     };
 
-    private static renderTabPane(children: utils.ReactChildren, tabs: TabDetails[], id: string): utils.ReactChildren {
+    private static renderTabPane(children: utils.ReactChildren, id: string): utils.ReactChildren {
         // const selectedTabId = tabs.filter(tab => {return tab.isSelected}).map(tab => {return tab.id})[0];
         const selectedTabId = id;
         return React.Children.map(children, child => {
@@ -241,13 +237,15 @@ export class NewTabs extends React.PureComponent<TabsProp, TabsState> {
     }
 
     render() {
-        const {tabOrientation, children} = this.props;
-        const {tabsData} = this.state;
+        const {tabOrientation, children, dataqa} = this.props;
         const {selectedTabId} = this.state;
         return (
-            <div className={tabOrientation === TabOrientation.VERTICAL ? ClassNames.VERTICALTAB : undefined}>
+            <div
+                className={tabOrientation === TabOrientation.VERTICAL ? ClassNames.VERTICALTAB : undefined}
+                data-qa={dataqa}
+            >
                 {this.renderTabLinks()}
-                {NewTabs.renderTabPane(children, tabsData, selectedTabId)}
+                {NewTabs.renderTabPane(children, selectedTabId)}
             </div>
         );
     }
