@@ -441,7 +441,7 @@ storiesOf("DataGrid", module)
             />
         </div>
     ))
-    .add("Grid Demo with support to open/close details pane", () => {
+    .add("Grid with open/close details pane on link click", () => {
         // function to handle
         const handleLinkClick = (rowIndex: number) => {
             datagridDetailsDemoRef &&
