@@ -11,11 +11,10 @@
 import * as React from "react";
 import {storiesOf} from "@storybook/react";
 import {State, Store} from "@sambego/storybook-state";
-import {NewTabs, TabOrientation, TabType, TabDetails} from ".";
+import {TabsV2, TabV2Orientation, TabV2Type, TabV2Details} from ".";
 import {TabPane} from "./TabPane";
-import {Tabs} from "../tabs";
 
-const tabsData: TabDetails[] = [
+const tabsData: TabV2Details[] = [
     {
         name: "Dashboard",
         id: "dashboard",
@@ -36,7 +35,7 @@ const tabsData: TabDetails[] = [
     },
 ];
 
-const staticTabsData: TabDetails[] = [
+const staticTabsData: TabV2Details[] = [
     {
         name: "Dashboard",
         id: "dashboard",
@@ -46,7 +45,7 @@ const staticTabsData: TabDetails[] = [
         name: "Management",
         id: "mgmt",
         isDisabled: false,
-        tabType: TabType.STATIC,
+        tabType: TabV2Type.STATIC,
     },
     {
         name: "Cloud",
@@ -62,64 +61,64 @@ const staticTabsData: TabDetails[] = [
 const store = new Store({
     simpleTabs: tabsData,
     staticTabs: staticTabsData,
-    onTabClick: (evt: React.MouseEvent<HTMLElement>, clickedTab: TabDetails, updatedTabs: TabDetails[]): void => {
+    onTabClick: (evt: React.MouseEvent<HTMLElement>, clickedTab: TabV2Details, updatedTabs: TabV2Details[]): void => {
         store.set({
             simpleTabs: [...updatedTabs],
         });
     },
 });
 
-storiesOf("New Tabs", module)
-    .add("Tab Vertical", () => (
+storiesOf("TabsV2", module)
+    .add("TabV2 Vertical", () => (
         <State store={store}>
             {state => (
-                <NewTabs id="verticalTabs" tabs={state.simpleTabs} tabOrientation={TabOrientation.VERTICAL}>
+                <TabsV2 id="verticalTabs" tabs={state.simpleTabs} tabOrientation={TabV2Orientation.VERTICAL}>
                     <TabPane id={"dashboard"}>DASH</TabPane>
                     <TabPane id={"mgmt"}>MGMT</TabPane>
                     <TabPane id={"cloud"}>CLD</TabPane>
                     <TabPane id={"infra"}>INF</TabPane>
-                </NewTabs>
+                </TabsV2>
             )}
         </State>
     ))
-    .add("Tab Horizontal", () => (
+    .add("TabV2 Horizontal", () => (
         <State store={store}>
             {state => (
-                <NewTabs id="horizontalTabs" tabs={state.simpleTabs} tabOrientation={TabOrientation.HORIZONTAL}>
+                <TabsV2 id="horizontalTabs" tabs={state.simpleTabs} tabOrientation={TabV2Orientation.HORIZONTAL}>
                     <TabPane id={"dashboard"}>DASH</TabPane>
                     <TabPane id={"mgmt"}>MGMT</TabPane>
                     <TabPane id={"cloud"}>CLD</TabPane>
                     <TabPane id={"infra"}>INF</TabPane>
-                </NewTabs>
+                </TabsV2>
             )}
         </State>
     ))
-    .add("Tab Static", () => (
+    .add("TabV2 Static", () => (
         <State store={store}>
             {state => (
-                <NewTabs id="staticTabs" tabs={state.staticTabs} tabOrientation={TabOrientation.HORIZONTAL}>
+                <TabsV2 id="staticTabs" tabs={state.staticTabs} tabOrientation={TabV2Orientation.HORIZONTAL}>
                     <TabPane id={"dashboard"}>DASH</TabPane>
                     <TabPane id={"mgmt"}>MGMT</TabPane>
                     <TabPane id={"cloud"}>CLD</TabPane>
                     <TabPane id={"infra"}>INF</TabPane>
-                </NewTabs>
+                </TabsV2>
             )}
         </State>
     ))
-    .add("Tab Overflow", () => (
+    .add("TabV2 Overflow", () => (
         <State store={store}>
             {state => (
-                <NewTabs
+                <TabsV2
                     id="overflowTabs"
                     tabs={state.simpleTabs}
-                    tabOrientation={TabOrientation.HORIZONTAL}
+                    tabOrientation={TabV2Orientation.HORIZONTAL}
                     overflowTabsFrom={2}
                 >
                     <TabPane id={"dashboard"}>DASH</TabPane>
                     <TabPane id={"mgmt"}>MGMT</TabPane>
                     <TabPane id={"cloud"}>CLD</TabPane>
                     <TabPane id={"infra"}>INF</TabPane>
-                </NewTabs>
+                </TabsV2>
             )}
         </State>
     ));

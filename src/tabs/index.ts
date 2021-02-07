@@ -9,4 +9,5 @@
  */
 
 export * from "./Tabs";
+export * from "./TabsV2";
 export * from "./ClassNames";

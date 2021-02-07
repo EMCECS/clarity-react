@@ -17,19 +17,19 @@ import {TabPane} from "./TabPane";
 
 /**
  * props for tabs
- * @param {tabs} List of all Tabs
+ * @param {tabs} List of all TabsV2
  * @param {id} string to identify tab group uniquely
  * @param {tabOrientation} orientation of tab either vertical or horizontal
  * @param {tabClickCallback} callback function from parent to call on tab click
- * @param {overflowTabsFrom} name of tab from which tabs added to overflow menu.
+ * @param {overflowTabsfrom} name of tab from which tabs added to overflow menu.
  *         optional prop, if set activates overflow tabs
  * @param {dataqa} quality engineering tag
  */
-type TabsProp = {
-    tabs: TabDetails[];
+type TabsV2Prop = {
+    tabs: TabV2Details[];
     id: string;
-    tabOrientation: TabOrientation;
-    tabClickCallback?: (evt: React.MouseEvent<HTMLElement>, clickedTab: TabDetails) => void;
+    tabOrientation: TabV2Orientation;
+    tabClickCallback?: (evt: React.MouseEvent<HTMLElement>, clickedTab: TabV2Details) => void;
     overflowTabsFrom?: number;
     dataqa?: string;
 };
@@ -40,10 +40,10 @@ type TabsProp = {
  * @param {selectedTabId} Id of selected tab
  * @param {tabsData} array of data for tabs
  */
-type TabsState = {
+type TabsV2State = {
     isOverflowTabSelected: boolean;
     selectedTabId: string;
-    tabsData: TabDetails[];
+    tabsData: TabV2Details[];
 };
 
 /**
@@ -54,12 +54,12 @@ type TabsState = {
  * @param {isDisabled} true if tab is disabled
  * @param {tabType} Type of tab static or simple
  */
-export type TabDetails = {
+export type TabV2Details = {
     name: any;
     id: string;
     isSelected?: boolean;
     isDisabled?: boolean;
-    tabType?: TabType;
+    tabType?: TabV2Type;
 };
 
 /**
@@ -67,7 +67,7 @@ export type TabDetails = {
  * @param {VERTICAL} vertical tabs
  * @param {HORIZONTAL} Horizontal tabs
  */
-export enum TabOrientation {
+export enum TabV2Orientation {
     VERTICAL = "vertical",
     HORIZONTAL = "horizontal",
 }
@@ -77,16 +77,16 @@ export enum TabOrientation {
  * @param {STATIC} tabs which has no panel to render
  * @param {SIMPLE} simple tabs user can switch between tabs
  */
-export enum TabType {
+export enum TabV2Type {
     STATIC = "static",
     SIMPLE = "simple",
 }
 
 /**
- * Tabs Component : Use to divide content into separate views which users navigate between.
+ * TabsV2 Component : Use to divide content into separate views which users navigate between.
  */
-export class NewTabs extends React.PureComponent<TabsProp, TabsState> {
-    constructor(props: TabsProp) {
+export class TabsV2 extends React.PureComponent<TabsV2Prop, TabsV2State> {
+    constructor(props: TabsV2Prop) {
         super(props);
         this.state = {
             isOverflowTabSelected: false,
@@ -96,18 +96,18 @@ export class NewTabs extends React.PureComponent<TabsProp, TabsState> {
     }
 
     //handle overflowed tab click
-    overflowTabClicked = (evt: React.MouseEvent<HTMLElement>, clickedTab: TabDetails) => {
+    overflowTabClicked = (evt: React.MouseEvent<HTMLElement>, clickedTab: TabV2Details) => {
         const {tabs, overflowTabsFrom, tabClickCallback} = this.props;
         let lastActiveTabIndex: number | undefined;
         let activeLastTab: boolean = false;
-        tabs.map((tab: TabDetails, index: number) => {
+        tabs.map((tab: TabV2Details, index: number) => {
             if (tab.isSelected) {
                 lastActiveTabIndex = index;
             }
 
             if (clickedTab.id === tab.id) {
                 // If tabType is present and if tabType is STATIC then active last selected tab
-                if (clickedTab.tabType && clickedTab.tabType === TabType.STATIC) {
+                if (clickedTab.tabType && clickedTab.tabType === TabV2Type.STATIC) {
                     tab.isSelected = false;
                     activeLastTab = true;
                 } else {
@@ -142,7 +142,7 @@ export class NewTabs extends React.PureComponent<TabsProp, TabsState> {
     };
 
     //handle normal tab click
-    normalTabClick = (evt: React.MouseEvent<HTMLElement>, clickedTab: TabDetails) => {
+    normalTabClick = (evt: React.MouseEvent<HTMLElement>, clickedTab: TabV2Details) => {
         const {tabClickCallback} = this.props;
         this.setState(
             {
@@ -154,7 +154,7 @@ export class NewTabs extends React.PureComponent<TabsProp, TabsState> {
     };
 
     //Render Tab Button
-    private renderTabLink = (tab: TabDetails, index: number) => {
+    private renderTabLink = (tab: TabV2Details, index: number) => {
         const {selectedTabId} = this.state;
         const className = tab.id === selectedTabId ? ClassNames.TABACTIVE : ClassNames.TABINACTIVE;
         return (
@@ -180,9 +180,9 @@ export class NewTabs extends React.PureComponent<TabsProp, TabsState> {
         let isOverflowRendered = false;
         return (
             <ul className={ClassNames.TABMAIN} role="tablist" id={id}>
-                {tabsData.map((tab: TabDetails, index: number) => {
+                {tabsData.map((tab: TabV2Details, index: number) => {
                     tabsData;
-                    if (tabOrientation === TabOrientation.HORIZONTAL && index === overflowTabsFrom) {
+                    if (tabOrientation === TabV2Orientation.HORIZONTAL && index === overflowTabsFrom) {
                         isOverflowRendered = true;
                         return this.renderOverflowTab(tabsData.slice(index, tabsData.length), index);
                     }
@@ -197,7 +197,7 @@ export class NewTabs extends React.PureComponent<TabsProp, TabsState> {
     };
 
     //Render Overflow Tab
-    private renderOverflowTab = (overflowTabs: TabDetails[], index: number) => {
+    private renderOverflowTab = (overflowTabs: TabV2Details[], index: number) => {
         return (
             <li className={ClassNames.TABITEM} key={index}>
                 <Dropdown
@@ -209,7 +209,7 @@ export class NewTabs extends React.PureComponent<TabsProp, TabsState> {
                     }}
                 >
                     <DropdownMenu>
-                        {overflowTabs.map((tab: TabDetails, index: number) => {
+                        {overflowTabs.map((tab: TabV2Details, index: number) => {
                             return (
                                 <DropdownItem
                                     key={index.toString()}
@@ -243,11 +243,11 @@ export class NewTabs extends React.PureComponent<TabsProp, TabsState> {
         const {selectedTabId} = this.state;
         return (
             <div
-                className={tabOrientation === TabOrientation.VERTICAL ? ClassNames.VERTICALTAB : undefined}
+                className={tabOrientation === TabV2Orientation.VERTICAL ? ClassNames.VERTICALTAB : undefined}
                 data-qa={dataqa}
             >
                 {this.renderTabLinks()}
-                {NewTabs.renderTabPane(children, selectedTabId)}
+                {TabsV2.renderTabPane(children, selectedTabId)}
             </div>
         );
     }
