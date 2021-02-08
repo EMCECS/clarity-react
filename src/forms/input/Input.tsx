@@ -13,6 +13,7 @@ import * as utils from "../../utils";
 import {UID} from "react-uid";
 import {ReactNode} from "react";
 import {Icon} from "../../icon";
+import {debounce} from "../common/DebounceUtils";
 
 type InputProps = {
     className?: string;
@@ -43,7 +44,7 @@ type InputProps = {
     required?: boolean; // auto-check on blur if there's a value
     error?: boolean; // force error state of component
     dataqa?: string; //quality engineering testing field
-    debounce?: number; // apply debounce behaviour and value provided is miliseconds of delay to be added
+    debounceTime?: number; // apply debounce behaviour and value provided is miliseconds of delay to be added
 };
 
 const initialState = {value: null};
@@ -53,21 +54,8 @@ type InputState = Readonly<typeof initialState>;
 export class Input extends React.PureComponent<InputProps> {
     readonly state: InputState = initialState;
 
-    // handle debounce
-    private handleDebounce = (func: Function, waitTime: number) => {
-        console.log("handleBounce: ", new Date().toLocaleDateString());
-        let debounceTimer: any = null;
-        const that = this;
-        return function() {
-            console.log("handleBounce: setting debounce timer", new Date().toLocaleDateString());
-            const args = arguments;
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(() => func.apply(that, args), waitTime);
-        };
-    };
-
     private handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-        console.log("handleChange: ", new Date().toLocaleDateString());
+        console.log("handleChange: ", new Date().toLocaleTimeString());
         this.setState({value: evt.target.value});
         const {onChange} = this.props;
         if (onChange) onChange(evt);
@@ -75,6 +63,7 @@ export class Input extends React.PureComponent<InputProps> {
 
     //prevents 'e' button click when input type is number
     private handleKeyDown = (evt: React.KeyboardEvent<HTMLInputElement>) => {
+        console.log("handleKeyDown: ", new Date().toLocaleTimeString());
         const {type, onKeyDown} = this.props;
         if (type === "number" && evt.key === "e") {
             evt.preventDefault();
@@ -116,7 +105,7 @@ export class Input extends React.PureComponent<InputProps> {
             helperText,
             spellCheck,
             pattern,
-            debounce,
+            debounceTime,
         } = this.props;
         return (
             <React.Fragment>
@@ -131,9 +120,13 @@ export class Input extends React.PureComponent<InputProps> {
                     className={className}
                     placeholder={placeholder}
                     data-qa={dataqa}
-                    onChange={debounce ? this.handleDebounce(this.handleChange, debounce) : this.handleChange}
-                    onKeyDown={this.handleKeyDown}
-                    onKeyPress={onKeyPress}
+                    onChange={(evt: React.ChangeEvent<HTMLInputElement>) =>
+                        debounce(evt, this.handleChange, debounceTime)
+                    }
+                    onKeyDown={(evt: React.KeyboardEvent<HTMLInputElement>) =>
+                        debounce(evt, this.handleKeyDown, debounceTime)
+                    }
+                    onKeyPress={(evt: React.KeyboardEvent<HTMLInputElement>) => debounce(evt, onKeyPress, debounceTime)}
                     title={title}
                     onBlur={onBlur}
                     style={style}
