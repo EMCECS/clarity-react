@@ -100,4 +100,15 @@ storiesOf("Input", module)
     ))
     .add("input with title", () => (
         <Input name="somevalue" onChange={action("changed")} placeholder="input with title" title={"Title for input"} />
-    ));
+    ))
+    .add("input with Debounce behaviour", () => {
+        return (
+            <Input
+                name="somevalue"
+                onChange={action("changed: after 5 secs", new Date().toLocaleTimeString())}
+                placeholder="input with title"
+                title={"Title for input"}
+                debounceTime={5000}
+            />
+        );
+    });

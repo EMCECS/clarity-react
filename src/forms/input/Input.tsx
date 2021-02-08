@@ -13,7 +13,7 @@ import * as utils from "../../utils";
 import {UID} from "react-uid";
 import {ReactNode} from "react";
 import {Icon} from "../../icon";
-import {debounce} from "../common/DebounceUtils";
+import {DebounceUtils} from "../common/DebounceUtils";
 
 type InputProps = {
     className?: string;
@@ -53,9 +53,11 @@ type InputState = Readonly<typeof initialState>;
 
 export class Input extends React.PureComponent<InputProps> {
     readonly state: InputState = initialState;
+    debounceHandleChange: DebounceUtils = new DebounceUtils();
+    debounceHandleKeyDown: DebounceUtils = new DebounceUtils();
+    debounceOnKeyPress: DebounceUtils = new DebounceUtils();
 
     private handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-        console.log("handleChange: ", new Date().toLocaleTimeString());
         this.setState({value: evt.target.value});
         const {onChange} = this.props;
         if (onChange) onChange(evt);
@@ -63,7 +65,6 @@ export class Input extends React.PureComponent<InputProps> {
 
     //prevents 'e' button click when input type is number
     private handleKeyDown = (evt: React.KeyboardEvent<HTMLInputElement>) => {
-        console.log("handleKeyDown: ", new Date().toLocaleTimeString());
         const {type, onKeyDown} = this.props;
         if (type === "number" && evt.key === "e") {
             evt.preventDefault();
@@ -121,12 +122,14 @@ export class Input extends React.PureComponent<InputProps> {
                     placeholder={placeholder}
                     data-qa={dataqa}
                     onChange={(evt: React.ChangeEvent<HTMLInputElement>) =>
-                        debounce(evt, this.handleChange, debounceTime)
+                        this.debounceHandleChange.debounce(evt, this.handleChange, debounceTime)
                     }
                     onKeyDown={(evt: React.KeyboardEvent<HTMLInputElement>) =>
-                        debounce(evt, this.handleKeyDown, debounceTime)
+                        this.debounceHandleKeyDown.debounce(evt, this.handleKeyDown, debounceTime)
                     }
-                    onKeyPress={(evt: React.KeyboardEvent<HTMLInputElement>) => debounce(evt, onKeyPress, debounceTime)}
+                    onKeyPress={(evt: React.KeyboardEvent<HTMLInputElement>) =>
+                        this.debounceOnKeyPress.debounce(evt, onKeyPress, debounceTime)
+                    }
                     title={title}
                     onBlur={onBlur}
                     style={style}
