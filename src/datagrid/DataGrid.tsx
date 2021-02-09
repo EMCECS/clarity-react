@@ -146,12 +146,14 @@ export type DetailPaneData = {
 
 /**
  * type for DataGridCell :
- * @param {cellData} data for cell
+ * @param {cellData} cell Data to be used for comparison pusposes
  * @param {className} CSS class name
  * @param {style} CSS style
+ * @param {cellDisplayData} Optional field to be used if user want to display JSX Element. cellData should be set as well
  */
 export type DataGridCell = {
     cellData: any;
+    cellDisplayData?: JSX.Element;
     columnName: string;
     className?: string;
     style?: any;
@@ -1244,13 +1246,14 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                         <div className={ClassNames.DATAGRID_NG_STAR_INSERTED} />
                         <div className={ClassNames.DATAGRID_NG_STAR_INSERTED} />
                         {rowData &&
-                            rowData.map((cell: any, index: number) => {
+                            rowData.map((cell: DataGridCell, index: number) => {
                                 return this.buildDataGridCell(
                                     cell.cellData,
                                     index,
                                     cell.columnName,
                                     cell.className,
                                     cell.style,
+                                    cell.cellDisplayData,
                                 );
                             })}
                     </div>
@@ -1369,6 +1372,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         columnName: string,
         className?: string,
         style?: any,
+        cellDisplayData?: JSX.Element,
     ): React.ReactElement {
         const columnObj = this.getColObject(columnName);
         const width = this.getColWidth(columnName);
@@ -1387,7 +1391,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                 ])}
                 style={{...style, width: width + "px"}}
             >
-                {cellData}
+                {cellDisplayData || cellData}
             </div>
         );
     }

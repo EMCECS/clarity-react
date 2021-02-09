@@ -333,7 +333,7 @@ export function getRowDataWithLink(functionToAttach: Function) {
                 },
                 {
                     columnName: "Name",
-                    cellData: (
+                    cellDisplayData: (
                         // eslint-disable-next-line
                         <a
                             href="javascript:void(0);" // eslint-disable-line no-script-url
@@ -343,6 +343,7 @@ export function getRowDataWithLink(functionToAttach: Function) {
                             {element[1]}
                         </a>
                     ),
+                    cellData: element[1],
                 },
                 {
                     columnName: "Creation Date",
