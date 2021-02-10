@@ -227,9 +227,7 @@ export class TabsV2 extends React.PureComponent<TabsV2Prop, TabsV2State> {
         );
     };
 
-    private static renderTabPane(children: utils.ReactChildren, id: string): utils.ReactChildren {
-        // const selectedTabId = tabs.filter(tab => {return tab.isSelected}).map(tab => {return tab.id})[0];
-        const selectedTabId = id;
+    private renderTabPane(children: utils.ReactChildren, selectedTabId: string): utils.ReactChildren {
         return React.Children.map(children, child => {
             const childEl = child as React.ReactElement;
             if (childEl.type === TabPane && childEl.props.id === selectedTabId) {
@@ -247,7 +245,7 @@ export class TabsV2 extends React.PureComponent<TabsV2Prop, TabsV2State> {
                 data-qa={dataqa}
             >
                 {this.renderTabLinks()}
-                {TabsV2.renderTabPane(children, selectedTabId)}
+                {this.renderTabPane(children, selectedTabId)}
             </div>
         );
     }

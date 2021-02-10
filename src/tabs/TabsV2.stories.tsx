@@ -73,10 +73,10 @@ storiesOf("TabsV2", module)
         <State store={store}>
             {state => (
                 <TabsV2 id="verticalTabs" tabs={state.simpleTabs} tabOrientation={TabV2Orientation.VERTICAL}>
-                    <TabPane id={"dashboard"}>DASH</TabPane>
-                    <TabPane id={"mgmt"}>MGMT</TabPane>
-                    <TabPane id={"cloud"}>CLD</TabPane>
-                    <TabPane id={"infra"}>INF</TabPane>
+                    <TabPane id={"dashboard"}>{"DASHBOARD"}</TabPane>
+                    <TabPane id={"mgmt"}>{"MANAGEMENT"}</TabPane>
+                    <TabPane id={"cloud"}>{"CLOUD"}</TabPane>
+                    <TabPane id={"infra"}>{"INFRASTRUCTURE"}</TabPane>
                 </TabsV2>
             )}
         </State>
@@ -85,10 +85,10 @@ storiesOf("TabsV2", module)
         <State store={store}>
             {state => (
                 <TabsV2 id="horizontalTabs" tabs={state.simpleTabs} tabOrientation={TabV2Orientation.HORIZONTAL}>
-                    <TabPane id={"dashboard"}>DASH</TabPane>
-                    <TabPane id={"mgmt"}>MGMT</TabPane>
-                    <TabPane id={"cloud"}>CLD</TabPane>
-                    <TabPane id={"infra"}>INF</TabPane>
+                    <TabPane id={"dashboard"}>{"DASHBOARD"}</TabPane>
+                    <TabPane id={"mgmt"}>{"MANAGEMENT"}</TabPane>
+                    <TabPane id={"cloud"}>{"CLOUD"}</TabPane>
+                    <TabPane id={"infra"}>{"INFRASTRUCTURE"}</TabPane>
                 </TabsV2>
             )}
         </State>
@@ -97,10 +97,10 @@ storiesOf("TabsV2", module)
         <State store={store}>
             {state => (
                 <TabsV2 id="staticTabs" tabs={state.staticTabs} tabOrientation={TabV2Orientation.HORIZONTAL}>
-                    <TabPane id={"dashboard"}>DASH</TabPane>
-                    <TabPane id={"mgmt"}>MGMT</TabPane>
-                    <TabPane id={"cloud"}>CLD</TabPane>
-                    <TabPane id={"infra"}>INF</TabPane>
+                    <TabPane id={"dashboard"}>{"DASHBOARD"}</TabPane>
+                    <TabPane id={"mgmt"}>{"MANAGEMENT"}</TabPane>
+                    <TabPane id={"cloud"}>{"CLOUD"}</TabPane>
+                    <TabPane id={"infra"}>{"INFRASTRUCTURE"}</TabPane>
                 </TabsV2>
             )}
         </State>
@@ -114,10 +114,10 @@ storiesOf("TabsV2", module)
                     tabOrientation={TabV2Orientation.HORIZONTAL}
                     overflowTabsFrom={2}
                 >
-                    <TabPane id={"dashboard"}>DASH</TabPane>
-                    <TabPane id={"mgmt"}>MGMT</TabPane>
-                    <TabPane id={"cloud"}>CLD</TabPane>
-                    <TabPane id={"infra"}>INF</TabPane>
+                    <TabPane id={"dashboard"}>{"DASHBOARD"}</TabPane>
+                    <TabPane id={"mgmt"}>{"MANAGEMENT"}</TabPane>
+                    <TabPane id={"cloud"}>{"CLOUD"}</TabPane>
+                    <TabPane id={"infra"}>{"INFRASTRUCTURE"}</TabPane>
                 </TabsV2>
             )}
         </State>
