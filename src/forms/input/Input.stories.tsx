@@ -16,11 +16,11 @@ import {Icon} from "../../icon";
 
 // onChange handler
 const handleEvent = (evt: any) => {
-    return action(
-        `[new Date().toLocaleTimeString()] - evet triggered: ${evt && evt.type}, event value: ${evt &&
-            evt.target &&
-            evt.target.value}`,
-    );
+    const message = `[${new Date().toLocaleTimeString()}] - 'Event Type': ${evt && evt.type}, 'Event Value': ${evt &&
+        evt.target &&
+        evt.target.value}`;
+    // while calling from outside, the action need to be called explicitely.
+    action(message)();
 };
 
 storiesOf("Input", module)
@@ -114,10 +114,11 @@ storiesOf("Input", module)
         return (
             <Input
                 name="somevalue"
-                onChange={action("changed: after 5 secs", new Date().toLocaleTimeString())}
+                onChange={handleEvent}
                 placeholder="input with title"
                 title={"Title for input"}
-                debounceTime={5000}
+                debounceTime={1000}
+                debounce={true}
             />
         );
     })
@@ -126,12 +127,12 @@ storiesOf("Input", module)
             <Input
                 type="number"
                 name="numberValue"
-                onChange={action(`[new Date().toLocaleTimeString()] - change event triggered`)}
-                onKeyDown={action(`[new Date().toLocaleTimeString()] - keyDown event triggered`)}
-                onKeyPress={action(`[new Date().toLocaleTimeString()] - keyPress event triggered`)}
+                onChange={handleEvent}
+                onKeyDown={handleEvent}
+                onKeyPress={handleEvent}
                 placeholder="Input with type Number"
                 title={"Title for input (type Number)"}
-                debounce={"false"}
+                debounce={false}
             />
         );
     })
@@ -141,13 +142,13 @@ storiesOf("Input", module)
             <Input
                 type="number"
                 name="numberValue"
-                onChange={action(`[new Date().toLocaleTimeString()] - change event triggered`)}
-                onKeyDown={action(`[new Date().toLocaleTimeString()] - keyDown event triggered`)}
-                onKeyPress={action(`[new Date().toLocaleTimeString()] - keyPress event triggered`)}
+                onChange={handleEvent}
+                onKeyDown={handleEvent}
+                onKeyPress={handleEvent}
                 placeholder="Input with type Number"
                 title={"Title for input (type Number)"}
-                // debounceTime={1000}
-                // debounce={"true"}
+                debounceTime={1000}
+                debounce={true}
             />
         );
     });

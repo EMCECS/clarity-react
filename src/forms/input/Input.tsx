@@ -44,8 +44,8 @@ type InputProps = {
     required?: boolean; // auto-check on blur if there's a value
     error?: boolean; // force error state of component
     dataqa?: string; //quality engineering testing field
+    debounce?: boolean; // apply debounce behaviour or not
     debounceTime?: number; // debounceTime/Delay value in miliseconds
-    debounce?: string; // apply debounce behaviour or not
 };
 
 const initialState = {value: null};
