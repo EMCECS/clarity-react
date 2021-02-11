@@ -32,6 +32,7 @@ export type DataGridFilterProps = {
     placeholder?: string;
     onFilter: (rows: DataGridRow[], columnValue: any, columnName: string) => Promise<DataGridFilterResult>;
     filterType?: FilterType;
+    showFilter?: boolean;
 };
 
 /**
@@ -90,6 +91,7 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
         className: "",
         style: {},
         customFilter: null,
+        showFilter: true,
     };
 
     // Initial state for filter
@@ -250,24 +252,26 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
 
     render() {
         const {isOpen} = this.state;
+        const {showFilter} = this.props;
         const {isFiltered} = this;
         const FilterBtnClasses = classNames([
             ClassNames.DATAGRID_FILTER_BUTTON,
             isFiltered && ClassNames.DATAGRID_FILTERED,
         ]);
-
         return (
             <div ref={this.refParent} className={classNames([ClassNames.CLR_FILTER])} style={{position: "relative"}}>
-                <Button
-                    defaultBtn={false}
-                    className={FilterBtnClasses}
-                    onClick={this.handleButtonClick}
-                    icon={{
-                        shape: isFiltered ? "filter-grid-circle" : "filter-grid",
-                        className: ClassNames.ICON_SOLID,
-                    }}
-                />
-                {isOpen && this.openFilter()}
+                {showFilter && (
+                    <Button
+                        defaultBtn={false}
+                        className={FilterBtnClasses}
+                        onClick={this.handleButtonClick}
+                        icon={{
+                            shape: isFiltered ? "filter-grid-circle" : "filter-grid",
+                            className: ClassNames.ICON_SOLID,
+                        }}
+                    />
+                )}
+                {showFilter && isOpen && this.openFilter()}
             </div>
         );
     }
