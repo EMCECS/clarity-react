@@ -91,7 +91,8 @@ storiesOf("DataList", module)
                 helperText="Select any option or create one"
                 label="Select Item"
                 onChange={action("changed: after 5 secs", new Date().toLocaleTimeString())}
-                debounceTime={5000}
+                debounce={true}
+                debounceTime={1000}
             >
                 <DataListOption value="Item1" />
                 <DataListOption value="Item2" />

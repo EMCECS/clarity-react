@@ -14,6 +14,15 @@ import {action} from "@storybook/addon-actions";
 import {Input} from "./Input";
 import {Icon} from "../../icon";
 
+// onChange handler
+const handleEvent = (evt: any) => {
+    const message = `[${new Date().toLocaleTimeString()}] - 'Event Type': ${evt && evt.type}, 'Event Value': ${evt &&
+        evt.target &&
+        evt.target.value}`;
+    // while calling from outside, the action need to be called explicitely.
+    action(message)();
+};
+
 storiesOf("Input", module)
     .add("a simple input box", () => <Input name="somevalue" onChange={action("changed")} />)
     .add("a simple input box with value", () => <Input name="somevalue" value="Apple" onChange={action("changed")} />)
@@ -105,10 +114,41 @@ storiesOf("Input", module)
         return (
             <Input
                 name="somevalue"
-                onChange={action("changed: after 5 secs", new Date().toLocaleTimeString())}
+                onChange={handleEvent}
                 placeholder="input with title"
                 title={"Title for input"}
-                debounceTime={5000}
+                debounceTime={1000}
+                debounce={true}
+            />
+        );
+    })
+    .add("input type number with Debounce behaviour off", () => {
+        return (
+            <Input
+                type="number"
+                name="numberValue"
+                onChange={handleEvent}
+                onKeyDown={handleEvent}
+                onKeyPress={handleEvent}
+                placeholder="Input with type Number"
+                title={"Title for input (type Number)"}
+                debounce={false}
+            />
+        );
+    })
+
+    .add("input type number with Debounce behaviour ON", () => {
+        return (
+            <Input
+                type="number"
+                name="numberValue"
+                onChange={handleEvent}
+                onKeyDown={handleEvent}
+                onKeyPress={handleEvent}
+                placeholder="Input with type Number"
+                title={"Title for input (type Number)"}
+                debounceTime={1000}
+                debounce={true}
             />
         );
     });

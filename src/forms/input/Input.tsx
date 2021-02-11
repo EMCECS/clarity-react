@@ -44,7 +44,8 @@ type InputProps = {
     required?: boolean; // auto-check on blur if there's a value
     error?: boolean; // force error state of component
     dataqa?: string; //quality engineering testing field
-    debounceTime?: number; // apply debounce behaviour and value provided is miliseconds of delay to be added
+    debounce?: boolean; // apply debounce behaviour or not
+    debounceTime?: number; // debounceTime/Delay value in miliseconds
 };
 
 const initialState = {value: null};
@@ -106,6 +107,7 @@ export class Input extends React.PureComponent<InputProps> {
             helperText,
             spellCheck,
             pattern,
+            debounce,
             debounceTime,
         } = this.props;
         return (
@@ -122,13 +124,13 @@ export class Input extends React.PureComponent<InputProps> {
                     placeholder={placeholder}
                     data-qa={dataqa}
                     onChange={(evt: React.ChangeEvent<HTMLInputElement>) =>
-                        this.debounceHandleChange.debounce(evt, this.handleChange, debounceTime)
+                        this.debounceHandleChange.debounce(evt, this.handleChange, debounce, debounceTime)
                     }
                     onKeyDown={(evt: React.KeyboardEvent<HTMLInputElement>) =>
-                        this.debounceHandleKeyDown.debounce(evt, this.handleKeyDown, debounceTime)
+                        this.debounceHandleKeyDown.debounce(evt, this.handleKeyDown, debounce, debounceTime)
                     }
                     onKeyPress={(evt: React.KeyboardEvent<HTMLInputElement>) =>
-                        this.debounceOnKeyPress.debounce(evt, onKeyPress, debounceTime)
+                        this.debounceOnKeyPress.debounce(evt, onKeyPress, debounce, debounceTime)
                     }
                     title={title}
                     onBlur={onBlur}

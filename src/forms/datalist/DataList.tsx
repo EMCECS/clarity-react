@@ -104,7 +104,8 @@ type DataListProps = {
     style?: any;
     defaultValue?: string;
     spellCheck?: boolean;
-    debounceTime?: number; //debounce time in miliseconds
+    debounce?: boolean; // decide if debounce is needed or not
+    debounceTime?: number; // debounce time in miliseconds
 };
 
 /**
@@ -171,6 +172,7 @@ export class DataList extends React.PureComponent<DataListProps, DataListState> 
             autoComplete,
             defaultValue,
             spellCheck,
+            debounce,
             debounceTime,
         } = this.props;
 
@@ -192,7 +194,7 @@ export class DataList extends React.PureComponent<DataListProps, DataListState> 
                                 onFocus={this.handleFocus}
                                 onBlur={this.handleBlur}
                                 onChange={(evt: React.ChangeEvent<HTMLInputElement>) =>
-                                    debounceOnChange.debounce(evt, onChange, debounceTime)
+                                    debounceOnChange.debounce(evt, onChange, debounce, debounceTime)
                                 }
                                 placeholder={placeHolder}
                                 name={name}

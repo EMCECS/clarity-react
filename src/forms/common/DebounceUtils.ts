@@ -9,6 +9,7 @@
  */
 
 const defaultDebounce = 500; // miliseconds
+const DebounceDisabled: boolean = false;
 
 export class DebounceUtils {
     debounceTimer: any = null;
@@ -17,19 +18,32 @@ export class DebounceUtils {
      * This method only suports the debounce with Events
      * @param evt - SyntheticEvent Event which is input to the called function
      * @param func - Function to be applied post debouce time is over
+     * @param debounce - Boolean value to decide if debounce is needed or not
      * @param debounceTime - optional debounceTime in miliseconds, defaultDebounce will be used if not provided
      */
-    public debounce = (evt: React.SyntheticEvent, func: Function | undefined, debounceTime: number | undefined) => {
+    public debounce = (
+        evt: React.SyntheticEvent,
+        func: Function | undefined,
+        debounce?: boolean,
+        debounceTime?: number,
+    ) => {
         // if function passed is not set by parent
         if (!func) {
             return func;
         }
+
+        // if debounce option is disabled
+        if (debounce === DebounceDisabled) {
+            func.apply(this, [evt]);
+            return;
+        }
+
         const waitTime = debounceTime || defaultDebounce;
 
         // this is needed to retain the Synthetic events
         evt.persist();
         const triggerFunction = (evt: any) => {
-            func.apply(null, [evt]);
+            func.apply(this, [evt]);
         };
 
         clearTimeout(this.debounceTimer);
