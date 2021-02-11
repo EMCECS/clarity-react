@@ -14,6 +14,15 @@ import {action} from "@storybook/addon-actions";
 import {Input} from "./Input";
 import {Icon} from "../../icon";
 
+// onChange handler
+const handleEvent = (evt: any) => {
+    return action(
+        `[new Date().toLocaleTimeString()] - evet triggered: ${evt && evt.type}, event value: ${evt &&
+            evt.target &&
+            evt.target.value}`,
+    );
+};
+
 storiesOf("Input", module)
     .add("a simple input box", () => <Input name="somevalue" onChange={action("changed")} />)
     .add("a simple input box with value", () => <Input name="somevalue" value="Apple" onChange={action("changed")} />)
@@ -109,6 +118,36 @@ storiesOf("Input", module)
                 placeholder="input with title"
                 title={"Title for input"}
                 debounceTime={5000}
+            />
+        );
+    })
+    .add("input type number with Debounce behaviour off", () => {
+        return (
+            <Input
+                type="number"
+                name="numberValue"
+                onChange={action(`[new Date().toLocaleTimeString()] - change event triggered`)}
+                onKeyDown={action(`[new Date().toLocaleTimeString()] - keyDown event triggered`)}
+                onKeyPress={action(`[new Date().toLocaleTimeString()] - keyPress event triggered`)}
+                placeholder="Input with type Number"
+                title={"Title for input (type Number)"}
+                debounce={"false"}
+            />
+        );
+    })
+
+    .add("input type number with Debounce behaviour ON", () => {
+        return (
+            <Input
+                type="number"
+                name="numberValue"
+                onChange={action(`[new Date().toLocaleTimeString()] - change event triggered`)}
+                onKeyDown={action(`[new Date().toLocaleTimeString()] - keyDown event triggered`)}
+                onKeyPress={action(`[new Date().toLocaleTimeString()] - keyPress event triggered`)}
+                placeholder="Input with type Number"
+                title={"Title for input (type Number)"}
+                // debounceTime={1000}
+                // debounce={"true"}
             />
         );
     });
