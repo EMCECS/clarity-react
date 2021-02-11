@@ -9,6 +9,7 @@
  */
 
 import * as React from "react";
+import * as utils from "../../utils";
 import {UID} from "react-uid";
 import {ClassNames} from "./ClassNames";
 
@@ -21,6 +22,7 @@ import {ClassNames} from "./ClassNames";
  * @param { checked } is checked property;
  * @param { defaultChecked } default checked property;
  * @param { dataqa } quality engineering property
+ * @param { className } className for toggle
  */
 type ToggleProps = {
     id?: string;
@@ -31,6 +33,7 @@ type ToggleProps = {
     checked?: boolean;
     defaultChecked?: boolean;
     dataqa?: string;
+    className?: string;
     onChange?: (newValue: boolean) => void;
     onClick?: (evt: React.MouseEvent<HTMLInputElement>) => void;
 };
@@ -76,13 +79,13 @@ export class Toggle extends React.PureComponent<ToggleProps, ToggleState> {
     }
 
     render() {
-        const {label, name, ariaLabelledby, disabled, onClick} = this.props;
+        const {label, name, ariaLabelledby, disabled, onClick, className} = this.props;
         const {checked} = this.state;
         const setId = this.props.id;
         return (
             <UID>
                 {id => (
-                    <div className={ClassNames.CLR_TOGGLE_WRAPPER}>
+                    <div className={utils.classNames([ClassNames.CLR_TOGGLE_WRAPPER, className])}>
                         <input
                             type="checkbox" //prettier
                             id={setId ? setId : id}
