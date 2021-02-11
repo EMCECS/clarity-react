@@ -291,6 +291,58 @@ storiesOf("DataGrid", module)
             </div>
         </React.Fragment>
     ))
+    .add("Grid with filter having show/hide functionality", () => (
+        <React.Fragment>
+            <div style={{width: "80%"}}>
+                <label> {"Datagrid with filter visible"} </label>
+                <DataGrid
+                    ref={datagridFilterRef}
+                    columns={[
+                        {columnName: "User ID"},
+                        {
+                            columnName: "Name",
+                            filter: (
+                                <DataGridFilter
+                                    onFilter={filterFunction}
+                                    columnName={"Name"}
+                                    datagridRef={datagridFilterRef}
+                                />
+                            ),
+                        },
+                        {columnName: "Creation Date"},
+                        {columnName: "Favorite color"},
+                    ]}
+                    rows={normalRows}
+                    footer={defaultFooter}
+                />
+            </div>
+            <br /> <br />
+            <div style={{width: "80%"}}>
+                <label> {"Datagrid with filter hidden"} </label>
+                <DataGrid
+                    ref={datagridCustomFilterMultiRef}
+                    columns={[
+                        {columnName: "User ID"},
+                        {
+                            columnName: "Name",
+                            filter: (
+                                <DataGridFilter
+                                    onFilter={filterFunction}
+                                    columnName={"Name"}
+                                    datagridRef={datagridFilterRef}
+                                    showFilter={false}
+                                />
+                            ),
+                        },
+                        {columnName: "Creation Date"},
+                        {columnName: "Favorite color"},
+                    ]}
+                    rows={normalRows}
+                    footer={defaultFooter}
+                />
+            </div>
+        </React.Fragment>
+    ))
     .add("Grid with expandable row", () => (
         <div style={{width: "80%"}}>
             <DataGrid

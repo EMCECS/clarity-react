@@ -91,10 +91,11 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
         className: "",
         style: {},
         customFilter: null,
+        showFilter: true,
     };
 
     // Initial state for filter
-    state = {
+    state: DataGridFilterState = {
         isOpen: false,
         transformVal: "translateX(0px) translateY(0px)",
     };
@@ -257,10 +258,9 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
             ClassNames.DATAGRID_FILTER_BUTTON,
             isFiltered && ClassNames.DATAGRID_FILTERED,
         ]);
-        const isFilterVisible = showFilter === undefined || showFilter;
         return (
             <div ref={this.refParent} className={classNames([ClassNames.CLR_FILTER])} style={{position: "relative"}}>
-                {isFilterVisible && (
+                {showFilter && (
                     <Button
                         defaultBtn={false}
                         className={FilterBtnClasses}
@@ -271,7 +271,7 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
                         }}
                     />
                 )}
-                {isFilterVisible && isOpen && this.openFilter()}
+                {showFilter && isOpen && this.openFilter()}
             </div>
         );
     }
