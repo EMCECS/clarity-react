@@ -13,6 +13,7 @@ import {UID} from "react-uid";
 import {classNames} from "../../utils";
 import {Icon} from "../../icon";
 import {ClassNames} from "./ClassNames";
+import {DebounceUtils} from "../common/DebounceUtils";
 
 /**
  * General component description :
@@ -83,6 +84,7 @@ export enum DataListAutoComplete {
  * @param {autoComplete} if "off" disable browser autocomplete
  * @param {spellCheck} specifies whether the element is to have its spelling and grammar checked or not
  * @param {defaultValue} if it will be used to set default value of input element, useful in case of edit workflows
+ * @param {debounceTime} if provided, will be used as debounceTime for debounce function
  **/
 type DataListProps = {
     placeHolder?: string;
@@ -102,6 +104,8 @@ type DataListProps = {
     style?: any;
     defaultValue?: string;
     spellCheck?: boolean;
+    debounce?: boolean; // decide if debounce is needed or not
+    debounceTime?: number; // debounce time in miliseconds
 };
 
 /**
@@ -151,6 +155,7 @@ export class DataList extends React.PureComponent<DataListProps, DataListState> 
     }
 
     private renderDataList(): React.ReactNode {
+        const debounceOnChange: DebounceUtils = new DebounceUtils();
         const {
             placeHolder,
             name,
@@ -167,6 +172,8 @@ export class DataList extends React.PureComponent<DataListProps, DataListState> 
             autoComplete,
             defaultValue,
             spellCheck,
+            debounce,
+            debounceTime,
         } = this.props;
 
         const {hasFocus} = this.state;
@@ -186,7 +193,9 @@ export class DataList extends React.PureComponent<DataListProps, DataListState> 
                             <input
                                 onFocus={this.handleFocus}
                                 onBlur={this.handleBlur}
-                                onChange={onChange}
+                                onChange={(evt: React.ChangeEvent<HTMLInputElement>) =>
+                                    debounceOnChange.debounce(evt, onChange, debounce, debounceTime)
+                                }
                                 placeholder={placeHolder}
                                 name={name}
                                 required={required}

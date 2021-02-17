@@ -17,6 +17,7 @@ import {
     normalColumns,
     normalRows,
     customRows,
+    customRowsWithPassword,
     customFooter,
     defaultFooter,
     GridActions,
@@ -34,7 +35,10 @@ import {
     alreadySelectedRows,
     getSelectableRowsData,
     paginationDetailsForAlreadySelectedRows,
-} from "./DataGridValues";
+    rowsWithDetailPane,
+    paginationDetailsForDetailsPane,
+    paginationRowsWithLinks,
+} from "./DataGridStoriesData";
 import {CustomFilter} from "./CustomFilter";
 import {CustomFilterMulti} from "./CustomFilterMulti";
 
@@ -81,6 +85,7 @@ const datagridFilterSortRef = React.createRef<DataGrid>();
 const datagridCustomFilterRef = React.createRef<DataGrid>();
 const datagridCustomFilterMultiRef = React.createRef<DataGrid>();
 const datagridFullDemoRef = React.createRef<DataGrid>();
+const datagridDetailsDemoRef = React.createRef<DataGrid>();
 
 storiesOf("DataGrid", module)
     .add("Basic grid", () => (
@@ -286,6 +291,58 @@ storiesOf("DataGrid", module)
             </div>
         </React.Fragment>
     ))
+    .add("Grid with filter having show/hide functionality", () => (
+        <React.Fragment>
+            <div style={{width: "80%"}}>
+                <label> {"Datagrid with filter visible"} </label>
+                <DataGrid
+                    ref={datagridFilterRef}
+                    columns={[
+                        {columnName: "User ID"},
+                        {
+                            columnName: "Name",
+                            filter: (
+                                <DataGridFilter
+                                    onFilter={filterFunction}
+                                    columnName={"Name"}
+                                    datagridRef={datagridFilterRef}
+                                />
+                            ),
+                        },
+                        {columnName: "Creation Date"},
+                        {columnName: "Favorite color"},
+                    ]}
+                    rows={normalRows}
+                    footer={defaultFooter}
+                />
+            </div>
+            <br /> <br />
+            <div style={{width: "80%"}}>
+                <label> {"Datagrid with filter hidden"} </label>
+                <DataGrid
+                    ref={datagridCustomFilterMultiRef}
+                    columns={[
+                        {columnName: "User ID"},
+                        {
+                            columnName: "Name",
+                            filter: (
+                                <DataGridFilter
+                                    onFilter={filterFunction}
+                                    columnName={"Name"}
+                                    datagridRef={datagridFilterRef}
+                                    showFilter={false}
+                                />
+                            ),
+                        },
+                        {columnName: "Creation Date"},
+                        {columnName: "Favorite color"},
+                    ]}
+                    rows={normalRows}
+                    footer={defaultFooter}
+                />
+            </div>
+        </React.Fragment>
+    ))
     .add("Grid with expandable row", () => (
         <div style={{width: "80%"}}>
             <DataGrid
@@ -363,6 +420,23 @@ storiesOf("DataGrid", module)
             )}
         </State>
     ))
+    .add("Grid with detail pane", () => (
+        <div style={{width: "80%", paddingTop: "5%"}}>
+            <DataGrid
+                columns={sortColumns}
+                rows={rowsWithDetailPane.slice(0, 5)}
+                footer={hideShowColFooter}
+                pagination={paginationDetailsForDetailsPane}
+                rowType={GridRowType.EXPANDABLE_ROWS_WITH_DETAIL_PANE}
+                selectionType={GridSelectionType.MULTI}
+            />
+        </div>
+    ))
+    .add("Grid with read-only password", () => (
+        <div style={{width: "80%"}}>
+            <DataGrid columns={normalColumns} rows={customRowsWithPassword} footer={customFooter} />
+        </div>
+    ))
     .add("Grid full demo", () => (
         <div style={{width: "80%", paddingTop: "5%"}}>
             <DataGrid
@@ -376,7 +450,6 @@ storiesOf("DataGrid", module)
                                 <Icon shape="user" className="is-solid" /> {"User ID"}
                             </div>
                         ),
-                        isVisible: false,
                         sort: {defaultSortOrder: SortOrder.ASC, sortFunction: sortFunction},
                         filter: (
                             <DataGridFilter
@@ -405,6 +478,7 @@ storiesOf("DataGrid", module)
                     {columnName: "Creation Date", style: {width: "20%"}},
                     {
                         columnName: "Favorite color",
+                        isVisible: false,
                         displayName: (
                             <div>
                                 <Icon shape="color-palette" className="is-solid" /> {"Favorite color"}{" "}
@@ -418,4 +492,53 @@ storiesOf("DataGrid", module)
                 footer={hideShowColFooter}
             />
         </div>
-    ));
+    ))
+    .add("Grid with open/close details pane on link click", () => {
+        // function to handle
+        const handleLinkClick = (rowIndex: number) => {
+            datagridDetailsDemoRef &&
+                datagridDetailsDemoRef.current &&
+                datagridDetailsDemoRef.current.handleDetailPaneToggle(rowIndex);
+        };
+
+        return (
+            <div style={{width: "80%", paddingTop: "5%"}}>
+                <DataGrid
+                    ref={datagridDetailsDemoRef}
+                    itemText={"Users"}
+                    columns={[
+                        {
+                            columnName: "User ID",
+                            displayName: (
+                                <div>
+                                    <Icon shape="user" className="is-solid" /> {"User ID"}
+                                </div>
+                            ),
+                            isVisible: false,
+                        },
+                        {
+                            columnName: "Name",
+                            displayName: (
+                                <div>
+                                    <Icon shape="administrator" className="is-solid" /> {"Name"}
+                                </div>
+                            ),
+                        },
+                        {columnName: "Creation Date", style: {width: "20%"}},
+                        {
+                            columnName: "Favorite color",
+                            displayName: (
+                                <div>
+                                    <Icon shape="color-palette" className="is-solid" /> {"Favorite color"}{" "}
+                                </div>
+                            ),
+                        },
+                    ]}
+                    rows={paginationRowsWithLinks(handleLinkClick).slice(0, 5)}
+                    rowType={GridRowType.ROWS_WITH_DETAIL_PANE}
+                    selectionType={GridSelectionType.MULTI}
+                    footer={hideShowColFooter}
+                />
+            </div>
+        );
+    });

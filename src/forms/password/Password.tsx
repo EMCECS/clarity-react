@@ -39,6 +39,7 @@ type PasswordProps = {
     unmask?: boolean; // if true renders eye icon to hide/show or mask/unmask password
     pattern?: string; // specifies a regular expression that element's value is checked against
     dataqa?: string; //quality engineering testing field
+    readOnly?: boolean; //specifies if password is readonly
 };
 
 type PasswordState = {
@@ -103,6 +104,7 @@ export class Password extends React.PureComponent<PasswordProps, PasswordState> 
             unmask,
             pattern,
             dataqa,
+            readOnly,
         } = this.props;
 
         const {show, type} = this.state;
@@ -136,6 +138,7 @@ export class Password extends React.PureComponent<PasswordProps, PasswordState> 
                                     pattern={pattern}
                                     data-qa={dataqa}
                                     onChange={this.handleChange}
+                                    readOnly={readOnly}
                                 />
 
                                 {unmask && (

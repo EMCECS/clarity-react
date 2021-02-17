@@ -12,6 +12,7 @@ import * as React from "react";
 import {storiesOf} from "@storybook/react";
 import {action} from "@storybook/addon-actions";
 import {Button, ButtonSize, ButtonState} from ".";
+import {Badge, BadgeColor} from "../../emphasis/badges";
 
 storiesOf("Button", module)
     .add("Simple buttons", () => (
@@ -139,6 +140,46 @@ storiesOf("Button", module)
             </Button>
             <Button key="basic" defaultBtn={false} onClick={action("basic click")}>
                 BASIC
+            </Button>
+        </div>
+    ))
+    .add("Buttons with badge", () => (
+        <div>
+            <Button key="basic" onClick={action("basic click")}>
+                BASIC
+                <span style={{paddingLeft: "0.5rem"}}>
+                    <Badge color={BadgeColor.LIGHT_BLUE}>1</Badge>
+                </span>
+            </Button>
+            <Button key="basic-info" state={ButtonState.INFO} onClick={action("basic-info click")}>
+                INFO
+                <span style={{paddingLeft: "0.5rem"}}>
+                    <Badge color={BadgeColor.LIGHT_BLUE}> 2 </Badge>
+                </span>
+            </Button>
+            <Button key="basic-warning" state={ButtonState.WARNING} onClick={action("basic-warning click")}>
+                WARNING
+                <span style={{paddingLeft: "0.5rem"}}>
+                    <Badge color={BadgeColor.BLUE}> 3 </Badge>
+                </span>
+            </Button>
+            <Button key="basic-success" state={ButtonState.SUCCESS} onClick={action("basic-success click")}>
+                SUCCESS
+                <span style={{paddingLeft: "0.5rem"}}>
+                    <Badge color={BadgeColor.ORANGE}> 4 </Badge>
+                </span>
+            </Button>
+            <Button key="basic-danger" state={ButtonState.DANGER} onClick={action("basic-danger click")}>
+                DANGER
+                <span style={{paddingLeft: "0.5rem"}}>
+                    <Badge color={BadgeColor.ORANGE}> 5 </Badge>
+                </span>
+            </Button>
+            <Button key="basic-disabled" disabled={true} onClick={action("basic-disabled click")}>
+                DISABLED
+                <span style={{paddingLeft: "0.5rem"}}>
+                    <Badge> 6 </Badge>
+                </span>
             </Button>
         </div>
     ));
