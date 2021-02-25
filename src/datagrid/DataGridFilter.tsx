@@ -25,6 +25,8 @@ import {DebounceUtils} from "../forms/common/DebounceUtils";
  * @param {onFilter} Custom filter logic
  * @param {filterType} Type of filter string or custom
  * @param {disabled} boolean value to enable or disable filter
+ * @param {debounce} boolean value to apply debounce behaviour
+ * @param {debounceTime} number value debounceTime/Delay value in miliseconds
  */
 export type DataGridFilterProps = {
     style?: any;
@@ -36,6 +38,8 @@ export type DataGridFilterProps = {
     filterType?: FilterType;
     showFilter?: boolean;
     disabled?: boolean;
+    debounce?: boolean;
+    debounceTime?: number;
 };
 
 /**
@@ -136,12 +140,12 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
         }
     }
 
-    private handlOnChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    private handleOnChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
         const value: string = evt.target.value;
         this.updateFilter(value);
     };
 
-    updateFilter = (value: any) => {
+    public updateFilter = (value: any) => {
         const {columnName, datagridRef, onFilter} = this.props;
         datagridRef.current!.showLoader();
 
@@ -206,7 +210,17 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
     private openFilter(): React.ReactElement {
         const {filterValue} = this;
         const {transformVal} = this.state;
-        const {style, className, filterType, placeholder, columnName, children, disabled} = this.props;
+        const {
+            style,
+            className,
+            filterType,
+            placeholder,
+            columnName,
+            children,
+            disabled,
+            debounce,
+            debounceTime,
+        } = this.props;
 
         const childrenWithProps = React.Children.map(children, child => {
             // checking isValidElement is the safe way and avoids a typescript error too
@@ -251,7 +265,7 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
                             defaultValue={filterValue}
                             disabled={disabled || false}
                             onChange={(evt: React.ChangeEvent<HTMLInputElement>) =>
-                                this.debounceHandleChange.debounce(evt, this.handlOnChange, true)
+                                this.debounceHandleChange.debounce(evt, this.handleOnChange, debounce, debounceTime)
                             }
                         />
                     ) : (
