@@ -280,7 +280,6 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
     render() {
         const {isOpen, isFiltered} = this.state;
         const {showFilter} = this.props;
-        //const {isFiltered} = this;
         const FilterBtnClasses = classNames([
             ClassNames.DATAGRID_FILTER_BUTTON,
             isFiltered && ClassNames.DATAGRID_FILTERED,
