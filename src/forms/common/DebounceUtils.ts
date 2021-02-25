@@ -33,20 +33,20 @@ export class DebounceUtils {
         }
 
         // if debounce option is disabled
-        if (debounce === DebounceDisabled) {
+        if (debounce === true) {
+            const waitTime = debounceTime || defaultDebounce;
+
+            // this is needed to retain the Synthetic events
+            evt.persist();
+            const triggerFunction = (evt: any) => {
+                func.apply(this, [evt]);
+            };
+
+            clearTimeout(this.debounceTimer);
+            this.debounceTimer = setTimeout(() => triggerFunction(evt), waitTime);
+        } else {
             func.apply(this, [evt]);
             return;
         }
-
-        const waitTime = debounceTime || defaultDebounce;
-
-        // this is needed to retain the Synthetic events
-        evt.persist();
-        const triggerFunction = (evt: any) => {
-            func.apply(this, [evt]);
-        };
-
-        clearTimeout(this.debounceTimer);
-        this.debounceTimer = setTimeout(() => triggerFunction(evt), waitTime);
     };
 }

@@ -110,16 +110,9 @@ storiesOf("Input", module)
     .add("input with title", () => (
         <Input name="somevalue" onChange={action("changed")} placeholder="input with title" title={"Title for input"} />
     ))
-    .add("input with Debounce behaviour", () => {
+    .add("input with Debounce behaviour off by default", () => {
         return (
-            <Input
-                name="somevalue"
-                onChange={handleEvent}
-                placeholder="input with title"
-                title={"Title for input"}
-                debounceTime={1000}
-                debounce={true}
-            />
+            <Input name="somevalue" onChange={handleEvent} placeholder="input with title" title={"Title for input"} />
         );
     })
     .add("input type number with Debounce behaviour off", () => {
