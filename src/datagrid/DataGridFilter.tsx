@@ -93,7 +93,6 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
     private refParent = React.createRef<HTMLDivElement>();
     private refChild = React.createRef<HTMLDivElement>();
     private filterValue: any;
-    //private isFiltered: boolean;
     private debounceHandleChange: DebounceUtils = new DebounceUtils();
 
     static defaultProps = {
