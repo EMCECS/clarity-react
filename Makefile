@@ -15,6 +15,7 @@ pack: build
 
 package: build
 	yarn run package 
+	yarn run copy
 
 publish: package
 	cd $(BUILD_DIR) 
