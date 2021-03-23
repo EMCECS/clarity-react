@@ -17,8 +17,8 @@ package: build
 	yarn package 
 
 publish: package
-	cd $(BUILD_DIR)
-	yarn publish 
+	cd $(BUILD_DIR) && yarn run publish 
+	
 
 test:
 	yarn test --watchAll=false
