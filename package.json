@@ -1,6 +1,6 @@
 {
     "name": "@dellstorage/clarity-react",
-    "version": "0.25.8",
+    "version": "0.25.9",
     "description": "React components for Clarity UI",
     "license": "Apache-2.0",
     "private": false,
@@ -22,7 +22,7 @@
         "url": "https://github.com/emcecs/clarity-react"
     },
     "scripts": {
-        "build": "rm -rf ./dist && tsc && yarn run copy", 
+        "build": "rm -rf ./dist && tsc && yarn run copy",
         "copy": "cp package.json ./dist/.",
         "storybook": "start-storybook -p 6006",
         "build-storybook": "build-storybook",
