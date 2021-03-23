@@ -6,7 +6,7 @@ This project an unofficial implementation of [VMware Clarity Design](https://cla
 
 To use the project simply add the dependencies with `yarn`, `npm`, etc:
 ```shell
-$ yarn add @dell/clarity-react
+$ yarn add @dellstorage/clarity-react
 ```
 
 Import styles and globals from peer dependencies:
