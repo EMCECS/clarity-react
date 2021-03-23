@@ -1,6 +1,6 @@
 {
     "name": "@dellstorage/clarity-react-ui",
-    "version": "0.25.10",
+    "version": "0.25.11",
     "description": "React components for Clarity UI",
     "license": "Apache-2.0",
     "private": false,
