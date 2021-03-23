@@ -11,7 +11,8 @@ build:
 	yarn run copy
 
 pack: build
-	cd $(BUILD_DIR) && yarn pack
+	cd $(BUILD_DIR) 
+	yarn pack
 
 package: build
 	yarn run package 

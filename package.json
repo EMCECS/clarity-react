@@ -33,7 +33,7 @@
         "publish": "npm publish --access public",
         "unpublish": "npm unpublish --force",
         "version": "npm version",
-        "package": "yarn run build && yarn run version patch --unsafe-perm",
+        "package": "yarn run version patch --unsafe-perm",
         "package-major": "yarn run lint && yarn run build && yarn run version major --unsafe-perm",
         "package-minor": "yarn run lint && yarn run build && yarn run version minor --unsafe-perm",
         "package-patch": "yarn run lint && yarn run build && yarn run version patch --unsafe-perm"
