@@ -7,19 +7,19 @@ NODE_MODULES_DIR := ${SOURCE_DIR}/node_modules
 build:
 	yarn
 	rm -rf $(BUILD_DIR)
-	yarn build
-	yarn copy
+	yarn run build
+	yarn run copy
 
 pack: build
 	cd $(BUILD_DIR) && yarn pack
 
 package: build
-	yarn package 
+	yarn run package 
 
 publish: package
-	cd $(BUILD_DIR) && yarn run publish 
+	cd $(BUILD_DIR) 
+	yarn run publish 
 	
-
 test:
 	yarn test --watchAll=false
 
