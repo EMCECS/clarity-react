@@ -6,11 +6,19 @@ NODE_MODULES_DIR := ${SOURCE_DIR}/node_modules
 
 build:
 	yarn
+	rm -rf $(BUILD_DIR)
 	yarn build
 	yarn copy
 
 pack: build
-	cd dist/ && yarn pack
+	cd $(BUILD_DIR) && yarn pack
+
+package: build
+	yarn package 
+
+publish: package
+	cd $(BUILD_DIR)
+	yarn publish 
 
 test:
 	yarn test --watchAll=false

@@ -1,5 +1,5 @@
 {
-    "name": "@dellstorage/clarity-react",
+    "name": "@dellstorage/clarity-react-ui",
     "version": "0.25.9",
     "description": "React components for Clarity UI",
     "license": "Apache-2.0",
@@ -22,7 +22,7 @@
         "url": "https://github.com/emcecs/clarity-react"
     },
     "scripts": {
-        "build": "rm -rf ./dist && tsc && yarn run copy",
+        "build": "tsc",
         "copy": "cp package.json ./dist/.",
         "storybook": "start-storybook -p 6006",
         "build-storybook": "build-storybook",
@@ -30,7 +30,7 @@
         "test": "jest",
         "lint": "./node_modules/.bin/eslint **//*.tsx",
         "precommit": "lint-staged",
-        "publish": "cd ./dist/ && npm publish --access public",
+        "publish": "npm publish --access public",
         "unpublish": "npm unpublish --force",
         "version": "npm version",
         "package": "yarn run build && yarn run version patch --unsafe-perm",
