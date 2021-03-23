@@ -20,7 +20,7 @@ package: build
 
 publish: package
 	cd $(BUILD_DIR) 
-	yarn run publish 
+	yarn run publish-public 
 	
 test:
 	yarn test --watchAll=false
