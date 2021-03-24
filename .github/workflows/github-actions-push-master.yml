@@ -42,7 +42,7 @@ jobs:
       - name: publish package
         run: |
           cd "./dist"
-	        yarn run publish-public
+          yarn run publish-public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       
