@@ -31,6 +31,5 @@ jobs:
         run: |
           rm -rf "./dist"
           yarn run build
-	        yarn run copy
-      
+	        yarn run copy     
       
