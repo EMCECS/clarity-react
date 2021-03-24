@@ -31,18 +31,17 @@ jobs:
 
       - name: build clarity-react project 
         run: |
-          rm -rf ${{BUILD_DIR}}
+          rm -rf "./dist"
           yarn run build
 	        yarn run copy
   
       - name: create package
         run: |
           yarn run package 
-	        yarn run copy
       
       - name: publish package
         run: |
-          cd $(BUILD_DIR) 
+          cd "./dist"
 	        yarn run publish-public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
