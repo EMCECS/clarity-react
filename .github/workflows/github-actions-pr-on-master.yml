@@ -1,4 +1,4 @@
-name: clarity-react CI Pipeline
+name: clarity-react CI - PR On Master - Pipeline
 
 # Controls when the action will run. 
 on:
@@ -20,9 +20,9 @@ jobs:
       - uses: actions/checkout@v2
       # Setup nodejs
       - uses: actions/setup-node@v1
-       with:
-        node-version: '12.x'
-        registry-url: 'https://registry.npmjs.org'
+        with:
+          node-version: '12.x'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: build dependencies 
         run: yarn
