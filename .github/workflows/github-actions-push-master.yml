@@ -5,8 +5,6 @@ on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -44,6 +42,7 @@ jobs:
       - name: create package and publish 
         run: |
           yarn run package 
+          git commit -m "Publishing clarity-react"
           yarn run copy
           cd "./dist"
           npm config set //registry.npmjs.org/:_authToken ${NODE_AUTH_TOKEN}

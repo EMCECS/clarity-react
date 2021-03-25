@@ -23,7 +23,7 @@
     },
     "scripts": {
         "build": "tsc",
-        "copy": "cp package.json ./dist/.",
+        "copy": "cp package.json ./dist/. && cp README.md ./dist/. ",
         "storybook": "start-storybook -p 6006",
         "build-storybook": "build-storybook",
         "testWithCoverage": "jest --coverage",
