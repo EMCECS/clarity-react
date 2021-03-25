@@ -110,5 +110,8 @@
         ],
         "snapshotResolver": "<rootDir>/testResolver.tsx",
         "testEnvironment": "jest-environment-jsdom-fourteen"
+    },
+    "publishConfig": {
+        "registry": "https://registry.npmjs.org/"
     }
 }
