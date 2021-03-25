@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-publish:
+  build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -40,7 +40,18 @@ jobs:
           rm -rf "./dist"
           yarn run build
           yarn run copy
-  
+
+  publish:
+    name: Publish to npm  
+    needs: build
+    runs-on: ubuntu-latest 
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+          registry-url: 'https://registry.npmjs.org' 
+      
       - name: create package
         run: |
           yarn run package 
