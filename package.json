@@ -30,7 +30,7 @@
         "test": "jest",
         "lint": "./node_modules/.bin/eslint **//*.tsx",
         "precommit": "lint-staged",
-        "publish-public": "npm publish --access public",
+        "publish-public": "npm publish --ignore-scripts --access public",
         "version": "npm version",
         "package": "yarn run version patch --unsafe-perm",
         "package-major": "yarn run lint && yarn run build && yarn run version major --unsafe-perm",
