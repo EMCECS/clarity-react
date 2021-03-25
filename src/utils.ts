@@ -39,3 +39,5 @@ export function allFalseOnKey(obj: any, key: any) {
     }
     return true;
 }
+// Added for testing only
+allFalseOnKey(100, 100);
