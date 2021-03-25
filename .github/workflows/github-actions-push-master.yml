@@ -40,24 +40,6 @@ jobs:
           rm -rf "./dist"
           yarn run build
           yarn run copy
-
-
-  publish:
-    name: Publish to npm  
-    needs: build
-    runs-on: ubuntu-latest 
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '12.x'
-          registry-url: 'https://registry.npmjs.org' 
-      
-      - name: setup configurations
-        run: |
-          git config --global user.email "mahesh.kulkarni4@dell.com"
-          git config --global user.name "Mahesh Kulkarni"
-          npm config set registry https://registry.npmjs.org/
       
       - name: create package
         run: |
