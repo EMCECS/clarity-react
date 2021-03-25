@@ -41,12 +41,10 @@ jobs:
           yarn run build
           yarn run copy
       
-      - name: create package
+      - name: create package and publish 
         run: |
           yarn run package 
-      
-      - name: publish package
-        run: |
+          yarn run copy
           cd "./dist"
           npm config set //registry.npmjs.org/:_authToken ${NODE_AUTH_TOKEN}
           yarn run publish-public
