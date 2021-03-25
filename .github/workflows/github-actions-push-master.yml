@@ -44,7 +44,7 @@ jobs:
           yarn run package 
           yarn run copy
           export PREVIOUS_MESSAGE="$(git log --format=%B -n 1)"
-          git commit --amend -m "Publishing clarity-react@$PREVIOUS_MESSAGE"
+          git commit --amend -m "Published clarity-react@$PREVIOUS_MESSAGE"
           cd "./dist"
           npm config set //registry.npmjs.org/:_authToken ${NODE_AUTH_TOKEN}
           yarn run publish-public
