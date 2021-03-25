@@ -42,7 +42,6 @@ jobs:
       - name: create package and publish 
         run: |
           yarn run package 
-          git commit -m "Publishing clarity-react"
           yarn run copy
           cd "./dist"
           npm config set //registry.npmjs.org/:_authToken ${NODE_AUTH_TOKEN}
