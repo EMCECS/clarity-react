@@ -26,6 +26,11 @@ jobs:
           node-version: '12.x'
           registry-url: 'https://registry.npmjs.org'
 
+      - name: setup gitconfig
+        run: |
+          git config --global user.email "mahesh.kulkarni4@dell.com"
+          git config --global user.name "Mahesh Kulkarni"
+
       - name: build dependencies 
         run: yarn
 
