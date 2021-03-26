@@ -33,6 +33,14 @@ const tabsData: TabV2Details[] = [
         id: "infra",
         isDisabled: true,
     },
+    {
+        name: "Metrics",
+        id: "metrics",
+    },
+    {
+        name: "Policies",
+        id: "policies",
+    },
 ];
 
 const staticTabsData: TabV2Details[] = [
@@ -118,6 +126,8 @@ storiesOf("TabsV2", module)
                     <TabPane id={"mgmt"}>{"MANAGEMENT"}</TabPane>
                     <TabPane id={"cloud"}>{"CLOUD"}</TabPane>
                     <TabPane id={"infra"}>{"INFRASTRUCTURE"}</TabPane>
+                    <TabPane id={"metrics"}>{"METRICS"}</TabPane>
+                    <TabPane id={"policies"}>{"POLICIES"}</TabPane>
                 </TabsV2>
             )}
         </State>
