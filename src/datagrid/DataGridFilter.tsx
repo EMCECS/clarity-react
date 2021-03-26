@@ -13,6 +13,7 @@ import {classNames} from "../utils";
 import {ClassNames} from "./ClassNames";
 import {Button} from "../forms/button";
 import {DataGridRow} from "./DataGrid";
+import {DebounceUtils} from "../forms/common/DebounceUtils";
 
 /**
  * Props for DataGridFilter :
@@ -23,6 +24,9 @@ import {DataGridRow} from "./DataGrid";
  * @param {placeholder} placeholder for string filter input
  * @param {onFilter} Custom filter logic
  * @param {filterType} Type of filter string or custom
+ * @param {disabled} boolean value to enable or disable filter
+ * @param {debounce} boolean value to apply debounce behaviour
+ * @param {debounceTime} number value debounceTime/Delay value in miliseconds
  */
 export type DataGridFilterProps = {
     style?: any;
@@ -33,6 +37,9 @@ export type DataGridFilterProps = {
     onFilter: (rows: DataGridRow[], columnValue: any, columnName: string) => Promise<DataGridFilterResult>;
     filterType?: FilterType;
     showFilter?: boolean;
+    disabled?: boolean;
+    debounce?: boolean;
+    debounceTime?: number;
 };
 
 /**
@@ -59,10 +66,12 @@ export enum FilterType {
  * State for DataGridFilter:
  * @param {isOpen} check if filter box is open
  * @param {transformVal} value for transform css attribute
+ * @param {isFiltered} boolean value to indicate if filter is applied or not
  */
 type DataGridFilterState = {
     isOpen: boolean;
     transformVal: string;
+    isFiltered: boolean;
 };
 
 /**
@@ -84,7 +93,7 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
     private refParent = React.createRef<HTMLDivElement>();
     private refChild = React.createRef<HTMLDivElement>();
     private filterValue: any;
-    private isFiltered: boolean;
+    private debounceHandleChange: DebounceUtils = new DebounceUtils();
 
     static defaultProps = {
         filterType: FilterType.STR,
@@ -92,18 +101,19 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
         style: {},
         customFilter: null,
         showFilter: true,
+        disabled: false,
     };
 
     // Initial state for filter
     state: DataGridFilterState = {
         isOpen: false,
         transformVal: "translateX(0px) translateY(0px)",
+        isFiltered: false,
     };
 
     constructor(props: DataGridFilterProps) {
         super(props);
         this.filterValue = undefined;
-        this.isFiltered = false;
     }
 
     componentWillMount() {
@@ -129,7 +139,12 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
         }
     }
 
-    updateFilter = (value: any) => {
+    private handleOnChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+        const value: string = evt.target.value;
+        this.updateFilter(value);
+    };
+
+    public updateFilter = (value: any) => {
         const {columnName, datagridRef, onFilter} = this.props;
         datagridRef.current!.showLoader();
 
@@ -140,7 +155,7 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
 
         if (onFilter && datagridRef) {
             this.filterValue = value;
-            this.isFiltered = String(value).length !== 0;
+            this.setState({isFiltered: String(value).length !== 0});
 
             onFilter(rows, value, columnName).then(data => {
                 // Update datagrid rows
@@ -194,7 +209,17 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
     private openFilter(): React.ReactElement {
         const {filterValue} = this;
         const {transformVal} = this.state;
-        const {style, className, filterType, placeholder, columnName, children} = this.props;
+        const {
+            style,
+            className,
+            filterType,
+            placeholder,
+            columnName,
+            children,
+            disabled,
+            debounce,
+            debounceTime,
+        } = this.props;
 
         const childrenWithProps = React.Children.map(children, child => {
             // checking isValidElement is the safe way and avoids a typescript error too
@@ -237,9 +262,10 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
                             name={`name-${columnName}`}
                             placeholder={placeholder}
                             defaultValue={filterValue}
-                            onChange={evt => {
-                                this.updateFilter(evt.target.value);
-                            }}
+                            disabled={disabled || false}
+                            onChange={(evt: React.ChangeEvent<HTMLInputElement>) =>
+                                this.debounceHandleChange.debounce(evt, this.handleOnChange, debounce, debounceTime)
+                            }
                         />
                     ) : (
                         filterType === FilterType.CUSTOM && childrenWithProps
@@ -251,9 +277,8 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
     }
 
     render() {
-        const {isOpen} = this.state;
+        const {isOpen, isFiltered} = this.state;
         const {showFilter} = this.props;
-        const {isFiltered} = this;
         const FilterBtnClasses = classNames([
             ClassNames.DATAGRID_FILTER_BUTTON,
             isFiltered && ClassNames.DATAGRID_FILTERED,

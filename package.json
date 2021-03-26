@@ -1,6 +1,6 @@
 {
-    "name": "@dell/clarity-react",
-    "version": "0.25.6",
+    "name": "@dellstorage/clarity-react",
+    "version": "0.25.11",
     "description": "React components for Clarity UI",
     "license": "Apache-2.0",
     "private": false,
@@ -23,13 +23,19 @@
     },
     "scripts": {
         "build": "tsc",
-        "copy": "cp package.json ./dist/.",
+        "copy": "cp package.json ./dist/. && cp README.md ./dist/. ",
         "storybook": "start-storybook -p 6006",
         "build-storybook": "build-storybook",
         "testWithCoverage": "jest --coverage",
         "test": "jest",
         "lint": "./node_modules/.bin/eslint **//*.tsx",
-        "precommit": "lint-staged"
+        "precommit": "lint-staged",
+        "publish-public": "npm publish --ignore-scripts --access public",
+        "version": "npm version",
+        "package": "yarn run version patch --unsafe-perm",
+        "package-major": "yarn run lint && yarn run build && yarn run version major --unsafe-perm",
+        "package-minor": "yarn run lint && yarn run build && yarn run version minor --unsafe-perm",
+        "package-patch": "yarn run lint && yarn run build && yarn run version patch --unsafe-perm"
     },
     "lint-staged": {
         "src/**/*.{js,jsx,json,css,ts,tsx}": [
@@ -104,5 +110,8 @@
         ],
         "snapshotResolver": "<rootDir>/testResolver.tsx",
         "testEnvironment": "jest-environment-jsdom-fourteen"
+    },
+    "publishConfig": {
+        "registry": "https://registry.npmjs.org/"
     }
 }

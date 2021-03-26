@@ -84,7 +84,7 @@ storiesOf("DataList", module)
             </DataList>
         </div>
     ))
-    .add("DataList with Debounce Behaviour", () => (
+    .add("DataList with Debounce true", () => (
         <div>
             <DataList
                 placeHolder="No label"
@@ -93,6 +93,20 @@ storiesOf("DataList", module)
                 onChange={action("changed: after 5 secs", new Date().toLocaleTimeString())}
                 debounce={true}
                 debounceTime={1000}
+            >
+                <DataListOption value="Item1" />
+                <DataListOption value="Item2" />
+                <DataListOption value="Item3" />
+            </DataList>
+        </div>
+    ))
+    .add("DataList with Debounce OFF by default", () => (
+        <div>
+            <DataList
+                placeHolder="No label"
+                helperText="Select any option or create one"
+                label="Select Item"
+                onChange={action("changed: Immediately", new Date().toLocaleTimeString())}
             >
                 <DataListOption value="Item1" />
                 <DataListOption value="Item2" />
