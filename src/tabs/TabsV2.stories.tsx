@@ -64,6 +64,16 @@ const staticTabsData: TabV2Details[] = [
         id: "infra",
         isDisabled: true,
     },
+    {
+        name: "Metrics",
+        id: "metrics",
+        isDisabled: true,
+    },
+    {
+        name: "Policies",
+        id: "policies",
+        isDisabled: true,
+    },
 ];
 
 const store = new Store({
@@ -85,6 +95,8 @@ storiesOf("TabsV2", module)
                     <TabPane id={"mgmt"}>{"MANAGEMENT"}</TabPane>
                     <TabPane id={"cloud"}>{"CLOUD"}</TabPane>
                     <TabPane id={"infra"}>{"INFRASTRUCTURE"}</TabPane>
+                    <TabPane id={"metrics"}>{"METRICS"}</TabPane>
+                    <TabPane id={"policies"}>{"POLICIES"}</TabPane>
                 </TabsV2>
             )}
         </State>
@@ -97,6 +109,8 @@ storiesOf("TabsV2", module)
                     <TabPane id={"mgmt"}>{"MANAGEMENT"}</TabPane>
                     <TabPane id={"cloud"}>{"CLOUD"}</TabPane>
                     <TabPane id={"infra"}>{"INFRASTRUCTURE"}</TabPane>
+                    <TabPane id={"metrics"}>{"METRICS"}</TabPane>
+                    <TabPane id={"policies"}>{"POLICIES"}</TabPane>
                 </TabsV2>
             )}
         </State>
@@ -109,6 +123,8 @@ storiesOf("TabsV2", module)
                     <TabPane id={"mgmt"}>{"MANAGEMENT"}</TabPane>
                     <TabPane id={"cloud"}>{"CLOUD"}</TabPane>
                     <TabPane id={"infra"}>{"INFRASTRUCTURE"}</TabPane>
+                    <TabPane id={"metrics"}>{"METRICS"}</TabPane>
+                    <TabPane id={"policies"}>{"POLICIES"}</TabPane>
                 </TabsV2>
             )}
         </State>
