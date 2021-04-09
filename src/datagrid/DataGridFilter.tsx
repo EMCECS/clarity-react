@@ -27,6 +27,7 @@ import {DebounceUtils} from "../forms/common/DebounceUtils";
  * @param {disabled} boolean value to enable or disable filter
  * @param {debounce} boolean value to apply debounce behaviour
  * @param {debounceTime} number value debounceTime/Delay value in miliseconds
+ * @param {position} number position of the filter popup
  */
 export type DataGridFilterProps = {
     style?: any;
@@ -40,6 +41,7 @@ export type DataGridFilterProps = {
     disabled?: boolean;
     debounce?: boolean;
     debounceTime?: number;
+    position?: FilterPosition;
 };
 
 /**
@@ -62,6 +64,12 @@ export enum FilterType {
     CUSTOM = "Custom",
 }
 
+// Enum for filter position
+export enum FilterPosition {
+    LEFT = "left",
+    MIDDLE = "middle",
+    RIGHT = "right",
+}
 /**
  * State for DataGridFilter:
  * @param {isOpen} check if filter box is open
@@ -219,6 +227,7 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
             disabled,
             debounce,
             debounceTime,
+            position,
         } = this.props;
 
         const childrenWithProps = React.Children.map(children, child => {
@@ -228,6 +237,14 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
             }
             return child;
         });
+        let alignment;
+        if (position === FilterPosition.RIGHT) {
+            alignment = "195px";
+        } else if (position === FilterPosition.MIDDLE) {
+            alignment = "97px";
+        } else {
+            alignment = "0px";
+        }
 
         return (
             <div>
@@ -240,7 +257,7 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
                         bottom: "auto",
                         right: "auto",
                         height: "90px",
-                        left: 0,
+                        left: alignment,
                         transform: transformVal,
                         ...style,
                     }}
