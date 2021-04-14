@@ -27,7 +27,7 @@ import {DebounceUtils} from "../forms/common/DebounceUtils";
  * @param {disabled} boolean value to enable or disable filter
  * @param {debounce} boolean value to apply debounce behaviour
  * @param {debounceTime} number value debounceTime/Delay value in miliseconds
- * @param {position} number position of the filter popup
+ * @param {position} position of the filter popup
  */
 export type DataGridFilterProps = {
     style?: any;
@@ -67,7 +67,7 @@ export enum FilterType {
 // Enum for filter position
 export enum FilterPosition {
     LEFT = "left",
-    MIDDLE = "middle",
+    CENTER = "center",
     RIGHT = "right",
 }
 /**
@@ -238,14 +238,17 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
             return child;
         });
         let alignment;
-        if (position === FilterPosition.RIGHT) {
-            alignment = "195px";
-        } else if (position === FilterPosition.MIDDLE) {
-            alignment = "97px";
-        } else {
-            alignment = "0px";
+        switch (position) {
+            case FilterPosition.RIGHT:
+                alignment = "195px";
+                break;
+            case FilterPosition.CENTER:
+                alignment = "97px";
+                break;
+            default:
+                alignment = "0px";
+                break;
         }
-
         return (
             <div>
                 <span className={ClassNames.OFFSCREEN_FOCUS_REBOUNDER} />

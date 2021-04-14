@@ -195,6 +195,7 @@ storiesOf("DataGrid", module)
                                 onFilter={filterFunction}
                                 columnName={"Name"}
                                 datagridRef={datagridFilterRef}
+                                position={FilterPosition.CENTER}
                             />
                         ),
                     },
