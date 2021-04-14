@@ -27,6 +27,7 @@ import {DebounceUtils} from "../forms/common/DebounceUtils";
  * @param {disabled} boolean value to enable or disable filter
  * @param {debounce} boolean value to apply debounce behaviour
  * @param {debounceTime} number value debounceTime/Delay value in miliseconds
+ * @param {position} position of the filter popup
  */
 export type DataGridFilterProps = {
     style?: any;
@@ -40,6 +41,7 @@ export type DataGridFilterProps = {
     disabled?: boolean;
     debounce?: boolean;
     debounceTime?: number;
+    position?: FilterPosition;
 };
 
 /**
@@ -62,6 +64,12 @@ export enum FilterType {
     CUSTOM = "Custom",
 }
 
+// Enum for filter position
+export enum FilterPosition {
+    LEFT = "left",
+    CENTER = "center",
+    RIGHT = "right",
+}
 /**
  * State for DataGridFilter:
  * @param {isOpen} check if filter box is open
@@ -219,6 +227,7 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
             disabled,
             debounce,
             debounceTime,
+            position,
         } = this.props;
 
         const childrenWithProps = React.Children.map(children, child => {
@@ -228,7 +237,18 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
             }
             return child;
         });
-
+        let alignment;
+        switch (position) {
+            case FilterPosition.RIGHT:
+                alignment = "195px";
+                break;
+            case FilterPosition.CENTER:
+                alignment = "97px";
+                break;
+            default:
+                alignment = "0px";
+                break;
+        }
         return (
             <div>
                 <span className={ClassNames.OFFSCREEN_FOCUS_REBOUNDER} />
@@ -240,7 +260,7 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
                         bottom: "auto",
                         right: "auto",
                         height: "90px",
-                        left: 0,
+                        left: alignment,
                         transform: transformVal,
                         ...style,
                     }}
