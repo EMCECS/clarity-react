@@ -32,16 +32,7 @@ function buildStepData(numberOfSteps: number = 1) {
 // Function to create steps UI
 function buildStepsUI() {
     const StepUI = steps.map((step, index) => {
-        return (
-            <WizardStep
-                id={index}
-                key={index}
-                name={step.name}
-                type={step.type}
-                valid={true}
-                complete={true}
-            ></WizardStep>
-        );
+        return <WizardStep id={index} key={index} name={step.name} type={step.type} valid={true} complete={true} />;
     });
     return StepUI;
 }
@@ -327,6 +318,38 @@ storiesOf("New Wizard", module)
                         onPrevious={() => state.handlePrevious()}
                         onComplete={() => state.handleComplete()}
                         onNavigateTo={state.handleSelectStep}
+                        customFooter={(props: WizardFooterProps) => (
+                            <Button primary link onClick={() => state.removeStep(state.currentWizardStepID)}>
+                                Delete Step
+                            </Button>
+                        )}
+                    >
+                        {state.steps}
+                    </Wizard>
+                </React.Fragment>
+            )}
+        </State>
+    ))
+    .add("wizard with disabled previous button", _props => (
+        <State store={store}>
+            {state => (
+                <React.Fragment>
+                    <Button key={0} primary link onClick={() => state.handleToggleWizard(WizardSize.LARGE)}>
+                        OPEN WIZARD
+                    </Button>
+                    <Wizard
+                        currentStepID={state.currentWizardStepID}
+                        key={1}
+                        size={WizardSize.LARGE}
+                        show={state.open}
+                        title="Wizard with dynamic step"
+                        onClose={() => state.handleClose()}
+                        onNext={() => state.addStep(1)}
+                        onPrevious={() => state.handlePrevious()}
+                        onComplete={() => state.handleComplete()}
+                        onNavigateTo={state.handleSelectStep}
+                        disablePreviousButton={true}
+                        showPrevious={true}
                         customFooter={(props: WizardFooterProps) => (
                             <Button primary link onClick={() => state.removeStep(state.currentWizardStepID)}>
                                 Delete Step
