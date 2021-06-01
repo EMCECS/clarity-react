@@ -28,11 +28,17 @@ export const SelectOption: React.FunctionComponent<SelectOption> = ({value, sele
     );
 };
 
+/**
+ * Options for SelectOptionGroup
+ * @param {label} label for option group
+ * @param {disabled} prop to disable complete option group
+ */
 type SelectOptionGroup = {
     label: string;
     disabled?: boolean;
 };
 
+//Component to add Grouped select options
 export const SelectOptionGroup: React.FunctionComponent<SelectOptionGroup> = ({label, disabled, children}) => {
     return (
         <optgroup label={label} disabled={disabled}>
