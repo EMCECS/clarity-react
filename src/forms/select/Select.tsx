@@ -11,7 +11,7 @@
 import * as React from "react";
 import {UID} from "react-uid";
 import {Icon} from "../../icon";
-import {classNames} from "../../utils";
+import {classNames, ReactChildren} from "../../utils";
 
 type SelectOption = {
     value?: any;
@@ -28,6 +28,19 @@ export const SelectOption: React.FunctionComponent<SelectOption> = ({value, sele
     );
 };
 
+type SelectOptionGroup = {
+    label: string;
+    disabled?: boolean;
+};
+
+export const SelectOptionGroup: React.FunctionComponent<SelectOptionGroup> = ({label, disabled, children}) => {
+    return (
+        <optgroup label={label} disabled={disabled}>
+            {children}
+        </optgroup>
+    );
+};
+
 type SelectProps = {
     label?: string;
     id?: string;
@@ -40,7 +53,7 @@ type SelectProps = {
     defaultHelperText?: string; // shown when state isError is false
     errorHelperText?: string; // shown when state isError is true
     onBlur?: (evt: React.FocusEvent<HTMLSelectElement>) => void;
-    onChange?: (evt: React.ChangeEvent<HTMLSelectElement>) => void;
+    onChange?: (evt: React.ChangeEvent<HTMLSelectElement>, selectedOptionGroup?: string) => void;
     className?: string;
     style?: any;
     width?: string;

@@ -10,7 +10,7 @@
 
 import * as React from "react";
 import {storiesOf} from "@storybook/react";
-import {Select, SelectOption} from "./Select";
+import {Select, SelectOption, SelectOptionGroup} from "./Select";
 import {action} from "@storybook/addon-actions";
 
 storiesOf("Select", module)
@@ -110,6 +110,22 @@ storiesOf("Select", module)
                 <SelectOption value="1">One</SelectOption>
                 <SelectOption value="2">Two</SelectOption>
                 <SelectOption value="3">Three</SelectOption>
+            </Select>
+        </div>
+    ))
+    .add("Select Option Group", () => (
+        <div>
+            <Select onChange={evt => console.log("hh", evt.target.value)}>
+                <SelectOptionGroup label="Group 1">
+                    <SelectOption value="1">One</SelectOption>
+                    <SelectOption value="2">Two</SelectOption>
+                    <SelectOption value="3">Three</SelectOption>
+                </SelectOptionGroup>
+                <SelectOptionGroup label="Group 2">
+                    <SelectOption value="7">Seven</SelectOption>
+                    <SelectOption value="8">Eight</SelectOption>
+                    <SelectOption value="9">Nine</SelectOption>
+                </SelectOptionGroup>
             </Select>
         </div>
     ));
