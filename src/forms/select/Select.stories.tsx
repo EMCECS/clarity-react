@@ -128,4 +128,20 @@ storiesOf("Select", module)
                 </SelectOptionGroup>
             </Select>
         </div>
+    ))
+    .add("Select Option Group Disabled", () => (
+        <div>
+            <Select onChange={evt => console.log("hh", evt.target.value)}>
+                <SelectOptionGroup label="Group 1" disabled>
+                    <SelectOption value="1">One</SelectOption>
+                    <SelectOption value="2">Two</SelectOption>
+                    <SelectOption value="3">Three</SelectOption>
+                </SelectOptionGroup>
+                <SelectOptionGroup label="Group 2">
+                    <SelectOption value="7">Seven</SelectOption>
+                    <SelectOption value="8">Eight</SelectOption>
+                    <SelectOption value="9">Nine</SelectOption>
+                </SelectOptionGroup>
+            </Select>
+        </div>
     ));
