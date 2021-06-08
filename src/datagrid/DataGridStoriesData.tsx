@@ -214,6 +214,9 @@ export const expandableRows: DataGridRow[] = [
         ],
         expandableRowData: {
             onRowExpand: loadExpandableContent,
+            onRowContract: () => {
+                console.log("I have contracted!");
+            },
         },
     },
     {
@@ -226,6 +229,19 @@ export const expandableRows: DataGridRow[] = [
         expandableRowData: {
             expandableContent: null,
             hideRowExpandIcon: true,
+        },
+    },
+    {
+        rowData: [
+            {columnName: "User ID", cellData: 1366768},
+            {columnName: "Name", cellData: "Gaurav"},
+            {columnName: "Creation Date", cellData: "Nov 11, 1994"},
+            {columnName: "Favorite color", cellData: "Blue"},
+        ],
+        expandableRowData: {
+            onRowContract: () => {
+                alert("I have contracted!");
+            },
         },
     },
 ];
