@@ -114,6 +114,7 @@ export type DataGridRow = {
  * type for datagrid expandable row data :
  * @param {isLoading} if true then show loading icon for expandable row
  * @param {onRowExpand} callback function to  fetch expandable row contents
+ * @param {onRowContract} callback function for additional logic after row contracts
  * @param {expandableContent} content to show after row expand
  * @param {isExpanded} true if row is already expanded
  * @param {hideRowExpandIcon} if true then hide icon for expandable row
@@ -121,6 +122,7 @@ export type DataGridRow = {
 export type ExpandableRowDetails = {
     isLoading?: boolean;
     onRowExpand?: (row: DataGridRow) => Promise<any>;
+    onRowContract?: (row: DataGridRow) => void;
     expandableContent?: any;
     isExpanded?: boolean;
     hideRowExpandIcon?: boolean;
@@ -635,7 +637,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         let {expandableRowData} = allRows[rowID];
         if (expandableRowData) {
             expandableRowData.isExpanded = !expandableRowData.isExpanded;
-            const {onRowExpand, isExpanded} = expandableRowData;
+            const {onRowExpand, isExpanded, onRowContract} = expandableRowData;
             if (onRowExpand && isExpanded) {
                 // For dynamic loading of expandable row content
                 expandableRowData!.isLoading = true;
@@ -649,6 +651,11 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                         allRows[rowID].expandableRowData = expandableRowData; // update row data in datagrid state
                         this.setState({allRows: [...allRows]});
                     });
+                });
+            } else if (onRowContract && !isExpanded) {
+                //Callback is called as an argument of this.setState callback for state refreshing.
+                this.setState({allRows: [...allRows]}, () => {
+                    onRowContract(allRows[rowID]);
                 });
             } else {
                 // For static loading of expandable row contnet
