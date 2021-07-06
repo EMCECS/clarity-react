@@ -159,7 +159,7 @@ export class HideShowColumns extends React.PureComponent<HideShowColumnsProps, H
                     <CheckBox
                         id={column.columnName}
                         ariaLabel="Select"
-                        label={column.columnName}
+                        label={column.displayName ? column.displayName : column.columnName}
                         onChange={evt => this.handleSingleSelect(column.columnName)}
                         checked={column.isVisible !== undefined ? column.isVisible : undefined}
                     />

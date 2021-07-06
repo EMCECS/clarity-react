@@ -32,7 +32,7 @@ export const normalColumns: DataGridColumn[] = [
 // Data for Hide/show columns
 export const hideableColumns: DataGridColumn[] = [
     {columnName: "User ID"},
-    {columnName: "Name"},
+    {columnName: "Name", displayName: "User name"},
     {columnName: "Creation Date", isVisible: false},
     {columnName: "Favorite color", isVisible: false},
 ];
