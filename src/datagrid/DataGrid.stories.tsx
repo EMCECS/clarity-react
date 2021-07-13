@@ -184,6 +184,7 @@ storiesOf("DataGrid", module)
                                 columnName={"User ID"}
                                 datagridRef={datagridFilterRef}
                                 position={FilterPosition.RIGHT}
+                                defaultValue={41512}
                             />
                         ),
                     },

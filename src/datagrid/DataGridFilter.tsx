@@ -28,6 +28,7 @@ import {DebounceUtils} from "../forms/common/DebounceUtils";
  * @param {debounce} boolean value to apply debounce behaviour
  * @param {debounceTime} number value debounceTime/Delay value in miliseconds
  * @param {position} position of the filter popup
+ * @param {defaultValue} defaultValue of the filter
  */
 export type DataGridFilterProps = {
     style?: any;
@@ -42,6 +43,7 @@ export type DataGridFilterProps = {
     debounce?: boolean;
     debounceTime?: number;
     position?: FilterPosition;
+    defaultValue?: any;
 };
 
 /**
@@ -121,7 +123,12 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
 
     constructor(props: DataGridFilterProps) {
         super(props);
-        this.filterValue = undefined;
+        const {defaultValue} = props;
+        if (defaultValue) {
+            this.filterValue = defaultValue;
+        } else {
+            this.filterValue = undefined;
+        }
     }
 
     componentWillMount() {
