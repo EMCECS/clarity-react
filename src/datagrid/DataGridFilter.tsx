@@ -114,21 +114,25 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
         disabled: false,
     };
 
-    // Initial state for filter
-    state: DataGridFilterState = {
-        isOpen: false,
-        transformVal: "translateX(0px) translateY(0px)",
-        isFiltered: false,
-    };
-
     constructor(props: DataGridFilterProps) {
         super(props);
+
+        // Initial state for filter
+        let initialStateData: DataGridFilterState = {
+            isOpen: false,
+            transformVal: "translateX(0px) translateY(0px)",
+            isFiltered: false,
+        };
+
         const {defaultValue} = props;
         if (defaultValue) {
+            initialStateData.isFiltered = true;
             this.filterValue = defaultValue;
         } else {
             this.filterValue = undefined;
         }
+
+        this.state = {...initialStateData};
     }
 
     componentWillMount() {
