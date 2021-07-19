@@ -1094,7 +1094,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     // Function to create placeholder for empty datagrid
     private buildEmptyPlaceholder(): React.ReactElement {
         const {itemText} = this.state;
-        const placeholderText = "No " + itemText + " found !";
+        const placeholderText = "No " + itemText + " found!";
         return (
             <React.Fragment>
                 <div
