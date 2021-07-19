@@ -367,7 +367,7 @@ storiesOf("DataGrid", module)
     ))
     .add("Empty data grid", () => (
         <div style={{width: "80%"}}>
-            <DataGrid columns={normalColumns} footer={defaultFooter} />
+            <DataGrid columns={normalColumns} footer={defaultFooter} style={{height: "70vh"}} />
         </div>
     ))
     .add("Grid with compact row", () => (

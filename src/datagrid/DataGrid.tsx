@@ -1081,6 +1081,8 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                     className={classNames([
                         ClassNames.DATAGRID_PLACEHOLDER,
                         allRows.length === 0 && ClassNames.DATAGRID_EMPTY,
+                        "clr-align-items-center",
+                        "clr-justify-content-center",
                     ])}
                 >
                     {allRows.length === 0 && this.buildEmptyPlaceholder()}
@@ -1092,7 +1094,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     // Function to create placeholder for empty datagrid
     private buildEmptyPlaceholder(): React.ReactElement {
         const {itemText} = this.state;
-        const placeholderText = "We couldn't find any " + itemText + " !";
+        const placeholderText = "No " + itemText + " found!";
         return (
             <React.Fragment>
                 <div
