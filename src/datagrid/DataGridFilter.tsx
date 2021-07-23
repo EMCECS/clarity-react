@@ -148,10 +148,10 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
 
         if (isOpen) {
             // Calculate left and top for filter box
-            const filterBoxTop = this.refParent.current!.getClientRects()[0].top + 15;
+            const filterBoxTop = this.refParent.current!.getBoundingClientRect().top + 15;
             const filterBoxLeft =
-                this.refParent.current!.getClientRects()[0].left -
-                this.refChild.current!.getClientRects()[0].width +
+                this.refParent.current!.getBoundingClientRect().left -
+                this.refChild.current!.getBoundingClientRect().width +
                 20;
             const transformVal = "translateX(" + filterBoxLeft + "px) " + "translateY(" + filterBoxTop + "px)";
             this.setState({transformVal: transformVal});
