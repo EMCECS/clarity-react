@@ -8,36 +8,35 @@
  *     http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import * as React from 'react';
-import {ReactElement, ReactNode} from 'react';
+import * as React from "react";
+import {ReactElement, ReactNode} from "react";
 import {Icon} from "../../icon";
 import * as utils from "../../utils";
 import {AlertType} from ".";
 
 export type AlertItemProps = {
-    actions?: React.ReactElement
-    type?: AlertType
-    children?: React.ReactNode | React.ReactNode[]
-    icon?: React.ReactElement
-    static?: boolean
+    actions?: React.ReactElement;
+    type?: AlertType;
+    children?: React.ReactNode | React.ReactNode[];
+    icon?: React.ReactElement;
+    static?: boolean;
 };
 
 export class AlertItem extends React.PureComponent<AlertItemProps> {
-
     private static iconWithAlertClass(alertType: AlertType | undefined, icon: ReactElement | undefined): any {
         if (icon) {
-            return React.cloneElement(icon, {
+            return (React.cloneElement(icon, {
                 shape: icon.props.shape || AlertItem.defaultIconShape(alertType),
-                className: "alert-icon " + icon.props.className
-            }) as ReactNode as Icon;
+                className: "alert-icon " + icon.props.className,
+            }) as ReactNode) as Icon;
         }
-        return <Icon className="alert-icon" shape={AlertItem.defaultIconShape(alertType)}/>;
+        return <Icon className="alert-icon" shape={AlertItem.defaultIconShape(alertType)} />;
     }
 
     private static renderActions(actions: React.ReactElement): ReactElement[] {
         return React.Children.map(actions, child => {
             return React.cloneElement(child, {
-                className: child.props.className + " alert-action"
+                className: child.props.className + " alert-action",
             });
         });
     }
@@ -45,21 +44,14 @@ export class AlertItem extends React.PureComponent<AlertItemProps> {
     render() {
         const {actions, type, children, icon} = this.props;
         let classNames = ["alert-item"];
-        if (this.props.static)
-            classNames.push("static");
+        if (this.props.static) classNames.push("static");
         return (
             <div className={utils.classNames(classNames)}>
-                <div className="alert-icon-wrapper">
-                    {AlertItem.iconWithAlertClass(type, icon)}
-                </div>
+                <div className="alert-icon-wrapper">{AlertItem.iconWithAlertClass(type, icon)}</div>
                 <div className="alert-text">
-                    {children}
+                    <div style={{wordBreak: "break-word"}}>{children}</div>
                 </div>
-                {actions &&
-                <div className="alert-actions">
-                    {AlertItem.renderActions(actions)}
-                </div>
-                }
+                {actions && <div className="alert-actions">{AlertItem.renderActions(actions)}</div>}
             </div>
         );
     }
