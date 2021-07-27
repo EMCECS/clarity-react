@@ -19,7 +19,7 @@ import {AlertType} from ".";
  * @param {type}: Alert type (Danger, Info, Success, Warning)
  * @param {children}: Children to be rendered inside AlertItem
  * @param {icon}: Component that can be rendered as icon
- * @param {static}: to determine if static class is part of classnames
+ * @param {isStatic}: to determine if static class is part of classnames
  */
 export type AlertItemProps = {
     actions?: React.ReactElement;
