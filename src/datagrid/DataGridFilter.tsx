@@ -147,16 +147,30 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
         const {isOpen} = this.state;
 
         if (isOpen) {
-            // Calculate left and top for filter box
-            const filterBoxTop = this.refParent.current!.getBoundingClientRect().top + 15;
-            const filterBoxLeft =
-                this.refParent.current!.getBoundingClientRect().left -
-                this.refChild.current!.getBoundingClientRect().width +
-                20;
-            const transformVal = "translateX(" + filterBoxLeft + "px) " + "translateY(" + filterBoxTop + "px)";
-            this.setState({transformVal: transformVal});
+            let prevChildWidth = this.refChild.current!.getClientRects()[0].width;
+            if (this.state!.transformVal === "translateX(0px) translateY(0px)") {
+                this.updateFitlerPosition(prevChildWidth);
+            } else {
+                const handleResize = setInterval(() => {
+                    let nextChildWidth = this.refChild.current!.getClientRects()[0].width;
+                    if (prevChildWidth === nextChildWidth) {
+                        clearInterval(handleResize);
+                        this.updateFitlerPosition(nextChildWidth);
+                    } else {
+                        prevChildWidth = nextChildWidth;
+                    }
+                }, 10);
+            }
         }
     }
+
+    private updateFitlerPosition = (nextChildWidth: number) => {
+        // Calculate left and top for filter box
+        const filterBoxTop = this.refParent.current!.getClientRects()[0].top + 15;
+        const filterBoxLeft = this.refParent.current!.getClientRects()[0].left - nextChildWidth + 20;
+        const transformVal = "translateX(" + filterBoxLeft + "px) " + "translateY(" + filterBoxTop + "px)";
+        this.setState({transformVal: transformVal});
+    };
 
     private handleOnChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
         const value: string = evt.target.value;
