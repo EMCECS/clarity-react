@@ -139,4 +139,14 @@ storiesOf("Alert", module)
                 <AlertItem actions={<Button>Action</Button>}>Warning Alert</AlertItem>
             </Alert>
         </div>
-    ));
+    ))
+    .add("Alert for word wrap for JSON String", () => {
+        const jsonText = `Thisisaverylongstringwithnospacesorpunctuationsijustmadesurethismakessenseohlookiamtalkingforquitealongtimenowbutatleastthisstringisbetterthanloremsoiguessthistestcaseworks.`;
+        return (
+            <div style={{width: "50vw", padding: "3em"}}>
+                <Alert type={AlertType.DANGER}>
+                    <AlertItem>{jsonText}</AlertItem>
+                </Alert>
+            </div>
+        );
+    });
