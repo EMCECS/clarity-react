@@ -117,7 +117,12 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
     // Poll till window resizing is stable to find correct width
     private handleResizeInterval = (prevChildWidth: number) => {
         const interval = setInterval(() => {
-            let nextChildWidth = this.refChild!.current!.getClientRects()[0]!.width;
+            let nextChildWidth =
+                (this.refChild &&
+                    this.refChild.current &&
+                    this.refChild.current.getClientRects()[0] &&
+                    this.refChild.current.getClientRects()[0].width) ||
+                0;
             if (prevChildWidth === nextChildWidth) {
                 clearInterval(interval);
                 this.updateFilterPosition(nextChildWidth);
@@ -130,8 +135,16 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
     // To avoid infinite loop, set the filter position only once child width is stable
     private updateFilterPosition = (childWidth: number) => {
         // Calculate left and top for filter box
-        const filterBoxTop = this.refParent!.current!.getClientRects()[0].top + 15;
-        const filterBoxLeft = this.refParent!.current!.getClientRects()[0].left - childWidth + 20;
+        const filterBoxTop =
+            this.refParent &&
+            this.refParent.current &&
+            this.refParent.current.getClientRects()[0] &&
+            this.refParent.current.getClientRects()[0].top + 15;
+        const filterBoxLeft =
+            this.refParent &&
+            this.refParent.current &&
+            this.refParent.current.getClientRects()[0] &&
+            this.refParent.current.getClientRects()[0].left - childWidth + 20;
         const transformVal = "translateX(" + filterBoxLeft + "px) " + "translateY(" + filterBoxTop + "px)";
         this.setState({transformVal: transformVal});
     };
@@ -169,7 +182,12 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
         const {isOpen} = this.state;
 
         if (isOpen) {
-            let prevChildWidth = this.refChild!.current!.getClientRects()[0]!.width;
+            let prevChildWidth =
+                (this.refChild &&
+                    this.refChild.current &&
+                    this.refChild.current.getClientRects()[0] &&
+                    this.refChild.current.getClientRects()[0].width) ||
+                0;
             // To avoid flicker at initial position of filter
             if (this.state!.transformVal === "translateX(0px) translateY(0px)") {
                 this.updateFilterPosition(prevChildWidth);
