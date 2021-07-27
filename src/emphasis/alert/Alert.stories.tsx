@@ -110,7 +110,7 @@ storiesOf("Alert", module)
     .add("Static Alerts", () => (
         <div style={{width: "80em", padding: "3em"}}>
             <Alert type={AlertType.INFO} style={{marginBottom: "2em"}}>
-                <AlertItem static>Informational Standard</AlertItem>
+                <AlertItem isStatic>Informational Standard</AlertItem>
             </Alert>
         </div>
     ))

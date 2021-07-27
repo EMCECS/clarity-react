@@ -14,12 +14,24 @@ import {Icon} from "../../icon";
 import * as utils from "../../utils";
 import {AlertType} from ".";
 
+/** Alert Properties Documentation:
+ * @param {actions}: Array of actions that can be performed in alert container
+ * @param {type}: Alert type (Danger, Info, Success, Warning)
+ * @param {children}: Children to be rendered inside AlertItem
+ * @param {icon}: Component that can be rendered as icon
+ * @param {static}: to determine if static class is part of classnames
+ */
 export type AlertItemProps = {
     actions?: React.ReactElement;
     type?: AlertType;
     children?: React.ReactNode | React.ReactNode[];
     icon?: React.ReactElement;
-    static?: boolean;
+    isStatic?: boolean;
+};
+
+//Additional CSS-in-JS style to word-wrap text for smaller resolutions
+const wordBreakStyle: React.CSSProperties = {
+    wordBreak: "break-word",
 };
 
 export class AlertItem extends React.PureComponent<AlertItemProps> {
@@ -42,14 +54,14 @@ export class AlertItem extends React.PureComponent<AlertItemProps> {
     }
 
     render() {
-        const {actions, type, children, icon} = this.props;
+        const {actions, type, children, icon, isStatic} = this.props;
         let classNames = ["alert-item"];
-        if (this.props.static) classNames.push("static");
+        if (isStatic) classNames.push("static");
         return (
             <div className={utils.classNames(classNames)}>
                 <div className="alert-icon-wrapper">{AlertItem.iconWithAlertClass(type, icon)}</div>
                 <div className="alert-text">
-                    <div style={{wordBreak: "break-word"}}>{children}</div>
+                    <div style={wordBreakStyle}>{children}</div>
                 </div>
                 {actions && <div className="alert-actions">{AlertItem.renderActions(actions)}</div>}
             </div>
