@@ -114,6 +114,28 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
         disabled: false,
     };
 
+    // Poll till window resizing is stable to find correct width
+    private handleResizeInterval = (prevChildWidth: number) => {
+        const interval = setInterval(() => {
+            let nextChildWidth = this.refChild!.current!.getClientRects()[0]!.width;
+            if (prevChildWidth === nextChildWidth) {
+                clearInterval(interval);
+                this.updateFilterPosition(nextChildWidth);
+            } else {
+                prevChildWidth = nextChildWidth;
+            }
+        }, 10);
+    };
+
+    // To avoid infinite loop, set the filter position only once child width is stable
+    private updateFilterPosition = (childWidth: number) => {
+        // Calculate left and top for filter box
+        const filterBoxTop = this.refParent!.current!.getClientRects()[0].top + 15;
+        const filterBoxLeft = this.refParent!.current!.getClientRects()[0].left - childWidth + 20;
+        const transformVal = "translateX(" + filterBoxLeft + "px) " + "translateY(" + filterBoxTop + "px)";
+        this.setState({transformVal: transformVal});
+    };
+
     constructor(props: DataGridFilterProps) {
         super(props);
 
@@ -147,30 +169,16 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
         const {isOpen} = this.state;
 
         if (isOpen) {
-            let prevChildWidth = this.refChild.current!.getClientRects()[0].width;
+            let prevChildWidth = this.refChild!.current!.getClientRects()[0]!.width;
+            // To avoid flicker at initial position of filter
             if (this.state!.transformVal === "translateX(0px) translateY(0px)") {
-                this.updateFitlerPosition(prevChildWidth);
+                this.updateFilterPosition(prevChildWidth);
             } else {
-                const handleResize = setInterval(() => {
-                    let nextChildWidth = this.refChild.current!.getClientRects()[0].width;
-                    if (prevChildWidth === nextChildWidth) {
-                        clearInterval(handleResize);
-                        this.updateFitlerPosition(nextChildWidth);
-                    } else {
-                        prevChildWidth = nextChildWidth;
-                    }
-                }, 10);
+                // Poll till the size is stable to avoid infinite loop if window resized
+                this.handleResizeInterval(prevChildWidth);
             }
         }
     }
-
-    private updateFitlerPosition = (nextChildWidth: number) => {
-        // Calculate left and top for filter box
-        const filterBoxTop = this.refParent.current!.getClientRects()[0].top + 15;
-        const filterBoxLeft = this.refParent.current!.getClientRects()[0].left - nextChildWidth + 20;
-        const transformVal = "translateX(" + filterBoxLeft + "px) " + "translateY(" + filterBoxTop + "px)";
-        this.setState({transformVal: transformVal});
-    };
 
     private handleOnChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
         const value: string = evt.target.value;
