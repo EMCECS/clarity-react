@@ -114,6 +114,35 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
         disabled: false,
     };
 
+    // Poll till window resizing is stable to find correct width
+    private handleResizeInterval = (prevChildWidth: number) => {
+        const interval = setInterval(() => {
+            let nextChildWidth =
+                (this.refChild &&
+                    this.refChild.current &&
+                    this.refChild.current.getClientRects()[0] &&
+                    this.refChild.current.getClientRects()[0].width) ||
+                0;
+            if (prevChildWidth === nextChildWidth) {
+                clearInterval(interval);
+                this.updateFilterPosition(nextChildWidth);
+            } else {
+                prevChildWidth = nextChildWidth;
+            }
+        }, 10);
+    };
+
+    // To avoid infinite loop, set the filter position only once child width is stable
+    private updateFilterPosition = (childWidth: number) => {
+        // Calculate left and top for filter box
+        if (this.refParent && this.refParent.current && this.refParent.current.getClientRects()[0]) {
+            const filterBoxTop: number = this.refParent.current.getClientRects()[0].top + 15;
+            const filterBoxLeft: number = this.refParent.current.getClientRects()[0].left - childWidth + 20;
+            const transformVal = "translateX(" + filterBoxLeft + "px) " + "translateY(" + filterBoxTop + "px)";
+            this.setState({transformVal: transformVal});
+        }
+    };
+
     constructor(props: DataGridFilterProps) {
         super(props);
 
@@ -144,17 +173,22 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
     }
 
     componentDidUpdate() {
-        const {isOpen} = this.state;
+        const {isOpen, transformVal} = this.state;
 
         if (isOpen) {
-            // Calculate left and top for filter box
-            const filterBoxTop = this.refParent.current!.getClientRects()[0].top + 15;
-            const filterBoxLeft =
-                this.refParent.current!.getClientRects()[0].left -
-                this.refChild.current!.getClientRects()[0].width +
-                20;
-            const transformVal = "translateX(" + filterBoxLeft + "px) " + "translateY(" + filterBoxTop + "px)";
-            this.setState({transformVal: transformVal});
+            let prevChildWidth: number =
+                (this.refChild &&
+                    this.refChild.current &&
+                    this.refChild.current.getClientRects()[0] &&
+                    this.refChild.current.getClientRects()[0].width) ||
+                0;
+            // To avoid flicker at initial position of filter
+            if (transformVal === "translateX(0px) translateY(0px)") {
+                this.updateFilterPosition(prevChildWidth);
+            } else {
+                // Poll till the size is stable to avoid infinite loop if window resized
+                this.handleResizeInterval(prevChildWidth);
+            }
         }
     }
 
