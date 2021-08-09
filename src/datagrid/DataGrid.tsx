@@ -1125,13 +1125,15 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                         <div className={ClassNames.DATAGRID_ROW_SCROLLABLE}>
                             {allColumns &&
                                 allColumns.map((column: DataGridColumn, index: number) => {
+                                    let columnState: DataGridColumn;
                                     // Hide all columns except first visible column if detail pane is open
                                     const showColumn =
                                         this.isDetailPaneOpen() &&
                                         column.columnID !== this.getFirstVisibleColumn()!.columnID
                                             ? false
                                             : column.isVisible;
-                                    return showColumn ? this.buildDataGridColumn(column, index) : undefined;
+                                    columnState = this.isDetailPaneOpen() ? {...column, sort: undefined} : column;
+                                    return showColumn ? this.buildDataGridColumn(columnState, index) : undefined;
                                 })}
                         </div>
                     </div>
