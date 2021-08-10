@@ -541,7 +541,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     };
 
     private gotoPreviousPage = () => {
-        const {pageSize, currentPage, totalPages} = this.state.pagination!;
+        const {pageSize, currentPage} = this.state.pagination!;
         let previousPage = currentPage - 1;
         if (previousPage < 1) previousPage = 1;
         this.getPage(previousPage, pageSize);
@@ -549,7 +549,13 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // Function to handle pageIndex change in input box on blur event
     private handlePageChangeOnBlur = (evt: React.FocusEvent<HTMLInputElement>) => {
-        this.handlePageChange();
+        const {pagination} = this.state;
+        const pageInputFieldValue: number | null =
+            this.pageIndexRef.current && parseInt(this.pageIndexRef.current.value);
+        const currentPageValue: number | null | undefined = pagination && pagination.currentPage;
+        if (pageInputFieldValue !== currentPageValue) {
+            this.handlePageChange();
+        }
     };
 
     // Function to handle pageIndex change in input box on Enter ot Tab key press event
@@ -845,6 +851,8 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
             if (column.sort) {
                 const col = allColumns.find(({columnName}) => columnName === column.columnName);
                 column.sort = col && col.sort;
+            } else {
+                column.sort = undefined;
             }
         });
         return columns;
@@ -1125,15 +1133,13 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                         <div className={ClassNames.DATAGRID_ROW_SCROLLABLE}>
                             {allColumns &&
                                 allColumns.map((column: DataGridColumn, index: number) => {
-                                    let columnState: DataGridColumn;
                                     // Hide all columns except first visible column if detail pane is open
                                     const showColumn =
                                         this.isDetailPaneOpen() &&
                                         column.columnID !== this.getFirstVisibleColumn()!.columnID
                                             ? false
                                             : column.isVisible;
-                                    columnState = this.isDetailPaneOpen() ? {...column, sort: undefined} : column;
-                                    return showColumn ? this.buildDataGridColumn(columnState, index) : undefined;
+                                    return showColumn ? this.buildDataGridColumn(column, index) : undefined;
                                 })}
                         </div>
                     </div>
