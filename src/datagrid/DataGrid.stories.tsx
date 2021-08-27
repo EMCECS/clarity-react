@@ -47,6 +47,7 @@ import {
     rowsWithDetailPane,
     paginationDetailsForDetailsPane,
     paginationRowsWithLinks,
+    sortColumnsOnOpen,
 } from "./DataGridStoriesData";
 import {CustomFilter} from "./CustomFilter";
 import {CustomFilterMulti} from "./CustomFilterMulti";
@@ -85,6 +86,21 @@ const store = new Store({
         });
     },
     paginationDetails: paginationDetailsForAlreadySelectedRows,
+});
+
+const store2 = new Store({
+    rows: rowsWithDetailPane,
+    columns: sortColumns,
+    onOpenDetails: (row: DataGridRow) => {
+        store2.set({
+            columns: sortColumnsOnOpen,
+        });
+    },
+    onCloseDetails: (row: DataGridRow) => {
+        store2.set({
+            columns: sortColumns,
+        });
+    },
 });
 // Refrence to call dataGrid methods
 const datagridRef = React.createRef<DataGrid>();
@@ -443,6 +459,22 @@ storiesOf("DataGrid", module)
                 selectionType={GridSelectionType.MULTI}
             />
         </div>
+    ))
+    .add("Grid with detail pane with sorting disabled", () => (
+        <State store={store2}>
+            {state => (
+                <div style={{width: "80%", paddingTop: "5%"}}>
+                    <DataGrid
+                        columns={state.columns}
+                        rows={rowsWithDetailPane.slice(0, 5)}
+                        footer={hideShowColFooter}
+                        pagination={paginationDetailsForDetailsPane}
+                        rowType={GridRowType.EXPANDABLE_ROWS_WITH_DETAIL_PANE}
+                        selectionType={GridSelectionType.MULTI}
+                    />
+                </div>
+            )}
+        </State>
     ))
     .add("Grid with read-only password", () => (
         <div style={{width: "80%"}}>

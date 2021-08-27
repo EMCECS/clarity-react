@@ -553,6 +553,22 @@ export const sortColumns = [
     },
 ];
 
+export const sortColumnsOnOpen = [
+    {
+        columnName: "User ID",
+        sort: undefined,
+    },
+    {
+        columnName: "Name",
+        sort: {defaultSortOrder: SortOrder.NONE, sortFunction: sortFunction},
+    },
+    {columnName: "Creation Date"},
+    {
+        columnName: "Favorite color",
+        sort: {defaultSortOrder: SortOrder.ASC, sortFunction: sortFunction, isSorted: true},
+    },
+];
+
 /**
  * Data for Pagination
  */
