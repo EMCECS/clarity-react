@@ -9,9 +9,10 @@
  */
 
 import * as React from "react";
+import {State, Store} from "@sambego/storybook-state";
 import {Icon} from "../icon";
 import {Button} from "../forms/button";
-import {SortOrder, DataGridRow, DataGridFilterResult, DataGridColumn, DataGridCell} from ".";
+import {SortOrder, DataGridRow, DataGridFilterResult, DataGridColumn} from ".";
 import {Password} from "../forms/password/Password";
 
 /**
@@ -245,68 +246,6 @@ export const expandableRows: DataGridRow[] = [
         },
     },
 ];
-
-const DetailPane: React.ReactElement = (
-    <React.Fragment>
-        <b>Additional Details</b>
-        <table className="table">
-            <thead>
-                <tr>
-                    <th>Property</th>
-                    <th>Value</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>ID</td>
-                    <td>38808</td>
-                </tr>
-                <tr>
-                    <td>Wins</td>
-                    <td>69</td>
-                </tr>
-            </tbody>
-        </table>
-    </React.Fragment>
-);
-
-// Rows with detail pane
-export function getRowsWithDetailPane() {
-    let rowValues: DataGridRow[] = [];
-    cellData.forEach(function(element: any) {
-        const row: DataGridRow = {
-            rowData: [
-                {
-                    columnName: "User ID",
-                    cellData: element[0],
-                },
-                {
-                    columnName: "Name",
-                    cellData: element[1],
-                },
-                {
-                    columnName: "Creation Date",
-                    cellData: element[2],
-                },
-                {
-                    columnName: "Favorite color",
-                    cellData: element[3],
-                },
-            ],
-            detailPaneData: {
-                detailPaneContent: DetailPane,
-                title: element[1],
-            },
-            expandableRowData: {
-                expandableContent: expandableContent,
-            },
-        };
-        rowValues.push(row);
-    });
-    return rowValues;
-}
-
-export const rowsWithDetailPane = getRowsWithDetailPane();
 
 // Function to get row data
 export function getRowData() {
@@ -644,13 +583,6 @@ export const paginationDetailsForAlreadySelectedRows = {
     pageSizes: [5, 10],
 };
 
-export const paginationDetailsForDetailsPane = {
-    totalItems: rowsWithDetailPane.length,
-    getPageData: getPageDataForDetailPane,
-    pageSize: 5,
-    pageSizes: [5, 10],
-};
-
 export const pageFilterFunction = (
     rows: DataGridRow[],
     columnValue: string,
@@ -723,3 +655,117 @@ export class GridActions extends React.PureComponent<any, GridActionsState> {
         );
     }
 }
+
+/* #################### Data For detail pane story start ####################### */
+
+const DetailPane: React.ReactElement = (
+    <React.Fragment>
+        <b>Additional Details</b>
+        <table className="table">
+            <thead>
+                <tr>
+                    <th>Property</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>ID</td>
+                    <td>38808</td>
+                </tr>
+                <tr>
+                    <td>Wins</td>
+                    <td>69</td>
+                </tr>
+            </tbody>
+        </table>
+    </React.Fragment>
+);
+
+// Column Data with sort option
+const getDetailPaneColumns = (hideNameSort: boolean = false): DataGridColumn[] => {
+    return [
+        {
+            columnName: "User ID",
+            sort: {defaultSortOrder: SortOrder.ASC, sortFunction: sortFunction, hideSort: hideNameSort},
+        },
+        {
+            columnName: "Name",
+            sort: {defaultSortOrder: SortOrder.NONE, sortFunction: sortFunction},
+        },
+        {columnName: "Creation Date"},
+        {
+            columnName: "Favorite color",
+            sort: {defaultSortOrder: SortOrder.ASC, sortFunction: sortFunction, isSorted: true},
+        },
+    ];
+};
+
+const onOpenDetails = () => {
+    return new Promise((resolve, reject) => {
+        storeForDetailPane.set({
+            columns: getDetailPaneColumns(true),
+        });
+        resolve(false);
+    });
+};
+
+const onCloseDetails = () => {
+    storeForDetailPane.set({
+        columns: getDetailPaneColumns(),
+    });
+};
+
+// Rows with detail pane
+function getRowsWithDetailPane() {
+    let rowValues: DataGridRow[] = [];
+    cellData.forEach(function(element: any) {
+        const row: DataGridRow = {
+            rowData: [
+                {
+                    columnName: "User ID",
+                    cellData: element[0],
+                },
+                {
+                    columnName: "Name",
+                    cellData: element[1],
+                },
+                {
+                    columnName: "Creation Date",
+                    cellData: element[2],
+                },
+                {
+                    columnName: "Favorite color",
+                    cellData: element[3],
+                },
+            ],
+            detailPaneData: {
+                detailPaneContent: DetailPane,
+                title: element[1],
+                onOpenDetails,
+                onCloseDetails,
+            },
+            expandableRowData: {
+                expandableContent: expandableContent,
+            },
+        };
+        rowValues.push(row);
+    });
+    return rowValues;
+}
+
+const rowsWithDetailPane = getRowsWithDetailPane();
+
+export const storeForDetailPane = new Store({
+    rows: rowsWithDetailPane.slice(0, 5),
+    columns: getDetailPaneColumns(),
+});
+
+export const paginationDetailsForDetailsPane = {
+    totalItems: rowsWithDetailPane.length,
+    getPageData: getPageDataForDetailPane,
+    pageSize: 5,
+    pageSizes: [5, 10],
+};
+
+/* #################### Data For detail pane story end ####################### */
