@@ -189,12 +189,14 @@ export type DataGridHideShowColumns = {
  * type for DataGridSort :
  * @param {defaultSortOrder} if data in column by default sorted
  * @param {sortFunction} function to perform sorting
- * @param {isCurrentlySorted} checks if column is currently sorted or not
+ * @param {isSorted} checks if column is currently sorted or not
+ * @param {hideSort} if true hides sort
  */
 export type DataGridSort = {
     defaultSortOrder: SortOrder;
-    isSorted?: boolean;
     sortFunction: (rows: DataGridRow[], order: SortOrder, columnName: string) => Promise<DataGridRow[]>;
+    isSorted?: boolean;
+    hideSort?: boolean;
 };
 
 /**
@@ -691,8 +693,10 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                 // For open panel
                 onOpenDetails &&
                     onOpenDetails(allRows[rowID]).then((content: any) => {
-                        // For dynamic update of detail content
-                        updatedRows[rowID].detailPaneData!.detailPaneContent = content;
+                        if (content) {
+                            // For dynamic update of detail content
+                            updatedRows[rowID].detailPaneData!.detailPaneContent = content;
+                        }
                     });
                 updatedRows[rowID].detailPaneData!.isOpen = isOpen;
             }
@@ -850,7 +854,10 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         columns.map((column: DataGridColumn, index: number) => {
             if (column.sort) {
                 const col = allColumns.find(({columnName}) => columnName === column.columnName);
-                column.sort = col && col.sort;
+                if (col && col.sort) {
+                    col.sort.hideSort = column.sort.hideSort;
+                    column.sort = col.sort;
+                }
             } else {
                 column.sort = undefined;
             }
@@ -1153,6 +1160,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         const {columnName, displayName, columnID, className, style, sort, filter, width} = column;
         const columnHeight =
             this.datagridTableRef && this.datagridTableRef.current && this.datagridTableRef.current.clientHeight;
+        const hideSort: boolean = sort && sort.hideSort !== undefined ? sort.hideSort : false;
 
         return (
             <div
@@ -1163,7 +1171,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                 key={"col-" + index}
             >
                 <div className={ClassNames.DATAGRID_COLUMN_FLEX}>
-                    {sort != undefined ? (
+                    {sort !== undefined && !hideSort ? (
                         <Button
                             key="sort"
                             defaultBtn={false}
