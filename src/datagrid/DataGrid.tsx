@@ -36,6 +36,7 @@ import {DataGridColumnResize} from "./DataGridColumnResize";
  * @param {footer} footer component
  * @param {onRowSelect} Function which will gets called on select/deselect of rows
  * @param {onSelectAll} Function which will gets called on select/deselect of all rows
+ * @param {showSelectAll} field if false will not show select all checkbox, by default true
  * @param {keyfield} field to uniquely identify row
  * @param {rowType} Expandable or compact row type
  * @param {itemText} label to display for all items
@@ -54,6 +55,7 @@ type DataGridProps = {
     footer?: DataGridFooter;
     onRowSelect?: (selectedRow: DataGridRow) => void;
     onSelectAll?: (areAllSelected: boolean, selectedRows: DataGridRow[]) => void;
+    showSelectAll?: boolean;
     keyfield?: string;
     rowType?: GridRowType;
     itemText?: string;
@@ -280,6 +282,7 @@ export const DEFAULT_TOTAL_ITEMS: number = 0;
  * @param {itemText} label to display for all items
  * @param {pagination} pagination data
  * @param {isLoading} if true shows loading spinner else shows datagrid
+ * @param {showSelectAll} if false hide select all checkbox, else by default it's true
  */
 type DataGridState = {
     selectAll: boolean;
@@ -288,6 +291,7 @@ type DataGridState = {
     itemText: string;
     pagination?: DataGridPaginationState;
     isLoading: boolean;
+    showSelectAll: boolean;
 };
 
 type DataGridPaginationState = {
@@ -314,6 +318,10 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         this.state = this.initializeDataGridState();
     }
 
+    static defaultProps = {
+        showSelectAll: true,
+    };
+
     componentDidUpdate(prevProps: DataGridProps) {
         const {rows, columns, pagination} = this.props;
         if (rows && rows !== prevProps.rows) {
@@ -327,7 +335,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // Function to initialize datagrid state
     initializeDataGridState = (): DataGridState => {
-        const {isLoading, itemText} = this.props;
+        const {isLoading, itemText, showSelectAll} = this.props;
         const rows = this.initializeRowData();
         const columns = this.initializeColumnData();
         const dataGridState: DataGridState = {
@@ -337,6 +345,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
             allRows: [...rows],
             itemText: itemText || DEFAULT_ITEM_TEXT,
             pagination: this.initializePaginationData(),
+            showSelectAll: showSelectAll || false,
         };
         return dataGridState;
     };
@@ -972,7 +981,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // function to render selectAll column
     private buildSelectColumn(): React.ReactElement {
-        const {selectionType, id} = this.props;
+        const {selectionType, id, showSelectAll} = this.props;
         const {selectAll} = this.state;
         return (
             <div
@@ -985,7 +994,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                 ])}
             >
                 <span className={ClassNames.DATAGRID_COLUMN_TITLE}>
-                    {selectionType === GridSelectionType.MULTI && (
+                    {selectionType === GridSelectionType.MULTI && showSelectAll && (
                         <div
                             className={classNames([
                                 ClassNames.CLR_CHECKBOX_WRAPPER,
