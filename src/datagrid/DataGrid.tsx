@@ -345,7 +345,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
             allRows: [...rows],
             itemText: itemText || DEFAULT_ITEM_TEXT,
             pagination: this.initializePaginationData(),
-            showSelectAll: showSelectAll || false,
+            showSelectAll: showSelectAll || true,
         };
         return dataGridState;
     };
