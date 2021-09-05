@@ -36,7 +36,7 @@ import {DataGridColumnResize} from "./DataGridColumnResize";
  * @param {footer} footer component
  * @param {onRowSelect} Function which will gets called on select/deselect of rows
  * @param {onSelectAll} Function which will gets called on select/deselect of all rows
- * @param {hideSelectAll} when false will not show select all checkbox, by default true
+ * @param {hideSelectAll} when true will not show select all checkbox, by default false
  * @param {keyfield} field to uniquely identify row
  * @param {rowType} Expandable or compact row type
  * @param {itemText} label to display for all items
