@@ -36,6 +36,7 @@ import {DataGridColumnResize} from "./DataGridColumnResize";
  * @param {footer} footer component
  * @param {onRowSelect} Function which will gets called on select/deselect of rows
  * @param {onSelectAll} Function which will gets called on select/deselect of all rows
+ * @param {hideSelectAll} when true will not show select all checkbox, by default false
  * @param {keyfield} field to uniquely identify row
  * @param {rowType} Expandable or compact row type
  * @param {itemText} label to display for all items
@@ -54,6 +55,7 @@ type DataGridProps = {
     footer?: DataGridFooter;
     onRowSelect?: (selectedRow: DataGridRow) => void;
     onSelectAll?: (areAllSelected: boolean, selectedRows: DataGridRow[]) => void;
+    hideSelectAll?: boolean;
     keyfield?: string;
     rowType?: GridRowType;
     itemText?: string;
@@ -972,7 +974,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // function to render selectAll column
     private buildSelectColumn(): React.ReactElement {
-        const {selectionType, id} = this.props;
+        const {selectionType, id, hideSelectAll} = this.props;
         const {selectAll} = this.state;
         return (
             <div
@@ -985,7 +987,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                 ])}
             >
                 <span className={ClassNames.DATAGRID_COLUMN_TITLE}>
-                    {selectionType === GridSelectionType.MULTI && (
+                    {selectionType === GridSelectionType.MULTI && !hideSelectAll && (
                         <div
                             className={classNames([
                                 ClassNames.CLR_CHECKBOX_WRAPPER,
