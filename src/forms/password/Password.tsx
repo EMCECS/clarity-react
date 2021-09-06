@@ -89,6 +89,7 @@ export class Password extends React.PureComponent<PasswordProps, PasswordState> 
             label,
             value,
             defaultValue,
+            onBlur,
             onKeyPress,
             title,
             errorTitle,
@@ -130,6 +131,7 @@ export class Password extends React.PureComponent<PasswordProps, PasswordState> 
                                     required={required}
                                     onKeyPress={onKeyPress}
                                     title={title}
+                                    onBlur={onBlur}
                                     type={type}
                                     disabled={disabled}
                                     style={{width: "95%"}}
