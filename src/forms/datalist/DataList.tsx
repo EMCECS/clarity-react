@@ -85,6 +85,7 @@ export enum DataListAutoComplete {
  * @param {spellCheck} specifies whether the element is to have its spelling and grammar checked or not
  * @param {defaultValue} if it will be used to set default value of input element, useful in case of edit workflows
  * @param {debounceTime} if provided, will be used as debounceTime for debounce function
+ * @param {value} if it will be used to set value of input element
  **/
 type DataListProps = {
     placeHolder?: string;
