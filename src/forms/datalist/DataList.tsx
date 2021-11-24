@@ -106,6 +106,7 @@ type DataListProps = {
     spellCheck?: boolean;
     debounce?: boolean; // decide if debounce is needed or not
     debounceTime?: number; // debounce time in miliseconds
+    value?: any;
 };
 
 /**
@@ -174,6 +175,7 @@ export class DataList extends React.PureComponent<DataListProps, DataListState> 
             spellCheck,
             debounce,
             debounceTime,
+            value,
         } = this.props;
 
         const {hasFocus} = this.state;
@@ -211,6 +213,7 @@ export class DataList extends React.PureComponent<DataListProps, DataListState> 
                                 type="text"
                                 spellCheck={spellCheck}
                                 autoComplete={autoComplete ? autoComplete : DataListAutoComplete.OFF}
+                                value={value}
                                 defaultValue={defaultValue ? defaultValue : ""}
                                 title={title}
                             />
