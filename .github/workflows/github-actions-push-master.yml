@@ -41,6 +41,7 @@ jobs:
       
       - name: create package and publish 
         run: |
+          git pull
           yarn run package 
           yarn run copy
           export PREVIOUS_MESSAGE="$(git log --format=%B -n 1)"
@@ -54,6 +55,6 @@ jobs:
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GIT_TOKEN }}
           branch: master
           force: true
