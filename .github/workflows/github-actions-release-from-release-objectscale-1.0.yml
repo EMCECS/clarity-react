@@ -1,4 +1,4 @@
-name: clarity-react CI - Push On Master - Pipeline
+name: clarity-react CI - Release from release-objectscale-1.0 - Pipeline
 
 # Controls when the action will run. 
 on:
@@ -37,6 +37,8 @@ jobs:
       
       - name: create package and publish 
         run: |
+          git checkout release-objectscale-1.0
+          git stash
           git pull
           yarn run package 
           yarn run copy
