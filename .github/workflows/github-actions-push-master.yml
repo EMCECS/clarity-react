@@ -2,10 +2,6 @@ name: clarity-react CI - Push On Master - Pipeline
 
 # Controls when the action will run. 
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
-  push:
-    branches: [ master ]
-
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -41,6 +37,7 @@ jobs:
       
       - name: create package and publish 
         run: |
+          git pull
           yarn run package 
           yarn run copy
           export PREVIOUS_MESSAGE="$(git log --format=%B -n 1)"
@@ -50,9 +47,4 @@ jobs:
           yarn run publish-public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: master
+

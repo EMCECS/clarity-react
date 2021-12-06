@@ -85,6 +85,7 @@ export enum DataListAutoComplete {
  * @param {spellCheck} specifies whether the element is to have its spelling and grammar checked or not
  * @param {defaultValue} if it will be used to set default value of input element, useful in case of edit workflows
  * @param {debounceTime} if provided, will be used as debounceTime for debounce function
+ * @param {value} if it will be used to set value of input element
  **/
 type DataListProps = {
     placeHolder?: string;
@@ -106,6 +107,7 @@ type DataListProps = {
     spellCheck?: boolean;
     debounce?: boolean; // decide if debounce is needed or not
     debounceTime?: number; // debounce time in miliseconds
+    value?: any;
 };
 
 /**
@@ -174,6 +176,7 @@ export class DataList extends React.PureComponent<DataListProps, DataListState> 
             spellCheck,
             debounce,
             debounceTime,
+            value,
         } = this.props;
 
         const {hasFocus} = this.state;
@@ -211,6 +214,7 @@ export class DataList extends React.PureComponent<DataListProps, DataListState> 
                                 type="text"
                                 spellCheck={spellCheck}
                                 autoComplete={autoComplete ? autoComplete : DataListAutoComplete.OFF}
+                                value={value}
                                 defaultValue={defaultValue ? defaultValue : ""}
                                 title={title}
                             />
