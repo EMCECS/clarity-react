@@ -36,6 +36,7 @@ import {DataGridColumnResize} from "./DataGridColumnResize";
  * @param {footer} footer component
  * @param {onRowSelect} Function which will gets called on select/deselect of rows
  * @param {onSelectAll} Function which will gets called on select/deselect of all rows
+ * @param {hideSelectAll} when true will not show select all checkbox, by default false
  * @param {keyfield} field to uniquely identify row
  * @param {rowType} Expandable or compact row type
  * @param {itemText} label to display for all items
@@ -54,6 +55,7 @@ type DataGridProps = {
     footer?: DataGridFooter;
     onRowSelect?: (selectedRow: DataGridRow) => void;
     onSelectAll?: (areAllSelected: boolean, selectedRows: DataGridRow[]) => void;
+    hideSelectAll?: boolean;
     keyfield?: string;
     rowType?: GridRowType;
     itemText?: string;
@@ -114,6 +116,7 @@ export type DataGridRow = {
  * type for datagrid expandable row data :
  * @param {isLoading} if true then show loading icon for expandable row
  * @param {onRowExpand} callback function to  fetch expandable row contents
+ * @param {onRowContract} callback function for additional logic after row contracts
  * @param {expandableContent} content to show after row expand
  * @param {isExpanded} true if row is already expanded
  * @param {hideRowExpandIcon} if true then hide icon for expandable row
@@ -121,6 +124,7 @@ export type DataGridRow = {
 export type ExpandableRowDetails = {
     isLoading?: boolean;
     onRowExpand?: (row: DataGridRow) => Promise<any>;
+    onRowContract?: (row: DataGridRow) => void;
     expandableContent?: any;
     isExpanded?: boolean;
     hideRowExpandIcon?: boolean;
@@ -187,12 +191,14 @@ export type DataGridHideShowColumns = {
  * type for DataGridSort :
  * @param {defaultSortOrder} if data in column by default sorted
  * @param {sortFunction} function to perform sorting
- * @param {isCurrentlySorted} checks if column is currently sorted or not
+ * @param {isSorted} checks if column is currently sorted or not
+ * @param {hideSort} if true hides sort
  */
 export type DataGridSort = {
     defaultSortOrder: SortOrder;
-    isSorted?: boolean;
     sortFunction: (rows: DataGridRow[], order: SortOrder, columnName: string) => Promise<DataGridRow[]>;
+    isSorted?: boolean;
+    hideSort?: boolean;
 };
 
 /**
@@ -539,7 +545,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     };
 
     private gotoPreviousPage = () => {
-        const {pageSize, currentPage, totalPages} = this.state.pagination!;
+        const {pageSize, currentPage} = this.state.pagination!;
         let previousPage = currentPage - 1;
         if (previousPage < 1) previousPage = 1;
         this.getPage(previousPage, pageSize);
@@ -547,7 +553,13 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // Function to handle pageIndex change in input box on blur event
     private handlePageChangeOnBlur = (evt: React.FocusEvent<HTMLInputElement>) => {
-        this.handlePageChange();
+        const {pagination} = this.state;
+        const pageInputFieldValue: number | null =
+            this.pageIndexRef.current && parseInt(this.pageIndexRef.current.value);
+        const currentPageValue: number | null | undefined = pagination && pagination.currentPage;
+        if (pageInputFieldValue !== currentPageValue) {
+            this.handlePageChange();
+        }
     };
 
     // Function to handle pageIndex change in input box on Enter ot Tab key press event
@@ -635,7 +647,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         let {expandableRowData} = allRows[rowID];
         if (expandableRowData) {
             expandableRowData.isExpanded = !expandableRowData.isExpanded;
-            const {onRowExpand, isExpanded} = expandableRowData;
+            const {onRowExpand, isExpanded, onRowContract} = expandableRowData;
             if (onRowExpand && isExpanded) {
                 // For dynamic loading of expandable row content
                 expandableRowData!.isLoading = true;
@@ -649,6 +661,11 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                         allRows[rowID].expandableRowData = expandableRowData; // update row data in datagrid state
                         this.setState({allRows: [...allRows]});
                     });
+                });
+            } else if (onRowContract && !isExpanded) {
+                //Callback is called as an argument of this.setState callback for state refreshing.
+                this.setState({allRows: [...allRows]}, () => {
+                    onRowContract(allRows[rowID]);
                 });
             } else {
                 // For static loading of expandable row contnet
@@ -678,8 +695,10 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                 // For open panel
                 onOpenDetails &&
                     onOpenDetails(allRows[rowID]).then((content: any) => {
-                        // For dynamic update of detail content
-                        updatedRows[rowID].detailPaneData!.detailPaneContent = content;
+                        if (content) {
+                            // For dynamic update of detail content
+                            updatedRows[rowID].detailPaneData!.detailPaneContent = content;
+                        }
                     });
                 updatedRows[rowID].detailPaneData!.isOpen = isOpen;
             }
@@ -837,7 +856,12 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         columns.map((column: DataGridColumn, index: number) => {
             if (column.sort) {
                 const col = allColumns.find(({columnName}) => columnName === column.columnName);
-                column.sort = col && col.sort;
+                if (col && col.sort) {
+                    col.sort.hideSort = column.sort.hideSort;
+                    column.sort = col.sort;
+                }
+            } else {
+                column.sort = undefined;
             }
         });
         return columns;
@@ -950,7 +974,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // function to render selectAll column
     private buildSelectColumn(): React.ReactElement {
-        const {selectionType, id} = this.props;
+        const {selectionType, id, hideSelectAll} = this.props;
         const {selectAll} = this.state;
         return (
             <div
@@ -963,7 +987,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                 ])}
             >
                 <span className={ClassNames.DATAGRID_COLUMN_TITLE}>
-                    {selectionType === GridSelectionType.MULTI && (
+                    {selectionType === GridSelectionType.MULTI && !hideSelectAll && (
                         <div
                             className={classNames([
                                 ClassNames.CLR_CHECKBOX_WRAPPER,
@@ -1074,6 +1098,8 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                     className={classNames([
                         ClassNames.DATAGRID_PLACEHOLDER,
                         allRows.length === 0 && ClassNames.DATAGRID_EMPTY,
+                        "clr-align-items-center",
+                        "clr-justify-content-center",
                     ])}
                 >
                     {allRows.length === 0 && this.buildEmptyPlaceholder()}
@@ -1085,7 +1111,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     // Function to create placeholder for empty datagrid
     private buildEmptyPlaceholder(): React.ReactElement {
         const {itemText} = this.state;
-        const placeholderText = "We couldn't find any " + itemText + " !";
+        const placeholderText = "No " + itemText + " found!";
         return (
             <React.Fragment>
                 <div
@@ -1136,6 +1162,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         const {columnName, displayName, columnID, className, style, sort, filter, width} = column;
         const columnHeight =
             this.datagridTableRef && this.datagridTableRef.current && this.datagridTableRef.current.clientHeight;
+        const hideSort: boolean = sort && sort.hideSort !== undefined ? sort.hideSort : false;
 
         return (
             <div
@@ -1146,7 +1173,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                 key={"col-" + index}
             >
                 <div className={ClassNames.DATAGRID_COLUMN_FLEX}>
-                    {sort != undefined ? (
+                    {sort !== undefined && !hideSort ? (
                         <Button
                             key="sort"
                             defaultBtn={false}

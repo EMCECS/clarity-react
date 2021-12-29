@@ -66,7 +66,7 @@ export class ClassNames {
     public static PAGINATION_LIST: string = "pagination-list";
     public static PAGINATION_FIRST: string = "pagination-first";
     public static PAGINATION_PREVIOUS: string = "pagination-previous";
-    public static PAGINATION_CURRENT: string = "pagination-current";
+    public static PAGINATION_CURRENT: string = "pagination-current clr-input ng-star-inserted";
     public static PAGINATION_NEXT: string = "pagination-next";
     public static PAGINATION_LAST: string = "pagination-last";
     public static PAGINATION_SIZE: string = "pagination-size";

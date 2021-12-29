@@ -46,6 +46,7 @@ export interface WizardFooterProps extends InheritedWizardFooterProps {
     showComplete?: boolean;
     showNext?: boolean;
     showPrevious?: boolean;
+    disablePreviousButton?: boolean;
 }
 
 export default class WizardFooter extends React.PureComponent<WizardFooterProps> {
@@ -73,6 +74,7 @@ export default class WizardFooter extends React.PureComponent<WizardFooterProps>
             showNext,
             showPrevious,
             isLoading,
+            disablePreviousButton,
         } = this.props;
 
         return (
@@ -99,7 +101,7 @@ export default class WizardFooter extends React.PureComponent<WizardFooterProps>
                             className={previousClassName}
                             dataqa={dataqa + dataqa_wizard_btn_previous}
                             onClick={onPrevious}
-                            disabled={isLoading}
+                            disabled={isLoading || disablePreviousButton}
                         >
                             {previousText + " "}
                         </Button>

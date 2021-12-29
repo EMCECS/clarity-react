@@ -27,6 +27,8 @@ import {DebounceUtils} from "../forms/common/DebounceUtils";
  * @param {disabled} boolean value to enable or disable filter
  * @param {debounce} boolean value to apply debounce behaviour
  * @param {debounceTime} number value debounceTime/Delay value in miliseconds
+ * @param {position} position of the filter popup
+ * @param {defaultValue} defaultValue of the filter
  */
 export type DataGridFilterProps = {
     style?: any;
@@ -40,6 +42,8 @@ export type DataGridFilterProps = {
     disabled?: boolean;
     debounce?: boolean;
     debounceTime?: number;
+    position?: FilterPosition;
+    defaultValue?: any;
 };
 
 /**
@@ -62,6 +66,12 @@ export enum FilterType {
     CUSTOM = "Custom",
 }
 
+// Enum for filter position
+export enum FilterPosition {
+    LEFT = "left",
+    CENTER = "center",
+    RIGHT = "right",
+}
 /**
  * State for DataGridFilter:
  * @param {isOpen} check if filter box is open
@@ -104,16 +114,54 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
         disabled: false,
     };
 
-    // Initial state for filter
-    state: DataGridFilterState = {
-        isOpen: false,
-        transformVal: "translateX(0px) translateY(0px)",
-        isFiltered: false,
+    // Poll till window resizing is stable to find correct width
+    private handleResizeInterval = (prevChildWidth: number) => {
+        const interval = setInterval(() => {
+            let nextChildWidth =
+                (this.refChild &&
+                    this.refChild.current &&
+                    this.refChild.current.getClientRects()[0] &&
+                    this.refChild.current.getClientRects()[0].width) ||
+                0;
+            if (prevChildWidth === nextChildWidth) {
+                clearInterval(interval);
+                this.updateFilterPosition(nextChildWidth);
+            } else {
+                prevChildWidth = nextChildWidth;
+            }
+        }, 10);
+    };
+
+    // To avoid infinite loop, set the filter position only once child width is stable
+    private updateFilterPosition = (childWidth: number) => {
+        // Calculate left and top for filter box
+        if (this.refParent && this.refParent.current && this.refParent.current.getClientRects()[0]) {
+            const filterBoxTop: number = this.refParent.current.getClientRects()[0].top + 15;
+            const filterBoxLeft: number = this.refParent.current.getClientRects()[0].left - childWidth + 20;
+            const transformVal = "translateX(" + filterBoxLeft + "px) " + "translateY(" + filterBoxTop + "px)";
+            this.setState({transformVal: transformVal});
+        }
     };
 
     constructor(props: DataGridFilterProps) {
         super(props);
-        this.filterValue = undefined;
+
+        // Initial state for filter
+        let initialStateData: DataGridFilterState = {
+            isOpen: false,
+            transformVal: "translateX(0px) translateY(0px)",
+            isFiltered: false,
+        };
+
+        const {defaultValue} = props;
+        if (defaultValue) {
+            initialStateData.isFiltered = true;
+            this.filterValue = defaultValue;
+        } else {
+            this.filterValue = undefined;
+        }
+
+        this.state = {...initialStateData};
     }
 
     componentWillMount() {
@@ -125,17 +173,22 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
     }
 
     componentDidUpdate() {
-        const {isOpen} = this.state;
+        const {isOpen, transformVal} = this.state;
 
         if (isOpen) {
-            // Calculate left and top for filter box
-            const filterBoxTop = this.refParent.current!.getClientRects()[0].top + 15;
-            const filterBoxLeft =
-                this.refParent.current!.getClientRects()[0].left -
-                this.refChild.current!.getClientRects()[0].width +
-                20;
-            const transformVal = "translateX(" + filterBoxLeft + "px) " + "translateY(" + filterBoxTop + "px)";
-            this.setState({transformVal: transformVal});
+            let prevChildWidth: number =
+                (this.refChild &&
+                    this.refChild.current &&
+                    this.refChild.current.getClientRects()[0] &&
+                    this.refChild.current.getClientRects()[0].width) ||
+                0;
+            // To avoid flicker at initial position of filter
+            if (transformVal === "translateX(0px) translateY(0px)") {
+                this.updateFilterPosition(prevChildWidth);
+            } else {
+                // Poll till the size is stable to avoid infinite loop if window resized
+                this.handleResizeInterval(prevChildWidth);
+            }
         }
     }
 
@@ -219,6 +272,7 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
             disabled,
             debounce,
             debounceTime,
+            position,
         } = this.props;
 
         const childrenWithProps = React.Children.map(children, child => {
@@ -228,7 +282,18 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
             }
             return child;
         });
-
+        let alignment;
+        switch (position) {
+            case FilterPosition.RIGHT:
+                alignment = "195px";
+                break;
+            case FilterPosition.CENTER:
+                alignment = "97px";
+                break;
+            default:
+                alignment = "0px";
+                break;
+        }
         return (
             <div>
                 <span className={ClassNames.OFFSCREEN_FOCUS_REBOUNDER} />
@@ -240,7 +305,7 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
                         bottom: "auto",
                         right: "auto",
                         height: "90px",
-                        left: 0,
+                        left: alignment,
                         transform: transformVal,
                         ...style,
                     }}

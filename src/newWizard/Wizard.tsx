@@ -42,6 +42,7 @@ import {SpinnerSize} from "../spinner/Spinner";
  * @param {showNext} if true show next button on wizard else hide
  * @param {onPrevious} callback function to call on click of previous button
  * @param {previousClassName} external CSS for previous button
+ * @param {disablePreviousButton} if true then disable previous button
  * @param {nextButtonText} custom text for next button
  * @param {onNext} callback function to call on click of next button
  * @param {nextClassName} external CSS for next button
@@ -102,6 +103,7 @@ export type WizardProps = {
     showPrevious?: boolean;
     previousClassName?: string;
     previousText?: string;
+    disablePreviousButton?: boolean;
     nextText?: string;
     showNext?: boolean;
     nextClassName?: string;
@@ -168,6 +170,7 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
         showStepTitle: true,
         showTitle: true,
         isLoading: false,
+        disablePreviousButton: false,
         onComplete: () => {
             // by default do nothing in addition the the default handler
         },
@@ -231,6 +234,7 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
             style,
             isLoading,
             loadingSpinnerSize,
+            disablePreviousButton,
         } = this.props;
 
         // initialize a bunch of class names
@@ -323,6 +327,7 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
                                                 currentStepID={currentStepID}
                                                 disableNext={!currentStepIsCompleteAndValid}
                                                 disableComplete={!allStepsCompleteAndValid}
+                                                disablePreviousButton={disablePreviousButton}
                                                 showCancel={showCancel}
                                                 showComplete={!nextStepExists}
                                                 showNext={nextStepExists}

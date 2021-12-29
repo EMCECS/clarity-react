@@ -12,7 +12,16 @@ import * as React from "react";
 import {storiesOf} from "@storybook/react";
 import {State, Store} from "@sambego/storybook-state";
 import {Icon} from "../icon";
-import {DataGrid, GridSelectionType, GridRowType, SortOrder, DataGridFilter, FilterType, DataGridRow} from ".";
+import {
+    DataGrid,
+    GridSelectionType,
+    GridRowType,
+    SortOrder,
+    DataGridFilter,
+    FilterType,
+    DataGridRow,
+    FilterPosition,
+} from ".";
 import {
     normalColumns,
     normalRows,
@@ -35,9 +44,9 @@ import {
     alreadySelectedRows,
     getSelectableRowsData,
     paginationDetailsForAlreadySelectedRows,
-    rowsWithDetailPane,
     paginationDetailsForDetailsPane,
     paginationRowsWithLinks,
+    storeForDetailPane,
 } from "./DataGridStoriesData";
 import {CustomFilter} from "./CustomFilter";
 import {CustomFilterMulti} from "./CustomFilterMulti";
@@ -77,6 +86,7 @@ const store = new Store({
     },
     paginationDetails: paginationDetailsForAlreadySelectedRows,
 });
+
 // Refrence to call dataGrid methods
 const datagridRef = React.createRef<DataGrid>();
 const datagridActionsRef = React.createRef<GridActions>();
@@ -174,6 +184,8 @@ storiesOf("DataGrid", module)
                                 onFilter={filterFunction}
                                 columnName={"User ID"}
                                 datagridRef={datagridFilterRef}
+                                position={FilterPosition.RIGHT}
+                                defaultValue={41512}
                             />
                         ),
                     },
@@ -185,6 +197,7 @@ storiesOf("DataGrid", module)
                                 onFilter={filterFunction}
                                 columnName={"Name"}
                                 datagridRef={datagridFilterRef}
+                                position={FilterPosition.CENTER}
                             />
                         ),
                     },
@@ -355,7 +368,7 @@ storiesOf("DataGrid", module)
     ))
     .add("Empty data grid", () => (
         <div style={{width: "80%"}}>
-            <DataGrid columns={normalColumns} footer={defaultFooter} />
+            <DataGrid columns={normalColumns} footer={defaultFooter} style={{height: "70vh"}} />
         </div>
     ))
     .add("Grid with compact row", () => (
@@ -421,16 +434,20 @@ storiesOf("DataGrid", module)
         </State>
     ))
     .add("Grid with detail pane", () => (
-        <div style={{width: "80%", paddingTop: "5%"}}>
-            <DataGrid
-                columns={sortColumns}
-                rows={rowsWithDetailPane.slice(0, 5)}
-                footer={hideShowColFooter}
-                pagination={paginationDetailsForDetailsPane}
-                rowType={GridRowType.EXPANDABLE_ROWS_WITH_DETAIL_PANE}
-                selectionType={GridSelectionType.MULTI}
-            />
-        </div>
+        <State store={storeForDetailPane}>
+            {state => (
+                <div style={{width: "80%", paddingTop: "5%"}}>
+                    <DataGrid
+                        columns={state.columns}
+                        rows={state.rows}
+                        footer={hideShowColFooter}
+                        pagination={paginationDetailsForDetailsPane}
+                        rowType={GridRowType.EXPANDABLE_ROWS_WITH_DETAIL_PANE}
+                        selectionType={GridSelectionType.MULTI}
+                    />
+                </div>
+            )}
+        </State>
     ))
     .add("Grid with read-only password", () => (
         <div style={{width: "80%"}}>
