@@ -38,7 +38,6 @@ type TabsV2Prop = {
  * state for tabs
  * @param {isOverflowTabSelected} if true inticate overflow tab button as active
  * @param {selectedTabId} Id of selected tab
- * @param {tabsData} array of data for tabs
  */
 type TabsV2State = {
     isOverflowTabSelected: boolean;
@@ -89,7 +88,7 @@ export class TabsV2 extends React.PureComponent<TabsV2Prop, TabsV2State> {
         super(props);
         this.state = {
             isOverflowTabSelected: false,
-            selectedTabId: props.tabs[0].id,
+            selectedTabId: props.tabs[0] && props.tabs[0].id,
         };
     }
 
@@ -106,7 +105,7 @@ export class TabsV2 extends React.PureComponent<TabsV2Prop, TabsV2State> {
     };
 
     //Render Tab Button
-    private renderTabLink = (tab: TabV2Details, index: number) => {
+    private renderTab = (tab: TabV2Details, index: number) => {
         const {selectedTabId} = this.state;
         const className = tab.id === selectedTabId ? ClassNames.TABACTIVE : ClassNames.TABINACTIVE;
         return (
@@ -126,7 +125,7 @@ export class TabsV2 extends React.PureComponent<TabsV2Prop, TabsV2State> {
     };
 
     //Render Tab bar
-    private renderTabLinks = () => {
+    private renderTabsBar = () => {
         const {id, tabOrientation, overflowTabsFrom} = this.props;
         const {tabs} = this.props;
         let isOverflowRendered = false;
@@ -141,7 +140,7 @@ export class TabsV2 extends React.PureComponent<TabsV2Prop, TabsV2State> {
 
                     //Render normal tab unless overflow tab rendered
                     if (!isOverflowRendered) {
-                        return this.renderTabLink(tab, index);
+                        return this.renderTab(tab, index);
                     }
                 })}
             </ul>
@@ -158,10 +157,10 @@ export class TabsV2 extends React.PureComponent<TabsV2Prop, TabsV2State> {
         return (
             <li className={ClassNames.TABITEM} key={index}>
                 <Dropdown
-                    showCaret={false}
+                    showCaret={true}
                     label={isOverflowTabSelected && selectedOverflowTab && selectedOverflowTab.name}
                     button={{
-                        icon: {shape: "ellipsis-horizontal"},
+                        //icon: {shape: "ellipsis-horizontal"},
                         link: true,
                         className: ClassNames.TABINACTIVE,
                     }}
@@ -202,7 +201,7 @@ export class TabsV2 extends React.PureComponent<TabsV2Prop, TabsV2State> {
                 className={tabOrientation === TabV2Orientation.VERTICAL ? ClassNames.VERTICALTAB : undefined}
                 data-qa={dataqa}
             >
-                {this.renderTabLinks()}
+                {this.renderTabsBar()}
                 {this.renderTabPane(children, selectedTabId)}
             </div>
         );

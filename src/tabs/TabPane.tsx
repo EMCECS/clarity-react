@@ -10,6 +10,10 @@
 
 import * as React from "react";
 
+/**
+ * props for TabPane
+ * @param {id} Tab Pane id
+ */
 export type TabPaneProps = {
     id: string;
 };
