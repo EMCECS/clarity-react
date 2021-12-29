@@ -10,4 +10,5 @@
 
 export * from "./Tabs";
 export * from "./TabsV2";
+export * from "./TabPane";
 export * from "./ClassNames";
