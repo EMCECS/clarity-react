@@ -19,6 +19,7 @@ import {Icon, Direction} from "../icon";
  * @param {className} css property
  * @param {accordionMultiPanel} if yes multipanel enebled else not
  * @param {dataqa} quality engineering testing field
+ * @param {titleClassName} css propert for title of accordion
  */
 type AccordionProps = {
     style?: any;
@@ -26,6 +27,7 @@ type AccordionProps = {
     content: accordionContent[];
     accordionMultiPanel?: boolean;
     dataqa?: string;
+    titleClassName?: string;
 };
 
 type accordionContent = {
@@ -119,7 +121,7 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
 
     //get content for each accordion panel
     getItemContent = (index: any, title: any, isOpen: boolean | undefined) => {
-        const {accordionMultiPanel} = this.props;
+        const {accordionMultiPanel, titleClassName} = this.props;
         const panelClass = classNames([ClassNames.ACCORDION_PANEL_INNER, isOpen && ClassNames.ACCORDION_PANEL_OPEN]);
         return (
             <div role="group" className={panelClass} key={index}>
@@ -137,7 +139,7 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
                             <Icon className={ClassNames.ACCORDION_ANGLE} dir={Direction.RIGHT} shape="angle" />
                             <span className={ClassNames.ACCORDION_NUMBER} />
                         </span>
-                        <div className={ClassNames.ACCORDION_TITLE}>{title}</div>
+                        <div className={classNames([ClassNames.ACCORDION_TITLE, titleClassName])}>{title}</div>
                     </button>
                 </div>
             </div>

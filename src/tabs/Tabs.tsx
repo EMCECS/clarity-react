@@ -223,9 +223,12 @@ export class Tabs extends React.PureComponent<TabsProp, TabsState> {
     };
 
     render() {
-        const {tabOrientation} = this.props;
+        const {tabOrientation, dataqa} = this.props;
         return (
-            <div className={tabOrientation === TabOrientation.VERTICAL ? ClassNames.VERTICALTAB : undefined}>
+            <div
+                className={tabOrientation === TabOrientation.VERTICAL ? ClassNames.VERTICALTAB : undefined}
+                data-qa={dataqa}
+            >
                 {this.renderTabLinks()}
                 {this.renderTabPanels()}
             </div>
