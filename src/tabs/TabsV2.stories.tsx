@@ -147,4 +147,16 @@ storiesOf("TabsV2", module)
                 </TabsV2>
             )}
         </State>
+    ))
+    .add("TabV2 Overflow - only tabs", () => (
+        <State store={store}>
+            {state => (
+                <TabsV2
+                    id="overflowTabs"
+                    tabs={state.simpleTabs}
+                    tabOrientation={TabV2Orientation.HORIZONTAL}
+                    overflowTabsFrom={2}
+                />
+            )}
+        </State>
     ));
