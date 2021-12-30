@@ -76,9 +76,14 @@ const staticTabsData: TabV2Details[] = [
     },
 ];
 
+const staticTabsWithTabSelected = [...staticTabsData];
+staticTabsWithTabSelected[3].isSelected = true;
+staticTabsWithTabSelected[0].isSelected = false;
+
 const store = new Store({
     simpleTabs: tabsData,
     staticTabs: staticTabsData,
+    staticTabsWithTabSelected: staticTabsWithTabSelected,
     onTabClick: (evt: React.MouseEvent<HTMLElement>, clickedTab: TabV2Details, updatedTabs: TabV2Details[]): void => {
         store.set({
             simpleTabs: [...updatedTabs],
@@ -157,6 +162,24 @@ storiesOf("TabsV2", module)
                     tabOrientation={TabV2Orientation.HORIZONTAL}
                     overflowTabsFrom={2}
                 />
+            )}
+        </State>
+    ))
+    .add("TabV2 Static with Tab Selected", () => (
+        <State store={store}>
+            {state => (
+                <TabsV2
+                    id="staticTabsWithTabSelected"
+                    tabs={state.staticTabsWithTabSelected}
+                    tabOrientation={TabV2Orientation.HORIZONTAL}
+                >
+                    <TabPane id={"dashboard"}>{"DASHBOARD"}</TabPane>
+                    <TabPane id={"mgmt"}>{"MANAGEMENT"}</TabPane>
+                    <TabPane id={"cloud"}>{"CLOUD"}</TabPane>
+                    <TabPane id={"infra"}>{"INFRASTRUCTURE"}</TabPane>
+                    <TabPane id={"metrics"}>{"METRICS"}</TabPane>
+                    <TabPane id={"policies"}>{"POLICIES"}</TabPane>
+                </TabsV2>
             )}
         </State>
     ));
