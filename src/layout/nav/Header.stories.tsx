@@ -195,7 +195,7 @@ storiesOf("Header", module)
                                     webkitTransform: "translate(-50%,-50%)",
                                 }}
                             />
-                            <span className="nav-text" style={{padding: "0 0 0 1.2rem"}}>
+                            <span className="nav-text" style={{paddingLeft: "1.2rem"}}>
                                 username
                             </span>
                         </a>
