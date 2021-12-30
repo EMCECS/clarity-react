@@ -411,6 +411,54 @@ storiesOf("New Wizard", module)
             )}
         </State>
     ))
+    .add("wizard with apply button on all steps", _props => (
+        <State store={store}>
+            {state => (
+                <React.Fragment>
+                    <Button key={0} primary link onClick={() => state.handleToggleWizard(WizardSize.LARGE)}>
+                        OPEN WIZARD
+                    </Button>
+                    <Wizard
+                        currentStepID={state.currentWizardStepID}
+                        key={1}
+                        size={WizardSize.LARGE}
+                        show={state.open}
+                        showComplete={true}
+                        showCancel={true}
+                        completeText={"Apply"}
+                        title="wizard with apply button on all steps"
+                        onClose={() => state.handleClose()}
+                        onComplete={() => state.handleComplete()}
+                        onNext={() => state.handleNext()}
+                        onPrevious={() => state.handlePrevious()}
+                        onNavigateTo={state.handleSelectStep}
+                    >
+                        <WizardStep
+                            id={0}
+                            key={0}
+                            name={"Page 1"}
+                            valid={state.basicInfoValid}
+                            complete={state.basicInfoValid}
+                        />
+                        <WizardStep
+                            id={1}
+                            key={1}
+                            name={"Page 2"}
+                            valid={state.basicInfoValid}
+                            complete={state.basicInfoValid}
+                        />
+                        <WizardStep
+                            id={2}
+                            key={2}
+                            name={"Page 3"}
+                            valid={state.basicInfoValid}
+                            complete={state.basicInfoValid}
+                        />
+                    </Wizard>
+                </React.Fragment>
+            )}
+        </State>
+    ))
     .add("wizard with loading spinner", _props => (
         <State store={store}>
             {state => (

@@ -226,6 +226,7 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
             onNavigateTo,
             show,
             showCancel,
+            showComplete,
             showNavigation,
             showStepTitle,
             showTitle,
@@ -329,7 +330,9 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
                                                 disableComplete={!allStepsCompleteAndValid}
                                                 disablePreviousButton={disablePreviousButton}
                                                 showCancel={showCancel}
-                                                showComplete={!nextStepExists}
+                                                showComplete={
+                                                    showComplete !== undefined ? showComplete : !nextStepExists
+                                                }
                                                 showNext={nextStepExists}
                                                 showPrevious={previousStepExists}
                                                 onClose={onClose}
