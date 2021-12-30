@@ -74,7 +74,11 @@ storiesOf("Header", module)
                     </div>
                     <div className="header-actions">
                         <Dropdown
-                            button={{icon: {shape: "cog"}, defaultBtn: false, className: "nav-icon dropdown-toggle"}}
+                            button={{
+                                icon: {shape: "cog", style: {right: "2.4rem"}},
+                                defaultBtn: false,
+                                className: "nav-icon dropdown-toggle",
+                            }}
                             onItemClick={action("onItemClick - Dropdown.")}
                         >
                             <DropdownMenu>
@@ -109,7 +113,11 @@ storiesOf("Header", module)
 
                     <div className="header-actions">
                         <Dropdown
-                            button={{icon: {shape: "user"}, defaultBtn: false, className: "nav-icon dropdown-toggle"}}
+                            button={{
+                                icon: {shape: "user", style: {right: "2.4rem"}},
+                                defaultBtn: false,
+                                className: "nav-icon dropdown-toggle",
+                            }}
                             onItemClick={action("onItemClick - Dropdown.")}
                         >
                             <DropdownMenu>
@@ -187,7 +195,9 @@ storiesOf("Header", module)
                                     webkitTransform: "translate(-50%,-50%)",
                                 }}
                             />
-                            <span className="nav-text">username</span>
+                            <span className="nav-text" style={{padding: "0 0 0 1.2rem"}}>
+                                username
+                            </span>
                         </a>
                     </div>
                 </Header>
