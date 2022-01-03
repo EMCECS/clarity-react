@@ -80,15 +80,31 @@ export enum TabV2Type {
     SIMPLE = "simple",
 }
 
+/*
+ *  util method to filter tabs and find selected tab if user provided preference
+ */
+
+const getSelectedTabId = (tabs: TabV2Details[]): string => {
+    const selectedTab: any = tabs.find(tab => tab.isSelected);
+    if (selectedTab) {
+        return selectedTab.id;
+    } else {
+        return tabs[0].id;
+    }
+};
+
 /**
- * TabsV2 Component : Use to divide content into separate views which users navigate between.
+ * TabsV2 Component: Use to divide content into separate views which users navigate between.
  */
 export class TabsV2 extends React.PureComponent<TabsV2Prop, TabsV2State> {
     constructor(props: TabsV2Prop) {
         super(props);
+        const {tabs} = props;
+        const selectedTabID: string = tabs && tabs.length > 0 ? getSelectedTabId(tabs) : tabs[0].id;
+
         this.state = {
             isOverflowTabSelected: false,
-            selectedTabId: props.tabs[0] && props.tabs[0].id,
+            selectedTabId: selectedTabID,
         };
     }
 
