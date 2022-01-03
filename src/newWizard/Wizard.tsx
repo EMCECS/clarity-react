@@ -43,6 +43,7 @@ import {SpinnerSize} from "../spinner/Spinner";
  * @param {onPrevious} callback function to call on click of previous button
  * @param {previousClassName} external CSS for previous button
  * @param {disablePreviousButton} if true then disable previous button
+ * @param {disableComplet} if true then disable complete button
  * @param {nextButtonText} custom text for next button
  * @param {onNext} callback function to call on click of next button
  * @param {nextClassName} external CSS for next button
@@ -104,6 +105,7 @@ export type WizardProps = {
     previousClassName?: string;
     previousText?: string;
     disablePreviousButton?: boolean;
+    disableComplete?: boolean;
     nextText?: string;
     showNext?: boolean;
     nextClassName?: string;
@@ -226,6 +228,7 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
             onNavigateTo,
             show,
             showCancel,
+            showComplete,
             showNavigation,
             showStepTitle,
             showTitle,
@@ -235,6 +238,7 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
             isLoading,
             loadingSpinnerSize,
             disablePreviousButton,
+            disableComplete,
         } = this.props;
 
         // initialize a bunch of class names
@@ -326,10 +330,16 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
                                             <WizardFooter
                                                 currentStepID={currentStepID}
                                                 disableNext={!currentStepIsCompleteAndValid}
-                                                disableComplete={!allStepsCompleteAndValid}
+                                                disableComplete={
+                                                    disableComplete !== undefined
+                                                        ? disableComplete
+                                                        : !allStepsCompleteAndValid
+                                                }
                                                 disablePreviousButton={disablePreviousButton}
                                                 showCancel={showCancel}
-                                                showComplete={!nextStepExists}
+                                                showComplete={
+                                                    showComplete !== undefined ? showComplete : !nextStepExists
+                                                }
                                                 showNext={nextStepExists}
                                                 showPrevious={previousStepExists}
                                                 onClose={onClose}
