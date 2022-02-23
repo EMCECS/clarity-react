@@ -31,6 +31,7 @@ type ToolTipProps = {
     shape?: string;
     className?: string;
     dataqa?: string;
+    isSolidIcon?: boolean;
 };
 
 export enum ToolTipDirection {
@@ -67,6 +68,7 @@ export const ToolTip: React.FunctionComponent<ToolTipProps> = ({
     className,
     status,
     children,
+    isSolidIcon,
 }) => {
     let setShape: string = shape ? shape : "info-circle";
     return (
@@ -82,7 +84,7 @@ export const ToolTip: React.FunctionComponent<ToolTipProps> = ({
             ])}
             style={style}
         >
-            <Icon shape={setShape} size={iconSize} />
+            <Icon shape={setShape} size={iconSize} className={classNames([isSolidIcon ? "is-solid" : ""])} />
             <span
                 className={classNames([
                     "tooltip-content", //prettier
