@@ -21,6 +21,7 @@ import {Icon} from "../../icon";
  * @param {shape} shape of tooltip
  * @param {className} css div style
  * @param {dataqa} quality engineering field
+ * @param {isSolidIcon} boolean whether tooltip icon should be solid
  */
 type ToolTipProps = {
     direction?: ToolTipDirection;
