@@ -110,7 +110,12 @@ export class Password extends React.PureComponent<PasswordProps, PasswordState> 
 
         const {show, type} = this.state;
 
-        let classNames = ["clr-control-container", error && "clr-error", label && "clr-col-md-10 clr-col-12"];
+        let classNames = [
+            "clr-control-container",
+            "password-container",
+            error && "clr-error",
+            label && "clr-col-md-10 clr-col-12",
+        ];
 
         if (disabled) classNames.push("clr-form-control-disabled");
 
