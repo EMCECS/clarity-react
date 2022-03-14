@@ -304,7 +304,7 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
                         top: 0,
                         bottom: "auto",
                         right: "auto",
-                        height: "90px",
+                        minHeight: "90px",
                         left: alignment,
                         transform: transformVal,
                         ...style,

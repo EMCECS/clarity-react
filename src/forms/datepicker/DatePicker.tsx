@@ -250,7 +250,7 @@ export class DatePicker extends React.PureComponent<DatePickerProps, DatePickerS
         const moment = Moment(value, Moment.localeData(locale).longDateFormat("L"));
         const selectedSameMonth = moment.isSame(navValue, "month");
         return (
-            <div ref={this.calRef} className="clr-control-container" data-qa={dataqa}>
+            <div ref={this.calRef} className="clr-control-container datepicker-container" data-qa={dataqa}>
                 <div className="clr-input-wrapper">
                     <div
                         className={classNames([
