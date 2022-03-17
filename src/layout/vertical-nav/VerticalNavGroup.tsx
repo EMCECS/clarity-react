@@ -70,7 +70,7 @@ export class VerticalNavGroup extends React.PureComponent<VerticalNavGroupProps,
                         <Icon
                             shape="caret"
                             className="nav-group-trigger-icon"
-                            dir={groupIsExpanded ? Direction.RIGHT : Direction.DOWN}
+                            dir={groupIsExpanded ? Direction.DOWN : Direction.RIGHT}
                         />
                     </button>
                 </div>
