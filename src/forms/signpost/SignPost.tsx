@@ -48,6 +48,7 @@ type SignPostProps = {
     dataqa?: string;
     customSignPostTrigger?: boolean;
     triggerClassNames?: string;
+    signpostHeading?: string;
 };
 
 /**
@@ -191,6 +192,7 @@ export class SignPost extends React.PureComponent<SignPostProps> {
             className,
             children,
             showCloseButton,
+            signpostHeading,
         } = this.props;
         return (
             <div
@@ -208,13 +210,14 @@ export class SignPost extends React.PureComponent<SignPostProps> {
             >
                 <div className="signpost-wrap">
                     <div className="popover-pointer" />
-                    {showCloseButton && (
-                        <div className="signpost-content-header">
+                    <div className="signpost-content-header">
+                        {signpostHeading && <div className="signpost-heading">{signpostHeading}</div>}
+                        {showCloseButton && (
                             <Button className="signpost-action close" defaultBtn={false} onClick={this.handleClose}>
                                 <Icon shape="close" />
                             </Button>
-                        </div>
-                    )}
+                        )}
+                    </div>
                     <div className="signpost-content-body">{children}</div>
                 </div>
             </div>
