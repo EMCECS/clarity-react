@@ -39,6 +39,7 @@ import {
     paginationRows,
     pageFilterFunction,
     hideableColumns,
+    hiddenColumns,
     hideShowColFooter,
     selectedRows,
     alreadySelectedRows,
@@ -433,6 +434,11 @@ storiesOf("DataGrid", module)
     .add("Grid with Hide and Show Column", () => (
         <div style={{width: "80%", paddingTop: "5%"}}>
             <DataGrid columns={hideableColumns} rows={normalRows} footer={hideShowColFooter} />
+        </div>
+    ))
+    .add("Grid with hidden columns", () => (
+        <div style={{width: "80%", paddingTop: "5%"}}>
+            <DataGrid columns={hiddenColumns} rows={normalRows} footer={hideShowColFooter} />
         </div>
     ))
     .add("Grid show selected row count", () => (

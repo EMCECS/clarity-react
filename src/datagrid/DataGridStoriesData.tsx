@@ -52,6 +52,27 @@ export const hideableColumns: DataGridColumn[] = [
     {columnName: "Favorite color", isVisible: false},
 ];
 
+// Data for some columns hidden from user
+export const hiddenColumns: DataGridColumn[] = [
+    {columnName: "User ID", isHidden: true},
+    {
+        columnName: "Name",
+        displayName: "User name",
+        tooltip: (
+            <ToolTip
+                key={"tooltip-key"}
+                dataqa={"dataqa-name"}
+                direction={ToolTipDirection.BOTTOM_LEFT}
+                size={ToolTipSize.MEDIUM}
+            >
+                "ToolTip for name"
+            </ToolTip>
+        ),
+    },
+    {columnName: "Creation Date", isVisible: false},
+    {columnName: "Favorite color", isVisible: false},
+];
+
 /**
  * Data for datagrid cell
  */
