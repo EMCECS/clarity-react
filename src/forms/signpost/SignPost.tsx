@@ -36,6 +36,7 @@ const signPostActive = "active";
  *@param {dataqa} for Quality Engineering
  *@param {customSignPostTrigger} flag to show custom signpost trigger
  *@param {triggerClassNames} css classNames for signPost
+ *@param {signpostHeading} heading for signpost
  */
 type SignPostProps = {
     direction?: SignPostDirection;
@@ -48,7 +49,7 @@ type SignPostProps = {
     dataqa?: string;
     customSignPostTrigger?: boolean;
     triggerClassNames?: string;
-    signpostHeading?: string;
+    signpostHeading?: any;
 };
 
 /**
