@@ -216,7 +216,7 @@ export class HideShowColumns extends React.PureComponent<HideShowColumnsProps, H
                             <ul className={ClassNames.SWITCH_CONTENT}>
                                 {columns &&
                                     columns.map((column: DataGridColumn, index: number) => {
-                                        return column.isHidden ? undefined : this.buildColumnList(column, index);
+                                        return this.buildColumnList(column, index);
                                     })}
                             </ul>
 

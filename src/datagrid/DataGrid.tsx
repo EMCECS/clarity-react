@@ -78,7 +78,6 @@ type DataGridProps = {
  * @param {filter} Filter component
  * @param {isVisible} if true column will be visible else hide it
  * @param {width} Width of datagrid column the default width will be 100px
- * @param {isHidden} set to true if column should be hidden from user always
  */
 export type DataGridColumn = {
     columnName: string;
@@ -91,7 +90,6 @@ export type DataGridColumn = {
     filter?: React.ReactNode;
     isVisible?: boolean;
     width?: number;
-    isHidden?: boolean;
 };
 
 /**
@@ -849,7 +847,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         const isColumnVisible =
             this.isDetailPaneOpen() && column && column.columnID !== this.getFirstVisibleColumn()!.columnID
                 ? false
-                : column && column.isVisible && !column.isHidden;
+                : column && column.isVisible;
 
         return isColumnVisible;
     }
@@ -874,7 +872,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     // get details of first visible column
     private getFirstVisibleColumn = () => {
         const {allColumns} = this.state;
-        return allColumns.find((column: DataGridColumn) => column.isVisible === true || !column.isHidden === true);
+        return allColumns.find((column: DataGridColumn) => column.isVisible === true);
     };
 
     // Check if datagrid need to render detail Pane for rows
@@ -1150,8 +1148,6 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                                     const showColumn =
                                         this.isDetailPaneOpen() &&
                                         column.columnID !== this.getFirstVisibleColumn()!.columnID
-                                            ? false
-                                            : column.isHidden
                                             ? false
                                             : column.isVisible;
                                     return showColumn ? this.buildDataGridColumn(column, index) : undefined;
