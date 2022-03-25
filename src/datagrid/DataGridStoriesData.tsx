@@ -14,6 +14,7 @@ import {Icon} from "../icon";
 import {Button} from "../forms/button";
 import {SortOrder, DataGridRow, DataGridFilterResult, DataGridColumn} from ".";
 import {Password} from "../forms/password/Password";
+import {ToolTip, ToolTipDirection, ToolTipSize} from "../forms/tooltip/ToolTip";
 
 /**
  * General file description :
@@ -33,7 +34,20 @@ export const normalColumns: DataGridColumn[] = [
 // Data for Hide/show columns
 export const hideableColumns: DataGridColumn[] = [
     {columnName: "User ID"},
-    {columnName: "Name", displayName: "User name"},
+    {
+        columnName: "Name",
+        displayName: "User name",
+        tooltip: (
+            <ToolTip
+                key={"tooltip-key"}
+                dataqa={"dataqa-name"}
+                direction={ToolTipDirection.BOTTOM_LEFT}
+                size={ToolTipSize.MEDIUM}
+            >
+                "ToolTip for name"
+            </ToolTip>
+        ),
+    },
     {columnName: "Creation Date", isVisible: false},
     {columnName: "Favorite color", isVisible: false},
 ];
@@ -434,39 +448,37 @@ export const filterFunction = (
 // Custom sorting function for number and string type
 export const sortFunction = (rows: DataGridRow[], sortOrder: SortOrder, columnName: string): Promise<DataGridRow[]> => {
     return new Promise((resolve, reject) => {
-        rows.sort(
-            (first: DataGridRow, second: DataGridRow): number => {
-                let result = 0;
-                let firstRecord = first.rowData.find(function(element: any) {
-                    if (element.columnName === columnName) return element;
-                });
+        rows.sort((first: DataGridRow, second: DataGridRow): number => {
+            let result = 0;
+            let firstRecord = first.rowData.find(function(element: any) {
+                if (element.columnName === columnName) return element;
+            });
 
-                let secondRecord = second.rowData.find(function(element: any) {
-                    if (element.columnName === columnName) return element;
-                });
+            let secondRecord = second.rowData.find(function(element: any) {
+                if (element.columnName === columnName) return element;
+            });
 
-                if (firstRecord && secondRecord) {
-                    const contentType = typeof firstRecord.cellData;
+            if (firstRecord && secondRecord) {
+                const contentType = typeof firstRecord.cellData;
 
-                    if (sortOrder === SortOrder.ASC) {
-                        if (contentType === "number") {
-                            result = firstRecord.cellData - secondRecord.cellData;
-                        } else if (contentType === "string") {
-                            if (firstRecord.cellData > secondRecord.cellData) result = -1;
-                            else if (firstRecord.cellData < secondRecord.cellData) result = 1;
-                        }
-                    } else if (sortOrder == SortOrder.DESC) {
-                        if (contentType === "number") {
-                            result = secondRecord.cellData - firstRecord.cellData;
-                        } else if (contentType === "string") {
-                            if (secondRecord.cellData > firstRecord.cellData) result = -1;
-                            else if (secondRecord.cellData < firstRecord.cellData) result = 1;
-                        }
+                if (sortOrder === SortOrder.ASC) {
+                    if (contentType === "number") {
+                        result = firstRecord.cellData - secondRecord.cellData;
+                    } else if (contentType === "string") {
+                        if (firstRecord.cellData > secondRecord.cellData) result = -1;
+                        else if (firstRecord.cellData < secondRecord.cellData) result = 1;
+                    }
+                } else if (sortOrder == SortOrder.DESC) {
+                    if (contentType === "number") {
+                        result = secondRecord.cellData - firstRecord.cellData;
+                    } else if (contentType === "string") {
+                        if (secondRecord.cellData > firstRecord.cellData) result = -1;
+                        else if (secondRecord.cellData < firstRecord.cellData) result = 1;
                     }
                 }
-                return result;
-            },
-        );
+            }
+            return result;
+        });
 
         // Purposefully added delay here to see loading spinner
         setTimeout(function() {

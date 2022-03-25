@@ -70,6 +70,7 @@ type DataGridProps = {
  * type for DataGridColumn :
  * @param {columnName} column data
  * @param {displayName} display name for column
+ * @param {tooltip} tooltip for column
  * @param {sort} does colum support sorting
  * @param {className} CSS class name
  * @param {columns} column details
@@ -81,6 +82,7 @@ type DataGridProps = {
 export type DataGridColumn = {
     columnName: string;
     displayName?: any;
+    tooltip?: any;
     columnID?: number; // For internal use
     sort?: DataGridSort;
     className?: string;
@@ -1159,7 +1161,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // Function to build datagrid colums
     private buildDataGridColumn(column: DataGridColumn, index: number): React.ReactElement {
-        const {columnName, displayName, columnID, className, style, sort, filter, width} = column;
+        const {columnName, displayName, columnID, className, style, sort, filter, width, tooltip} = column;
         const columnHeight =
             this.datagridTableRef && this.datagridTableRef.current && this.datagridTableRef.current.clientHeight;
         const hideSort: boolean = sort && sort.hideSort !== undefined ? sort.hideSort : false;
@@ -1186,6 +1188,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                             }
                         >
                             {displayName ? displayName : columnName}
+                            {tooltip}
                             {sort.isSorted && sort.defaultSortOrder !== SortOrder.NONE && (
                                 <Icon
                                     shape={sort.defaultSortOrder == SortOrder.DESC ? "arrow down" : "arrow up"}
@@ -1199,6 +1202,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                     ) : (
                         <span className={ClassNames.DATAGRID_COLUMN_TITLE}>
                             {displayName ? displayName : columnName}
+                            {tooltip}
                         </span>
                     )}
                     {filter && filter}
