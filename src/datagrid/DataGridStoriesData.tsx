@@ -723,6 +723,7 @@ const getDetailPaneColumns = (hideNameSort: boolean = false): DataGridColumn[] =
         {
             columnName: "User ID",
             sort: {defaultSortOrder: SortOrder.ASC, sortFunction: sortFunction, hideSort: hideNameSort},
+            isHidden: true,
         },
         {
             columnName: "Name",
@@ -732,6 +733,7 @@ const getDetailPaneColumns = (hideNameSort: boolean = false): DataGridColumn[] =
         {
             columnName: "Favorite color",
             sort: {defaultSortOrder: SortOrder.ASC, sortFunction: sortFunction, isSorted: true},
+            isHidden: true,
         },
     ];
 };

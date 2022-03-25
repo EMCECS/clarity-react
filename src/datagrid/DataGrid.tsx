@@ -849,9 +849,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         const isColumnVisible =
             this.isDetailPaneOpen() && column && column.columnID !== this.getFirstVisibleColumn()!.columnID
                 ? false
-                : column && column.isHidden
-                ? false
-                : column && column.isVisible;
+                : column && column.isVisible && !column.isHidden;
 
         return isColumnVisible;
     }
@@ -876,7 +874,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     // get details of first visible column
     private getFirstVisibleColumn = () => {
         const {allColumns} = this.state;
-        return allColumns.find((column: DataGridColumn) => column.isVisible === true);
+        return allColumns.find((column: DataGridColumn) => column.isVisible === true || !column.isHidden === true);
     };
 
     // Check if datagrid need to render detail Pane for rows
