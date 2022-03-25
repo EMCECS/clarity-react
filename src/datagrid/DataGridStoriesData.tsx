@@ -14,6 +14,7 @@ import {Icon} from "../icon";
 import {Button} from "../forms/button";
 import {SortOrder, DataGridRow, DataGridFilterResult, DataGridColumn} from ".";
 import {Password} from "../forms/password/Password";
+import {ToolTip, ToolTipDirection, ToolTipSize} from "../forms/tooltip/ToolTip";
 
 /**
  * General file description :
@@ -33,7 +34,20 @@ export const normalColumns: DataGridColumn[] = [
 // Data for Hide/show columns
 export const hideableColumns: DataGridColumn[] = [
     {columnName: "User ID"},
-    {columnName: "Name", displayName: "User name"},
+    {
+        columnName: "Name",
+        displayName: "User name",
+        tooltip: (
+            <ToolTip
+                key={"tooltip-key"}
+                dataqa={"dataqa-name"}
+                direction={ToolTipDirection.BOTTOM_LEFT}
+                size={ToolTipSize.MEDIUM}
+            >
+                "ToolTip for name"
+            </ToolTip>
+        ),
+    },
     {columnName: "Creation Date", isVisible: false},
     {columnName: "Favorite color", isVisible: false},
 ];

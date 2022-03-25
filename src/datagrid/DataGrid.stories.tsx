@@ -50,6 +50,7 @@ import {
 } from "./DataGridStoriesData";
 import {CustomFilter} from "./CustomFilter";
 import {CustomFilterMulti} from "./CustomFilterMulti";
+import {ToolTip, ToolTipDirection, ToolTipSize} from "../forms/tooltip/ToolTip";
 
 const store = new Store({
     selectedRows: selectedRows,
@@ -257,6 +258,16 @@ storiesOf("DataGrid", module)
                         {columnName: "User ID"},
                         {
                             columnName: "Name",
+                            tooltip: (
+                                <ToolTip
+                                    key={"tooltip-key"}
+                                    dataqa={"dataqa-name"}
+                                    direction={ToolTipDirection.BOTTOM_LEFT}
+                                    size={ToolTipSize.MEDIUM}
+                                >
+                                    "ToolTip for name"
+                                </ToolTip>
+                            ),
                             filter: (
                                 <DataGridFilter
                                     onFilter={filterFunction}
@@ -314,6 +325,16 @@ storiesOf("DataGrid", module)
                         {columnName: "User ID"},
                         {
                             columnName: "Name",
+                            tooltip: (
+                                <ToolTip
+                                    key={"tooltip-key"}
+                                    dataqa={"dataqa-name"}
+                                    direction={ToolTipDirection.BOTTOM_LEFT}
+                                    size={ToolTipSize.MEDIUM}
+                                >
+                                    "ToolTip for name"
+                                </ToolTip>
+                            ),
                             filter: (
                                 <DataGridFilter
                                     onFilter={filterFunction}
