@@ -25,6 +25,7 @@ import {ReactNode} from "react";
  * @param {width} if Size is custom, then width need to be provided in props
  * @param {height} if Size is custom, then height need to be provided in props
  * @param {className} if className is provided, the add custom class with existing classes
+ * @param {type} if type is provided, modal rendered will be of given type
  */
 type ModalProps = {
     isOpen?: boolean;
@@ -36,6 +37,7 @@ type ModalProps = {
     width?: number;
     height?: number;
     className?: string;
+    type?: ModalType;
 };
 
 type ModalState = {
@@ -47,6 +49,13 @@ export enum ModalSize {
     LARGE = "modal-lg",
     XLARGE = "modal-xl",
     CUSTOM = "custom",
+}
+
+export enum ModalType {
+    INFO = "modal-type-info",
+    WARNING = "modal-type-warning",
+    DANGER = "modal-type-danger",
+    DEFAULT = "modal-type-default",
 }
 
 export const ModalBody: React.FunctionComponent = ({children}) => {
@@ -98,7 +107,7 @@ export class Modal extends React.PureComponent<ModalProps> {
     }
 
     buildModal(): React.ReactElement {
-        const {size, closable, title, children, dataqa, width, height, className} = this.props;
+        const {size, closable, title, children, dataqa, width, height, className, type} = this.props;
         return (
             <React.Fragment>
                 <div className={ClassNames.MODAL} data-qa={dataqa}>
@@ -112,7 +121,7 @@ export class Modal extends React.PureComponent<ModalProps> {
                         role="dialog"
                         aria-hidden="true"
                     >
-                        <div className={ClassNames.MODAL_CONTENT}>
+                        <div className={classNames([ClassNames.MODAL_CONTENT, type && type])}>
                             <div className={ClassNames.MODAL_HEADER}>
                                 {closable && (
                                     <button
