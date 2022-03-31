@@ -22,6 +22,7 @@ import {classNames} from "../utils";
  * @param {type} type of progressbar
  * @param {position} progress Bar position
  * @param {dataqa} quality engineering testing field
+ * @param {size} size of progressbar
  */
 export type ProgressBarProps = {
     value?: number;
@@ -33,6 +34,7 @@ export type ProgressBarProps = {
     type?: ProgressBarType;
     position?: ProgressBarPosition;
     dataqa?: string;
+    size?: ProgressBarSize;
 };
 
 export enum ProgressBarType {
@@ -57,6 +59,12 @@ export const ProgressBarAnimation = {
     FLASH_DANGER: "flash-danger",
 };
 
+export enum ProgressBarSize {
+    SMALL = "progress-sm",
+    DEFAULT = "progress-md",
+    LARGE = "progress-lg",
+}
+
 export class ProgressBar extends React.PureComponent<ProgressBarProps> {
     // By default Progress Bar will be normal progress bar not static
     static defaultProps = {
@@ -64,7 +72,7 @@ export class ProgressBar extends React.PureComponent<ProgressBarProps> {
     };
 
     render() {
-        const {value, max, status, type, labeled, position, style, className, dataqa} = this.props;
+        const {value, max, status, type, labeled, position, style, className, dataqa, size} = this.props;
 
         // Label style for labled progress bar
         const labelStyle = {display: "block"};
@@ -76,6 +84,7 @@ export class ProgressBar extends React.PureComponent<ProgressBarProps> {
                     status,
                     labeled && "labeled",
                     position,
+                    size || ProgressBarSize.DEFAULT,
                     className, // prettier
                 ])}
                 style={style}
