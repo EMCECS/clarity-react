@@ -18,4 +18,5 @@ export class ClassNames {
     public static NO_SCROLLING: string = "no-scrolling";
     public static MODAL_TITLE: string = "modal-title";
     public static MODAL_BACKDROP: string = "modal-backdrop";
+    public static MODAL_TITLE_ICON: string = "modal-title-icon";
 }
