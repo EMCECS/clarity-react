@@ -46,7 +46,6 @@ type ModalProps = {
 
 type ModalState = {
     isOpen: boolean;
-    showIcon?: boolean;
 };
 
 export enum ModalSize {
@@ -76,7 +75,6 @@ export class Modal extends React.PureComponent<ModalProps> {
 
     state: ModalState = {
         isOpen: this.props.isOpen !== undefined ? this.props.isOpen : false,
-        showIcon: this.props.showIcon !== undefined ? this.props.showIcon : this.props.type ? true : false,
     };
 
     componentWillUpdate(nextProps: ModalProps, nextState: ModalState) {
@@ -121,22 +119,22 @@ export class Modal extends React.PureComponent<ModalProps> {
             case ModalType.DANGER:
                 return <Icon aria-hidden={true} shape="error-standard" />;
             default:
-                return;
+                return undefined;
         }
     }
 
     /*Function to build title for modal
       overwrites type icons if custom icon is provided, doesn't renders any icon if showIcon is set to false
     */
-    buildTitle(): React.ReactElement {
-        const {type, customIcon, title} = this.props;
-        const {showIcon} = this.state;
-        let titleIcon: React.ReactNode | undefined = customIcon
+    buildModalTitle(): React.ReactElement {
+        const {type, customIcon, title, showIcon} = this.props;
+        const showTitleIcon = showIcon && type;
+        const titleIcon: React.ReactNode | undefined = customIcon
             ? customIcon
             : type && type !== ModalType.DEFAULT
             ? this.getTitleIconByType(type)
             : undefined;
-        if (showIcon && titleIcon) {
+        if (showTitleIcon && titleIcon) {
             return (
                 <div className={ClassNames.MODAL_TITLE_ICON}>
                     {titleIcon}
@@ -175,7 +173,7 @@ export class Modal extends React.PureComponent<ModalProps> {
                                         <Icon aria-hidden={true} shape="close" />
                                     </button>
                                 )}
-                                {this.buildTitle()}
+                                {this.buildModalTitle()}
                             </div>
                             {children}
                         </div>
