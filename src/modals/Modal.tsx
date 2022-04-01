@@ -110,7 +110,7 @@ export class Modal extends React.PureComponent<ModalProps> {
         this.cleanup();
     }
 
-    getTitleIconByType(type: ModalType): React.ReactNode {
+    getTitleIconByType(type: ModalType | undefined): React.ReactNode {
         switch (type) {
             case ModalType.INFO:
                 return <Icon aria-hidden={true} shape="info-standard" />;
@@ -129,11 +129,8 @@ export class Modal extends React.PureComponent<ModalProps> {
     buildModalTitle(): React.ReactElement {
         const {type, customIcon, title, showIcon} = this.props;
         const showTitleIcon = showIcon && type;
-        const titleIcon: React.ReactNode | undefined = customIcon
-            ? customIcon
-            : type && type !== ModalType.DEFAULT
-            ? this.getTitleIconByType(type)
-            : undefined;
+        const titleIcon: React.ReactNode | undefined = customIcon ? customIcon : this.getTitleIconByType(type);
+
         if (showTitleIcon && titleIcon) {
             return (
                 <div className={ClassNames.MODAL_TITLE_ICON}>
