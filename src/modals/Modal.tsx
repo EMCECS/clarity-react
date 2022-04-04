@@ -26,6 +26,8 @@ import {ReactNode} from "react";
  * @param {height} if Size is custom, then height need to be provided in props
  * @param {className} if className is provided, the add custom class with existing classes
  * @param {type} if type is provided, modal rendered will be of given type
+ * @param {showIcon} by defualt it is true if type is provided, make it false to not show icon
+ * @param {customIcon} sets custom icons to modal title
  */
 type ModalProps = {
     isOpen?: boolean;
@@ -38,6 +40,8 @@ type ModalProps = {
     height?: number;
     className?: string;
     type?: ModalType;
+    showIcon?: boolean;
+    customIcon?: React.ReactNode;
 };
 
 type ModalState = {
@@ -106,8 +110,41 @@ export class Modal extends React.PureComponent<ModalProps> {
         this.cleanup();
     }
 
+    getTitleIconByType(type: ModalType | undefined): React.ReactNode {
+        switch (type) {
+            case ModalType.INFO:
+                return <Icon aria-hidden={true} shape="info-standard" />;
+            case ModalType.WARNING:
+                return <Icon aria-hidden={true} shape="warning-standard" />;
+            case ModalType.DANGER:
+                return <Icon aria-hidden={true} shape="error-standard" />;
+            default:
+                return undefined;
+        }
+    }
+
+    /*Function to build title for modal
+      overwrites type icons if custom icon is provided, doesn't renders any icon if showIcon is set to false
+    */
+    buildModalTitle(): React.ReactElement {
+        const {type, customIcon, title, showIcon} = this.props;
+        const showTitleIcon = showIcon && type;
+        const titleIcon: React.ReactNode | undefined = customIcon ? customIcon : this.getTitleIconByType(type);
+
+        if (showTitleIcon && titleIcon) {
+            return (
+                <div className={ClassNames.MODAL_TITLE_ICON}>
+                    {titleIcon}
+                    <h3 className={ClassNames.MODAL_TITLE}>{title}</h3>
+                </div>
+            );
+        } else {
+            return <h3 className={ClassNames.MODAL_TITLE}>{title}</h3>;
+        }
+    }
+
     buildModal(): React.ReactElement {
-        const {size, closable, title, children, dataqa, width, height, className, type} = this.props;
+        const {size, closable, children, dataqa, width, height, className, type} = this.props;
         return (
             <React.Fragment>
                 <div className={ClassNames.MODAL} data-qa={dataqa}>
@@ -133,7 +170,7 @@ export class Modal extends React.PureComponent<ModalProps> {
                                         <Icon aria-hidden={true} shape="close" />
                                     </button>
                                 )}
-                                <h3 className={ClassNames.MODAL_TITLE}>{title}</h3>
+                                {this.buildModalTitle()}
                             </div>
                             {children}
                         </div>
