@@ -21,10 +21,6 @@
         "type": "http",
         "url": "https://github.com/emcecs/clarity-react"
     },
-    "engines": {
-        "npm": ">=8.1.2",
-        "node": ">=16.13.1"
-    },
     "scripts": {
         "build": "tsc",
         "copy": "cp package.json ./dist/. && cp README.md ./dist/. ",
