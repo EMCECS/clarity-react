@@ -8,7 +8,7 @@
  *     http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import * as React from "react";
+import React from "react";
 import {ClassNames, Styles} from "./ClassNames";
 import {classNames, allTrueOnKey} from "../utils";
 import {CheckBox} from "../forms/checkbox";
@@ -1126,7 +1126,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // Function to build datagrid header
     private buildDataGridHeader(): React.ReactElement {
-        const {selectionType, rowType, style} = this.props;
+        const {selectionType, rowType} = this.props;
         const {allColumns} = this.state;
         const showEmptyHeader: boolean = rowType && rowType !== GridRowType.COMPACT ? true : false;
 
