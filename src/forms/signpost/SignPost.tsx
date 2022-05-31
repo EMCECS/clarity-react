@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2018 Dell Inc., or its subsidiaries. All Rights Reserved.
+ * Copyright (c) 2018 - 2022 Dell Inc., or its subsidiaries. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -8,10 +8,10 @@
  *     http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import * as React from "react";
+import React from "react";
 import {classNames} from "../../utils";
 import {Button, ButtonSize} from "../button";
-import {Icon, IconProps} from "../../icon";
+import {Icon} from "../../icon";
 import {calculateAxisPosition} from "./AxisPosition";
 
 //className constants
@@ -200,13 +200,13 @@ export class SignPost extends React.PureComponent<SignPostProps> {
                 ref={this.refChild}
                 className={classNames([direction, "signpost-content", "ng-star-inserted", className])}
                 style={{
-                    ...style,
-                    position: "absolute",
                     top: "0px",
-                    bottom: "auto",
                     left: "0px",
                     right: "auto",
+                    bottom: "auto",
+                    position: "absolute",
                     transform: transformVal,
+                    ...style,
                 }}
             >
                 <div className="signpost-wrap">

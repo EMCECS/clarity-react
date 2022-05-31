@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2020 Dell Inc., or its subsidiaries. All Rights Reserved.
+ * Copyright (c) 2020 - 2022 Dell Inc., or its subsidiaries. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,15 +63,14 @@ export class CustomFilterMulti extends React.PureComponent<DataGridCustomFilterP
 
         return (
             <div style={{width: "130px", padding: "1em"}}>
-                {COLOR_OPTIONS.map((color: string) => {
-                    return (
-                        <CheckBox
-                            label={color}
-                            onClick={evt => this.handleFilterChange(evt, color)}
-                            checked={values.includes(color)}
-                        />
-                    );
-                })}
+                {COLOR_OPTIONS.map((color: string, index: number) => (
+                    <CheckBox
+                        key={`${color}-${index}`}
+                        label={color}
+                        onClick={evt => this.handleFilterChange(evt, color)}
+                        checked={values.includes(color)}
+                    />
+                ))}
             </div>
         );
     }

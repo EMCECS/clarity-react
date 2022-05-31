@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2018 Dell Inc., or its subsidiaries. All Rights Reserved.
+ * Copyright (c) 2018 - 2022 Dell Inc., or its subsidiaries. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,7 +74,7 @@ export const ToolTip: React.FunctionComponent<ToolTipProps> = ({
     let setShape: string = shape ? shape : "info-circle";
     return (
         <a
-            href="javascript://"
+            href="#!"
             role="tooltip"
             aria-haspopup="true"
             className={classNames([

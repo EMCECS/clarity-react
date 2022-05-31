@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2018 Dell Inc., or its subsidiaries. All Rights Reserved.
+ * Copyright (c) 2018 - 2022 Dell Inc., or its subsidiaries. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -8,8 +8,9 @@
  *     http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import * as React from "react";
-import {classNames} from "../utils";
+import React from "react";
+import {classNames, getXPositionValue} from "../utils";
+import {DEFAULT_TRANSFORM_XY_POSITIONS} from "../constants";
 import {ClassNames} from "./ClassNames";
 import {Button} from "../forms/button";
 import {DataGridRow} from "./DataGrid";
@@ -17,18 +18,18 @@ import {DebounceUtils} from "../forms/common/DebounceUtils";
 
 /**
  * Props for DataGridFilter :
- * @param {style} CSS style
- * @param {className} CSS classnames
- * @param {datagridRef} Refrence for DataGrid on which filter will gets apply. We need this to call method which will update datagird rows.
- * @param {columnName} columnName on which filter will apply
- * @param {placeholder} placeholder for string filter input
- * @param {onFilter} Custom filter logic
- * @param {filterType} Type of filter string or custom
- * @param {disabled} boolean value to enable or disable filter
- * @param {debounce} boolean value to apply debounce behaviour
- * @param {debounceTime} number value debounceTime/Delay value in miliseconds
- * @param {position} position of the filter popup
- * @param {defaultValue} defaultValue of the filter
+ * @param {any} style - CSS style
+ * @param {string} className - CSS classnames
+ * @param {any} datagridRef - Reference for DataGrid on which filter will gets apply. We need this to call method which will update datagird rows.
+ * @param {string} columnName - columnName on which filter will apply
+ * @param {string} placeholder - placeholder for string filter input
+ * @param {Function} onFilter - Custom filter logic
+ * @param {FilterType} filterType - Type of filter string or custom
+ * @param {boolean} disabled - boolean value to enable or disable filter
+ * @param {boolean} debounce - boolean value to apply debounce behavior
+ * @param {number} debounceTime - number value debounceTime/Delay value in milliseconds
+ * @param {FilterPosition} position - position of the filter popup
+ * @param {any} defaultValue - defaultValue of the filter
  */
 export type DataGridFilterProps = {
     style?: any;
@@ -48,8 +49,8 @@ export type DataGridFilterProps = {
 
 /**
  * Props for DataGridFilter results :
- * @param {rows} datagrid rows after applying filter
- * @param {totalItems} total rows length
+ * @param {DataGridRow[]} rows - datagrid rows after applying filter
+ * @param {number} totalItems - total rows length
  */
 export type DataGridFilterResult = {
     rows: DataGridRow[];
@@ -58,8 +59,8 @@ export type DataGridFilterResult = {
 
 /**
  * Enum for filter type :
- * @param {STR} to render string filter
- * @param {CUSTOM} to render custom filter
+ * @param {string} STR - to render string filter
+ * @param {string} CUSTOM - to render custom filter
  */
 export enum FilterType {
     STR = "String",
@@ -74,9 +75,9 @@ export enum FilterPosition {
 }
 /**
  * State for DataGridFilter:
- * @param {isOpen} check if filter box is open
- * @param {transformVal} value for transform css attribute
- * @param {isFiltered} boolean value to indicate if filter is applied or not
+ * @param {boolean} isOpen - check if filter box is open
+ * @param {string} transformVal - value for transform css attribute
+ * @param {boolean} isFiltered - boolean value to indicate if filter is applied or not
  */
 type DataGridFilterState = {
     isOpen: boolean;
@@ -86,8 +87,8 @@ type DataGridFilterState = {
 
 /**
  * Props for CustomFilter :
- * @param {OnChange} function to call on change of filter value
- * @param {filterValue} value to be filter
+ * @param {function} OnChange - function to call on change of filter value
+ * @param {any} filterValue - value to be filter
  */
 export type DataGridCustomFilterProps = {
     onChange?: Function;
@@ -105,13 +106,14 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
     private filterValue: any;
     private debounceHandleChange: DebounceUtils = new DebounceUtils();
 
-    static defaultProps = {
-        filterType: FilterType.STR,
-        className: "",
-        style: {},
-        customFilter: null,
-        showFilter: true,
-        disabled: false,
+    static defaultProps: {
+        filterType: FilterType;
+        className: string;
+        style: {};
+        customFilter: null;
+        showFilter: boolean;
+        disabled: boolean;
+        position: FilterPosition;
     };
 
     // Poll till window resizing is stable to find correct width
@@ -133,13 +135,16 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
     };
 
     // To avoid infinite loop, set the filter position only once child width is stable
-    private updateFilterPosition = (childWidth: number) => {
+    private updateFilterPosition = (childWidth: number): void => {
+        const {position} = this.props;
+
         // Calculate left and top for filter box
         if (this.refParent && this.refParent.current && this.refParent.current.getClientRects()[0]) {
-            const filterBoxTop: number = this.refParent.current.getClientRects()[0].top + 15;
-            const filterBoxLeft: number = this.refParent.current.getClientRects()[0].left - childWidth + 20;
-            const transformVal = "translateX(" + filterBoxLeft + "px) " + "translateY(" + filterBoxTop + "px)";
-            this.setState({transformVal: transformVal});
+            const parentPositionFromTop: number = this.refParent.current.getClientRects()[0].height;
+            const parentPositionFromLeft = getXPositionValue(position!, childWidth);
+            const transformVal = `translateX(${parentPositionFromLeft}px) translateY(${parentPositionFromTop}px)`;
+
+            this.setState({transformVal});
         }
     };
 
@@ -149,7 +154,7 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
         // Initial state for filter
         let initialStateData: DataGridFilterState = {
             isOpen: false,
-            transformVal: "translateX(0px) translateY(0px)",
+            transformVal: DEFAULT_TRANSFORM_XY_POSITIONS,
             isFiltered: false,
         };
 
@@ -162,14 +167,11 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
         }
 
         this.state = {...initialStateData};
-    }
-
-    componentWillMount() {
-        window.addEventListener("resize", this.resize as any, true);
+        window.addEventListener("resize", this.resize, true);
     }
 
     componentWillUnmount() {
-        window.removeEventListener("resize", this.resize as any, true);
+        window.removeEventListener("resize", this.resize, true);
     }
 
     componentDidUpdate() {
@@ -183,7 +185,7 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
                     this.refChild.current.getClientRects()[0].width) ||
                 0;
             // To avoid flicker at initial position of filter
-            if (transformVal === "translateX(0px) translateY(0px)") {
+            if (transformVal === DEFAULT_TRANSFORM_XY_POSITIONS) {
                 this.updateFilterPosition(prevChildWidth);
             } else {
                 // Poll till the size is stable to avoid infinite loop if window resized
@@ -202,7 +204,7 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
         datagridRef.current!.showLoader();
 
         // get latest data from grid
-        // TODO: unsued code keeping this for backword compatibility
+        // TODO: unused code keeping this for backward compatibility
         // Remove rows parameter from onFilter() in future
         const rows = datagridRef.current!.getAllRows();
 
@@ -235,19 +237,19 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
 
     private afterToggle = () => {
         if (this.state.isOpen) {
-            window.addEventListener("click", this.handleDocumentClick as any, true);
+            window.addEventListener("click", this.handleDocumentClick, true);
         } else {
-            window.removeEventListener("click", this.handleDocumentClick as any, true);
+            window.removeEventListener("click", this.handleDocumentClick, true);
         }
     };
 
-    private resize = () => {
+    private resize = (): void => {
         if (this.state.isOpen) {
             this.toggle();
         }
     };
 
-    private handleDocumentClick = (evt: React.MouseEvent<HTMLElement>) => {
+    private handleDocumentClick = (evt: MouseEvent): void => {
         if (this.state.isOpen) {
             const target = (evt.target as any) as HTMLElement;
             const el = this.refChild.current;
@@ -272,7 +274,6 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
             disabled,
             debounce,
             debounceTime,
-            position,
         } = this.props;
 
         const childrenWithProps = React.Children.map(children, child => {
@@ -282,18 +283,7 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
             }
             return child;
         });
-        let alignment;
-        switch (position) {
-            case FilterPosition.RIGHT:
-                alignment = "195px";
-                break;
-            case FilterPosition.CENTER:
-                alignment = "97px";
-                break;
-            default:
-                alignment = "0px";
-                break;
-        }
+
         return (
             <div>
                 <span className={ClassNames.OFFSCREEN_FOCUS_REBOUNDER} />
@@ -302,10 +292,10 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
                     className={classNames([ClassNames.DATARID_FILTER, ClassNames.CLR_POPOVER_CONTENT, className])}
                     style={{
                         top: 0,
-                        bottom: "auto",
+                        left: 0,
                         right: "auto",
-                        minHeight: "90px",
-                        left: alignment,
+                        bottom: "auto",
+                        position: "absolute",
                         transform: transformVal,
                         ...style,
                     }}
@@ -366,3 +356,13 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
         );
     }
 }
+
+DataGridFilter.defaultProps = {
+    filterType: FilterType.STR,
+    className: "",
+    style: {},
+    customFilter: null,
+    showFilter: true,
+    disabled: false,
+    position: FilterPosition.LEFT,
+};
