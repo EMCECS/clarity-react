@@ -9,8 +9,9 @@
  */
 
 import React from "react";
-import {classNames, getXPositionValue} from "../utils";
-import {DEFAULT_TRANSFORM_XY_POSITIONS} from "../constants";
+import {classNames} from "../utils";
+import {getXPositionValue} from "./DataGridUtils";
+import {DEFAULT_TRANSFORM_XY_POSITIONS} from "./constants";
 import {ClassNames} from "./ClassNames";
 import {Button} from "../forms/button";
 import {DataGridRow} from "./DataGrid";
@@ -18,18 +19,18 @@ import {DebounceUtils} from "../forms/common/DebounceUtils";
 
 /**
  * Props for DataGridFilter :
- * @param {any} style - CSS style
+ * @param {*} style - CSS style
  * @param {string} className - CSS classnames
- * @param {any} datagridRef - Reference for DataGrid on which filter will gets apply. We need this to call method which will update datagird rows.
+ * @param {*} datagridRef - Reference for DataGrid on which filter will gets apply. We need this to call method which will update datagird rows.
  * @param {string} columnName - columnName on which filter will apply
  * @param {string} placeholder - placeholder for string filter input
- * @param {Function} onFilter - Custom filter logic
+ * @param {function} onFilter - Custom filter logic
  * @param {FilterType} filterType - Type of filter string or custom
  * @param {boolean} disabled - boolean value to enable or disable filter
  * @param {boolean} debounce - boolean value to apply debounce behavior
  * @param {number} debounceTime - number value debounceTime/Delay value in milliseconds
  * @param {FilterPosition} position - position of the filter popup
- * @param {any} defaultValue - defaultValue of the filter
+ * @param {*} defaultValue - defaultValue of the filter
  */
 export type DataGridFilterProps = {
     style?: any;
@@ -88,7 +89,7 @@ type DataGridFilterState = {
 /**
  * Props for CustomFilter :
  * @param {function} OnChange - function to call on change of filter value
- * @param {any} filterValue - value to be filter
+ * @param {*} filterValue - value to be filter
  */
 export type DataGridCustomFilterProps = {
     onChange?: Function;

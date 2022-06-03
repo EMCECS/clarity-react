@@ -74,7 +74,6 @@ export const ToolTip: React.FunctionComponent<ToolTipProps> = ({
     let setShape: string = shape ? shape : "info-circle";
     return (
         <a
-            href="#!"
             role="tooltip"
             aria-haspopup="true"
             className={classNames([
