@@ -13,9 +13,9 @@ import {FilterPosition} from "./DataGridFilter";
 
 /**
  * Get X axis position value for supplied object
- * @param {FilterPosition} position - Position prop, Accepted values right, left, center
- * @param {number} childWidth - Width of child element in pixels, for center and left alignment
- * @returns {number} X axis position relative to parent element
+ * @param position - Position prop, Accepted values right, left, center
+ * @param childWidth - Width of child element in pixels, for center and left alignment
+ * @returns X axis position relative to parent element
  * */
 
 export const getXPositionValue = (position: string, childWidth: number): number => {

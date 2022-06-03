@@ -19,18 +19,18 @@ import {DebounceUtils} from "../forms/common/DebounceUtils";
 
 /**
  * Props for DataGridFilter :
- * @param {*} style - CSS style
- * @param {string} className - CSS classnames
- * @param {*} datagridRef - Reference for DataGrid on which filter will gets apply. We need this to call method which will update datagird rows.
- * @param {string} columnName - columnName on which filter will apply
- * @param {string} placeholder - placeholder for string filter input
- * @param {function} onFilter - Custom filter logic
- * @param {FilterType} filterType - Type of filter string or custom
- * @param {boolean} disabled - boolean value to enable or disable filter
- * @param {boolean} debounce - boolean value to apply debounce behavior
- * @param {number} debounceTime - number value debounceTime/Delay value in milliseconds
- * @param {FilterPosition} position - position of the filter popup
- * @param {*} defaultValue - defaultValue of the filter
+ * @param {style} CSS style
+ * @param {className} CSS classnames
+ * @param {datagridRef} Reference for DataGrid on which filter will gets apply. We need this to call method which will update datagird rows.
+ * @param {columnName} columnName on which filter will apply
+ * @param {placeholder} placeholder for string filter input
+ * @param {onFilter} Custom filter logic
+ * @param {filterType} Type of filter string or custom
+ * @param {disabled} boolean value to enable or disable filter
+ * @param {debounce} boolean value to apply debounce behavior
+ * @param {debounceTime} number value debounceTime/Delay value in milliseconds
+ * @param {position} position of the filter popup
+ * @param {defaultValue} defaultValue of the filter
  */
 export type DataGridFilterProps = {
     style?: any;
@@ -50,8 +50,8 @@ export type DataGridFilterProps = {
 
 /**
  * Props for DataGridFilter results :
- * @param {DataGridRow[]} rows - datagrid rows after applying filter
- * @param {number} totalItems - total rows length
+ * @param {rows} datagrid rows after applying filter
+ * @param {totalItems} total rows length
  */
 export type DataGridFilterResult = {
     rows: DataGridRow[];
@@ -60,8 +60,8 @@ export type DataGridFilterResult = {
 
 /**
  * Enum for filter type :
- * @param {string} STR - to render string filter
- * @param {string} CUSTOM - to render custom filter
+ * @param {STR} to render string filter
+ * @param {CUSTOM} to render custom filter
  */
 export enum FilterType {
     STR = "String",
@@ -76,9 +76,9 @@ export enum FilterPosition {
 }
 /**
  * State for DataGridFilter:
- * @param {boolean} isOpen - check if filter box is open
- * @param {string} transformVal - value for transform css attribute
- * @param {boolean} isFiltered - boolean value to indicate if filter is applied or not
+ * @param {isOpen} check if filter box is open
+ * @param {transformVal} value for transform css attribute
+ * @param {isFiltered} boolean value to indicate if filter is applied or not
  */
 type DataGridFilterState = {
     isOpen: boolean;
@@ -88,8 +88,8 @@ type DataGridFilterState = {
 
 /**
  * Props for CustomFilter :
- * @param {function} OnChange - function to call on change of filter value
- * @param {*} filterValue - value to be filter
+ * @param {OnChange} function to call on change of filter value
+ * @param {filterValue} value to be filter
  */
 export type DataGridCustomFilterProps = {
     onChange?: Function;
