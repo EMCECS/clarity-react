@@ -19,7 +19,7 @@ import {FilterPosition} from "./DataGridFilter";
  * */
 
 export const getXPositionValue = (position: string, childWidth: number): number => {
-    if (!position) return 0;
+    if (!position || childWidth === undefined) return 0;
 
     const {CENTER, LEFT, RIGHT} = FilterPosition;
     return position === RIGHT
