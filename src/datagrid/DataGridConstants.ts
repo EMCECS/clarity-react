@@ -9,11 +9,6 @@
  */
 
 /**
- * Constant for Icon center position offset in pixels
- */
-export const ICON_HEIGHT = 12;
-
-/**
  * Constant for default X and Y position
  */
 export const DEFAULT_TRANSFORM_XY_POSITIONS = "translateX(0px) translateY(0px)";

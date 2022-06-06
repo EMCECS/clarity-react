@@ -1072,7 +1072,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         const {allRows} = this.state;
         return (
             <div className={ClassNames.DATAGRID}>
-                <div className={ClassNames.DATAGRID_TABLE_WRAPPER}>
+                <div className={ClassNames.DATAGRID_TABLE_WRAPPER} style={{overflow: "initial"}}>
                     <div ref={this.datagridTableRef} className={ClassNames.DATAGRID_TABLE} role="grid">
                         {this.buildDataGridHeader()}
                         {allRows.map((row: DataGridRow, index: number) => {

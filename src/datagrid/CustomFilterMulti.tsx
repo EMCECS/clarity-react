@@ -63,14 +63,16 @@ export class CustomFilterMulti extends React.PureComponent<DataGridCustomFilterP
 
         return (
             <div style={{width: "130px", padding: "1em"}}>
-                {COLOR_OPTIONS.map((color: string, index: number) => (
-                    <CheckBox
-                        key={`${color}-${index}`}
-                        label={color}
-                        onClick={evt => this.handleFilterChange(evt, color)}
-                        checked={values.includes(color)}
-                    />
-                ))}
+                {COLOR_OPTIONS.map(
+                    (color: string, index: number): JSX.Element => (
+                        <CheckBox
+                            key={`${color}-${index}`}
+                            label={color}
+                            onClick={evt => this.handleFilterChange(evt, color)}
+                            checked={values.includes(color)}
+                        />
+                    ),
+                )}
             </div>
         );
     }

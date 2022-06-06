@@ -8,7 +8,7 @@
  *     http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import {ICON_HEIGHT} from "./DataGridConstants";
+import {ICON_HEIGHT} from "../icon";
 import {FilterPosition} from "./DataGridFilter";
 
 /**
