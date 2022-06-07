@@ -13,6 +13,11 @@ import "@clr/icons/clr-icons.min.css";
 import "@webcomponents/custom-elements/custom-elements.min.js";
 import "@clr/icons/clr-icons.min.js";
 
+/**
+ * Constant for Icon center position offset in pixels
+ */
+export const ICON_HEIGHT = 12;
+
 export interface IconProps {
     shape: string;
     size?: number;

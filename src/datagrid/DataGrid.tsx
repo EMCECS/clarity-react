@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2018 Dell Inc., or its subsidiaries. All Rights Reserved.
+ * Copyright (c) 2018 - 2022 Dell Inc., or its subsidiaries. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -8,7 +8,7 @@
  *     http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import * as React from "react";
+import React from "react";
 import {ClassNames, Styles} from "./ClassNames";
 import {classNames, allTrueOnKey} from "../utils";
 import {CheckBox} from "../forms/checkbox";
@@ -117,7 +117,7 @@ export type DataGridRow = {
 /**
  * type for datagrid expandable row data :
  * @param {isLoading} if true then show loading icon for expandable row
- * @param {onRowExpand} callback function to  fetch expandable row contents
+ * @param {onRowExpand} callback function to fetch expandable row contents
  * @param {onRowContract} callback function for additional logic after row contracts
  * @param {expandableContent} content to show after row expand
  * @param {isExpanded} true if row is already expanded
@@ -152,7 +152,7 @@ export type DetailPaneData = {
 
 /**
  * type for DataGridCell :
- * @param {cellData} cell Data to be used for comparison pusposes
+ * @param {cellData} cell Data to be used for comparison purposes
  * @param {className} CSS class name
  * @param {style} CSS style
  * @param {cellDisplayData} Optional field to be used if user want to display JSX Element. cellData should be set as well
@@ -248,7 +248,7 @@ export enum SortOrder {
 }
 
 /**
- * Enum for RowTpye :
+ * Enum for RowType :
  * @param {EXPANDABLE} for enabling expandable rows
  * @param {COMPACT} for enabling compact rows
  * @param {ROWS_WITH_DETAIL_PANE} for enabling detail pane for rows
@@ -306,7 +306,7 @@ type DataGridPaginationState = {
 };
 
 /**
- * DataGrid Componnet :
+ * DataGrid Component :
  * Displays data in grid format
  */
 export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> {
@@ -904,7 +904,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     /* ##########  DataGrid DOM methods start  ############ */
 
-    //funtion to render detail pane icon cell
+    // Function to render detail pane icon cell
     private buildDetailPaneToggleIcon({rowID, detailPaneData}: DataGridRow): React.ReactElement {
         const {id} = this.props;
         const {isOpen, hideDetailPane} = detailPaneData
@@ -942,7 +942,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         );
     }
 
-    //funtion to render expandable icon cell
+    // Function to render expandable icon cell
     private buildExpandableCell({rowID, expandableRowData}: DataGridRow): React.ReactElement {
         const {id} = this.props;
         const {hideRowExpandIcon, isExpanded, isLoading} = expandableRowData
@@ -974,7 +974,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         );
     }
 
-    // function to render selectAll column
+    // Function to render selectAll column
     private buildSelectColumn(): React.ReactElement {
         const {selectionType, id, hideSelectAll} = this.props;
         const {selectAll} = this.state;
@@ -1028,7 +1028,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         );
     }
 
-    // function to render select cell
+    // Function to render select cell
     private buildSelectCell(row: DataGridRow): React.ReactElement {
         const {selectionType, id} = this.props;
         const wrapperClassName =
@@ -1067,11 +1067,11 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         );
     }
 
-    // function to build datagrid body
+    // Function to build datagrid body
     private buildDataGridBody(): React.ReactElement {
         const {allRows} = this.state;
         return (
-            <div className={ClassNames.DATAGRID}>
+            <div className={ClassNames.DATAGRID} style={{overflow: "initial"}}>
                 <div className={ClassNames.DATAGRID_TABLE_WRAPPER}>
                     <div ref={this.datagridTableRef} className={ClassNames.DATAGRID_TABLE} role="grid">
                         {this.buildDataGridHeader()}
@@ -1131,7 +1131,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         const showEmptyHeader: boolean = rowType && rowType !== GridRowType.COMPACT ? true : false;
 
         return (
-            <div className={ClassNames.DATAGRID_HEADER} role="rowgroup">
+            <div className={ClassNames.DATAGRID_HEADER} style={{position: "relative"}} role="rowgroup">
                 <div className={ClassNames.DATAGRID_ROW} role="row">
                     <div className={ClassNames.DATAGRID_ROW_MASTER}>
                         <div className={ClassNames.DATAGRID_ROW_STICKY}>
@@ -1159,7 +1159,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         );
     }
 
-    // Function to build datagrid colums
+    // Function to build datagrid columns
     private buildDataGridColumn(column: DataGridColumn, index: number): React.ReactElement {
         const {columnName, displayName, columnID, className, style, sort, filter, width, tooltip} = column;
         const columnHeight =
@@ -1212,7 +1212,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         );
     }
 
-    // function to build datagrid rows
+    // Function to build datagrid rows
     private buildDataGridRow(row: DataGridRow, index: number): React.ReactElement {
         const {rowType} = this.props;
         const {className, style, isSelected, disableRowSelection, detailPaneData} = row;
@@ -1396,7 +1396,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         }
     }
 
-    // function to build datagrid cell
+    // Function to build datagrid cell
     private buildDataGridCell(
         cellData: any,
         index: number,
@@ -1527,7 +1527,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         );
     }
 
-    // function to build datagrid pagination footer
+    // Function to build datagrid pagination footer
     private buildDataGridPagination(): React.ReactElement {
         const {className, style, compactFooter} = this.props.pagination!;
         const {itemText} = this.state;
@@ -1561,13 +1561,13 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         );
     }
 
-    // function to build Hide and show columns menu
+    // Function to build Hide and show columns menu
     private buildHideShowColumnsBtn(): React.ReactElement {
         const {allColumns} = this.state;
         return <HideShowColumns columns={allColumns} updateColumns={this.updateColumns} />;
     }
 
-    // function to build selected row count
+    // Function to build selected row count
     private buildSelectedRowCount(): React.ReactElement {
         const {selectedRowCount, selectionType} = this.props;
         const showSelectedRowsCount =
@@ -1596,7 +1596,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         return <div> {content} </div>;
     }
 
-    // function to build datagrid footer
+    // Function to build datagrid footer
     private buildDataGridFooter(): React.ReactElement {
         const {footer} = this.props;
         const {pagination} = this.state;
