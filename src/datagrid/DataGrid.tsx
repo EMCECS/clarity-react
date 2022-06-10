@@ -1071,7 +1071,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     private buildDataGridBody(): React.ReactElement {
         const {allRows} = this.state;
         return (
-            <div className={ClassNames.DATAGRID} style={{overflow: "initial"}}>
+            <div className={ClassNames.DATAGRID}>
                 <div className={ClassNames.DATAGRID_TABLE_WRAPPER}>
                     <div ref={this.datagridTableRef} className={ClassNames.DATAGRID_TABLE} role="grid">
                         {this.buildDataGridHeader()}
@@ -1131,7 +1131,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         const showEmptyHeader: boolean = rowType && rowType !== GridRowType.COMPACT ? true : false;
 
         return (
-            <div className={ClassNames.DATAGRID_HEADER} style={{position: "relative"}} role="rowgroup">
+            <div className={ClassNames.DATAGRID_HEADER} role="rowgroup">
                 <div className={ClassNames.DATAGRID_ROW} role="row">
                     <div className={ClassNames.DATAGRID_ROW_MASTER}>
                         <div className={ClassNames.DATAGRID_ROW_STICKY}>
