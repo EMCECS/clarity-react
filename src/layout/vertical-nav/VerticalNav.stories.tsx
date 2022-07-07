@@ -34,6 +34,18 @@ storiesOf("Vertical Navigation", module)
             </VerticalNavGroup>
         </VerticalNav>
     ))
+    .add("a vertical nav with expanded group", () => (
+        <VerticalNav>
+            <VerticalNavGroup groupName="Group 1">
+                <NavLink>Link 1</NavLink>
+                <NavLink>Link 2</NavLink>
+            </VerticalNavGroup>
+            <VerticalNavGroup groupName="Group 2" isExpanded={true}>
+                <NavLink>Link 3</NavLink>
+                <NavLink>Link 4</NavLink>
+            </VerticalNavGroup>
+        </VerticalNav>
+    ))
     .add("incorporated vertical nav", () => (
         <MainContainer
             title="Project Pokémon"

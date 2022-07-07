@@ -29,6 +29,9 @@ export interface VerticalNavGroupProps {
     // to be opened so that the expanded group can become visible.
     openVerticalNav?: () => void;
 
+    // True if group is already active and expanded
+    isExpanded?: boolean;
+
     className?: string;
 }
 
@@ -39,8 +42,9 @@ interface VerticalNavGroupState {
 export class VerticalNavGroup extends React.PureComponent<VerticalNavGroupProps, VerticalNavGroupState> {
     constructor(props: VerticalNavGroupProps) {
         super(props);
+        const {isExpanded} = this.props;
         this.state = {
-            groupIsExpanded: false,
+            groupIsExpanded: isExpanded || false,
         };
     }
 
