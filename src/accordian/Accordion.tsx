@@ -136,7 +136,11 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
                     >
                         <span className={ClassNames.ACCORDION_SR} />
                         <span className={ClassNames.ACCORDION_STATUS}>
-                            <Icon className={ClassNames.ACCORDION_ANGLE} dir={Direction.RIGHT} shape="angle" />
+                            <Icon
+                                className={ClassNames.ACCORDION_ANGLE}
+                                dir={isOpen ? Direction.UP : Direction.RIGHT}
+                                shape="angle"
+                            />
                             <span className={ClassNames.ACCORDION_NUMBER} />
                         </span>
                         <div className={classNames([ClassNames.ACCORDION_TITLE, titleClassName])}>{title}</div>
