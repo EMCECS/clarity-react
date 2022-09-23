@@ -29,6 +29,9 @@ jobs:
       - name: build dependencies 
         run: yarn
 
+      - name: lint 
+        run: yarn run lint
+        
       - name: build clarity-react project 
         run: |
           rm -rf "./dist"

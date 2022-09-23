@@ -10,6 +10,9 @@ build:
 	yarn run build
 	yarn run copy
 
+lint:
+	yarn run lint
+	
 pack: build
 	cd $(BUILD_DIR) 
 	yarn pack
