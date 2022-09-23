@@ -9,7 +9,7 @@
  */
 
 import {Header, NavHeaderProps} from ".";
-import {shallow, mount, ShallowWrapper} from "enzyme";
+import {shallow, ShallowWrapper} from "enzyme";
 import * as React from "react";
 
 let wrapper: ShallowWrapper<NavHeaderProps>;

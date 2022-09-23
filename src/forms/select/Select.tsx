@@ -11,7 +11,7 @@
 import * as React from "react";
 import {UID} from "react-uid";
 import {Icon} from "../../icon";
-import {classNames, ReactChildren} from "../../utils";
+import {classNames} from "../../utils";
 
 type SelectOption = {
     value?: any;
@@ -69,10 +69,6 @@ type SelectProps = {
 };
 
 export class Select extends React.PureComponent<SelectProps> {
-    constructor(props: SelectProps) {
-        super(props);
-    }
-
     private buildSelect(className: any, setId: string) {
         const {
             value, // prettier

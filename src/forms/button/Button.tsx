@@ -12,7 +12,6 @@ import * as React from "react";
 import {ReactNode} from "react";
 import {classNames} from "../../utils";
 import {Icon, IconProps} from "../../icon";
-import {findAllInRenderedTree} from "react-dom/test-utils";
 
 export type ButtonProps = {
     id?: string;

@@ -127,7 +127,7 @@ export class Toast extends React.PureComponent<ToastProps> {
     }
 
     buildToast(): React.ReactElement {
-        const {text, icon, position, type, duration, showToast, style, className, dataqa} = this.props;
+        const {text, icon, position, type, style, className, dataqa} = this.props;
 
         let styled = {
             ...style,

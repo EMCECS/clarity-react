@@ -47,10 +47,6 @@ export enum AlertLevel {
 //TODO: Add alert paging for app-level alerts
 //TODO: Improve alert action styling
 export class Alert extends React.PureComponent<AlertProps> {
-    constructor(props: AlertProps) {
-        super(props);
-    }
-
     private static getClassNames(props: AlertProps): (string | undefined)[] {
         const {type, isStatic, level, size, className} = props;
         return [
@@ -58,8 +54,8 @@ export class Alert extends React.PureComponent<AlertProps> {
             type ? `alert-${type}` : undefined,
             size ? `alert-${size}` : undefined,
             isStatic ? "static" : undefined,
-            level == AlertLevel.APP ? "alert-app-level" : undefined,
-            size == AlertSize.COMPACT ? "alert-sm" : undefined,
+            level === AlertLevel.APP ? "alert-app-level" : undefined,
+            size === AlertSize.COMPACT ? "alert-sm" : undefined,
             className,
         ];
     }

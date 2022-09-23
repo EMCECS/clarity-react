@@ -14,8 +14,7 @@ import {action} from "@storybook/addon-actions";
 import {Button} from ".";
 import {ButtonGroup} from ".";
 import {RadioButton} from "../radio/.";
-import {DropdownMenu, Dropdown, DropdownItem, MenuItemType} from "../dropdown/.";
-import {Icon} from "../../icon";
+import {DropdownMenu, Dropdown, DropdownItem} from "../dropdown/.";
 
 storiesOf("ButtonGroup", module)
     .add("Outline ButtonGroup", () => (

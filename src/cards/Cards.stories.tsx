@@ -46,7 +46,7 @@ storiesOf("Cards", module)
                 <div className="clr-col-lg-4 clr-col-md-8 clr-col-12">
                     <Card onClick={action("onclick - card image top")}>
                         <CardImage>
-                            <img src={require("./placeholder_350x150.png")} />
+                            <img src={require("./placeholder_350x150.png")} alt="" />
                         </CardImage>
                         <CardBlock>
                             <CardText>
@@ -67,7 +67,7 @@ storiesOf("Cards", module)
                             </CardText>
                         </CardBlock>
                         <CardImage>
-                            <img src={require("./placeholder_350x150.png")} />
+                            <img src={require("./placeholder_350x150.png")} alt="" />
                         </CardImage>
                     </Card>
                 </div>
@@ -77,7 +77,7 @@ storiesOf("Cards", module)
                             <CardText>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</CardText>
                         </CardBlock>
                         <CardImage>
-                            <img src={require("./placeholder_350x150.png")} />
+                            <img src={require("./placeholder_350x150.png")} alt="" />
                         </CardImage>
                         <CardBlock>
                             <CardText>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</CardText>
@@ -88,7 +88,7 @@ storiesOf("Cards", module)
             <div className="clr-row">
                 <Card className="clr-col-md-6 clr-col-12" onClick={action("onclick - card image only")}>
                     <CardImage>
-                        <img src={require("./placeholder_350x150.png")} />
+                        <img src={require("./placeholder_350x150.png")} alt="" />
                     </CardImage>
                 </Card>
             </div>
@@ -195,8 +195,12 @@ storiesOf("Cards", module)
                         </CardText>
                     </CardBlock>
                     <CardFooter>
-                        <a className="card-link">Button One</a>
-                        <a className="card-link">Button Two</a>
+                        <a href="#" className="card-link">
+                            Button One
+                        </a>
+                        <a href="#" className="card-link">
+                            Button Two
+                        </a>
                     </CardFooter>
                 </Card>
             </div>
@@ -237,7 +241,9 @@ storiesOf("Cards", module)
                         </ul>
                     </CardBlock>
                     <CardFooter>
-                        <a className="btn btn-primary">Action</a>
+                        <a href="#" className="btn btn-primary">
+                            Action
+                        </a>
                     </CardFooter>
                 </Card>
             </div>
@@ -274,7 +280,9 @@ storiesOf("Cards", module)
                         </ol>
                     </CardBlock>
                     <CardFooter>
-                        <a className="btn btn-primary">Action</a>
+                        <a href="#" className="btn btn-primary">
+                            Action
+                        </a>
                     </CardFooter>
                 </Card>
             </div>
@@ -311,7 +319,9 @@ storiesOf("Cards", module)
                         </ul>
                     </CardBlock>
                     <CardFooter>
-                        <a className="btn btn-primary">Action</a>
+                        <a href="#" className="btn btn-primary">
+                            Action
+                        </a>
                     </CardFooter>
                 </Card>
             </div>
@@ -322,7 +332,7 @@ storiesOf("Cards", module)
             <div className="clr-col-5">
                 <Card>
                     <CardImage>
-                        <img src={require("./placeholder_350x150.png")} />
+                        <img src={require("./placeholder_350x150.png")} alt="" />
                     </CardImage>
                     <CardBlock>
                         <CardTitle>Title</CardTitle>
@@ -337,8 +347,12 @@ storiesOf("Cards", module)
                         <li className="list-group-item">Lorem ipsum.</li>
                     </ul>
                     <CardFooter>
-                        <a className="btn btn-sm btn-link">Action 1</a>
-                        <a className="btn btn-sm btn-link">Action 2</a>
+                        <a href="#" className="btn btn-sm btn-link">
+                            Action 1
+                        </a>
+                        <a href="#" className="btn btn-sm btn-link">
+                            Action 2
+                        </a>
                     </CardFooter>
                 </Card>
             </div>
@@ -351,7 +365,9 @@ storiesOf("Cards", module)
                     <CardBlock style={{backgroundColor: "#eeeeee", borderBottom: "1px solid #cccccc"}}>
                         <CardTitle style={{height: "30px"}}>
                             <div style={{float: "left"}}>
-                                <a className="btn btn-sm btn-link">My App Object</a>
+                                <a href="#" className="btn btn-sm btn-link">
+                                    My App Object
+                                </a>
                             </div>
                             <div style={{float: "right"}}>
                                 <Label status={LabelStatus.SUCCESS}>Healthy</Label>

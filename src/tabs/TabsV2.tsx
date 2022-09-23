@@ -158,7 +158,6 @@ export class TabsV2 extends React.PureComponent<TabsV2Prop, TabsV2State> {
         return (
             <ul className={ClassNames.TABMAIN} role="tablist" id={id}>
                 {tabs.map((tab: TabV2Details, index: number) => {
-                    tabs;
                     if (tabOrientation === TabV2Orientation.HORIZONTAL && index === overflowTabsFrom) {
                         isOverflowRendered = true;
                         return this.renderOverflowTab(tabs.slice(index, tabs.length), index);

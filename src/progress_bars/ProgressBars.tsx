@@ -82,14 +82,14 @@ export class ProgressBar extends React.PureComponent<ProgressBarProps> {
                 data-qa={dataqa}
             >
                 {/* Render normal progress bar if type is normal */}
-                {type == ProgressBarType.NORMAL && (
+                {type === ProgressBarType.NORMAL && (
                     <progress max={max} value={value}>
                         {" "}
                     </progress>
                 )}
 
                 {/* Render static progress bar if type is static */}
-                {type == ProgressBarType.STATIC && <div className="progress-meter" data-value={value} />}
+                {type === ProgressBarType.STATIC && <div className="progress-meter" data-value={value} />}
 
                 {/* If classname is labeled render label after progres bar */}
                 {labeled && <span style={labelStyle}> {value}% </span>}

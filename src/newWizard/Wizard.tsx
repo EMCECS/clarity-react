@@ -190,7 +190,7 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
     // and this step's position in the list
     // progressionStatus determines the status of the wizard based on the current step properties
     private progressionStatus(currentStepID: number, steps: ReadonlyArray<WizardStep>): ProgressionStatus {
-        const {showNext, showPrevious, showStepTitle} = this.props;
+        const {showNext, showPrevious} = this.props;
         if (steps.length > 0 && steps[currentStepID]) {
             const currentStep = steps[currentStepID];
             return {

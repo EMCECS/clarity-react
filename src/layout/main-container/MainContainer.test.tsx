@@ -9,7 +9,7 @@
  */
 
 import {MainContainer, MainContainerProps} from "./MainContainer";
-import {shallow, mount, ShallowWrapper} from "enzyme";
+import {shallow, ShallowWrapper} from "enzyme";
 import * as React from "react";
 import {NavLink} from "../nav";
 

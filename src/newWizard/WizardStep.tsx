@@ -45,7 +45,7 @@ export default class WizardStep extends React.PureComponent<WizardStepProps> {
     };
 
     render() {
-        const {children, currentStepID, id, isLoading, loadingSpinnerSize} = this.props;
+        const {children, currentStepID, id, isLoading, loadingSpinnerSize, name} = this.props;
         const classNameList = classNames([ClassNames.ACTIVE, ClassNames.WIZARD_PAGE]);
         return (
             <div

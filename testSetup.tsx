@@ -8,7 +8,6 @@
  *     http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import * as React from "react";
 import Enzyme from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 
