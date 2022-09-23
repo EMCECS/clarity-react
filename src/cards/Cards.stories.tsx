@@ -195,12 +195,8 @@ storiesOf("Cards", module)
                         </CardText>
                     </CardBlock>
                     <CardFooter>
-                        <a href="#" className="card-link">
-                            Button One
-                        </a>
-                        <a href="#" className="card-link">
-                            Button Two
-                        </a>
+                        <a className="card-link">Button One</a>
+                        <a className="card-link">Button Two</a>
                     </CardFooter>
                 </Card>
             </div>
@@ -241,9 +237,7 @@ storiesOf("Cards", module)
                         </ul>
                     </CardBlock>
                     <CardFooter>
-                        <a href="#" className="btn btn-primary">
-                            Action
-                        </a>
+                        <a className="btn btn-primary">Action</a>
                     </CardFooter>
                 </Card>
             </div>
@@ -280,9 +274,7 @@ storiesOf("Cards", module)
                         </ol>
                     </CardBlock>
                     <CardFooter>
-                        <a href="#" className="btn btn-primary">
-                            Action
-                        </a>
+                        <a className="btn btn-primary">Action</a>
                     </CardFooter>
                 </Card>
             </div>
@@ -319,9 +311,7 @@ storiesOf("Cards", module)
                         </ul>
                     </CardBlock>
                     <CardFooter>
-                        <a href="#" className="btn btn-primary">
-                            Action
-                        </a>
+                        <a className="btn btn-primary">Action</a>
                     </CardFooter>
                 </Card>
             </div>
@@ -347,12 +337,8 @@ storiesOf("Cards", module)
                         <li className="list-group-item">Lorem ipsum.</li>
                     </ul>
                     <CardFooter>
-                        <a href="#" className="btn btn-sm btn-link">
-                            Action 1
-                        </a>
-                        <a href="#" className="btn btn-sm btn-link">
-                            Action 2
-                        </a>
+                        <a className="btn btn-sm btn-link">Action 1</a>
+                        <a className="btn btn-sm btn-link">Action 2</a>
                     </CardFooter>
                 </Card>
             </div>
@@ -365,9 +351,7 @@ storiesOf("Cards", module)
                     <CardBlock style={{backgroundColor: "#eeeeee", borderBottom: "1px solid #cccccc"}}>
                         <CardTitle style={{height: "30px"}}>
                             <div style={{float: "left"}}>
-                                <a href="#" className="btn btn-sm btn-link">
-                                    My App Object
-                                </a>
+                                <a className="btn btn-sm btn-link">My App Object</a>
                             </div>
                             <div style={{float: "right"}}>
                                 <Label status={LabelStatus.SUCCESS}>Healthy</Label>
