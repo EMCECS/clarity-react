@@ -163,10 +163,10 @@ export default class Wizard extends React.PureComponent<WizardProps, WizardState
     // By default Wizard will have following prop values
     static defaultProps = {
         isInline: false,
-        previousText: "BACK",
-        nextText: "NEXT",
-        cancelText: "CANCEL",
-        completeText: "FINISH",
+        previousText: "Back",
+        nextText: "Next",
+        cancelText: "Cancel",
+        completeText: "Finish",
         size: WizardSize.MEDIUM,
         showNavigation: true,
         showStepTitle: true,
