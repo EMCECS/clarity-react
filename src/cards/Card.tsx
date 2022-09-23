@@ -92,7 +92,7 @@ export const CardMediaBlock: React.FunctionComponent<CardMediaBlockProps> = ({
                 wrap && "wrap",
             ])}
         >
-            <img src={image} className={ClassNames.CARD_MEDIA_IMAGE} alt="" />
+            <img src={image} className={ClassNames.CARD_MEDIA_IMAGE} />
             <div className={ClassNames.CARD_MEDIA_DESC}>
                 <span className={ClassNames.CARD_MEDIA_TITLE}>{title}</span>
                 <span className={ClassNames.CARD_MEDIA_TEXT}>{text}</span>

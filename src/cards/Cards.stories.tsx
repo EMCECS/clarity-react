@@ -46,7 +46,7 @@ storiesOf("Cards", module)
                 <div className="clr-col-lg-4 clr-col-md-8 clr-col-12">
                     <Card onClick={action("onclick - card image top")}>
                         <CardImage>
-                            <img src={require("./placeholder_350x150.png")} alt="" />
+                            <img src={require("./placeholder_350x150.png")} />
                         </CardImage>
                         <CardBlock>
                             <CardText>
@@ -67,7 +67,7 @@ storiesOf("Cards", module)
                             </CardText>
                         </CardBlock>
                         <CardImage>
-                            <img src={require("./placeholder_350x150.png")} alt="" />
+                            <img src={require("./placeholder_350x150.png")} />
                         </CardImage>
                     </Card>
                 </div>
@@ -77,7 +77,7 @@ storiesOf("Cards", module)
                             <CardText>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</CardText>
                         </CardBlock>
                         <CardImage>
-                            <img src={require("./placeholder_350x150.png")} alt="" />
+                            <img src={require("./placeholder_350x150.png")} />
                         </CardImage>
                         <CardBlock>
                             <CardText>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</CardText>
@@ -88,7 +88,7 @@ storiesOf("Cards", module)
             <div className="clr-row">
                 <Card className="clr-col-md-6 clr-col-12" onClick={action("onclick - card image only")}>
                     <CardImage>
-                        <img src={require("./placeholder_350x150.png")} alt="" />
+                        <img src={require("./placeholder_350x150.png")} />
                     </CardImage>
                 </Card>
             </div>
@@ -322,7 +322,7 @@ storiesOf("Cards", module)
             <div className="clr-col-5">
                 <Card>
                     <CardImage>
-                        <img src={require("./placeholder_350x150.png")} alt="" />
+                        <img src={require("./placeholder_350x150.png")} />
                     </CardImage>
                     <CardBlock>
                         <CardTitle>Title</CardTitle>
