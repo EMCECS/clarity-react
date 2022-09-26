@@ -10,7 +10,7 @@
 
 import * as React from "react";
 import {storiesOf} from "@storybook/react";
-import {TextArea, TextWrapType} from ".";
+import {TextArea} from ".";
 
 storiesOf("Textarea", module)
     .add("Basic textarea", () => (

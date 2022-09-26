@@ -182,10 +182,10 @@ export class Wizard extends React.PureComponent<WizardProps> {
     // By default Wizard will have following prop values
     static defaultProps = {
         isInline: false,
-        previousButtonText: "BACK",
-        nextButtonText: "NEXT",
-        cancelButtonText: "CANCEL",
-        finishButtonText: "FINISH",
+        previousButtonText: "Back",
+        nextButtonText: "Next",
+        cancelButtonText: "Cancel",
+        finishButtonText: "Finish",
         size: WizardSize.MEDIUM,
         showNav: true,
         defaultStepId: 0,
@@ -257,14 +257,14 @@ export class Wizard extends React.PureComponent<WizardProps> {
                     ? false
                     : true;
 
+            let allStepsUpdated = [...this.state.allSteps];
+            let stepUpdated = {...this.state.allSteps[step.stepId], stepCompleted: false, disableNav: disableNav};
+            allStepsUpdated[step.stepId] = stepUpdated;
+
             this.setState({
                 disableNextButton: this.state.disableNextButton !== disableNext ? disableNext : undefined,
                 disableFinishButton: this.state.disableFinishButton !== disableFinish ? disableFinish : undefined,
-                allSteps: [
-                    ...this.state.allSteps,
-                    ((this.state.allSteps[step.stepId].stepCompleted = false),
-                    (this.state.allSteps[step.stepId].disableNav = disableNav)),
-                ],
+                allSteps: allStepsUpdated,
             });
         });
     }
@@ -300,8 +300,12 @@ export class Wizard extends React.PureComponent<WizardProps> {
     resetWizard() {
         const {steps} = this.props;
         steps.map((step, key) => {
+            let allStepsUpdated = [...this.state.allSteps];
+            let stepUpdated = {...this.state.allSteps[step.stepId], stepCompleted: false};
+            allStepsUpdated[step.stepId] = stepUpdated;
+
             this.setState({
-                allSteps: [...this.state.allSteps, (this.state.allSteps[step.stepId].stepCompleted = false)],
+                allSteps: allStepsUpdated,
             });
         });
         this.setState(this.initialState);
@@ -312,7 +316,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
         const nextStepId = this.state.currentStepId + 1;
         const currenstStep = this.getStepObj(this.state.currentStepId);
         // Check validity of current step before going next
-        const {validState, disableNextStep} = this.checkStepValidity(this.state.currentStepId);
+        const {disableNextStep} = this.checkStepValidity(this.state.currentStepId);
 
         if (!disableNextStep && nextStepId <= steps.length - 1) {
             if (currenstStep.onStepSubmit) {
@@ -354,10 +358,10 @@ export class Wizard extends React.PureComponent<WizardProps> {
         const {onFinish, validationType, isInline} = this.props;
         let finishWizard: boolean;
         const currenstStep = this.getStepObj(this.state.currentStepId);
-        const {validState, disableNextStep} = this.checkStepValidity(this.state.currentStepId);
+        const {disableNextStep} = this.checkStepValidity(this.state.currentStepId);
 
         if (validationType === WizardValidationType.ASYNC) {
-            var {validationData, allStepsValid} = this.checkValidityOfAllSteps();
+            var {allStepsValid} = this.checkValidityOfAllSteps();
             finishWizard = allStepsValid;
         } else {
             finishWizard = !disableNextStep;
@@ -388,7 +392,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
             this.setState({
                 showPreviousButton: false,
                 showNextButton: true,
-                disableNextButton: !step.stepCompleted && validationType == WizardValidationType.SYNC ? true : false,
+                disableNextButton: !step.stepCompleted && validationType === WizardValidationType.SYNC ? true : false,
                 showFinishButton: false,
                 showCancelButton: showCancelButton !== undefined ? showCancelButton : true,
                 currentStepId: step.stepId,
@@ -399,7 +403,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
             this.setState({
                 showPreviousButton: showPreviousButton !== undefined ? showPreviousButton : true,
                 showFinishButton: true,
-                disableFinishButton: !step.stepCompleted && validationType == WizardValidationType.SYNC ? true : false,
+                disableFinishButton: !step.stepCompleted && validationType === WizardValidationType.SYNC ? true : false,
                 showNextButton: false,
                 showCancelButton: showCancelButton !== undefined ? showCancelButton : true,
                 currentStepId: step.stepId,
@@ -410,7 +414,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
             this.setState({
                 showPreviousButton: showPreviousButton !== undefined ? showPreviousButton : true,
                 showNextButton: true,
-                disableNextButton: !step.stepCompleted && validationType == WizardValidationType.SYNC ? true : false,
+                disableNextButton: !step.stepCompleted && validationType === WizardValidationType.SYNC ? true : false,
                 showFinishButton: false,
                 showCancelButton: showCancelButton !== undefined ? showCancelButton : true,
                 currentStepId: step.stepId,
@@ -447,7 +451,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
         let validationState = true;
         let disableNext = false;
         let currenstStep = this.getStepObj(stepId);
-        let nextStep = stepId == steps.length - 1 ? currenstStep : this.state.allSteps[stepId + 1];
+        let nextStep = stepId === steps.length - 1 ? currenstStep : this.state.allSteps[stepId + 1];
 
         if (currenstStep.isStepValid !== undefined) validationState = currenstStep.isStepValid!();
         if (!validationState && validationType === WizardValidationType.SYNC) disableNext = true;
@@ -474,7 +478,7 @@ export class Wizard extends React.PureComponent<WizardProps> {
         let validationData: {[key: number]: boolean} = {};
 
         steps.map((step, key) => {
-            const {validState, disableNextStep} = this.checkStepValidity(step.stepId);
+            const {validState} = this.checkStepValidity(step.stepId);
             validationData[step.stepId] = validState;
         });
         const allStepsValid = allTrue(validationData);
@@ -647,11 +651,6 @@ export class Wizard extends React.PureComponent<WizardProps> {
 
         const wizardSize = "wizard-" + size;
         const modalSize = "modal-" + size;
-        const buttonStyle: any = () => {
-            if (isInline) {
-                return {display: "inline-block !important"};
-            }
-        };
 
         return (
             <React.Fragment>

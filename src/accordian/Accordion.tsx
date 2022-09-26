@@ -51,7 +51,7 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
 
     componentDidUpdate(prevProps: AccordionProps) {
         const {content} = this.props;
-        if (content && content != prevProps.content) {
+        if (content && content !== prevProps.content) {
             this.getAccordionContent();
         }
     }

@@ -69,7 +69,6 @@ export class CheckBox extends React.PureComponent<CheckBoxProps, CheckBoxState> 
             onClick,
             checked,
             onChange,
-            className,
             dataqa,
             defaultChecked,
         } = this.props;

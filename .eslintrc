@@ -16,5 +16,13 @@
         },
         "ecmaVersion": 2019,
         "sourceType": "module"
-    }
+    },
+    "rules": {
+        "jsx-a11y/anchor-is-valid": "off",
+        "no-script-url": "off",
+        "jsx-a11y/role-supports-aria-props": "off",
+        "no-loop-func": "off",
+        "array-callback-return": "off",
+        "jsx-a11y/alt-text": "off"
+      }
 }

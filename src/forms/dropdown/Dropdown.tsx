@@ -9,7 +9,6 @@
  */
 
 import * as React from "react";
-import * as ReactDOM from "react-dom";
 import {classNames} from "../../utils";
 import {Icon} from "../../icon";
 import {ClassNames} from "./ClassNames";

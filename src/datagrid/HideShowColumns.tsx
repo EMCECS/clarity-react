@@ -72,8 +72,7 @@ export class HideShowColumns extends React.PureComponent<HideShowColumnsProps, H
             const HideShowColumnsMenuTop =
                 this.refParent.current!.getClientRects()[0].top - this.refChild.current!.getClientRects()[0].width + 50;
             const HideShowColumnsMenuLeft = this.refParent.current!.getClientRects()[0].left;
-            const transformVal =
-                "translateX(" + HideShowColumnsMenuLeft + "px) " + "translateY(" + HideShowColumnsMenuTop + "px)";
+            const transformVal = `translateX(${HideShowColumnsMenuLeft}px) translateY(${HideShowColumnsMenuTop}px)`;
             this.setState({transformVal: transformVal});
         }
     }

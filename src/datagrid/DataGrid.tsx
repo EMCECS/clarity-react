@@ -568,7 +568,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     private handlePageChangeOnKeyDown = (evt: React.KeyboardEvent<HTMLInputElement>) => {
         // Check for 'Enter' or 'tab' key
         const keyCode = evt.keyCode;
-        if (keyCode == 13 || keyCode == 9) {
+        if (keyCode === 13 || keyCode === 9) {
             this.handlePageChange();
         }
     };
@@ -766,7 +766,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     ) => {
         this.showLoader();
         const {allRows, allColumns} = this.state;
-        if (columnID != undefined) {
+        if (columnID !== undefined) {
             // Set currentlySorted flag for all columns as false
             allColumns.forEach(col => {
                 if (col.sort) {
@@ -801,9 +801,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     private updateRowIDs(rows: DataGridRow[]) {
         // set rowID = index in array
         if (rows && rows.length) {
-            rows.map((row: DataGridRow, index: number) => {
-                row.rowID = index;
-            });
+            rows.map((row: DataGridRow, index: number) => (row.rowID = index));
         }
 
         return rows;
@@ -811,9 +809,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     private updateColumnIDs(columns: DataGridColumn[]) {
         // set columnID = index in array
-        columns.map((column: DataGridColumn, index: number) => {
-            column["columnID"] = index;
-        });
+        columns.map((column: DataGridColumn, index: number) => (column["columnID"] = index));
         return columns;
     }
 
@@ -1191,7 +1187,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                             {tooltip}
                             {sort.isSorted && sort.defaultSortOrder !== SortOrder.NONE && (
                                 <Icon
-                                    shape={sort.defaultSortOrder == SortOrder.DESC ? "arrow down" : "arrow up"}
+                                    shape={sort.defaultSortOrder === SortOrder.DESC ? "arrow down" : "arrow up"}
                                     className={classNames([
                                         ClassNames.DATAGRID_SORT_ICON,
                                         ClassNames.DATAGRID_NG_STAR_INSERTED,
@@ -1464,7 +1460,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                     key="left-compact"
                     className={ClassNames.PAGINATION_PREVIOUS}
                     icon={{shape: "angle left"}}
-                    disabled={currentPage == 1 ? true : false}
+                    disabled={currentPage === 1 ? true : false}
                     onClick={this.gotoPreviousPage}
                 />
                 <span>{currentPage}</span>
@@ -1488,14 +1484,14 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                     key="down"
                     className={ClassNames.PAGINATION_FIRST}
                     icon={{shape: "step-forward-2 down"}}
-                    disabled={currentPage == 1 ? true : false}
+                    disabled={currentPage === 1 ? true : false}
                     onClick={this.gotoFirstPage}
                 />
                 <Button
                     key="left"
                     className={ClassNames.PAGINATION_PREVIOUS}
                     icon={{shape: "angle left"}}
-                    disabled={currentPage == 1 ? true : false}
+                    disabled={currentPage === 1 ? true : false}
                     onClick={this.gotoPreviousPage}
                 />
                 <input
@@ -1520,7 +1516,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                     key="up"
                     className={ClassNames.PAGINATION_LAST}
                     icon={{shape: "step-forward-2 up"}}
-                    disabled={currentPage == totalPages ? true : false}
+                    disabled={currentPage === totalPages ? true : false}
                     onClick={this.gotoLastPage}
                 />
             </div>
