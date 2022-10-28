@@ -281,7 +281,6 @@ export const DEFAULT_TOTAL_ITEMS: number = 0;
  * @param {selectAll} set to true if all rows got selected else false
  * @param {allColumns} column data
  * @param {allRows} row data
- * @param {itemText} label to display for all items
  * @param {pagination} pagination data
  * @param {isLoading} if true shows loading spinner else shows datagrid
  */
@@ -289,7 +288,6 @@ type DataGridState = {
     selectAll: boolean;
     allColumns: DataGridColumn[];
     allRows: DataGridRow[];
-    itemText: string;
     pagination?: DataGridPaginationState;
     isLoading: boolean;
 };
@@ -331,7 +329,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // Function to initialize datagrid state
     initializeDataGridState = (): DataGridState => {
-        const {isLoading, itemText} = this.props;
+        const {isLoading} = this.props;
         const rows = this.initializeRowData();
         const columns = this.initializeColumnData();
         const dataGridState: DataGridState = {
@@ -339,7 +337,6 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
             selectAll: this.isAllRowsSelected(rows),
             allColumns: [...columns],
             allRows: [...rows],
-            itemText: itemText || DEFAULT_ITEM_TEXT,
             pagination: this.initializePaginationData(),
         };
         return dataGridState;
@@ -1108,7 +1105,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // Function to create placeholder for empty datagrid
     private buildEmptyPlaceholder(): React.ReactElement {
-        const {itemText} = this.state;
+        const {itemText = DEFAULT_ITEM_TEXT} = this.props;
         const placeholderText = "No " + itemText + " found!";
         return (
             <React.Fragment>
@@ -1426,7 +1423,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     // Function to build pageSizes select
     private buildPageSizesSelect(): React.ReactElement {
         const {pageSizes, pageSize} = this.state.pagination!;
-        const {itemText} = this.state;
+        const {itemText = DEFAULT_ITEM_TEXT} = this.props;
 
         return (
             <div className={ClassNames.PAGINATION_SIZE}>
@@ -1526,7 +1523,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     // Function to build datagrid pagination footer
     private buildDataGridPagination(): React.ReactElement {
         const {className, style, compactFooter} = this.props.pagination!;
-        const {itemText} = this.state;
+        const {itemText = DEFAULT_ITEM_TEXT} = this.props;
         const showCompactFooter: boolean = compactFooter || this.isDetailPaneOpen();
         let {totalItems, firstItem, lastItem, pageSize, pageSizes} = this.state.pagination!;
         if (totalItems === 0) {
@@ -1580,8 +1577,8 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     }
 
     private buildFooterContent(): React.ReactElement {
-        const {footer} = this.props;
-        const {allRows, itemText} = this.state;
+        const {footer, itemText = DEFAULT_ITEM_TEXT} = this.props;
+        const {allRows} = this.state;
         const footerDescription = allRows.length.toString() + " " + itemText;
         let content;
 
