@@ -281,7 +281,6 @@ export const DEFAULT_TOTAL_ITEMS: number = 0;
  * @param {selectAll} set to true if all rows got selected else false
  * @param {allColumns} column data
  * @param {allRows} row data
- * @param {itemText} label to display for all items
  * @param {pagination} pagination data
  * @param {isLoading} if true shows loading spinner else shows datagrid
  */
