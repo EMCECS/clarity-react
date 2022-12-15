@@ -108,14 +108,16 @@ export class TabsV2 extends React.PureComponent<TabsV2Prop, TabsV2State> {
         };
     }
 
-    componentDidUpdate = () => {
+    componentDidUpdate = (prevProps: TabsV2Prop, prevState: TabsV2State) => {
         const {tabs} = this.props;
         const selectedTabID: string = tabs && tabs.length > 0 ? getSelectedTabId(tabs) : tabs[0].id;
 
-        this.setState({
-            isOverflowTabSelected: false,
-            selectedTabId: selectedTabID,
-        });
+        if (prevState.selectedTabId !== selectedTabID) {
+            this.setState({
+                isOverflowTabSelected: false,
+                selectedTabId: selectedTabID,
+            });
+        }
     };
 
     //handle tab click
