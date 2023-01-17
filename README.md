@@ -16,7 +16,7 @@ Import styles and globals from peer dependencies:
 import "@webcomponents/custom-elements/custom-elements.min.js";
 import "@clr/icons/clr-icons.min.css";
 import "@clr/icons/clr-icons-lite.min.js";
-import "@clr/ui/clr-ui.min.css"
+import "@clr/ui/clr-ui.min.css";
 import "@clr/icons/shapes/technology-shapes.js";
 
 ...
@@ -26,7 +26,7 @@ And make use of the components in your app:
 #### `App.tsx`
 ```typescript jsx
 import React, {Component} from 'react';
-import MainContainer from "@dell/clarity-react/layout/main-container/MainContainer";
+import MainContainer from "@dellstorage/clarity-react/layout/main-container/MainContainer";
 
 const initialState = {
 };
