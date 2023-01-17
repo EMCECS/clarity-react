@@ -23,11 +23,12 @@ import {ClassNames} from ".";
  */
 export type MainContainerProps = {
     actions?: React.ReactNode;
-    title: string;
+    title?: string;
     headerNav?: any;
     sideNav?: any;
     subNav?: any;
     dataqa?: string;
+    children: JSX.Element | string;
 };
 
 const initialState = {
@@ -70,22 +71,24 @@ export class MainContainer extends React.PureComponent<MainContainerProps> {
         const {primary, secondary} = MainContainer.detectNavs(headerNav, sideNav, subNav);
         return (
             <div className={utils.classNames(this.getClassList())} data-qa={dataqa}>
-                <Header
-                    primaryShown={primary}
-                    secondaryShown={secondary}
-                    onHamburgerToggle={this.handleHamburgerToggle}
-                    onRightSideToggle={this.handleRightSideToggle}
-                    onCloseAll={this.closeAll}
-                >
-                    <div className="branding">
-                        <a href="#" className="nav-link">
-                            <span className="logo dell-emc-logo" />
-                            <span className="title">{title}</span>
-                        </a>
-                    </div>
-                    {headerNav && headerNav}
-                    <div className="header-actions">{actions}</div>
-                </Header>
+                {title && (
+                    <Header
+                        primaryShown={primary}
+                        secondaryShown={secondary}
+                        onHamburgerToggle={this.handleHamburgerToggle}
+                        onRightSideToggle={this.handleRightSideToggle}
+                        onCloseAll={this.closeAll}
+                    >
+                        <div className="branding">
+                            <a href="#" className="nav-link">
+                                <span className="logo dell-emc-logo" />
+                                <span className="title">{title}</span>
+                            </a>
+                        </div>
+                        {headerNav && headerNav}
+                        <div className="header-actions">{actions}</div>
+                    </Header>
+                )}
                 {subNav && subNav}
                 <div className="content-container">
                     <div className="content-area">{children}</div>
