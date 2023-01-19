@@ -20,6 +20,7 @@ import {ClassNames} from ".";
  * @param {sideNav} for side navigation;
  * @param {subNav} for sub navigation;
  * @param {dataqa} for Quality Engineering
+ * @param {children} for content;
  */
 export type MainContainerProps = {
     actions?: React.ReactNode;
@@ -28,7 +29,7 @@ export type MainContainerProps = {
     sideNav?: any;
     subNav?: any;
     dataqa?: string;
-    children: JSX.Element | string;
+    children?: JSX.Element[] | string;
 };
 
 const initialState = {
