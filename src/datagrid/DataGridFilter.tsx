@@ -350,6 +350,7 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
                             shape: isFiltered ? "filter-grid-circle" : "filter-grid",
                             className: ClassNames.ICON_SOLID,
                         }}
+                        dataqa={"dataqa_datagrid-filter_button"}
                     />
                 )}
                 {showFilter && isOpen && this.openFilter()}

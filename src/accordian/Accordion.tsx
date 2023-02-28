@@ -133,6 +133,7 @@ export class Accordion extends React.Component<AccordionProps, AccordionState> {
                         aria-controls="clr-accordion-content"
                         aria-expanded={isOpen}
                         onClick={() => this.handleButtonClick(index, accordionMultiPanel)}
+                        data-qa={`dataqa_accordian-item-${index}`}
                     >
                         <span className={ClassNames.ACCORDION_SR} />
                         <span className={ClassNames.ACCORDION_STATUS}>

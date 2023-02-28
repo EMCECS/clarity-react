@@ -161,6 +161,7 @@ export class HideShowColumns extends React.PureComponent<HideShowColumnsProps, H
                         label={column.displayName ? column.displayName : column.columnName}
                         onChange={evt => this.handleSingleSelect(column.columnName)}
                         checked={column.isVisible !== undefined ? column.isVisible : undefined}
+                        dataqa={`dataqa_hide-show_selectCol-${index}`}
                     />
                 </div>
             </li>
@@ -180,6 +181,7 @@ export class HideShowColumns extends React.PureComponent<HideShowColumnsProps, H
                         icon={{
                             shape: "view-columns",
                         }}
+                        dataqa={"dataqa_hide-show_button"}
                     />
                 </div>
                 {isOpen && (
@@ -209,6 +211,7 @@ export class HideShowColumns extends React.PureComponent<HideShowColumnsProps, H
                                     icon={{
                                         shape: "close",
                                     }}
+                                    dataqa={"dataqa_datagrid_hide-show_close"}
                                 />
                             </div>
 
@@ -225,6 +228,7 @@ export class HideShowColumns extends React.PureComponent<HideShowColumnsProps, H
                                     link
                                     disabled={SelectAll}
                                     onClick={this.handleSelectAll}
+                                    dataqa={"dataqa_datagrid_hide-show_select-all-columns"}
                                 >
                                     Select All
                                 </Button>
