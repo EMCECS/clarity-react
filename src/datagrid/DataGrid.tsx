@@ -936,7 +936,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     }
 
     // Function to render expandable icon cell
-    private buildExpandableCell({rowID, expandableRowData}: DataGridRow): React.ReactElement {
+    private buildExpandableCell({rowID, expandableRowData}: DataGridRow, rowIndex: number): React.ReactElement {
         const {id} = this.props;
         const {hideRowExpandIcon, isExpanded, isLoading} = expandableRowData
             ? expandableRowData
@@ -960,6 +960,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                                 className: ClassNames.DATAGRID_EXPANDABLE_CARET_ICON,
                                 dir: isExpanded ? Direction.DOWN : Direction.RIGHT,
                             }}
+                            dataqa={`dataqa_datagrid_caret-row-${rowIndex}`}
                         />
                     )
                 )}
@@ -995,6 +996,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                                 ariaLabel="Select All"
                                 className={ClassNames.CLR_SELECT}
                                 checked={selectAll !== undefined ? selectAll : undefined}
+                                dataqa={"dataqa_datagrid-select-all-rows"}
                             />
                         </div>
                     )}
@@ -1022,7 +1024,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     }
 
     // Function to render select cell
-    private buildSelectCell(row: DataGridRow): React.ReactElement {
+    private buildSelectCell(row: DataGridRow, rowIndex: number): React.ReactElement {
         const {selectionType, id} = this.props;
         const wrapperClassName =
             selectionType === GridSelectionType.MULTI ? ClassNames.CLR_CHECKBOX_WRAPPER : ClassNames.CLR_RADIO_WRAPPER;
@@ -1045,6 +1047,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                                 className={ClassNames.CLR_SELECT}
                                 onChange={evt => this.handleSelectSingle(evt, row.rowID)}
                                 checked={row.isSelected !== undefined ? row.isSelected : undefined}
+                                dataqa={`dataqa_datagrid-select-checkbox-row-${rowIndex}`}
                             />
                         ) : (
                             <RadioButton
@@ -1053,6 +1056,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                                 className={ClassNames.CLR_SELECT}
                                 onChange={evt => this.handleSelectSingle(evt, row.rowID)}
                                 checked={row.isSelected !== undefined ? row.isSelected : undefined}
+                                dataqa={`dataqa_datagrid-select-radio-row-${rowIndex}`}
                             />
                         ))}
                 </div>
@@ -1167,7 +1171,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                 style={{...style, width: width + "px"}}
                 key={"col-" + index}
             >
-                <div className={ClassNames.DATAGRID_COLUMN_FLEX}>
+                <div className={ClassNames.DATAGRID_COLUMN_FLEX} data-qa={`dataqa_datagrid_column-${index}`}>
                     {sort !== undefined && !hideSort ? (
                         <Button
                             key="sort"
@@ -1179,6 +1183,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                             onClick={evt =>
                                 this.handleSort(evt, columnName, columnID, sort.sortFunction, sort.defaultSortOrder)
                             }
+                            dataqa={"dataqa_column-sort"}
                         >
                             {displayName ? displayName : columnName}
                             {tooltip}
@@ -1234,6 +1239,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                 aria-owns={"clr-dg-row" + index}
                 style={rowStyle}
                 key={"row-" + index}
+                data-qa={`dataqa_datagrid-row-${index}`}
             >
                 {isExpandableRow ? (
                     <div
@@ -1242,17 +1248,17 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                             isExpandableRow && ClassNames.DATAGRID_EXPAND_ANIMATION,
                         ])}
                     >
-                        {this.buildRowCells(row, isExpandableRow, isRowWithDetailPane)}
+                        {this.buildRowCells(row, isExpandableRow, isRowWithDetailPane, index)}
                     </div>
                 ) : (
-                    this.buildRowCells(row, isExpandableRow, isRowWithDetailPane)
+                    this.buildRowCells(row, isExpandableRow, isRowWithDetailPane, index)
                 )}
             </div>
         );
     }
 
     // Function to build cells of single row
-    private buildRowCells(row: DataGridRow, isExpandableRow: boolean, isRowWithDetailPane: boolean) {
+    private buildRowCells(row: DataGridRow, isExpandableRow: boolean, isRowWithDetailPane: boolean, rowIndex: number) {
         const {rowData} = row;
         const {selectionType} = this.props;
         return (
@@ -1261,8 +1267,8 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                 role="row"
             >
                 <div className={ClassNames.DATAGRID_ROW_STICKY}>
-                    {selectionType && this.buildSelectCell(row)}
-                    {isExpandableRow && this.buildExpandableCell(row)}
+                    {selectionType && this.buildSelectCell(row, rowIndex)}
+                    {isExpandableRow && this.buildExpandableCell(row, rowIndex)}
                     {isRowWithDetailPane && this.buildDetailPaneToggleIcon(row)}
                 </div>
                 <div className={ClassNames.DATAGRID_ROW_SCROLLABLE}>

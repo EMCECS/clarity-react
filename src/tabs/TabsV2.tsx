@@ -191,6 +191,7 @@ export class TabsV2 extends React.PureComponent<TabsV2Prop, TabsV2State> {
                         link: true,
                         className: ClassNames.TABINACTIVE,
                     }}
+                    dataqa={"dataqa_tabs-dropdown"}
                 >
                     <DropdownMenu>
                         {overflowTabs.map((tab: TabV2Details, index: number) => {
