@@ -84,6 +84,8 @@ type DataGridFilterState = {
     isOpen: boolean;
     transformVal: string;
     isFiltered: boolean;
+    filterPositionX: number;
+    filterPositionY: number;
 };
 
 /**
@@ -157,6 +159,8 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
             isOpen: false,
             transformVal: DEFAULT_TRANSFORM_XY_POSITIONS,
             isFiltered: false,
+            filterPositionX: 0,
+            filterPositionY: 0,
         };
 
         const {defaultValue} = props;
@@ -169,10 +173,12 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
 
         this.state = {...initialStateData};
         window.addEventListener("resize", this.resize, true);
+        window.addEventListener("scroll", this.closeFilter, true);
     }
 
     componentWillUnmount() {
         window.removeEventListener("resize", this.resize, true);
+        window.removeEventListener("scroll", this.closeFilter, true);
     }
 
     componentDidUpdate() {
@@ -223,8 +229,15 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
         }
     };
 
-    private handleButtonClick = () => {
+    private handleButtonClick = (e: React.MouseEvent<HTMLElement>) => {
+        this.setState({filterPositionX: e.pageX, filterPositionY: e.pageY});
         this.toggle();
+    };
+
+    private closeFilter = () => {
+        this.setState({
+            isOpen: false,
+        });
     };
 
     private toggle() {
@@ -292,11 +305,10 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
                     ref={this.refChild}
                     className={classNames([ClassNames.DATARID_FILTER, ClassNames.CLR_POPOVER_CONTENT, className])}
                     style={{
-                        top: 0,
-                        left: 0,
-                        right: "auto",
-                        bottom: "auto",
-                        position: "absolute",
+                        top: this.state.filterPositionY,
+                        left: this.state.filterPositionX,
+                        right: "unset",
+                        position: "fixed",
                         transform: transformVal,
                         ...style,
                     }}
@@ -345,7 +357,7 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
                     <Button
                         defaultBtn={false}
                         className={FilterBtnClasses}
-                        onClick={this.handleButtonClick}
+                        onClick={e => this.handleButtonClick(e)}
                         icon={{
                             shape: isFiltered ? "filter-grid-circle" : "filter-grid",
                             className: ClassNames.ICON_SOLID,
