@@ -16,6 +16,7 @@ export type DatePickerProps = {
     defaultValue?: Date | string;
     dataqa?: string;
     onChange?: (newValue: string | Date) => void;
+    disabled?: boolean;
 };
 
 export type DatePickerState = {
@@ -76,6 +77,12 @@ export class DatePicker extends React.PureComponent<DatePickerProps, DatePickerS
                 : Moment(this.props.defaultValue),
         inputFocused: false,
     };
+
+    componentDidUpdate(prevProps: Readonly<DatePickerProps>, prevState: Readonly<DatePickerState>): void {
+        if (this.props.defaultValue !== prevProps.defaultValue) {
+            this.setState({value: this.value});
+        }
+    }
 
     get value() {
         const {value, defaultValue} = this.props;
@@ -238,7 +245,7 @@ export class DatePicker extends React.PureComponent<DatePickerProps, DatePickerS
 
     render() {
         const {isOpen, viewMode, navValue, inputFocused, value} = this.state;
-        const {locale, dataqa} = this.props;
+        const {locale, dataqa, disabled} = this.props;
         const navMonth = navValue.month();
         const navYear = navValue.year();
         const daysFromPrevMonth = DatePicker.numDaysFromPrevMonth(navYear, navMonth);
@@ -267,12 +274,14 @@ export class DatePicker extends React.PureComponent<DatePickerProps, DatePickerS
                             onFocus={this.handleInputFocus}
                             onBlur={this.handleInputBlur}
                             onChange={this.handleInputChange}
+                            disabled={disabled}
                         />
                         <button
                             className="clr-input-group-icon-action"
                             type="button"
                             title="Open"
                             onClick={this.handleToggle.bind(this)}
+                            disabled={disabled}
                         >
                             <Icon shape="calendar" />
                         </button>
