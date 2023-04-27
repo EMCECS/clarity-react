@@ -22,4 +22,9 @@ storiesOf("Datepicker", module)
         <div>
             <DatePicker disabled />
         </div>
+    ))
+    .add("Datepicker with default value", () => (
+        <div>
+            <DatePicker defaultValue={"04/27/2023"} />
+        </div>
     ));
