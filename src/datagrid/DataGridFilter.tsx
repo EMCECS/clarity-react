@@ -234,10 +234,13 @@ export class DataGridFilter extends React.PureComponent<DataGridFilterProps, Dat
         this.toggle();
     };
 
-    private closeFilter = () => {
-        this.setState({
-            isOpen: false,
-        });
+    private closeFilter = (evt: any) => {
+        // This should make sure that only scroll events not due to large inputs are handled
+        if (evt.target.nodeName !== "INPUT") {
+            this.setState({
+                isOpen: false,
+            });
+        }
     };
 
     private toggle() {
