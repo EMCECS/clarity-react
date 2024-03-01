@@ -360,7 +360,7 @@ export class DatePicker extends React.PureComponent<DatePickerProps, DatePickerS
                                                                                     isSelected,
                                                                                     isToday,
                                                                                     isDisabled,
-                                                                                    calendar.isAfter(Moment(), "day"),
+                                                                                    calendar.isAfter(Moment(), "day")
                                                                                 )}
                                                                                 tabIndex={this.calculateTabIndex(
                                                                                     isSelected,
