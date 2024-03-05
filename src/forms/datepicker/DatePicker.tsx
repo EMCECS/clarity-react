@@ -9,6 +9,9 @@ import {classNames} from "../../utils";
  * @param {locale} regional code
  * @param {defaultValue} default date value
  * @param {dataqa} quality engineering testing field
+ * @param {onChange} function to call on change of filter value
+ * @param {disabled} boolean value to enable or disable filter
+ * @param {disableFutureDates} boolean if true, future dates will be disabled
  */
 export type DatePickerProps = {
     value?: Date;
@@ -17,6 +20,7 @@ export type DatePickerProps = {
     dataqa?: string;
     onChange?: (newValue: string | Date) => void;
     disabled?: boolean;
+    disableFutureDates?: boolean;
 };
 
 export type DatePickerState = {
@@ -57,6 +61,7 @@ export class DatePicker extends React.PureComponent<DatePickerProps, DatePickerS
         value: undefined,
         defaultValue: undefined,
         onChange: undefined,
+        disableFutureDates: false,
     };
 
     private calRef = React.createRef<HTMLDivElement>();
@@ -226,12 +231,13 @@ export class DatePicker extends React.PureComponent<DatePickerProps, DatePickerS
         }
     };
 
-    private buildDateClasses(isSelected: boolean, isToday: boolean, isDisabled: boolean) {
+    private buildDateClasses(isSelected: boolean, isToday: boolean, isDisabled: boolean, isFuture: boolean) {
         return classNames([
             "day-btn", // prettier
             isSelected && !isToday && "is-selected",
             isToday && "is-today",
             isDisabled && "is-disabled",
+            isFuture && this.props.disableFutureDates && "is-future",
         ]);
     }
 
@@ -357,6 +363,7 @@ export class DatePicker extends React.PureComponent<DatePickerProps, DatePickerS
                                                                                     isSelected,
                                                                                     isToday,
                                                                                     isDisabled,
+                                                                                    calendar.isAfter(Moment(), "day"),
                                                                                 )}
                                                                                 tabIndex={this.calculateTabIndex(
                                                                                     isSelected,
