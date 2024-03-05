@@ -11,7 +11,7 @@ import {classNames} from "../../utils";
  * @param {dataqa} quality engineering testing field
  * @param {onChange} function to call on change of filter value
  * @param {disabled} boolean value to enable or disable filter
- * @param {disableFutureDates} boolean if true, future dates will be disabled. 
+ * @param {disableFutureDates} boolean if true, future dates will be disabled
  */
 export type DatePickerProps = {
     value?: Date;
