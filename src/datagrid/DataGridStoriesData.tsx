@@ -582,6 +582,12 @@ export const paginationDetails = {
     pageSizes: [5, 10],
 };
 
+export const paginationDetailswithDefaultPageSizes = {
+    totalItems: paginationRows.length,
+    getPageData: getPageData,
+    pageSize: 10,
+};
+
 export const paginationDetailsWithCompactFooter = {
     totalItems: paginationRows.length,
     getPageData: getPageData,
