@@ -116,7 +116,7 @@ export class Styles {
         flex: 1,
     };
 
-    public static PAGINATION_CUSTOM = {
+    public static PAGINATION_CUSTOM_PAGESIZE = {
         display: "inline",
     };
     public static PAGINATION_CUSTOM_INPUT = {

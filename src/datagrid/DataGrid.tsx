@@ -1462,7 +1462,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     private buildCustomPageSizeSelect = () => {
         return (
-            <div className={classNames([ClassNames.PAGINATION_LIST])} style={Styles.PAGINATION_CUSTOM}>
+            <div className={classNames([ClassNames.PAGINATION_LIST])} style={Styles.PAGINATION_CUSTOM_PAGESIZE}>
                 <input
                     className={ClassNames.PAGINATION_CURRENT}
                     size={4}
