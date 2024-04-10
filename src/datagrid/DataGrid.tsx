@@ -213,6 +213,8 @@ export type DataGridSort = {
  * @param {lastPage} Index of the last page for the current data
  * @param {getPage} custom function to get page data for given page number
  * @param {compactFooter} if true will render compact pagination footer
+ * @param {pageSizes} Array containing pageSize which user can select from dropdown menu
+ * @param {MAX_PAGE_SIZE} Maximum limit for custom page size
  */
 type DataGridPaginationProps = {
     className?: string;
@@ -223,6 +225,7 @@ type DataGridPaginationProps = {
     totalItems: number;
     compactFooter?: boolean;
     getPageData?: (pageIndex: number, pageSize: number) => Promise<DataGridRow[]>;
+    MAX_PAGE_SIZE?: number;
 };
 
 /**
@@ -276,7 +279,7 @@ export const DEFAULT_CURRENT_PAGE_NUMBER: number = 1;
 export const DEFAULT_PAGE_SIZE: number = 10;
 export const DEFAULT_TOTAL_ITEMS: number = 0;
 export const DEFAULT_PAGE_SIZES: string[] = ["10", "20", "50", "100", "Custom"];
-export const DEFAULT_CUSTOM_PAGE_SIZE_LIMIT: number = 1000;
+export const MAX_PAGE_SIZE: number = 1000;
 
 /**
  * State for DataGrid :
@@ -285,6 +288,7 @@ export const DEFAULT_CUSTOM_PAGE_SIZE_LIMIT: number = 1000;
  * @param {allRows} row data
  * @param {pagination} pagination data
  * @param {isLoading} if true shows loading spinner else shows datagrid
+ * @param {isCustomPageSizeSelected} if true renders textbox for custom pageSize
  */
 type DataGridState = {
     selectAll: boolean;
@@ -292,7 +296,7 @@ type DataGridState = {
     allRows: DataGridRow[];
     pagination?: DataGridPaginationState;
     isLoading: boolean;
-    customPageSize?: boolean;
+    isCustomPageSizeSelected?: boolean;
 };
 type DataGridPaginationState = {
     currentPage: number;
@@ -301,7 +305,7 @@ type DataGridPaginationState = {
     firstItem: number;
     lastItem: number;
     totalPages: number;
-    pageSizes?: any[];
+    pageSizes?: string[];
     compactFooter?: boolean;
 };
 
@@ -527,9 +531,9 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     // Function to handle change in page sizes
     private handleSelectPageSize = (evt: React.ChangeEvent<HTMLSelectElement>) => {
         if (evt.target.value === "Custom") {
-            this.setState({customPageSize: true});
+            this.setState({isCustomPageSizeSelected: true});
         } else {
-            this.setState({customPageSize: false});
+            this.setState({isCustomPageSizeSelected: false});
             this.getPage(this.state.pagination!.currentPage, parseInt(evt.target.value));
         }
     };
@@ -613,7 +617,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     // Function to handle CustomPageSize change in input box
     private handleCustomPageSizeChange = () => {
         const pageSize = this.pageSizeRef.current && parseInt(this.pageSizeRef.current.value);
-        if (pageSize && pageSize <= DEFAULT_CUSTOM_PAGE_SIZE_LIMIT) {
+        if (pageSize && pageSize <= MAX_PAGE_SIZE) {
             this.getPage(this.state.pagination!.currentPage, pageSize);
         }
     };
@@ -1460,6 +1464,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         );
     }
 
+    //Function to render textbox for custom pageSize
     private buildCustomPageSizeSelect = () => {
         return (
             <div className={classNames([ClassNames.PAGINATION_LIST])} style={Styles.PAGINATION_CUSTOM_PAGESIZE}>
@@ -1491,7 +1496,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                             onChange={evt => this.handleSelectPageSize(evt)}
                             defaultValue={pageSize}
                         >
-                            {pageSizes!.map((size: any, index: number) => {
+                            {pageSizes!.map((size: string, index: number) => {
                                 return (
                                     <option key={index} value={size}>
                                         {size}
@@ -1500,7 +1505,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                             })}
                         </select>
                     </div>
-                    {this.state.customPageSize && this.buildCustomPageSizeSelect()}
+                    {this.state.isCustomPageSizeSelected && this.buildCustomPageSizeSelect()}
                 </div>
             </div>
         );
