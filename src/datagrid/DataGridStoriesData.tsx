@@ -574,6 +574,19 @@ export const getPageDataForDetailPane = (pageIndex: number, pageSize: number): P
         }, 2000);
     });
 };
+//Function to get data for page based on customPageSize and page number
+export const getPageDataForCustomPageSize = (pageIndex: number, pageSize: number): Promise<DataGridRow[]> => {
+    return new Promise((resolve, reject) => {
+        let rows: DataGridRow[] = [];
+        let offset = pageSize * (pageIndex - 1);
+        rows = paginationRows.slice(offset, offset + pageSize);
+
+        // Delay to display loading spinner
+        setTimeout(function() {
+            resolve(rows);
+        }, 2000);
+    });
+};
 
 export const paginationDetails = {
     totalItems: paginationRows.length,
@@ -584,7 +597,7 @@ export const paginationDetails = {
 
 export const paginationDetailswithDefaultPageSizes = {
     totalItems: paginationRows.length,
-    getPageData: getPageData,
+    getPageData: getPageDataForCustomPageSize,
     pageSize: 10,
 };
 
