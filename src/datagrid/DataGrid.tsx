@@ -620,6 +620,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         const pageSizeInputFieldValue: number | null =
             this.customPageSizeRef.current && parseInt(this.customPageSizeRef.current.value);
         const currentPageSizeValue: number | null | undefined = pagination && pagination.pageSize;
+
         if (pageSizeInputFieldValue !== currentPageSizeValue) {
             this.handleCustomPageSizeChange();
         }
@@ -641,6 +642,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     private handleCustomPageSizeChange = () => {
         const {maxCustomPageSize, currentPage} = this.state.pagination!;
         const pageSize = this.customPageSizeRef.current && parseInt(this.customPageSizeRef.current.value);
+
         if (pageSize && maxCustomPageSize && pageSize <= maxCustomPageSize) {
             this.getPage(this.state.pagination!.currentPage, pageSize);
         } else if (pageSize && maxCustomPageSize && pageSize > maxCustomPageSize) {
