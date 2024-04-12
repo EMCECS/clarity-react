@@ -639,14 +639,14 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // Function to handle CustomPageSize change in input box
     private handleCustomPageSizeChange = () => {
-        const {maxCustomPageSize} = this.state.pagination!;
+        const {maxCustomPageSize, currentPage} = this.state.pagination!;
         const pageSize = this.customPageSizeRef.current && parseInt(this.customPageSizeRef.current.value);
         if (pageSize && maxCustomPageSize && pageSize <= maxCustomPageSize) {
             this.getPage(this.state.pagination!.currentPage, pageSize);
         } else if (pageSize && maxCustomPageSize && pageSize > maxCustomPageSize) {
             if (this.customPageSizeRef.current) {
                 this.customPageSizeRef.current.value = maxCustomPageSize.toString();
-                this.getPage(this.state.pagination!.currentPage, parseInt(this.customPageSizeRef.current.value));
+                this.getPage(currentPage, parseInt(this.customPageSizeRef.current.value));
             }
         }
     };
