@@ -579,7 +579,7 @@ export const paginationDetails = {
     totalItems: paginationRows.length,
     getPageData: getPageData,
     pageSize: 5,
-    pageSizes: [5, 10],
+    pageSizes: ["5", "10"],
 };
 
 export const paginationDetailswithDefaultPageSizes = {
@@ -592,7 +592,7 @@ export const paginationDetailsWithCompactFooter = {
     totalItems: paginationRows.length,
     getPageData: getPageData,
     pageSize: 5,
-    pageSizes: [5, 10],
+    pageSizes: ["5", "10"],
     compactFooter: true,
 };
 
@@ -600,7 +600,7 @@ export const paginationDetailsForAlreadySelectedRows = {
     totalItems: alreadySelectedRows.length,
     getPageData: getPageDataForSelectedRows,
     pageSize: 5,
-    pageSizes: [5, 10],
+    pageSizes: ["5", "10"],
 };
 
 export const pageFilterFunction = (
@@ -785,7 +785,7 @@ export const paginationDetailsForDetailsPane = {
     totalItems: rowsWithDetailPane.length,
     getPageData: getPageDataForDetailPane,
     pageSize: 5,
-    pageSizes: [5, 10],
+    pageSizes: ["5", "10"],
 };
 
 /* #################### Data For detail pane story end ####################### */
