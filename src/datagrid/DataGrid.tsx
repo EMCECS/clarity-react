@@ -648,7 +648,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         } else if (pageSize && maxCustomPageSize && pageSize > maxCustomPageSize) {
             if (this.customPageSizeRef.current) {
                 this.customPageSizeRef.current.value = maxCustomPageSize.toString();
-                this.getPage(1, parseInt(this.customPageSizeRef.current.value));
+                this.getPage(DEFAULT_CURRENT_PAGE_NUMBER, parseInt(this.customPageSizeRef.current.value));
             }
         }
     };
@@ -1504,6 +1504,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                     size={4}
                     defaultValue=""
                     type="text"
+                    data-qa="dataqa_datagrid_custom_input"
                     ref={this.customPageSizeRef}
                     style={Styles.PAGINATION_CUSTOM_INPUT}
                     onBlur={this.handleCustomPageSizeChangeOnBlur}
