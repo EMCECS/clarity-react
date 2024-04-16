@@ -120,8 +120,8 @@ export class Styles {
         display: "inline",
     };
     public static PAGINATION_CUSTOM_INPUT = {
-        width: "39px",
-        height: "29px",
+        width: "2rem",
+        height: "2rem",
     };
 
     public static DRAGGABLE_GHOST = {
