@@ -115,6 +115,15 @@ export class Styles {
         WebkitBoxFlex: 1,
         flex: 1,
     };
+
+    public static PAGINATION_CUSTOM_PAGESIZE = {
+        display: "inline",
+    };
+    public static PAGINATION_CUSTOM_INPUT = {
+        width: "2rem",
+        height: "2rem",
+    };
+
     public static DRAGGABLE_GHOST = {
         visibility: "visible" as "visible",
         width: "13px",
