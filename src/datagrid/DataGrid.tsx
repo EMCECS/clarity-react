@@ -1627,7 +1627,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         const {className, style, compactFooter} = this.props.pagination!;
         const {itemText = DEFAULT_ITEM_TEXT} = this.props;
         const showCompactFooter: boolean = compactFooter || this.isDetailPaneOpen();
-        let {totalItems, firstItem, lastItem, pageSize, pageSizes = DEFAULT_PAGE_SIZES} = this.state.pagination!;
+        let {totalItems, firstItem, lastItem, pageSizes = DEFAULT_PAGE_SIZES} = this.state.pagination!;
         if (totalItems === 0) {
             firstItem = lastItem = 0;
         }
