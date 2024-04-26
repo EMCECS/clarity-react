@@ -15,6 +15,7 @@ import {Button} from "../forms/button";
 import {SortOrder, DataGridRow, DataGridFilterResult, DataGridColumn} from ".";
 import {Password} from "../forms/password/Password";
 import {ToolTip, ToolTipDirection, ToolTipSize} from "../forms/tooltip/ToolTip";
+import {CUSTOM_PAGE_SIZE_OPTION} from "./DataGrid";
 
 /**
  * General file description :
@@ -595,10 +596,11 @@ export const paginationDetails = {
     pageSizes: ["5", "10"],
 };
 
-export const paginationDetailswithDefaultPageSizes = {
+export const paginationDetailswithPageSizes = {
     totalItems: paginationRows.length,
     getPageData: getPageDataForCustomPageSize,
     pageSize: 10,
+    pageSizes: ["10", "20", "50", "100", CUSTOM_PAGE_SIZE_OPTION],
 };
 
 export const paginationDetailsWithCompactFooter = {
