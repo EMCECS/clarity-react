@@ -18,7 +18,6 @@ import {Icon, Direction} from "../icon";
 import {Spinner, SpinnerSize} from "../spinner/Spinner";
 import {HideShowColumns} from "./HideShowColumns";
 import {DataGridColumnResize} from "./DataGridColumnResize";
-import {totalmem} from "os";
 
 /**
  * General component description :
