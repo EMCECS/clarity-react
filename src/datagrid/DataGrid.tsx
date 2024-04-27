@@ -216,8 +216,9 @@ export type DataGridSort = {
  * @param {pageSizes} Array containing pageSize which user can select from dropdown menu.
  *          Supports custom page sizes. For example["10", "20", "50", "100", CUSTOM_PAGE_SIZE_OPTION]
  * @param {maxCustomPageSize} Maximum limit for custom page size as well as for pageSize dropdown
+ * @param {isCustomPageSizeSelected} set to true if page sizes dropdown is present and custom option is selected
  */
-type DataGridPaginationProps = {
+export type DataGridPaginationProps = {
     className?: string;
     style?: any;
     currentPage?: number;
@@ -227,6 +228,7 @@ type DataGridPaginationProps = {
     compactFooter?: boolean;
     getPageData?: (pageIndex: number, pageSize: number) => Promise<DataGridRow[]>;
     maxCustomPageSize?: number;
+    isCustomPageSizeSelected?: boolean;
 };
 
 /**
@@ -279,7 +281,7 @@ export const DEFAULT_COLUMN_WIDTH: number = 100;
 export const DEFAULT_CURRENT_PAGE_NUMBER: number = 1;
 export const DEFAULT_PAGE_SIZE: number = 10;
 export const DEFAULT_TOTAL_ITEMS: number = 0;
-export const MAX_PAGE_SIZE: number = 1000;
+export const DEFAULT_MAX_PAGE_SIZE: number = 1000;
 export const CUSTOM_PAGE_SIZE_OPTION: string = "Custom";
 
 /**
@@ -401,11 +403,14 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                 totalItems,
                 compactFooter,
                 pageSizes,
-                maxCustomPageSize = MAX_PAGE_SIZE,
+                maxCustomPageSize,
+                isCustomPageSizeSelected,
             } = pagination;
             const currentPageNumber: number = currentPage || DEFAULT_CURRENT_PAGE_NUMBER;
             const datagridPageSize: number = pageSize || DEFAULT_PAGE_SIZE;
             const totalItemsInDatagrid: number = totalItems || DEFAULT_TOTAL_ITEMS;
+            const maxCustomPageSizeNumber: number = maxCustomPageSize || DEFAULT_MAX_PAGE_SIZE;
+            const isCustomPageSizeOptionSelected: boolean = isCustomPageSizeSelected || false;
 
             const firstItem: number = this.getFirstItemIndex(currentPageNumber, datagridPageSize);
             const lastItem: number = this.getLastItemIndex(datagridPageSize, totalItemsInDatagrid, firstItem);
@@ -419,7 +424,8 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                 firstItem: firstItem,
                 lastItem: lastItem,
                 totalPages: this.getTotalPages(totalItemsInDatagrid, datagridPageSize),
-                maxCustomPageSize: maxCustomPageSize,
+                maxCustomPageSize: maxCustomPageSizeNumber,
+                isCustomPageSizeSelected: isCustomPageSizeOptionSelected,
             };
 
             return paginationState;
@@ -1513,12 +1519,13 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     //Function to render textbox for custom pageSize
     private buildCustomPageSizeSelect = () => {
+        const {pageSize} = this.state.pagination!;
         return (
             <div className={classNames([ClassNames.PAGINATION_LIST])} style={Styles.PAGINATION_CUSTOM_PAGESIZE}>
                 <input
                     className={ClassNames.PAGINATION_CURRENT}
                     size={4}
-                    defaultValue=""
+                    defaultValue={pageSize}
                     type="text"
                     data-qa="dataqa_datagrid_custom_input"
                     ref={this.customPageSizeRef}
@@ -1542,7 +1549,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                         <select
                             className={classNames([ClassNames.CLR_PAGE_SIZE_SELECT])}
                             onChange={evt => this.handleSelectPageSize(evt)}
-                            defaultValue={pageSize}
+                            defaultValue={isCustomPageSizeSelected ? CUSTOM_PAGE_SIZE_OPTION : pageSize}
                         >
                             {pageSizes!.map((size: string, index: number) => {
                                 return (
