@@ -664,11 +664,10 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                     if (customPageSizeInt <= maxCustomPageSize) {
                         this.getPage(currentPage, customPageSizeInt);
                     }
-                    //If page size selected by user is greater than maximum limit for custom page size
+                    // If page size selected by user is greater than maximum limit for custom page size
                     else if (customPageSizeInt > maxCustomPageSize && this.customPageSizeRef.current) {
-                        this.customPageSizeRef.current.value =
-                            totalItems < maxCustomPageSize ? totalItems.toString() : maxCustomPageSize.toString();
-                        this.getPage(DEFAULT_CURRENT_PAGE_NUMBER, customPageSizeInt);
+                        const newCustomPageSize = totalItems < maxCustomPageSize ? totalItems : maxCustomPageSize;
+                        this.getPage(DEFAULT_CURRENT_PAGE_NUMBER, newCustomPageSize);
                     }
                 }
             }

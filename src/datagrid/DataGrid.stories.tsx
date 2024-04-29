@@ -420,7 +420,7 @@ storiesOf("DataGrid", module)
             />
         </div>
     ))
-    .add("Grid with pagination and pageSizes dropdown", () => (
+    .add("Grid with pagination and custom page size", () => (
         <div style={{width: "80%"}}>
             <DataGrid
                 columns={normalColumns}
