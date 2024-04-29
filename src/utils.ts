@@ -53,7 +53,7 @@ export function allFalseOnKey(obj: any, key: any) {
 
 /**
  * Function to check if input is a number.
- * @param input - The input to be checked.
+ * @param {input} - The input to be checked.
  * @returns True if the input is a number, false otherwise.
  */
 export function isNumber(input: any): boolean {
@@ -63,7 +63,7 @@ export function isNumber(input: any): boolean {
 
 /**
  * Function to check if a key event allows only number inputs.
- * @param evt - The key event to be checked.
+ * @param {evt} - The key event to be checked.
  * @returns True if the event allows only number inputs, false otherwise.
  */
 export function allowOnlyIntegers(evt: any) {
