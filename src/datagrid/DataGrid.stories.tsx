@@ -47,7 +47,7 @@ import {
     paginationDetailsForDetailsPane,
     paginationRowsWithLinks,
     storeForDetailPane,
-    paginationDetailswithDefaultPageSizes,
+    paginationDetailswithPageSizes,
 } from "./DataGridStoriesData";
 import {CustomFilter} from "./CustomFilter";
 import {CustomFilterMulti} from "./CustomFilterMulti";
@@ -420,12 +420,12 @@ storiesOf("DataGrid", module)
             />
         </div>
     ))
-    .add("Grid with pagination and default pageSizes dropdown", () => (
+    .add("Grid with pagination and custom page size", () => (
         <div style={{width: "80%"}}>
             <DataGrid
                 columns={normalColumns}
                 rows={paginationRows.slice(0, 10)}
-                pagination={paginationDetailswithDefaultPageSizes}
+                pagination={paginationDetailswithPageSizes}
                 itemText={"Users"}
                 footer={{showFooter: true}}
             />

@@ -15,6 +15,7 @@ import {Button} from "../forms/button";
 import {SortOrder, DataGridRow, DataGridFilterResult, DataGridColumn} from ".";
 import {Password} from "../forms/password/Password";
 import {ToolTip, ToolTipDirection, ToolTipSize} from "../forms/tooltip/ToolTip";
+import {CUSTOM_PAGE_SIZE_OPTION, DataGridPaginationProps} from "./DataGrid";
 
 /**
  * General file description :
@@ -588,20 +589,22 @@ export const getPageDataForCustomPageSize = (pageIndex: number, pageSize: number
     });
 };
 
-export const paginationDetails = {
+export const paginationDetails: DataGridPaginationProps = {
     totalItems: paginationRows.length,
     getPageData: getPageData,
     pageSize: 5,
     pageSizes: ["5", "10"],
 };
 
-export const paginationDetailswithDefaultPageSizes = {
+export const paginationDetailswithPageSizes: DataGridPaginationProps = {
     totalItems: paginationRows.length,
     getPageData: getPageDataForCustomPageSize,
     pageSize: 10,
+    currentPage: 1,
+    pageSizes: ["10", "20", "50", "100", CUSTOM_PAGE_SIZE_OPTION],
 };
 
-export const paginationDetailsWithCompactFooter = {
+export const paginationDetailsWithCompactFooter: DataGridPaginationProps = {
     totalItems: paginationRows.length,
     getPageData: getPageData,
     pageSize: 5,
@@ -609,7 +612,7 @@ export const paginationDetailsWithCompactFooter = {
     compactFooter: true,
 };
 
-export const paginationDetailsForAlreadySelectedRows = {
+export const paginationDetailsForAlreadySelectedRows: DataGridPaginationProps = {
     totalItems: alreadySelectedRows.length,
     getPageData: getPageDataForSelectedRows,
     pageSize: 5,

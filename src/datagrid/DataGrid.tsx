@@ -10,7 +10,7 @@
 
 import React from "react";
 import {ClassNames, Styles} from "./ClassNames";
-import {classNames, allTrueOnKey} from "../utils";
+import {classNames, allTrueOnKey, allowOnlyIntegers, isNumber, KEYBOARD_KEYS} from "../utils";
 import {CheckBox} from "../forms/checkbox";
 import {RadioButton} from "../forms/radio";
 import {Button} from "../forms/button";
@@ -213,10 +213,12 @@ export type DataGridSort = {
  * @param {lastPage} Index of the last page for the current data
  * @param {getPage} custom function to get page data for given page number
  * @param {compactFooter} if true will render compact pagination footer
- * @param {pageSizes} Array containing pageSize which user can select from dropdown menu
+ * @param {pageSizes} Array containing pageSize which user can select from dropdown menu.
+ *          Supports custom page sizes. For example["10", "20", "50", "100", CUSTOM_PAGE_SIZE_OPTION]
  * @param {maxCustomPageSize} Maximum limit for custom page size as well as for pageSize dropdown
+ * @param {isCustomPageSizeSelected} set to true if page sizes dropdown is present and custom option is selected
  */
-type DataGridPaginationProps = {
+export type DataGridPaginationProps = {
     className?: string;
     style?: any;
     currentPage?: number;
@@ -226,6 +228,7 @@ type DataGridPaginationProps = {
     compactFooter?: boolean;
     getPageData?: (pageIndex: number, pageSize: number) => Promise<DataGridRow[]>;
     maxCustomPageSize?: number;
+    isCustomPageSizeSelected?: boolean;
 };
 
 /**
@@ -278,8 +281,8 @@ export const DEFAULT_COLUMN_WIDTH: number = 100;
 export const DEFAULT_CURRENT_PAGE_NUMBER: number = 1;
 export const DEFAULT_PAGE_SIZE: number = 10;
 export const DEFAULT_TOTAL_ITEMS: number = 0;
-export const DEFAULT_PAGE_SIZES: string[] = ["10", "20", "50", "100", "Custom"];
-export const MAX_PAGE_SIZE: number = 1000;
+export const DEFAULT_MAX_PAGE_SIZE: number = 1000;
+export const CUSTOM_PAGE_SIZE_OPTION: string = "Custom";
 
 /**
  * State for DataGrid :
@@ -299,7 +302,16 @@ type DataGridState = {
 
 /**
  * State for DataGrid Pagination :
+ * @param {currentPage} Page index of the current page
+ * @param {pageSize} page size of the page. Default is 10
+ * @param {totalItems} total number of items
+ * @param {firstItem} first item number in current page
+ * @param {lastItem} last item number in current page
+ * @param {totalPages} number of total pages
+ * @param {pageSizes} array of page sizes. can support string "custom" For example,  ["10", "20", "50", "100", CUSTOM_PAGE_SIZE_OPTION]
+ * @param {compactFooter} if true renders compact pagination footer
  * @param {isCustomPageSizeSelected} if true renders input box to enter custom pageSize
+ * @param {maxCustomPageSize} maximum value for custom page size
  */
 type DataGridPaginationState = {
     currentPage: number;
@@ -390,12 +402,15 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                 pageSize,
                 totalItems,
                 compactFooter,
-                pageSizes = DEFAULT_PAGE_SIZES,
-                maxCustomPageSize = MAX_PAGE_SIZE,
+                pageSizes,
+                maxCustomPageSize,
+                isCustomPageSizeSelected,
             } = pagination;
             const currentPageNumber: number = currentPage || DEFAULT_CURRENT_PAGE_NUMBER;
             const datagridPageSize: number = pageSize || DEFAULT_PAGE_SIZE;
             const totalItemsInDatagrid: number = totalItems || DEFAULT_TOTAL_ITEMS;
+            const maxCustomPageSizeNumber: number = maxCustomPageSize || DEFAULT_MAX_PAGE_SIZE;
+            const isCustomPageSizeOptionSelected: boolean = isCustomPageSizeSelected || false;
 
             const firstItem: number = this.getFirstItemIndex(currentPageNumber, datagridPageSize);
             const lastItem: number = this.getLastItemIndex(datagridPageSize, totalItemsInDatagrid, firstItem);
@@ -409,7 +424,8 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                 firstItem: firstItem,
                 lastItem: lastItem,
                 totalPages: this.getTotalPages(totalItemsInDatagrid, datagridPageSize),
-                maxCustomPageSize: maxCustomPageSize,
+                maxCustomPageSize: maxCustomPageSizeNumber,
+                isCustomPageSizeSelected: isCustomPageSizeOptionSelected,
             };
 
             return paginationState;
@@ -464,6 +480,10 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
             if (this.pageIndexRef.current) {
                 this.pageIndexRef.current.value = currentPage.toString();
+            }
+
+            if (this.customPageSizeRef.current) {
+                this.customPageSizeRef.current.value = pageSize.toString();
             }
             pagination.compactFooter = compactFooter !== undefined ? compactFooter : false;
         }
@@ -549,7 +569,10 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
             this.setState(
                 prevState => ({
                     ...prevState,
-                    pagination: {...prevState.pagination!, isCustomPageSizeSelected: evt.target.value === "Custom"},
+                    pagination: {
+                        ...prevState.pagination!,
+                        isCustomPageSizeSelected: evt.target.value === CUSTOM_PAGE_SIZE_OPTION,
+                    },
                 }),
                 () => {
                     const {isCustomPageSizeSelected, currentPage} = this.state.pagination!;
@@ -599,8 +622,8 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     // Function to handle pageIndex change in input box on Enter ot Tab key press event
     private handlePageChangeOnKeyDown = (evt: React.KeyboardEvent<HTMLInputElement>) => {
         // Check for 'Enter' or 'tab' key
-        const keyCode = evt.keyCode;
-        if (keyCode === 13 || keyCode === 9) {
+        const keyName = evt.key;
+        if (keyName === KEYBOARD_KEYS.ENTER || keyName === KEYBOARD_KEYS.TAB) {
             this.handlePageChange();
         }
     };
@@ -608,23 +631,12 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     // Function to handle CustomPageSize change in input box on Enter or Tab key press event
     private handleCustomPageSizeChangeOnKeyDown = (evt: React.KeyboardEvent<HTMLInputElement>) => {
         // Check for 'Enter' or 'tab' key
-        const keyCode = evt.keyCode;
-        if (keyCode === 13 || keyCode === 9) {
+        const keyName = evt.key;
+        if (keyName === KEYBOARD_KEYS.ENTER || keyName === KEYBOARD_KEYS.TAB) {
             this.handleCustomPageSizeChange();
         }
     };
 
-    // Function to handle CustomPageSize change in input box on blur event
-    private handleCustomPageSizeChangeOnBlur = () => {
-        const {pagination} = this.state;
-        const pageSizeInputFieldValue: number | null =
-            this.customPageSizeRef.current && parseInt(this.customPageSizeRef.current.value);
-        const currentPageSizeValue: number | null | undefined = pagination && pagination.pageSize;
-
-        if (pageSizeInputFieldValue !== currentPageSizeValue) {
-            this.handleCustomPageSizeChange();
-        }
-    };
     // Function to handle pageIndex change in input box
     private handlePageChange = () => {
         const {pageSize, currentPage} = this.state.pagination!;
@@ -639,22 +651,29 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     };
 
     // Function to handle CustomPageSize change in input box
-    private handleCustomPageSizeChange = () => {
-        const {maxCustomPageSize, totalItems} = this.state.pagination!;
-        const pageSize = this.customPageSizeRef.current && parseInt(this.customPageSizeRef.current.value);
+    private handleCustomPageSizeChange = (event?: any) => {
+        const {maxCustomPageSize = DEFAULT_MAX_PAGE_SIZE, totalItems, pageSize, currentPage} = this.state.pagination!;
+        const customPageSize = this.customPageSizeRef.current && this.customPageSizeRef.current.value;
 
-        if (pageSize && maxCustomPageSize) {
-            if (pageSize <= maxCustomPageSize) {
-                this.getPage(this.state.pagination!.currentPage, pageSize);
-            }
-            //If page size selected by user is greater than maximum limit for custom page size
-            else if (pageSize > maxCustomPageSize && this.customPageSizeRef.current) {
-                this.customPageSizeRef.current.value =
-                    totalItems < maxCustomPageSize ? totalItems.toString() : maxCustomPageSize.toString();
-                this.getPage(DEFAULT_CURRENT_PAGE_NUMBER, parseInt(this.customPageSizeRef.current.value));
+        if (pageSize && customPageSize) {
+            if (!isNumber(customPageSize) || parseInt(customPageSize) === 0) {
+                this.customPageSizeRef.current!.value = pageSize.toString();
+            } else {
+                const customPageSizeInt: number = parseInt(customPageSize);
+                if (pageSize !== customPageSizeInt && customPageSizeInt > 0) {
+                    if (customPageSizeInt <= maxCustomPageSize) {
+                        this.getPage(currentPage, customPageSizeInt);
+                    }
+                    // If page size selected by user is greater than maximum limit for custom page size
+                    else if (customPageSizeInt > maxCustomPageSize && this.customPageSizeRef.current) {
+                        const newCustomPageSize = totalItems < maxCustomPageSize ? totalItems : maxCustomPageSize;
+                        this.getPage(DEFAULT_CURRENT_PAGE_NUMBER, newCustomPageSize);
+                    }
+                }
             }
         }
     };
+
     // Function to get page data for given page number
     private getPage(pageIndex: number, pageSize: number) {
         if (this.state.pagination && this.props.pagination) {
@@ -679,6 +698,11 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
             //Set page index in input box
             if (this.pageIndexRef.current) {
                 this.pageIndexRef.current.value = pageIndex.toString();
+            }
+
+            //Set custom page size in input box
+            if (this.customPageSizeRef.current) {
+                this.customPageSizeRef.current.value = pageSize.toString();
             }
 
             if (getPageData) {
@@ -1499,19 +1523,21 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     }
 
     //Function to render textbox for custom pageSize
-    private buildCustomPageSizeSelect = () => {
+    private buildCustomPageSizeInput = () => {
+        const {pageSize} = this.state.pagination!;
         return (
             <div className={classNames([ClassNames.PAGINATION_LIST])} style={Styles.PAGINATION_CUSTOM_PAGESIZE}>
                 <input
                     className={ClassNames.PAGINATION_CURRENT}
                     size={4}
-                    defaultValue=""
+                    defaultValue={pageSize.toString()}
                     type="text"
                     data-qa="dataqa_datagrid_custom_input"
                     ref={this.customPageSizeRef}
                     style={Styles.PAGINATION_CUSTOM_INPUT}
-                    onBlur={this.handleCustomPageSizeChangeOnBlur}
-                    onKeyDown={this.handleCustomPageSizeChangeOnKeyDown}
+                    onBlur={evt => this.handleCustomPageSizeChange(evt)}
+                    onKeyDown={evt => this.handleCustomPageSizeChangeOnKeyDown(evt)}
+                    onKeyPress={allowOnlyIntegers}
                 />
             </div>
         );
@@ -1519,7 +1545,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
     // Function to build pageSizes select
     private buildPageSizesSelect(): React.ReactElement {
-        const {pageSizes = DEFAULT_PAGE_SIZES, pageSize, isCustomPageSizeSelected} = this.state.pagination!;
+        const {pageSizes, pageSize, isCustomPageSizeSelected} = this.state.pagination!;
         const {itemText = DEFAULT_ITEM_TEXT} = this.props;
         return (
             <div className={ClassNames.PAGINATION_SIZE}>
@@ -1529,7 +1555,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                         <select
                             className={classNames([ClassNames.CLR_PAGE_SIZE_SELECT])}
                             onChange={evt => this.handleSelectPageSize(evt)}
-                            defaultValue={pageSize}
+                            defaultValue={isCustomPageSizeSelected ? CUSTOM_PAGE_SIZE_OPTION : pageSize}
                         >
                             {pageSizes!.map((size: string, index: number) => {
                                 return (
@@ -1540,7 +1566,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                             })}
                         </select>
                     </div>
-                    {isCustomPageSizeSelected && this.buildCustomPageSizeSelect()}
+                    {isCustomPageSizeSelected && this.buildCustomPageSizeInput()}
                 </div>
             </div>
         );
@@ -1597,6 +1623,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                     aria-label="Current Page"
                     onBlur={evt => this.handlePageChangeOnBlur(evt)}
                     onKeyDown={evt => this.handlePageChangeOnKeyDown(evt)}
+                    onKeyPress={allowOnlyIntegers}
                 />
                 &nbsp;/&nbsp;<span aria-label="Total Pages">{totalPages}</span>
                 <Button
@@ -1622,7 +1649,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         const {className, style, compactFooter} = this.props.pagination!;
         const {itemText = DEFAULT_ITEM_TEXT} = this.props;
         const showCompactFooter: boolean = compactFooter || this.isDetailPaneOpen();
-        let {totalItems, firstItem, lastItem, pageSizes = DEFAULT_PAGE_SIZES} = this.state.pagination!;
+        let {totalItems, firstItem, lastItem, pageSizes} = this.state.pagination!;
         if (totalItems === 0) {
             firstItem = lastItem = 0;
         }
@@ -1691,9 +1718,10 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         const {pagination} = this.state;
         let renderPaginationFooter = false;
         if (pagination) {
-            const {totalItems, pageSize} = pagination;
-            if (totalItems && pageSize && totalItems > 0) {
-                renderPaginationFooter = true;
+            const {totalItems, pageSize, pageSizes} = pagination;
+            if (totalItems && pageSize) {
+                // Render pagination footer if pageSizes are given or if totalItems are greater than pageSize
+                renderPaginationFooter = pageSizes ? totalItems > 0 : totalItems >= pageSize;
             }
         }
 
