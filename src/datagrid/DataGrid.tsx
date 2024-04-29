@@ -10,7 +10,7 @@
 
 import React from "react";
 import {ClassNames, Styles} from "./ClassNames";
-import {classNames, allTrueOnKey} from "../utils";
+import {classNames, allTrueOnKey, allowOnlyIntegers, isNumber, KEYBOARD_KEYS} from "../utils";
 import {CheckBox} from "../forms/checkbox";
 import {RadioButton} from "../forms/radio";
 import {Button} from "../forms/button";
@@ -481,6 +481,10 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
             if (this.pageIndexRef.current) {
                 this.pageIndexRef.current.value = currentPage.toString();
             }
+
+            if (this.customPageSizeRef.current) {
+                this.customPageSizeRef.current.value = pageSize.toString();
+            }
             pagination.compactFooter = compactFooter !== undefined ? compactFooter : false;
         }
 
@@ -618,8 +622,8 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     // Function to handle pageIndex change in input box on Enter ot Tab key press event
     private handlePageChangeOnKeyDown = (evt: React.KeyboardEvent<HTMLInputElement>) => {
         // Check for 'Enter' or 'tab' key
-        const keyCode = evt.keyCode;
-        if (keyCode === 13 || keyCode === 9) {
+        const keyName = evt.key;
+        if (keyName === KEYBOARD_KEYS.ENTER || keyName === KEYBOARD_KEYS.TAB) {
             this.handlePageChange();
         }
     };
@@ -627,23 +631,12 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     // Function to handle CustomPageSize change in input box on Enter or Tab key press event
     private handleCustomPageSizeChangeOnKeyDown = (evt: React.KeyboardEvent<HTMLInputElement>) => {
         // Check for 'Enter' or 'tab' key
-        const keyCode = evt.keyCode;
-        if (keyCode === 13 || keyCode === 9) {
+        const keyName = evt.key;
+        if (keyName === KEYBOARD_KEYS.ENTER || keyName === KEYBOARD_KEYS.TAB) {
             this.handleCustomPageSizeChange();
         }
     };
 
-    // Function to handle CustomPageSize change in input box on blur event
-    private handleCustomPageSizeChangeOnBlur = () => {
-        const {pagination} = this.state;
-        const pageSizeInputFieldValue: number | null =
-            this.customPageSizeRef.current && parseInt(this.customPageSizeRef.current.value);
-        const currentPageSizeValue: number | null | undefined = pagination && pagination.pageSize;
-
-        if (pageSizeInputFieldValue !== currentPageSizeValue) {
-            this.handleCustomPageSizeChange();
-        }
-    };
     // Function to handle pageIndex change in input box
     private handlePageChange = () => {
         const {pageSize, currentPage} = this.state.pagination!;
@@ -658,22 +651,30 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     };
 
     // Function to handle CustomPageSize change in input box
-    private handleCustomPageSizeChange = () => {
-        const {maxCustomPageSize, totalItems} = this.state.pagination!;
-        const pageSize = this.customPageSizeRef.current && parseInt(this.customPageSizeRef.current.value);
+    private handleCustomPageSizeChange = (event?: any) => {
+        const {maxCustomPageSize = DEFAULT_MAX_PAGE_SIZE, totalItems, pageSize, currentPage} = this.state.pagination!;
+        const customPageSize = this.customPageSizeRef.current && this.customPageSizeRef.current.value;
 
-        if (pageSize && maxCustomPageSize) {
-            if (pageSize <= maxCustomPageSize) {
-                this.getPage(this.state.pagination!.currentPage, pageSize);
-            }
-            //If page size selected by user is greater than maximum limit for custom page size
-            else if (pageSize > maxCustomPageSize && this.customPageSizeRef.current) {
-                this.customPageSizeRef.current.value =
-                    totalItems < maxCustomPageSize ? totalItems.toString() : maxCustomPageSize.toString();
-                this.getPage(DEFAULT_CURRENT_PAGE_NUMBER, parseInt(this.customPageSizeRef.current.value));
+        if (pageSize && customPageSize) {
+            if (!isNumber(customPageSize)) {
+                this.customPageSizeRef.current!.value = pageSize.toString();
+            } else {
+                const customPageSizeInt: number = parseInt(customPageSize);
+                if (pageSize !== customPageSizeInt) {
+                    if (customPageSizeInt <= maxCustomPageSize) {
+                        this.getPage(currentPage, customPageSizeInt);
+                    }
+                    //If page size selected by user is greater than maximum limit for custom page size
+                    else if (customPageSizeInt > maxCustomPageSize && this.customPageSizeRef.current) {
+                        this.customPageSizeRef.current.value =
+                            totalItems < maxCustomPageSize ? totalItems.toString() : maxCustomPageSize.toString();
+                        this.getPage(DEFAULT_CURRENT_PAGE_NUMBER, customPageSizeInt);
+                    }
+                }
             }
         }
     };
+
     // Function to get page data for given page number
     private getPage(pageIndex: number, pageSize: number) {
         if (this.state.pagination && this.props.pagination) {
@@ -698,6 +699,11 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
             //Set page index in input box
             if (this.pageIndexRef.current) {
                 this.pageIndexRef.current.value = pageIndex.toString();
+            }
+
+            //Set custom page size in input box
+            if (this.customPageSizeRef.current) {
+                this.customPageSizeRef.current.value = pageSize.toString();
             }
 
             if (getPageData) {
@@ -1518,20 +1524,21 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
     }
 
     //Function to render textbox for custom pageSize
-    private buildCustomPageSizeSelect = () => {
+    private buildCustomPageSizeInput = () => {
         const {pageSize} = this.state.pagination!;
         return (
             <div className={classNames([ClassNames.PAGINATION_LIST])} style={Styles.PAGINATION_CUSTOM_PAGESIZE}>
                 <input
                     className={ClassNames.PAGINATION_CURRENT}
                     size={4}
-                    defaultValue={pageSize}
+                    defaultValue={pageSize.toString()}
                     type="text"
                     data-qa="dataqa_datagrid_custom_input"
                     ref={this.customPageSizeRef}
                     style={Styles.PAGINATION_CUSTOM_INPUT}
-                    onBlur={this.handleCustomPageSizeChangeOnBlur}
-                    onKeyDown={this.handleCustomPageSizeChangeOnKeyDown}
+                    onBlur={evt => this.handleCustomPageSizeChange(evt)}
+                    onKeyDown={evt => this.handleCustomPageSizeChangeOnKeyDown(evt)}
+                    onKeyPress={allowOnlyIntegers}
                 />
             </div>
         );
@@ -1560,7 +1567,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                             })}
                         </select>
                     </div>
-                    {isCustomPageSizeSelected && this.buildCustomPageSizeSelect()}
+                    {isCustomPageSizeSelected && this.buildCustomPageSizeInput()}
                 </div>
             </div>
         );
@@ -1617,6 +1624,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                     aria-label="Current Page"
                     onBlur={evt => this.handlePageChangeOnBlur(evt)}
                     onKeyDown={evt => this.handlePageChangeOnKeyDown(evt)}
+                    onKeyPress={allowOnlyIntegers}
                 />
                 &nbsp;/&nbsp;<span aria-label="Total Pages">{totalPages}</span>
                 <Button
