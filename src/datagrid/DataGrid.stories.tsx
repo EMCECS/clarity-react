@@ -441,6 +441,7 @@ storiesOf("DataGrid", module)
                 itemText={"Users"}
                 footer={{showFooter: true}}
             />
+            <br /> <br />
         </div>
     ))
     .add("Grid with pagination and compact footer", () => (
