@@ -604,6 +604,14 @@ export const paginationDetailswithPageSizes: DataGridPaginationProps = {
     pageSizes: ["10", "20", "50", "100", CUSTOM_PAGE_SIZE_OPTION],
 };
 
+export const paginationDetailsForLessThan10Records: DataGridPaginationProps = {
+    totalItems: 6,
+    getPageData: getPageDataForCustomPageSize,
+    pageSize: 10,
+    currentPage: 1,
+    pageSizes: ["10", "20", "50", "100", CUSTOM_PAGE_SIZE_OPTION],
+};
+
 export const paginationDetailsWithCompactFooter: DataGridPaginationProps = {
     totalItems: paginationRows.length,
     getPageData: getPageData,

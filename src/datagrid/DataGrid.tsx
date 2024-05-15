@@ -1721,7 +1721,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
             const {totalItems, pageSize, pageSizes} = pagination;
             if (totalItems && pageSize) {
                 // Render pagination footer if pageSizes are given or if totalItems are greater than pageSize
-                renderPaginationFooter = pageSizes ? totalItems > 0 : totalItems >= pageSize;
+                renderPaginationFooter = pageSizes ? totalItems >= DEFAULT_PAGE_SIZE : totalItems >= pageSize;
             }
         }
 
