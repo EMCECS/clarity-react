@@ -468,8 +468,23 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
 
             pagination.totalPages = this.getTotalPages(totalItems, pageSize);
 
+            // Update data from props if available
+            if (this.props.pagination) {
+                pagination = {
+                    ...pagination,
+                    currentPage:
+                        this.props.pagination.currentPage && this.props.pagination.currentPage > 0
+                            ? this.props.pagination.currentPage
+                            : pagination.currentPage,
+                    isCustomPageSizeSelected:
+                        this.props.pagination.isCustomPageSizeSelected || pagination.isCustomPageSizeSelected,
+                    maxCustomPageSize: this.props.pagination.maxCustomPageSize || pagination.maxCustomPageSize,
+                };
+            }
+
             // Set current page to 1 if it is greater than total pages
-            const currentPage = pagination.currentPage > pagination.totalPages ? 1 : pagination.currentPage;
+            const currentPage =
+                pagination.currentPage > pagination.totalPages ? DEFAULT_CURRENT_PAGE_NUMBER : pagination.currentPage;
             const firstItem = this.getFirstItemIndex(currentPage, pageSize);
             const lastItem = this.getLastItemIndex(pageSize, totalItems, firstItem);
 
@@ -723,7 +738,7 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
                     this.setState(
                         {
                             allRows: [...rows],
-                            pagination: paginationState,
+                            pagination: {...this.state.pagination, ...paginationState},
                             selectAll: this.isAllRowsSelected(rows),
                         },
                         () => this.closeDetailPane(),
@@ -1644,18 +1659,47 @@ export class DataGrid extends React.PureComponent<DataGridProps, DataGridState> 
         );
     }
 
-    // Function to build datagrid pagination footer
-    private buildDataGridPagination(): React.ReactElement {
-        const {className, style, compactFooter} = this.props.pagination!;
-        const {itemText = DEFAULT_ITEM_TEXT} = this.props;
+    /**
+     * Builds the label for the pagination footer.
+     * @returns {string} The pagination footer label.
+     */
+    private buildPaginationFooterLabel(): string {
+        // Destructure pagination state
+        let {totalItems, firstItem, lastItem, pageSize, compactFooter} = this.state.pagination!;
+
+        // Determine if compactFooter should be shown
         const showCompactFooter: boolean = compactFooter || this.isDetailPaneOpen();
-        let {totalItems, firstItem, lastItem, pageSizes} = this.state.pagination!;
+
+        // Destructure props
+        const {itemText = DEFAULT_ITEM_TEXT} = this.props;
+
+        // If no items, set first and last to 0
         if (totalItems === 0) {
             firstItem = lastItem = 0;
         }
-        const paginationLabel = showCompactFooter
-            ? firstItem + "-" + lastItem + " / " + totalItems
-            : firstItem + "-" + lastItem + " of " + totalItems + " " + itemText;
+
+        // Build the pagination label
+        let paginationLabel = `${firstItem}-${lastItem} of ${totalItems} ${itemText}`;
+
+        // If compactFooter is true, use compact pagination label
+        if (showCompactFooter) {
+            paginationLabel = `${firstItem}-${lastItem} / ${totalItems}`;
+            // If pageSize is 1, use label for single item
+        } else if (pageSize === 1) {
+            paginationLabel = `${firstItem} of ${totalItems} ${itemText}`;
+        }
+
+        // Return the pagination label
+        return paginationLabel;
+    }
+
+    // Function to build datagrid pagination footer
+    private buildDataGridPagination(): React.ReactElement {
+        const {className, style, compactFooter} = this.props.pagination!;
+        const showCompactFooter: boolean = compactFooter || this.isDetailPaneOpen();
+        let {totalItems, pageSizes} = this.state.pagination!;
+
+        const paginationLabel = this.buildPaginationFooterLabel();
 
         return (
             <div
