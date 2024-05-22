@@ -47,8 +47,8 @@ import {
     paginationDetailsForDetailsPane,
     paginationRowsWithLinks,
     storeForDetailPane,
-    paginationDetailswithPageSizes,
     paginationDetailsForLessThan10Records,
+    paginationDetailswithPageSizes,
 } from "./DataGridStoriesData";
 import {CustomFilter} from "./CustomFilter";
 import {CustomFilterMulti} from "./CustomFilterMulti";
@@ -429,7 +429,7 @@ storiesOf("DataGrid", module)
                 columns={normalColumns}
                 rows={paginationRows.slice(0, 10)}
                 pagination={paginationDetailswithPageSizes}
-                itemText={"Users"}
+                itemText="Users"
                 footer={{showFooter: true}}
             />
             <br /> <br />

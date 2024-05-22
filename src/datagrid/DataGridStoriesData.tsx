@@ -64,9 +64,17 @@ const cellData = [
     [14262, "Johnson", "Jun 23, 2019", "Blue"],
     [59729, "Sibyl", "Feb 27, 2016", "Red"],
     [92422, "Roslyn", "Apr 26, 2016", "Blue"],
-    [83941, "Lottie", "Mar 2, 2019", "Yellow"],
-    [83942, "Lottie", "Mar 2, 2019", "Yellow"],
-    [83943, "Lottie", "Mar 2, 2019", "Yellow"],
+    [83941, "Lottie", "Mar 2, 2020", "Yellow"],
+    [83942, "Lottie", "May 5, 2019", "Red"],
+    [83943, "Lottie", "June 29, 2018", "Blue"],
+    [83944, "Latta", "Mar 26, 2017", "Grren"],
+    [83945, "Lottie", "Apr 11, 2010", "Yellow"],
+    [83946, "Lottie", "Dec 2, 2020", "Blue"],
+    [83947, "Lottie", "Feb 27, 2019", "Yellow"],
+    [83948, "Lottie", "Oct 2, 2015", "Black"],
+    [83946, "Lottie", "Dec 10, 2020", "Blue"],
+    [83947, "Lottie", "Feb 27, 2019", "Yellow"],
+    [83948, "Lottie", "Oct 2, 2009", "Black"],
 ];
 
 /**
@@ -349,7 +357,8 @@ export const getSelectableRowsData = (): DataGridRow[] => {
 export let selectedRows = [41512, 2459, 83942];
 
 export const getSelectedRowsData = (): DataGridRow[] => {
-    let updatedRows: DataGridRow[] = getRowData();
+    // Create deep copy of datagrid rows
+    let updatedRows: DataGridRow[] = JSON.parse(JSON.stringify(getRowData()));
     updatedRows.forEach((row: DataGridRow) => {
         row.isSelected = selectedRows.includes(row.rowData[0].cellData);
     });
@@ -396,10 +405,11 @@ function filterRows(rows: DataGridRow[], columnValues: string[]) {
     const newRows = rows.filter(row => {
         let matchFound = false;
         for (const index in row.rowData) {
-            const content = String(row.rowData[index].cellData);
+            const content = String(row.rowData[index].cellData).toLowerCase();
             columnValues.forEach(columnValue => {
-                if (content.indexOf(columnValue) !== -1) {
+                if (content.indexOf(columnValue.toLowerCase()) !== -1) {
                     matchFound = true;
+                    return;
                 }
             });
         }
@@ -512,27 +522,6 @@ export const sortColumns = [
  */
 
 // Function to get data for page based on pagenumber
-export const getPageData = (pageIndex: number, pageSize: number): Promise<DataGridRow[]> => {
-    return new Promise((resolve, reject) => {
-        let rows: DataGridRow[] = [];
-        if (pageSize === 5) {
-            if (pageIndex === 2) {
-                rows = paginationRows.slice(5, 10);
-            }
-            if (pageIndex === 1) {
-                rows = paginationRows.slice(0, 5);
-            }
-        } else if (pageSize === 10) {
-            rows = paginationRows;
-        }
-        // Purposefully added dealy here to see loading spinner
-        setTimeout(function() {
-            resolve(rows);
-        }, 2000);
-    });
-};
-
-// Function to get data for page based on pagenumber
 export const getPageDataForSelectedRows = (pageIndex: number, pageSize: number): Promise<DataGridRow[]> => {
     return new Promise((resolve, reject) => {
         let rows: DataGridRow[] = [];
@@ -558,16 +547,8 @@ export const getPageDataForSelectedRows = (pageIndex: number, pageSize: number):
 export const getPageDataForDetailPane = (pageIndex: number, pageSize: number): Promise<DataGridRow[]> => {
     return new Promise((resolve, reject) => {
         let rows: DataGridRow[] = [];
-        if (pageSize === 5) {
-            if (pageIndex === 2) {
-                rows = rowsWithDetailPane.slice(5, 10);
-            }
-            if (pageIndex === 1) {
-                rows = rowsWithDetailPane.slice(0, 5);
-            }
-        } else if (pageSize === 10) {
-            rows = rowsWithDetailPane;
-        }
+        const offset = pageSize * (pageIndex - 1);
+        rows = rowsWithDetailPane.slice(offset, offset + pageSize);
 
         // Purposefully added dealy here to see loading spinner
         setTimeout(function() {
@@ -575,11 +556,12 @@ export const getPageDataForDetailPane = (pageIndex: number, pageSize: number): P
         }, 2000);
     });
 };
-//Function to get data for page based on customPageSize and page number
-export const getPageDataForCustomPageSize = (pageIndex: number, pageSize: number): Promise<DataGridRow[]> => {
+
+//Function to get data for page based on page size and page number
+export const getPageData = (pageIndex: number, pageSize: number): Promise<DataGridRow[]> => {
     return new Promise((resolve, reject) => {
         let rows: DataGridRow[] = [];
-        let offset = pageSize * (pageIndex - 1);
+        const offset = pageSize * (pageIndex - 1);
         rows = paginationRows.slice(offset, offset + pageSize);
 
         // Delay to display loading spinner
@@ -594,22 +576,7 @@ export const paginationDetails: DataGridPaginationProps = {
     getPageData: getPageData,
     pageSize: 5,
     pageSizes: ["5", "10"],
-};
-
-export const paginationDetailswithPageSizes: DataGridPaginationProps = {
-    totalItems: paginationRows.length,
-    getPageData: getPageDataForCustomPageSize,
-    pageSize: 10,
     currentPage: 1,
-    pageSizes: ["10", "20", "50", "100", CUSTOM_PAGE_SIZE_OPTION],
-};
-
-export const paginationDetailsForLessThan10Records: DataGridPaginationProps = {
-    totalItems: 6,
-    getPageData: getPageDataForCustomPageSize,
-    pageSize: 10,
-    currentPage: 1,
-    pageSizes: ["10", "20", "50", "100", CUSTOM_PAGE_SIZE_OPTION],
 };
 
 export const paginationDetailsWithCompactFooter: DataGridPaginationProps = {
@@ -643,9 +610,9 @@ export const pageFilterFunction = (
                 totalItems: paginationRows.length,
             };
         } else {
-            const newRows = filterRows(rows, [columnValue]);
+            const newRows = filterRows(paginationRows, [columnValue]);
             result = {
-                rows: newRows,
+                rows: newRows.slice(0, 5),
                 totalItems: newRows.length,
             };
         }
@@ -807,9 +774,28 @@ export const storeForDetailPane = new Store({
 
 export const paginationDetailsForDetailsPane = {
     totalItems: rowsWithDetailPane.length,
-    getPageData: getPageDataForDetailPane,
+    getPageData: getPageData,
     pageSize: 5,
     pageSizes: ["5", "10"],
 };
 
 /* #################### Data For detail pane story end ####################### */
+
+/* #################### Data For Custom Page Size story start ####################### */
+export const paginationDetailswithPageSizes: DataGridPaginationProps = {
+    totalItems: paginationRows.length,
+    getPageData: getPageData,
+    pageSize: 10,
+    currentPage: 1,
+    pageSizes: ["10", "20", "50", "100", CUSTOM_PAGE_SIZE_OPTION],
+};
+
+export const paginationDetailsForLessThan10Records: DataGridPaginationProps = {
+    totalItems: 6,
+    getPageData: getPageData,
+    pageSize: 10,
+    currentPage: 1,
+    pageSizes: ["10", "20", "50", "100", CUSTOM_PAGE_SIZE_OPTION],
+};
+
+/* #################### Data For Custom Page Size story end ####################### */
